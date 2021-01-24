@@ -16,7 +16,7 @@ public	Extension	__ext_cstrike	= 	{
 	required	=	0,
 };
 
-//I made this because TFTeam enum exists and cs doesn't have one :)
+//I made this because TFTeam enum exists and cs doesn't have it :)
 enum	CSTeam
 {
 	CSTeam_Unassigned	=	0,
@@ -200,8 +200,9 @@ stock	Action	Respawn(int	client)	{
 	}
 	else	{
 		switch(GetEngineVersion())	{
-		case	Engine_TF2:	TF2_RespawnPlayer(client);
-		case	Engine_CSS,Engine_CSGO:	CS_RespawnPlayer(client);
+			case	Engine_TF2:	TF2_RespawnPlayer(client);
+			case	Engine_CSS,Engine_CSGO:	CS_RespawnPlayer(client);
+		}
 	}
 	return	Plugin_Handled;
 }
@@ -282,19 +283,19 @@ stock	int		CS_GetClientWeaponName(int	client,	char[] weapon,	char[] output)	{
 
 
 stock	void	SetClientWeaponAmmo(int	client,	int	value)	{
-	SetEntProp(client,	Prop_Send,	"m_iClip1",	value);
+	SetEntProp(GetClientActiveWeapon(client),	Prop_Send,	"m_iClip1",	value);
 }
 
 stock	int		GetClientWeaponAmmo(int	client)	{
-	return	GetEntProp(client,	Prop_Send,	"m_iClip1");
+	return	GetEntProp(GetClientActiveWeapon(client),	Prop_Send,	"m_iClip1");
 }
 
 stock	void	SetClientWeaponReserveAmmo(int	client,	int	value)	{
-	SetEntProp(client,	Prop_Send,	"m_iPrimaryReserveAmmoCount",	value);
+	SetEntProp(GetClientActiveWeapon(client),	Prop_Send,	"m_iPrimaryReserveAmmoCount",	value);
 }
 
 stock	int		GetClientWeaponReserveAmmo(int	client)	{
-	return	GetEntProp(client,	Prop_Send,	"m_iPrimaryReserveAmmoCount");
+	return	GetEntProp(GetClientActiveWeapon(client),	Prop_Send,	"m_iPrimaryReserveAmmoCount");
 }
 
 stock	int		GetClientWeaponEx(int	client,	int	slot,	char[]	output)	{
@@ -307,8 +308,8 @@ stock	int		GetClientWeaponEx(int	client,	int	slot,	char[]	output)	{
 stock	void	GiveClientWeaponEx2(int	client,	char[] weapon,	int slot,	int primary,	int secondary)	{
 	CS_ClientRemoveWeaponSlot(client,	slot);
 	GivePlayerItem(client,	weapon);
-	SetClientWeaponAmmo(GetClientActiveWeapon(client),	primary);
-	SetClientWeaponReserveAmmo(GetClientActiveWeapon(client),	secondary);
+	SetClientWeaponAmmo(client,	primary);
+	SetClientWeaponReserveAmmo(client,	secondary);
 }
 
 stock	void	GiveClientWeapon(int client, char[] weapon,	int	slot)	{
@@ -326,8 +327,7 @@ stock	void	GiveClientWeapon(int client, char[] weapon,	int	slot)	{
  * @return              Current TFTeam of client.
  * @error               Invalid client index.
  */
-stock	CSTeam	CS_GetClientTeam(int client)
-{
+stock	CSTeam	CS_GetClientTeam(int client)	{
 	return view_as<CSTeam>(GetClientTeam(client));
 }
 
@@ -421,7 +421,7 @@ stock	void	CS_ClientRemoveWeaponSlot(int	client,	int	slot)	{
 	}
 }
 
-int	CS_GetClientNavLocation(int client,	char[] location,	int	len)	{
+stock	int	CS_GetClientNavLocation(int client,	char[] location,	int	len)	{
 	char	storage[256];
 	GetEntPropString(client,	Prop_Send,	"m_szLastPlaceName",	storage,	sizeof(storage));
 	
