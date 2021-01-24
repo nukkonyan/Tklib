@@ -16,7 +16,7 @@ public	Extension	__ext_cstrike	= 	{
 	required	=	0,
 };
 
-//I made this because TFTeam enum exists and cs doesn't have it :)
+//I made this because TFTeam enum exists and cs doesn't have one :)
 enum	CSTeam
 {
 	CSTeam_Unassigned	=	0,
