@@ -28,6 +28,10 @@
  * or <http://www.sourcemod.net/license.php>.
  *
  * Version: $Id$
+ *
+ * Modified by Teamkiller324 | /id/Teamkiller324
+ *
+ * Updated for Team Fortress 2 Classic Support
  */
 
 #if defined _tf2_included
