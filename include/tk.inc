@@ -16,15 +16,6 @@ public	Extension	__ext_cstrike	= 	{
 	required	=	0,
 };
 
-//I made this because TFTeam enum exists and cs doesn't have it :)
-enum	CSTeam
-{
-	CSTeam_Unassigned	=	0,
-	CSTeam_Spectators	=	1,
-	CSTeam_Terrorists	=	2,
-	CSTeam_CTerrorists	=	3
-}
-
 //Player permissions
 
 stock	bool	Console(int	client)	{
@@ -318,29 +309,6 @@ stock	void	GiveClientWeapon(int client, char[] weapon,	int	slot)	{
 
 
 //Counter-Strike
-
-/**
- * Gets a client's current team.
- *
- * @param client        Client index.
- * @return              Current TFTeam of client.
- * @error               Invalid client index.
- */
-stock	CSTeam	CS_GetClientTeam(int client)
-{
-	return view_as<CSTeam>(GetClientTeam(client));
-}
-
-/**
- * Changes a client's current team.
- *
- * @param client        Client index.
- * @param team          CSTeam team symbol.
- * @error               Invalid client index.
- */
-stock	void	CS_ChangeClientTeam(int client,	CSTeam team)	{
-	ChangeClientTeam(client,	view_as<int>(CSTeam));
-}
 
 /**
  * Remove a clients weapon in a specified slot

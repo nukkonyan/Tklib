@@ -28,6 +28,8 @@
  * or <http://www.sourcemod.net/license.php>.
  *
  * Version: $Id$
+ *
+ * Updated by Teamkiller324 | /id/Teamkiller324
  */
 
 #if defined _cstrike_included
@@ -47,6 +49,15 @@
 #define CS_SLOT_C4          4   /**< C4 slot. */
 
 #define CS_DMG_HEADSHOT     (1 << 30)    /**< Headshot */
+
+//I made this because TFTeam enum exists and cs doesn't have it :)
+enum	CSTeam
+{
+	CSTeam_Unassigned	=	0,
+	CSTeam_Spectators	=	1,
+	CSTeam_Terrorists	=	2,
+	CSTeam_CTerrorists	=	3
+}
 
 enum CSRoundEndReason
 {
@@ -175,6 +186,29 @@ enum CSWeaponID
 	CSWeapon_KNIFE_SKELETON = 525,
 	CSWeapon_MAX_WEAPONS //THIS MUST BE LAST, EASY WAY TO CREATE LOOPS. When looping, do CS_IsValidWeaponID(i), to check.
 };
+
+/**
+ * Gets a client's current team.
+ *
+ * @param client        Client index.
+ * @return              Current TFTeam of client.
+ * @error               Invalid client index.
+ */
+stock	CSTeam	CS_GetClientTeam(int client)
+{
+	return view_as<CSTeam>(GetClientTeam(client));
+}
+
+/**
+ * Changes a client's current team.
+ *
+ * @param client        Client index.
+ * @param team          CSTeam team symbol.
+ * @error               Invalid client index.
+ */
+stock	void	CS_ChangeClientTeam(int client,	CSTeam team)	{
+	ChangeClientTeam(client,	view_as<int>(CSTeam));
+}
 
 /**
  * Called when a player attempts to purchase an item.
