@@ -682,23 +682,23 @@ stock	void	CS_ClientRemoveWeaponSlot(int	client,	int	slot)	{
  * @param len			Size of the buffer.
  *
  */
-stock	int	CS_GetClientNavLocation(int client,	char[] location,	int	len)	{
+stock	int	CS_GetClientNavLocation(int client,	char[] location,	int	maxlen)	{
 	char	storage[256];
 	GetEntPropString(client,	Prop_Send,	"m_szLastPlaceName",	storage,	sizeof(storage));
 	
 	if(StrEqual(storage,	"BombsiteA"))
-		FormatEx(location,	sizeof(len),	"Bombsite A");
+		FormatEx(location,	sizeof(maxlen),	"Bombsite A");
 	else if(StrEqual(storage,	"BombsiteB"))
-		FormatEx(location,	sizeof(len),	"Bombsite B");
+		FormatEx(location,	sizeof(maxlen),	"Bombsite B");
 	else if(StrEqual(storage,	"BombsiteC"))
-		FormatEx(location,	sizeof(len),	"Bombsite C");
+		FormatEx(location,	sizeof(maxlen),	"Bombsite C");
 	else
-		FormatEx(location,	sizeof(len),	"%s",	storage);
+		FormatEx(location,	sizeof(maxlen),	"%s",	storage);
 }
 
 //Gets the clients last place via the maps navigation area (such as Bombsite A or Bombsite B)
-stock	int		CS_GetClientLastPlace(int	client,	char[] output,	int len)	{
-	GetEntPropString(client,	Prop_Send,	"m_szLastPlaceName",	output,	sizeof(len));
+stock	int		CS_GetClientLastPlace(int client,	char[] output,	int maxlen)	{
+	GetEntPropString(client,	Prop_Send,	"m_szLastPlaceName",	output,	sizeof(maxlen));
 }
 
 /**
