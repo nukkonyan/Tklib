@@ -3,6 +3,8 @@
 #include	<cstrike>
 #include	<tf2_stocks>
 
+#define		CONSOLE		0
+
 public	Extension	__ext_tf2	= 	{
 	name		=	"TF2 Tools",		//This allows the plugin to load even though the TF2 Tools extension is not running
 	file		=	"game.tf2.ext",	//To allow other TF2 versions to work with this plugin
@@ -25,13 +27,50 @@ enum	CSTeam
 	CSTeam_CTerrorists	=	3
 }
 
+//Left 4 Dead 2 enum
+enum	L4DTeam
+{
+	L4DTeam_Unassigned	=	0,
+	L4DTeam_Spectators	=	1,
+	L4DTeam_Survivors	=	2,
+	L4DTeam_Zombies		=	3
+}
+
+//Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringName[GetClientTeam(client)])
+stock	char	TF2_GetTeamStringName[][128]	=	{
+	"{grey}Unassigned",
+	"{grey}Spectators",
+	"{red}Red",
+	"{blue}Blue",
+	"{lightgreen}Green",
+	"{orange}Yellow"
+},
+		CSS_GetTeamStringName[][128]	=	{
+	"{grey}Unassigned",
+	"{grey}Spectators",
+	"{red}Terrorists",
+	"{blue}Counter-Terrorists"
+},
+		CSGO_GetTeamStringName[][128]	=	{
+	"{grey}Unassigned",
+	"{grey}Spectators",
+	"{orange}Terrorists",
+	"{bluegrey}Counter-Terrorists"
+},
+		L4D_GetTeamStringName[][128]	=	{
+	"{grey}Unassigned",
+	"{grey}Spectators",
+	"{orange}Survivors",
+	"{lightred}Zombies"
+};
+
 //Player permissions
 /**
  * Returns if the client is a Console
  *
  * @param client		Client index.
  */
-stock	bool	Console(int	client)	{
+stock	bool	IsClientConsole(int client)	{
 	if(client == 0)
 		return true;
 	return	false;
@@ -42,7 +81,7 @@ stock	bool	Console(int	client)	{
  *
  * @param client		Client index.
  */
-stock	bool	Bot(int client)	{
+stock	bool	IsClientBot(int client)	{
 	if(IsFakeClient(client))
 		return	true;
 	return	false;
@@ -86,8 +125,21 @@ stock	bool	IsClientModerator(int client)	{
  *
  * @param client		Client index.
  */
-stock	bool	IsClientVip(int	client)	{
-	if(!CheckCommandAccess(client,	"vip_flag",	ADMFLAG_RESERVATION,	false))	return false;
+stock	bool	IsClientVip(int client)	{
+	if(!CheckCommandAccess(client,	"vip_flag",	ADMFLAG_RESERVATION,	false))
+		return false;
+	return	true;
+}
+
+/**
+ * Returns if the client is has the specified flag
+ *
+ * @param client		Client index.
+ * @param adminflags	Administrative flags (bitstring) to use for permissions.
+ */
+stock	bool	IsClientFlag(int client, int adminflags)	{
+	if(!CheckCommandAccess(client,	"",	adminflags,	false))
+		return	false;
 	return	true;
 }
 
@@ -124,7 +176,7 @@ stock	void		SetClientPing(int	client,	int	value)	{
  *
  * @param client		Client index.
  */
-stock	int		GetClientPing(int	client)	{
+stock	int		GetClientPing(int client)	{
 	return	GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iPing", _, client);
 }
 
@@ -135,7 +187,7 @@ stock	int		GetClientPing(int	client)	{
  * @param client		Client index.
  * @param value			Amount value.
  */
-stock	void	SetClientDeaths(int	client,	int	value)	{
+stock	void	SetClientDeaths(int client, int	value)	{
 	SetEntProp(client,	Prop_Send,	"m_iDeaths",	value);
 }
 
@@ -146,7 +198,7 @@ stock	void	SetClientDeaths(int	client,	int	value)	{
  * @param client		Client index.
  * @param value			Amount index.
  */
-stock	void	SetClientFrags(int	client,	int	value)	{
+stock	void	SetClientFrags(int client, int value)	{
 	SetEntProp(client,	Prop_Send,	"m_iFrags",		value);
 }
 
@@ -157,7 +209,7 @@ stock	void	SetClientFrags(int	client,	int	value)	{
  * @param client		Client index.
  * @param value			Amount value.
  */
-stock	void	SetClientHealth(int	client,	int	value)	{
+stock	void	SetClientHealth(int client, int value)	{
 	SetEntProp(client,	Prop_Send,	"m_iHealth",	value);
 }
 
@@ -167,7 +219,7 @@ stock	void	SetClientHealth(int	client,	int	value)	{
  * @param client		Client index.
  * @param value			Amount value.
  */
-stock	void	GetClientMaxHealth(int	client)	{
+stock	void	GetClientMaxHealth(int client)	{
 	return	SetEntProp(client,	Prop_Send,	"m_iMaxHealth");
 }
 
@@ -178,7 +230,7 @@ stock	void	GetClientMaxHealth(int	client)	{
  * @param client		Client index.
  * @param value			Team index value.
  */
-stock	void	SetClientTeamNum(int client,	int	value)	{
+stock	void	SetClientTeamNum(int client, int value)	{
 	SetEntProp(client,	Prop_Send,	"m_iTeamNum",	value);
 }
 
@@ -198,7 +250,7 @@ stock	int		GetClientTeamNum(int client)	{
  * @param client		Client index.
  * @param value			Amount value.
  */
-stock	void	SetClientFOV(int	client,	int	value)	{
+stock	void	SetClientFOV(int client, int value)	{
 	SetEntProp(client,	Prop_Send,	"m_iFOV",	value);
 }
 
@@ -217,7 +269,7 @@ stock	int		GetClientFOV(int client)	{
  * @param client		Client index.
  * @param value			Amount value.
  */
-stock	void	SetClientDefaultFOV(int	client,	int	value)	{
+stock	void	SetClientDefaultFOV(int client, int value)	{
 	SetEntProp(client,	Prop_Send,	"m_iDefaultFOV",	value);
 }
 
@@ -226,7 +278,7 @@ stock	void	SetClientDefaultFOV(int	client,	int	value)	{
  *
  * @param client		Client index.
  */
-stock	int		GetClientDefaultFOV(int	client)	{
+stock	int		GetClientDefaultFOV(int client)	{
 	return	GetEntProp(client,	Prop_Send,	"m_iDefaultFOV");
 }
 
@@ -237,7 +289,7 @@ stock	int		GetClientDefaultFOV(int	client)	{
  * @param client 		Client index.
  * @param value			Amount value.
  */
-stock	void	SetClientObserverTarget(int	client,	int value)	{
+stock	void	SetClientObserverTarget(int client, int value)	{
 	SetEntProp(client,	Prop_Send,	"m_iObserverTarget",	value);
 }
 
@@ -247,7 +299,7 @@ stock	void	SetClientObserverTarget(int	client,	int value)	{
  * @param client		Client index.
  * @param value			Bool value.
  */
-stock	void	SetClientObserverMode(int	client,	bool value)	{
+stock	void	SetClientObserverMode(int client, bool value)	{
 	SetEntProp(client,	Prop_Send,	"m_iObserverMode",		value);
 }
 
@@ -258,7 +310,7 @@ stock	void	SetClientObserverMode(int	client,	bool value)	{
  * @param client		Client index.
  * @param value			Amount value.
  */
-stock	void	SetClientDrawViewModel(int	client,	int	value)	{
+stock	void	SetClientDrawViewModel(int client, int value)	{
 	SetEntProp(client,	Prop_Send,	"m_bDrawViewmodel",	value);
 }
 
@@ -267,7 +319,7 @@ stock	void	SetClientDrawViewModel(int	client,	int	value)	{
  *
  * @param client		Client index.
  */
-stock	int		GetClientDrawViewModel(int	client)	{
+stock	int		GetClientDrawViewModel(int client)	{
 	return	SetEntProp(client,	Prop_Send,	"m_bDrawViewmodel");
 }
 
@@ -279,7 +331,7 @@ stock	int		GetClientDrawViewModel(int	client)	{
  * @param client		Client index.
  * @param godmode		Bool value.
  */
-stock	void	SetClientGodMode(int	client,	bool	godmode)	{
+stock	void	SetClientGodMode(int client, bool godmode)	{
 	if(godmode)
 		SetEntProp(client,	Prop_Send,	"m_takedamage",	0,	1);
 	else
@@ -292,7 +344,7 @@ stock	void	SetClientGodMode(int	client,	bool	godmode)	{
  * @param client		Client index.
  * @param buddha		Bool value.
  */
-stock	void	SetClientBuddhaMode(int	client,	bool	buddha)	{
+stock	void	SetClientBuddhaMode(int client, bool buddha)	{
 	if(godmode)
 		SetEntProp(client,	Prop_Send,	"m_takedamage",	1,	1);
 	else
@@ -306,7 +358,7 @@ stock	void	SetClientBuddhaMode(int	client,	bool	buddha)	{
  * @param client		Client index.
  * @param collision		Bool value.
  */
-stock	void	SetClientCollision(int	client,	bool collision)	{
+stock	void	SetClientCollision(int client, bool collision)	{
 	int	block	=	FindSendPropInfo("CBaseEntity", "m_CollisionGroup");
 	if(collision)
 		SetEntData(client,	block,	2,	4,	true);
@@ -321,7 +373,7 @@ stock	void	SetClientCollision(int	client,	bool collision)	{
  * @param client		Client index.
  * @param noclip		Bool value.
  */
-stock	void	SetClientNoclip(int	client,	bool	noclip)	{
+stock void SetClientNoclip(int client, bool noclip)	{
 	if(noclip)
 		SetEntityMoveType(client,	MOVETYPE_NOCLIP);
 	else
@@ -336,7 +388,7 @@ stock	void	SetClientNoclip(int	client,	bool	noclip)	{
  * @param client		Client index.
  * @param value			Float amount value.
  */
-stock	float	SetClientMaxSpeed(int	client,	float	value)	{
+stock	float	SetClientMaxSpeed(int client, float value)	{
 	SetEntPropFloat(client,	Prop_Send,	"m_MaxSpeed",	value);
 }
 
@@ -345,7 +397,7 @@ stock	float	SetClientMaxSpeed(int	client,	float	value)	{
  *
  * @param client		Client index.
  */
-stock	float	GetClientMaxSpeed(int	client)	{
+stock	float	GetClientMaxSpeed(int client)	{
 	return	GetEntPropFloat(client,	Prop_Send,	"m_MaxSpeed");
 }
 
@@ -360,7 +412,7 @@ stock	float	GetClientMaxSpeed(int	client)	{
  * @param client		Client index.
  * @param value			Float amount value.
  */
-stock	float	RespawnTime(int	client,	float	value)	{
+stock	float	RespawnTime(int client, float value)	{
 	CreateTimer(value,	SetRespawnTime,	client);
 }
 
@@ -374,10 +426,10 @@ stock	Action	SetRespawnTime(Handle	timer,	any	client)	{
  *
  * @param client		Client index.
  */
-stock	Action	Respawn(int	client)	{
-	//Checks if client is a console user or ingame/valid
-	if(client == 0 || client > MaxClients)	{
-		return Plugin_Handled;
+stock	Action	Respawn(int client)	{
+	//Checks if client exists or is invalid
+	if(client < 1 || client > MaxClients)	{
+		return	Plugin_Handled;
 	}
 	else	{
 		switch(GetEngineVersion())	{
@@ -416,7 +468,7 @@ stock	int		GetClientActiveWeapon(int client)	{
  * @param output		Buffer to store in.
  * @param maxlen		Maximum length of the buffer.
  */
-stock	int		CS_GetClientWeaponName(int	client,	char[] weapon,	char[] output,	int maxlen)	{
+stock	int		CS_GetClientWeaponName(int client, char[] weapon, char[] output, int maxlen)	{
 	char	final[256];
 	
 	//Rifles
@@ -474,12 +526,8 @@ stock	int		CS_GetClientWeaponName(int	client,	char[] weapon,	char[] output,	int 
 	if(StrEqual(weapon,	"weapon_zeus"))			{	final	=	"Zeus-X21";		}	//Ingame called X27 but model calls itself X21, volvo pls fix
 	
 	switch(GetEngineVersion())	{
-		case	Engine_CSS:	{
-			if(StrEqual(weapon,	"weapon_m4a1"))	{	final	=	"M4A4";		}
-		}
-		case	Engine_CSGO:	{
-			if(StrEqual(weapon,	"weapon_m4a1"))	{	final	=	"M4A1";		}
-		}
+		case	Engine_CSS:		if(StrEqual(weapon,	"weapon_m4a1"))	{	final	=	"M4A4";		}
+		case	Engine_CSGO:	if(StrEqual(weapon,	"weapon_m4a1"))	{	final	=	"M4A1";		}
 	}
 	FormatEx(output,	sizeof(maxlen),	"%s",	final);
 }
@@ -500,7 +548,7 @@ stock	void	SetClientWeaponAmmo(int	client,	int	value)	{
  *
  * @param client		Client index.
  */
-stock	int		GetClientWeaponAmmo(int	client)	{
+stock	int		GetClientWeaponAmmo(int client)	{
 	return	GetEntProp(GetClientActiveWeapon(client),	Prop_Send,	"m_iClip1");
 }
 
@@ -510,7 +558,7 @@ stock	int		GetClientWeaponAmmo(int	client)	{
  * @param client		Client index.
  * @param value			Amount value.
  */
-stock	void	SetClientWeaponReserveAmmo(int	client,	int	value)	{
+stock	void	SetClientWeaponReserveAmmo(int client, int value)	{
 	SetEntProp(GetClientActiveWeapon(client),	Prop_Send,	"m_iPrimaryReserveAmmoCount",	value);
 }
 
@@ -519,7 +567,7 @@ stock	void	SetClientWeaponReserveAmmo(int	client,	int	value)	{
  *
  * @param client		Client index.
  */
-stock	int		GetClientWeaponReserveAmmo(int	client)	{
+stock	int		GetClientWeaponReserveAmmo(int client)	{
 	return	GetEntProp(GetClientActiveWeapon(client),	Prop_Send,	"m_iPrimaryReserveAmmoCount");
 }
 
@@ -531,7 +579,7 @@ stock	int		GetClientWeaponReserveAmmo(int	client)	{
  * @param output		Buffer to store the weapon entity name.
  * @param maxlen		The maximum length for the buffer.
  */
-stock	int		GetClientWeaponEx(int	client,	int	slot,	char[]	output,	int maxlen)	{
+stock	int		GetClientWeaponEx(int client, int slot, char[] output, int maxlen)	{
 	int	clientweapon	=	GetPlayerWeaponSlot(client,	slot);
 	if(IsValidEdict(clientweapon))	{
 		GetEdictClassname(clientweapon,	output,	sizeof(maxlen));
@@ -547,7 +595,7 @@ stock	int		GetClientWeaponEx(int	client,	int	slot,	char[]	output,	int maxlen)	{
  * @param primary		Amount of primary ammo for the weapon selected.
  * @param secondary		Amount of secondary ammo for the weapon selected.
  */
-stock	void	GiveClientWeaponEx2(int	client,	char[] weapon,	int slot,	int primary,	int secondary)	{
+stock	void	GiveClientWeaponEx2(int client, char[] weapon, int slot, int primary, int secondary)	{
 	CS_ClientRemoveWeaponSlot(client,	slot);
 	GivePlayerItem(client,	weapon);
 	SetClientWeaponAmmo(client,	primary);
@@ -561,7 +609,7 @@ stock	void	GiveClientWeaponEx2(int	client,	char[] weapon,	int slot,	int primary,
  * @param weapon		Weapon entity name.
  * @param slot			Players slot to be removed.
  */
-stock	void	GiveClientWeapon(int client, char[] weapon,	int	slot)	{
+stock	void	GiveClientWeapon(int client, char[] weapon, int slot)	{
 	CS_ClientRemoveWeaponSlot(client,	slot);
 	GivePlayerItem(client,	weapon);
 }
@@ -577,7 +625,7 @@ stock	void	GiveClientWeapon(int client, char[] weapon,	int	slot)	{
  * @error               Invalid client index.
  */
 stock	CSTeam	CS_GetClientTeam(int client)	{
-	return view_as<CSTeam>(GetClientTeam(client));
+	return	view_as<CSTeam>(GetClientTeam(client));
 }
 
 /**
@@ -637,6 +685,12 @@ stock	void	CS_ClientDropWeaponSlot(int	client,	int	slot)	{
  * @pragma client			Client index.
  * @pragma slot				Weapon slot.
  *
+ * Slots:
+ * 1 = Primary
+ * 2 = Secondary
+ * 3 = Melee
+ * 4 = Grenade
+ * 5 = Bomb
  */
 stock	void	CS_ClientRemoveWeaponSlot(int	client,	int	slot)	{
 	int ent;
@@ -803,7 +857,7 @@ stock	int		TF2_GetClientTauntCam(int	client)	{
 	return	GetEntProp(client,	Prop_Send,	"m_nForceTauntCam");
 }
 
-//Set the clients killstreak count
+//Set or get the clients killstreak count
 /**
  * Set the clients killstreak count
  *
@@ -821,4 +875,28 @@ stock	void	TF2_SetClientKillstreak(int	client,	int	value)	{
  */
 stock	int	TF2_GetClientKillstreak(int	client)	{
 	return	SetEntProp(client,	Prop_Send,	"m_nStreaks");
+}
+
+//Left 4 Dead
+
+/**
+ * Gets a client's current team.
+ *
+ * @param client        Client index.
+ * @return              Current L4DTeam of client.
+ * @error               Invalid client index.
+ */
+stock	L4DTeam	L4D_GetClientTeam(int client)	{
+	return	view_as<L4DTeam>(GetClientTeam(client));
+}
+
+/**
+ * Changes a client's current team.
+ *
+ * @param client        Client index.
+ * @param team          L4DTeam team symbol.
+ * @error               Invalid client index.
+ */
+stock	void	L4D_ChangeClientTeam(int client,	L4DTeam team)	{
+	ChangeClientTeam(client,	view_as<int>(team));
 }
