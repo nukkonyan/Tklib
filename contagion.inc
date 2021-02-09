@@ -34,5 +34,5 @@ stock	CETeam	CE_GetClientTeam(int client)	{
  * @error               Invalid client index.
  */
 stock	void	CE_ChangeClientTeam(int client,	CETeam team)	{
-	ChangeClientTeam(client,	view_as<int>(team));
+	ChangeClientTeam(client, view_as<int>(team));
 }
