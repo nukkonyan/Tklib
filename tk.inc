@@ -14,6 +14,10 @@
 // + Added numerous new set/change functions.
 // + Added checks to return error if the client is invalid.
 
+// - Version 1.1.1
+// + Added Day of Defeat: Source
+// + Added TFFlag event type support (Events related to example picking up, defending, capturing and dropping intelligence in tf2.)
+// + Updated some enum structures to better match the existing ones.
 
 #include	<sdktools>
 #include	<sdkhooks>
@@ -23,7 +27,16 @@
 
 #define		CONSOLE		0
 
-#define		TK_Include_Version	"1.1.0"
+#define		TK_Include_Version	"1.1.1"
+
+//TF2 Flag Event
+enum
+{
+	TFFlag_PickedUp	=	1,
+	TFFlag_Defended	=	2,
+	TFFlag_Captured	=	3,
+	TFFlag_Dropped	=	4
+}
 
 //CS Slots
 enum	CSSlot
@@ -55,18 +68,27 @@ enum	CSWeaponType
 enum	CSTeam
 {
 	CSTeam_Unassigned	=	0,
-	CSTeam_Spectators	=	1,
-	CSTeam_Terrorists	=	2,
-	CSTeam_CTerrorists	=	3
+	CSTeam_Spectator	=	1,
+	CSTeam_Terrorist	=	2,
+	CSTeam_CTerrorist	=	3
 }
 
 //Left 4 Dead 2 enum
 enum	L4DTeam
 {
 	L4DTeam_Unassigned	=	0,
-	L4DTeam_Spectators	=	1,
-	L4DTeam_Survivors	=	2,
-	L4DTeam_Zombies		=	3
+	L4DTeam_Spectator	=	1,
+	L4DTeam_Survivor	=	2,
+	L4DTeam_Zombie		=	3
+}
+
+//Day of Defeat: Source enum
+enum	DODTeam
+{
+	DODTeam_Unassigned	=	0,
+	DODTeam_Spectator	=	1,
+	DODTeam_Red			=	2,
+	DODTeam_Blue		=	3
 }
 
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringName[GetClientTeam(client)] will return the correct team name)
@@ -213,7 +235,7 @@ stock bool IsClientFlag(int client, int adminflags)	{
  * @param cookie		Cookie handle.
  * @param value			The integer value
  */
-stock void SetClientCookieInt(int client, Cookie cookie, int value)	{
+stock void SetClientCookieInt(int client, Handle cookie, int value)	{
 	if(!ClientExists(client))
 		ThrowError("Client index %d is invalid", client);
 	
@@ -460,6 +482,21 @@ stock void SetClientGodMode(int client, bool godmode)	{
 	}
 }
 
+
+/**
+ * Get the clients godmode value.
+ *
+ * @param client		Client index.
+ */
+stock bool GetClientGodmode(int client)	{
+	if(!ClientExists(client))
+		ThrowError("Client index %d is invalid", client);
+	
+	if(GetEntProp(client,	Prop_Send,	"m_takedamage",	0,	1) == 1)
+		return	true;
+	return	false;
+}
+
 /**
  * Set the clients buddha mode
  *
@@ -476,22 +513,52 @@ stock void SetClientBuddhaMode(int client, bool buddha)	{
 	}
 }
 
-//Enable or disable clients collision
+/**
+ * Get the clients buddha mode
+ *
+ * @param client		Client index.
+ */
+stock bool GetClientBuddhaMode(int client)	{
+	if(!ClientExists(client))
+		ThrowError("Client index %d is invalid", client);
+	
+	if(GetEntProp(client,	Prop_Send,	"m_takedamage",	1,	1) == 1)
+		return	true;
+	return	false;
+}
+
+//Clients collision
 /**
  * Set the clients collision
  *
  * @param client		Client index.
  * @param collision		Bool value.
  */
-stock	void	SetClientCollision(int client, bool collision)	{
+stock void	SetClientCollision(int client, bool collision)	{
 	if(!ClientExists(client))
 		ThrowError("Client index %d is invalid", client);
 	
 	int	block	=	FindSendPropInfo("CBaseEntity", "m_CollisionGroup");
 	switch(collision)	{
-		case	true:	SetEntData(client,	block,	2,	4,	true);
-		case	false:	SetEntData(client,	block,	5,	4,	true);
+		case	true:	SetEntData(client,	block,	2,	4);
+		case	false:	SetEntData(client,	block,	5,	4);
 	}
+}
+
+/**
+ * Get the clients collision
+ *
+ * @param client		Client index.
+ * @param collision		Bool value.
+ */
+stock bool GetClientCollision(int client)	{
+	if(!ClientExists(client))
+		ThrowError("Client index %d is invalid", client);
+	
+	int	block	=	FindSendPropInfo("CBaseEntity", "m_CollisionGroup");
+	if(GetEntData(client,	block,	2,	4) == 1)
+		return	true;
+	return	false;
 }
 
 //Noclip toggle
@@ -546,7 +613,7 @@ stock float GetClientMaxSpeed(int client)	{
  * @param client		Client index
  * @param error			Invalid client index.
  */
-stock void IsClientMuted(int client)	{
+stock void IsClientMutedEx(int client)	{
 	if(!ClientExists(client))
 		ThrowError("Client index %d is invalid", client);
 	
@@ -569,6 +636,28 @@ stock void SetClientMute(int client, int mute)	{
 	switch(mute)	{
 		case	true:	SetClientListeningFlags(client, VOICE_MUTED);
 		case	false:	SetClientListeningFlags(client,	VOICE_NORMAL);
+	}
+}
+
+/**
+ * Slay the client.
+ *
+ * @param client		Client index.
+ * @param randomdeath	Should death be random. (Should be used in games where is supported)
+ * @error				Invalid client index.
+ */
+stock void SlayPlayer(int client, bool RandomDeath=false)	{
+	if(!ClientExists(client))
+		ThrowError("Client index %d is invalid", client);
+	
+	char	death[][] = {
+		"kill",
+		"explode"
+	};
+	
+	switch(RandomDeath)	{
+		case	true:	FakeClientCommandEx(client, death[GetRandomInt(0, 1)]);
+		case	false:	FakeClientCommandEx(client, death[0]);
 	}
 }
 
@@ -813,15 +902,15 @@ stock int GetClientWeaponReserveAmmo(int client)	{
  * Get the clients weapon entity name via slot
  *
  * @param client		Client index.
- * @param slot			Target slot.
+ * @param slot			Target CSSlot slot.
  * @param output		Buffer to store the weapon entity name.
  * @param maxlen		The maximum length for the buffer.
  */
-stock int GetClientWeaponEx(int client, int slot, char[] output, int maxlen)	{
+stock int CS_GetClientWeaponEx(int client, CSSlot slot, char[] output, int maxlen)	{
 	if(!ClientExists(client))
 		ThrowError("Client index %d is invalid", client);
 	
-	int	clientweapon	=	GetPlayerWeaponSlot(client,	slot);
+	int	clientweapon	=	CS_GetPlayerWeaponSlot(client,	slot);
 	if(IsValidEdict(clientweapon))	{
 		GetEdictClassname(clientweapon,	output,	sizeof(maxlen));
 	}
@@ -836,11 +925,11 @@ stock int GetClientWeaponEx(int client, int slot, char[] output, int maxlen)	{
  * @param primary		Amount of primary ammo for the weapon selected.
  * @param secondary		Amount of secondary ammo for the weapon selected.
  */
-stock	void	GiveClientWeaponEx2(int client, char[] weapon, int slot, int primary, int secondary)	{
+stock void CS_GiveClientWeaponEx2(int client, char[] weapon, CSSlot slot, int primary, int secondary)	{
 	if(!ClientExists(client))
 		ThrowError("Client index %d is invalid", client);
 	
-	CS_ClientRemoveWeaponSlot(client,	slot);
+	CS_ClientRemoveWeaponSlot(client, slot);
 	GivePlayerItem(client,	weapon);
 	if(primary > 0)
 		SetClientWeaponAmmo(client,	primary);
@@ -855,7 +944,7 @@ stock	void	GiveClientWeaponEx2(int client, char[] weapon, int slot, int primary,
  * @param weapon		Weapon entity name.
  * @param slot			Players slot to be removed.
  */
-stock	void	GiveClientWeapon(int client, char[] weapon, int slot)	{
+stock void CS_GiveClientWeapon(int client, char[] weapon, CSSlot slot)	{
 	if(!ClientExists(client))
 		ThrowError("Client index %d is invalid", client);
 	
@@ -1242,6 +1331,36 @@ stock L4DTeam L4D_GetClientTeam(int client)	{
  * @error				Invalid client index.
  */
 stock void L4D_ChangeClientTeam(int client, L4DTeam team)	{
+	if(!ClientExists(client))
+		ThrowError("Client index %d is invalid", client);
+	
+	ChangeClientTeam(client,	view_as<int>(team));
+}
+
+//Day of Defeat: Source
+
+/**
+ * Gets a client's current team.
+ *
+ * @param client		Client index.
+ * @return				Current DODTeam of client.
+ * @error				Invalid client index.
+ */
+stock DODTeam DOD_GetClientTeam(int client)	{
+	if(!ClientExists(client))
+		ThrowError("Client index %d is invalid", client);
+	
+	return	view_as<DODTeam>(GetClientTeam(client));
+}
+
+/**
+ * Changes a client's current team.
+ *
+ * @param client		Client index.
+ * @param team			DODTeam team symbol.
+ * @error				Invalid client index.
+ */
+stock void DOD_ChangeClientTeam(int client, DODTeam team)	{
 	if(!ClientExists(client))
 		ThrowError("Client index %d is invalid", client);
 	
