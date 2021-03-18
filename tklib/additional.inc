@@ -43,10 +43,10 @@ enum	CSGORank
 }
 
 //Soon will be finished on.
-//enum	CSGORankType
-//{
-//	CSGORankType_Competitive	=	7
-//}
+enum	CSGORankType
+{
+	CSGORankType_Competitive	=	7
+}
 
 /**
  *	Fixes the StatTrak and Skins function not working.
@@ -141,7 +141,7 @@ stock void CSGO_SetWeaponNametag(int weapon, char[] nametag, int maxlen=128)	{
  *	@param buffer		A Nametag or string of characters you specify.
  *	@param maxlen		Length of the buffer.
  */
-stock void CSGO_SetWeaponNametag(int weapon, char[] buffer, int maxlen)	{
+stock void CSGO_GetWeaponNametag(int weapon, char[] buffer, int maxlen)	{
 	GetEntDataString(weapon, FindSendPropInfo("CBaseAttributableItem", "m_szCustomName"), nametag, maxlen);
 }
 
