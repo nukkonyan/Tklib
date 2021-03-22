@@ -3,7 +3,7 @@
  *										 *
  * 		Made by Tk /id/Teamkiller324	 *
  *										 *
- *				Version 1.1.2			 *
+ *				Version 1.2.1			 *
 \*****************************************/
 
 //Changelogs
@@ -44,6 +44,9 @@
 // + Added SetEntityDisabled if the entity you target should start disabled or not as a boolean. true/false statement.
 // + Added GetEntityModel as easier method to return the model of the entity.
 // + Added GetClientAuth which is same as GetClientAuthId but it functions similiarly to GetClientAuthString.
+
+// - Version 1.2.1
+// + Updated L4DTeam enum L4DTeam_Zombie to L4DTeam_Infected
 
 //TF2 Flag Event
 enum
@@ -106,7 +109,7 @@ enum	L4DTeam
 	L4DTeam_Unassigned	=	0,
 	L4DTeam_Spectator	=	1,
 	L4DTeam_Survivor	=	2,
-	L4DTeam_Zombie		=	3
+	L4DTeam_Infected	=	3
 }
 
 //Day of Defeat: Source enum
@@ -127,9 +130,10 @@ enum	DODTeam
 
 //Core includes
 #include	"tklib/additional"
+#include	"tklib/resize"
 
 #define		CONSOLE		0
-#define		TK_Include_Version	"1.1.2"
+#define		TK_Include_Version	"1.2.1"
 
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringName[GetClientTeam(client)] will return the correct team name)
 stock	char	TF2_GetTeamStringName[][128]	=	{
@@ -362,7 +366,7 @@ stock int SetClientMaxHealth(int client, int value)	{
 	if(!ClientExists(client))
 		ThrowError("Client index %d is invalid", client);
 	
-	SetEntProp(client,	Prop_Data,	"m_iMaxHealth",	value);
+	SetEntProp(client, Prop_Send, "m_iMaxHealth", value);
 }
 
 /**
