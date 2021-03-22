@@ -190,7 +190,7 @@ stock void CSGO_SetArmModel(int client, char[] name)	{
 
 //TF2
 
-//Empty here atm, soon will come stuff.
+//Empty here, will be filled later on..
 
 //Other
 
@@ -310,4 +310,59 @@ stock void GetEntityModel(int entity, char[] buffer, int maxlen)	{
  */
 stock void GetClientAuth(int client, char[] buffer, int maxlen)	{
 	GetClientAuthId(client, AuthId_Steam2, buffer, maxlen);
+}
+
+/**
+ *	Returns the AdminFlag from the ADMFLAG you specify.
+ *
+ *	@param adminflags	The adminflag integer.
+ */
+stock AdminFlag AdmflagToAdminFlag(int adminflags)	{
+	AdminFlag adminflag;
+	
+	switch(adminflags)	{
+		case	ADMFLAG_RESERVATION:	adminflag = Admin_Reservation;
+		case	ADMFLAG_GENERIC:		adminflag = Admin_Generic;
+		case	ADMFLAG_KICK:			adminflag = Admin_Kick;
+		case	ADMFLAG_BAN:			adminflag = Admin_Ban;
+		case	ADMFLAG_UNBAN:			adminflag = Admin_Unban;
+		case	ADMFLAG_SLAY:			adminflag = Admin_Slay;
+		case	ADMFLAG_CHANGEMAP:		adminflag = Admin_Changemap;
+		case	ADMFLAG_CONVARS:		adminflag = Admin_Convars;
+		case	ADMFLAG_CONFIG:			adminflag = Admin_Config;
+		case	ADMFLAG_CHAT:			adminflag = Admin_Chat;
+		case	ADMFLAG_VOTE:			adminflag = Admin_Vote;
+		case	ADMFLAG_PASSWORD:		adminflag = Admin_Password;
+		case	ADMFLAG_RCON:			adminflag = Admin_RCON;
+		case	ADMFLAG_CHEATS:			adminflag = Admin_Cheats;
+		case	ADMFLAG_ROOT:			adminflag = Admin_Root;
+		case	ADMFLAG_CUSTOM1:		adminflag = Admin_Custom1;
+		case	ADMFLAG_CUSTOM2:		adminflag = Admin_Custom2;
+		case	ADMFLAG_CUSTOM3:		adminflag = Admin_Custom3;
+		case	ADMFLAG_CUSTOM4:		adminflag = Admin_Custom4;
+		case	ADMFLAG_CUSTOM5:		adminflag = Admin_Custom5;
+		case	ADMFLAG_CUSTOM6:		adminflag = Admin_Custom6;
+	}
+	
+	return	adminflag;
+}
+
+/**
+ *	Get the client by steam authentication.
+ *
+ *	@param auth.		Steam Auth.
+ *	@return				Client Index.
+ */
+stock int GetClientOfAuth(char[] auth)	{
+	int client = 0;
+	for(int i = 1; i < MaxClients; i++)	{
+		if(!IsClientInGame(i) || IsFakeClient(i))
+			continue;
+		
+		char tempauth[64];
+		GetClientAuth(i, tempauth, sizeof(tempauth));
+		if(StrEqual(tempauth, auth))
+			client = i;
+	}
+	return	client;
 }
