@@ -1,316 +1,14 @@
-//CSGO
+//Get true of false message statements easier.
+stock char Bool[][]	=	{
+	"True",
+	"False"
+};
 
-enum	CSGORank
-{
-	CSGORank_UnRanked	=	0,
-	CSGORank_UR	=	0,
-	CSGORank_Silver1	=	1,
-	CSGORank_S1	=	1,
-	CSGORank_Silver2	=	2,
-	CSGORank_S2	=	2,
-	CSGORank_Silver3	=	3,
-	CSGORank_S3	=	3,
-	CSGORank_Silver4	=	4,
-	CSGORank_S4	=	4,
-	CSGORank_SilverElite	=	5,
-	CSGORank_SE	=	5,
-	CSGORank_SilverEliteMaster	=	6,
-	CSGORank_SEM	=	6,
-	CSGORank_GoldNova1	=	7,
-	CSGORank_GN1	=	7,
-	CSGORank_GoldNova2	=	8,
-	CSGORank_GN2	=	8,
-	CSGORank_GoldNova3	=	9,
-	CSGORank_GN3	=	9,
-	CSGORank_GoldNovaMaster	=	10,
-	CSGORank_GNM	=	10,
-	CSGORank_MasterGuardian1	=	11,
-	CSGORank_MG1	=	11,
-	CSGORank_MasterGuardian2	=	12,
-	CSGORank_MG2	=	12,
-	CSGORank_MasterGuardianElite	=	13,
-	CSGORank_MGE	=	13,
-	CSGORank_DistinguishedMasterGuardian	=	14,
-	CSGORank_DMG	=	14,
-	CSGORank_LegendaryEagle	=	15,
-	CSGORank_LE	=	15,
-	CSGORank_LegendaryEagleMaster	=	16,
-	CSGORank_LEM	=	16,
-	CSGORank_SupremeMasterFirstClass	=	17,
-	CSGORank_SMFC	=	17,
-	CSGORank_TheGlobalElite	=	18,
-	CSGORank_GE	=	18
-}
-
-//Soon will be finished on.
-enum	CSGORankType
-{
-	CSGORankType_Competitive	=	7
-}
-
-/**
- *	Fixes the StatTrak and Skins function not working.
- *
- *	@param weapon		Weapon entity.
- */
-stock void CSGO_FixWeaponId(int weapon)	{
-	//Fixes skin not appearing.
-	static int IDHigh = 16384;
-	SetEntProp(weapon, Prop_Send, "m_iItemIDHigh", IDHigh++);
-	SetEntProp(weapon, Prop_Send, "m_iItemIDLow", -1);
-}
-
-/**
- *	Set the Weapon skin.
- *
- *	@param weapon		Weapon entity.
- *	@param index		The Skin index.
- */
-stock void CSGO_SetWeaponSkin(int weapon, int index)	{
-	CSGO_FixWeaponId(weapon);
-	SetEntProp(weapon, Prop_Send, "m_nFallbackPaintKit", index);
-}
-
-/**
- *	Get the Weapon skin.
- *
- *	@param weapon		Weapon entity.
- *	@param index		The Skin index.
- */
-stock int CSGO_GetWeaponSkin(int weapon)	{
-	return	GetEntProp(weapon, Prop_Send, "m_nFallbackPaintKit");
-}
-
-/**
- *	Set the Weapon StatTrak.
- *
- *	@param weapon		Weapon entity.
- *	@param value		The 'kill' track amount. If -1 (by default), will be disabled.
- */
-stock void CSGO_SetWeaponStatTrak(int weapon, int value=-1)	{
-	CSGO_FixWeaponId(weapon);
-	SetEntProp(weapon, Prop_Send, "m_nFallbackStatTrak", value);
-}
-
-/**
- *	Get the Weapon StatTrak.
- *
- *	@param weapon		Weapon entity.
- */
-stock int CSGO_GetWeaponStatTrak(int weapon)	{
-	return	GetEntProp(weapon, Prop_Send, "m_nFallbackStatTrak");
-}
-
-/**
- *	Set the weapon owner.
- *
- *	@param weapon		Weapon entity.
- *	@param client		Client index.
- */
-stock void CSGO_SetWeaponOwner(int weapon, int client)	{
-	SetEntProp(weapon, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
-	SetEntPropEnt(weapon, Prop_Send, "m_hOwnerEntity", client);
-	SetEntPropEnt(weapon, Prop_Send, "m_hPrevOwner", -1);
-}
-
-/**
- *	Set the weapon quality.
- *
- *	@param weapon		Weapon entity.
- *	@param index		Quality index value. By default set to 3, adding a star to the weapon name.
- */
-stock void CSGO_SetWeaponQuality(int weapon, int index=3)	{
-	SetEntProp(weapon, Prop_Send, "m_iEntityQuality", index);
-}
-
-/**
- *	Set the weapon nametag
- *
- *	@param weapon		Weapon entity.
- *	@param nametag		A Nametag or string of characters you specify.
- *	@param maxlen		Max character length for the string buffer.
- */
-stock void CSGO_SetWeaponNametag(int weapon, char[] nametag, int maxlen=128)	{
-	SetEntDataString(weapon, FindSendPropInfo("CBaseAttributableItem", "m_szCustomName"), nametag, maxlen);
-}
-
-/**
- *	Get the weapon nametag
- *
- *	@param weapon		Weapon entity.
- *	@param buffer		A Nametag or string of characters you specify.
- *	@param maxlen		Length of the buffer.
- */
-stock void CSGO_GetWeaponNametag(int weapon, char[] buffer, int maxlen)	{
-	GetEntDataString(weapon, FindSendPropInfo("CBaseAttributableItem", "m_szCustomName"), nametag, maxlen);
-}
-
-/**
- *	Get the competitive rank offset. [CS:GO]
- */
-stock int CSGO_GetCompetitiveOffset()	{
-	return	FindSendPropInfo("CCSPlayerResource",	"m_iCompetitiveRanking");
-}
-
-/**
- *	Set the competitive rank offset. [CS:GO]
- *	@param entity		The target entity.
- *	@param array			array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
- */
-stock void CSGO_SetCompetitiveOffset(int entity, const CSGORank[] array)	{
-	SetEntDataArray(entity,	CSGO_GetCompetitiveOffset(),	view_as<int>(array),	MAXPLAYERS+1);
-}
-
-/**
- *	Get the competitive rank type. [CS:GO]
- */
-stock int CSGO_GetCompetitiveType()	{
-	return	FindSendPropInfo("CCSPlayerResource",	"m_iCompetitiveRankType");
-}
-
-/**
- *	Set the competitive rank type. [CS:GO]
- *
- *	@param entity		The target entity.
- *	@param array			array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
- */
-stock void CSGO_SetCompetitiveType(int entity, const CSGORankType[] array)	{
-	SetEntDataArray(entity,	CSGO_GetCompetitiveType(),	view_as<int>(array),	MAXPLAYERS+1,	1);
-}
-
-/** 
- *	Set the arms model. [CS:GO]
- *
- *	@param client		Client index.
- *	@param name			The Arm model path.
- */
-stock void CSGO_SetArmModel(int client, char[] name)	{
-	SetEntPropString(client, Prop_Send, "m_szArmsModel", name);
-}
-
-//TF2
-
-//Empty here, will be filled later on..
-
-//Other
-
-/**
- *	Equips a players weapon.
- *	This is an alternative to that, this method fixes 0 clip magazine and glitchy reload animations because
- *	it was being spawned onto the client too early when using CreateEntityByName.
- *
- *	@param client		Client index.
- *	@param weapon		Weapon entity.
- */
-stock void EquipPlayerWeaponEx(int client, int weapon)	{
-	//Credits to Bacardi for part of the code.
-	
-	float origin[3];
-	GetClientAbsOrigin(client, origin);
-	//origin[2] += 100.0;
-	
-	TeleportEntity(weapon, origin, NULL_VECTOR, NULL_VECTOR);
-	SetEntPropVector(weapon, Prop_Send, "m_vecOrigin", origin);
-	
-	//Lets force the weapon to never respawn.
-	int SF_NORESPAWN = (1 << 30);
-	int flags = GetEntProp(weapon, Prop_Data, "m_spawnflags");
-	flags |= SF_NORESPAWN;
-	
-	SetEntProp(weapon, Prop_Data, "m_spawnflags", flags);
-	
-	DispatchSpawn(weapon);
-}
-
-/**
- *	Get entity name
- *
- *	@param entity		Entity index.
- *	@param buffer		Buffer storage.
- *	@param maxlen		Buffer max length.
- */
-stock int GetEntityName(int entity, char[] buffer, int maxlen)	{
-	GetEntPropString(entity, Prop_Data, "m_iName", buffer, maxlen);
-}
-
-/**
- *	Set entity name
- *
- *	@param entity		Entity index.
- *	@param name			Entity name.
- */
-stock void SetEntityName(int entity, char[] name)	{
-	DispatchKeyValue(entity, "targetname", name);
-}
-
-/**
- *	Find entity if it exists.
- *
- *	@param classname	Entity classname.
- *	@return				Returns true on success, or false on failure.
- *	@error				Invalid entity.
- */
-stock bool FindEntity(char[] classname)	{
-	int entity = -1;
-	if((entity = FindEntityByClassname(entity, classname)) != -1)
-		return	true;
-	
-	return	false;
-}
-
-/**
- *	Creates an entity by string name but does not spawn it (see DispatchSpawn).
- *	If ForceEdictIndex is not -1, then it will use an edict by that index. If the index is
- *	invalid or there is already an edict using that index, it will error out.
- *	This provides additional ability to force name on the entity you created.
- *
- *	@param classname		Entity classname.
- *	@param name				Entity name it will be referred as.
- *	@param ForceEdictIndex	Edict index used by the created entity (Ignored on Orangebox and above).
- *	@return					Entity index on success, or -1 on failure.
- *	@error					Invalid edict index, or no mod support.
- */
-stock int CreateEntityByNameEx(char[] classname, char[] name, int ForceEdictIndex=-1)	{
-	int entity = CreateEntityByName(classname, ForceEdictIndex);
-	SetClientName(entity, name);
-	return entity;
-}
-
-/**
- *	Should entity start disabled?
- *
- *	@param entity		Entity index.
- *	@param disabled		If true, starts disabled, else enabled if false
- */
-stock void SetEntityDisabled(int entity, bool disabled)	{
-	switch(disabled)	{
-		case	true:	DispatchKeyValue(entity, "StartDisabled", "true");
-		case	false:	DispatchKeyValue(entity, "StartDisabled", "false");
-	}
-}
-
-/**
- *	Get the entitys model name/path
- *
- *	@param entity		Entity index.
- *	@param buffer		Buffer storage.
- *	@param maxlen		Length of the buffer.
- */
-stock void GetEntityModel(int entity, char[] buffer, int maxlen)	{
-	GetEntPropString(entity, Prop_Data, "m_ModelName", buffer, maxlen);
-}
-
-/**
- *	Get the clients steam authentication string.
- *	Same as GetClientAuthId but simpler.
- *
- *	@param client		Client index.
- *	@param buffer		Buffer storage.
- *	@param maxlen		Length of the buffer.
- */
-stock void GetClientAuth(int client, char[] buffer, int maxlen)	{
-	GetClientAuthId(client, AuthId_Steam2, buffer, maxlen);
-}
+//Coloured
+stock char BoolEx[][]	=	{
+	"{green}True{default}",
+	"{red}False{default}"
+};
 
 /**
  *	Returns the AdminFlag from the ADMFLAG you specify.
@@ -348,21 +46,208 @@ stock AdminFlag AdmflagToAdminFlag(int adminflags)	{
 }
 
 /**
- *	Get the client by steam authentication.
+ *	Returns the ADMFLAG from the AdminFlag you specify.
  *
- *	@param auth.		Steam Auth.
- *	@return				Client Index.
+ *	@param adminflags	The AdminFlag flag.
  */
-stock int GetClientOfAuth(char[] auth)	{
-	int client = 0;
-	for(int i = 1; i < MaxClients; i++)	{
-		if(!IsClientInGame(i) || IsFakeClient(i))
-			continue;
-		
-		char tempauth[64];
-		GetClientAuth(i, tempauth, sizeof(tempauth));
-		if(StrEqual(tempauth, auth))
-			client = i;
+stock int AdminFlaglagToAdmflag(AdminFlag adminflags)	{
+	int adminflag;
+	
+	switch(adminflags)	{
+		case	Admin_Reservation:	adminflag = ADMFLAG_RESERVATION;
+		case	Admin_Generic:		adminflag = ADMFLAG_GENERIC;
+		case	Admin_Kick:			adminflag = ADMFLAG_KICK;
+		case	Admin_Ban:			adminflag = ADMFLAG_BAN;
+		case	Admin_Unban:		adminflag = ADMFLAG_UNBAN;
+		case	Admin_Slay:			adminflag = ADMFLAG_SLAY;
+		case	Admin_Changemap:	adminflag = ADMFLAG_CHANGEMAP;
+		case	Admin_Convars:		adminflag = ADMFLAG_CONVARS;
+		case	Admin_Config:		adminflag = ADMFLAG_CONFIG;
+		case	Admin_Chat:			adminflag = ADMFLAG_CHAT;
+		case	Admin_Vote:			adminflag = ADMFLAG_VOTE;
+		case	Admin_Password:		adminflag = ADMFLAG_PASSWORD;
+		case	Admin_RCON:			adminflag = ADMFLAG_RCON;
+		case	Admin_Cheats:		adminflag = ADMFLAG_CHEATS;
+		case	Admin_Root:			adminflag = ADMFLAG_ROOT;
+		case	Admin_Custom1:		adminflag = ADMFLAG_CUSTOM1;
+		case	Admin_Custom2:		adminflag = ADMFLAG_CUSTOM2;
+		case	Admin_Custom3:		adminflag = ADMFLAG_CUSTOM3;
+		case	Admin_Custom4:		adminflag = ADMFLAG_CUSTOM4;
+		case	Admin_Custom5:		adminflag = ADMFLAG_CUSTOM5;
+		case	Admin_Custom6:		adminflag = ADMFLAG_CUSTOM6;
 	}
-	return	client;
+	
+	return	adminflag;
+}
+
+/**
+ *	Retrieves a command as integer at its index, from the current console or server command.
+ *
+ *	@note Argument indexes start at 1; 0 retrieves the command name.
+ *	@param argnum		Argument number to retrieve.
+ *	@return				Integer of the returned argument.
+ */
+stock int GetCmdInt(int argnum)	{
+	char buffer[64];
+	GetCmdArg(argnum, buffer, sizeof(buffer));
+	
+	if(StrEqual(buffer, ""))
+		return	-1;
+	
+	return	StringToInt(buffer);
+}
+
+/**
+ *	Returns if the client and target is the same player.
+ *
+ *	@param client		Client index.
+ *	@param target		Target index.
+ *	@return				Returns true if it's the same player, false otherwise.
+ */
+stock bool IsSamePlayers(int client, int target)	{
+	return (client == target);
+}
+
+/**
+ *	Returns if the client and target is on the same team.
+ *
+ *	@param client		Client index.
+ *	@param target		Target index.
+ *	@return				Returns true if it's they're on the same team, false otherwise.
+ */
+stock bool IsSameTeam(int client, int target)	{
+	return (GetClientTeam(client) == GetClientTeam(target));
+}
+
+/**
+ *	Turns an integer into a floating point.
+ *
+ *	@param value	Float to convert.
+ *	@return			Integer result, or 0 on error. 
+ */
+stock int FloatToInt(float value)	{
+	char buffer[96];
+	FloatToString(value, buffer, sizeof(buffer));
+	return	StringToInt(buffer);
+}
+
+/**
+ *	Returns if the game is the game you you specified.
+ *	This can be quite useful for checking things and not take too much space.
+ *
+ *	@param game			The EngineVersion game you specify.
+ *	@return				If true, game you specified is active, else false.
+ */
+stock bool IsCurrentGame(GameIdentifier gameversion)	{
+	return (Identifygame() == gameversion);
+}
+
+/**
+ *	Tests whether a string is found in another string.
+ *	This is same as StrContains but no need to use the -1 at the end, now just returns true or false.
+ *
+ *	@param	str				String to search in.
+ *	@param	substr			Substring to find inside the original string.
+ *	@param	caseSensitive	if true (by default), search is case sensitive. If false, search is case insensitive.
+ *	*/
+stock bool StrContainsEx(char[] str, char[] substr, bool caseSensitive=true)	{
+	return (StrContains(str, substr, caseSensitive) != -1);
+}
+
+/**
+ *	Returns the teamcoloured name of the client specified.
+ *
+ *	@param		client		The client index.
+ *	@param		buffer		Buffer storage to store the name.
+ *	@param		maxlen		Maximum length of the buffer storage.
+ *	@return		Returns true if succeeded, else false.
+ */
+stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
+	int team = Tklib_IsValidClient(client) ? GetClientTeam(client):0;
+		
+	char	TeamColour_Default[][]	=	{
+		"{grey}",
+		"{grey}",
+		"{red}",
+		"{blue}"
+	},
+		TeamColour_TF2[][]	=	{
+		"{grey}",
+		"{grey}",
+		"{red}",
+		"{blue}",
+		"{lightgreen}",
+		"{orange}"
+	},
+
+		TeamColour_CSGO[][]	=	{
+		"{grey}",
+		"{grey}",
+		"{orange}",
+		"{bluegrey}"
+	},
+		TeamColour_L4D[][]	=	{
+		"{grey}",
+		"{grey}",
+		"{orange}",
+		"{lightred}"
+	};
+	switch(GetEngineVersion())	{
+		case	Engine_TF2:			Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2[team],		client);
+		case	Engine_CSGO:		Format(buffer, maxlen, "%s%N{default}", TeamColour_CSGO[team],		client);
+		case	Engine_Left4Dead:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
+		case	Engine_Left4Dead2:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
+		default:					Format(buffer, maxlen, "%s%N{default}", TeamColour_Default[team],	client);
+	}
+	return	true;
+}
+
+/**
+ *	Same as SQL_Connect but this is if you just want a temporary connection.
+ *
+ *	@param		confname		The name of the database config connection.
+ *	@param		persistent		If true, it will try to use a previous persistent connection.
+ *	@param		debug			If true, it will show message if the connection returned 'null' (Error) or if it succeeded.
+ */
+stock Database SQL_Connect2(char[] confname, bool persistent=true, bool dbg=false)	{
+	char error[256];
+	Database database = SQL_Connect(confname, persistent, error, sizeof(error));
+	if(dbg)	{
+		switch(database == null)	{
+			case	true:	PrintToServer("[Tklib: Additional] SQL_Connect2: Connection to database \"%s\" had an error (%s)", confname, error);
+			case	false:	PrintToServer("[Tklib: Additional] SQL_Connect2: Connection to database \"%s\" succeeded!", confname);
+		}
+	}
+	return database;
+}
+
+/**
+ *	Returns GetRandomInt(0, 1) in boolean.
+ */
+stock bool GetRandomBool()	{
+	return view_as<bool>(GetRandomInt(0, 1));
+}
+
+/**
+ *	Same as CreateNative but you use 2 natives before forwarding it to a callback.
+ *	Useful for having 2 natives that uses the same forward.
+ *	Paired with MarkNativeAsOptionalEx.
+ *
+ *	@param	native1		Native 1.
+ *	@param	native2		Native 2.
+ *	@param	func		Native callback.
+ */
+stock void CreateNativeEx(const char[] native1, const char[] native2, NativeCall func)	{
+	CreateNative(native1, func);
+	CreateNative(native2, func);
+}
+
+/**
+ *	Same as MarkNativeAsOptional but you use 2 natives before marking it optional.
+ *	Useful for cleaning up code and also for 2 natives that use same forward.
+ *	Paired with CreateNativeEx.
+ */
+stock void MarkNativeAsOptionalEx(const char[] native1, const char[] native2)	{
+	MarkNativeAsOptional(native1);
+	MarkNativeAsOptional(native2);
 }
