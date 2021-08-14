@@ -3,7 +3,7 @@
  *										 *
  * 		Made by Tk /id/Teamkiller324	 *
  *										 *
- *				Version 1.3.0			 *
+ *				Version 1.3.1			 *
 \*****************************************/
 
 //Changelogs
@@ -53,14 +53,15 @@
 // + Added TFSlot_Invalid.
 // + Added SetWeaponDefinitionIndex
 
-// - Version 1.2.5
+// - Version 1.3.0
 // + Loads of changes and new functions.
 // + Integrated Game Identifier.
 
-#if defined Tklib_Included
-	#endinput
-#endif
-#define Tklib_Included
+// - Version 1.3.1
+// + Minor additions such as SetClientModel & TF2_SetClientModel and TF2_SetClassAnimations.
+// + Minor fixes to certain functions to work correctly.
+// + Updated Tk_Include_Version definition to Tklib_Version.
+// + Integrated Fortress Forever include.
 
 //SM Includes
 #include	<sdktools>
@@ -71,7 +72,12 @@
 #include	<tf2_stocks>
 
 #define		CONSOLE		0
-#define		TK_Include_Version	"1.3.0"
+
+#if defined Tklib_Included
+	#endinput
+#endif
+#define		Tklib_Included
+#define		TKlib_Version	"1.3.1"
 
 //Core includes
 #include	"tklib/gameidentifier"
@@ -86,3 +92,4 @@
 #include	"tklib/csgo"
 #include	"tklib/l4d"
 #include	"tklib/dods"
+#include	"tklib/fortress_forever"

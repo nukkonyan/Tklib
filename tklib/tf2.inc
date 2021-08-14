@@ -158,7 +158,7 @@ stock bool TF2_SetClientGlow(int client, bool value)	{
  *	@error	If the user is invalid, this will return -1.0.
 */
 stock float TF2_GetClientUbercharge(int client)	{
-	return Tklib_IsValidClient(client, _, true)) GetEntPropFloat(client, Prop_Send, "m_flChargeLevel"):-1.0;
+	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flChargeLevel"):-1.0;
 }
 
 /**
@@ -176,21 +176,18 @@ stock void TF2_SetClientUbercharge(int client, float value=1.0)	{
 /**
  *	Returns the users charge value,
  *
- *	@param client		The users index.
- *	@error				Invalid The users index.
+ *	@param	client		The users index.
+ *	@error	If the user is invalid, it will return -1.
 */
 stock float TF2_GetClientChargeMeter(int client)	{
-	if(Tklib_IsValidClient(client))
-		ThrowError("The users index %d is invalid", client)
-	
-	return GetEntPropFloat(client, Prop_Send, "m_flChargeMeter");
+	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flChargeMeter"):-1;
 }
 
 /**
  *	Set the users charge value,
  *
  *	@param client		The users index.
- *	@param value		Float value.
+ *	@param value		Charge value.
  *	@error				Invalid The users index.
 */
 stock void TF2_SetClientChargeMeter(int client, float value=1.0)	{
@@ -201,28 +198,23 @@ stock void TF2_SetClientChargeMeter(int client, float value=1.0)	{
 /**
  *	Returns the users metal value,
  *
- *	@param client		The users index.
- *	@error				Invalid The users index.
+ *	@param	client		The users index.
+ *	@error	If the user is invalid, it will return -1.
 */
 stock int TF2_GetClientMetal(int client)	{
-	if(Tklib_IsValidClient(client))
-		ThrowError("The users index %d is invalid", client)
-	
-	return	GetEntProp(client, Prop_Data, "m_iAmmo", 4, 3);
+	return Tklib_IsValidClient(client, _, true) ? GetEntProp(client, Prop_Data, "m_iAmmo", 4, 3):-1;
 }
 
 /**
  *	Set the users metal value,
  *
- *	@param client		The users index.
- *	@param value		Amount value.
- *	@error				Invalid The users index.
+ *	@param	client		The users index.
+ *	@param	value		Metal amount.
+ *	@error	If the user is invalid, nothing will happen.
 */
 stock void TF2_SetClientMetal(int client, int value=200)	{
-	if(Tklib_IsValidClient(client))
-		ThrowError("The users index %d is invalid", client)
-	
-	SetEntProp(client, Prop_Data, "m_iAmmo", value, 4, 3);
+	if(Tklib_IsValidClient(client, _, true))
+		SetEntProp(client, Prop_Data, "m_iAmmo", value, 4, 3);
 }
 
 /**
@@ -232,35 +224,30 @@ stock void TF2_SetClientMetal(int client, int value=200)	{
  *	@error	If the client is invalid, this will return -1.
 */
 stock int TF2_GetClientDecapitations(int client)	{
-	if(Tklib_IsValidClient(client))
-		ThrowError("The users index %d is invalid", client)
-	
-	return	GetEntProp(client, Prop_Send, "m_iDecapitations");
+	return Tklib_IsValidClient(client) ? GetEntProp(client, Prop_Send, "m_iDecapitations"):-1;
 }
 
 /**
  *	Set the users decapitations value,
  *
- *	@param client		The users index.
- *	@param value		Amount value.
- *	@error				Invalid The users index.
+ *	@param	client		The users index.
+ *	@param	value		Decapitations amount.
+ *	@error	If the user is invalid, nothing will happen.
 */
 stock void TF2_SetClientDecapitations(int client, int value=10)	{
 	if(Tklib_IsValidClient(client))
-		ThrowError("The users index %d is invalid", client)
-	
-	SetEntProp(client, Prop_Send, "m_iDecapitations");
+		SetEntProp(client, Prop_Send, "m_iDecapitations");
 }
 
 /**
  *	Returns the TF2 Weapon Slot
  *
- *	@param client		The users index.
- *	@param slot			TFSlot slot.
- *	@error	If the client is invalid, nothing will happen.
+ *	@param	client		The users index.
+ *	@param	slot			TFSlot slot.
+ *	@error	If the user is invalid, it will return -1.
  */
 stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
-	return GetPlayerWeaponSlot(client, view_as<int>(slot));
+	return Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, view_as<int>(slot)):-1;
 }
 
 /**
@@ -281,32 +268,59 @@ stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int max
 }
 
 /**
- *	Get the TFBuilding type.
+ *	Returns the TFBuilding type.
  *
- *	@param		index		The building to get TFBuilding type from.
- *	@return	Returns TFBuilding type.
+ *	@param	index	The building to get TFBuilding type from.
+ *	@error	If the building is invalid, it will return TFBuilding_Invalid.
  */
 stock TFBuilding TF2_GetBuildingType(int index)	{
-	if(!IsValidEdict(index) || !IsValidEntity(index))	{
-		PrintToServer("[Tklib: Additional] Failed to get TFBuilding type from entity %d", index);
-		return TFBuilding_Invalid;
-	}
-	
-	char classname[64];
-	GetEntityClassname(index, classname, sizeof(classname));
-	
-	if(StrEqual(classname, "obj_dispenser", false))
-		return	TFBuilding_Dispenser;
-	if(StrEqual(classname, "obj_sentrygun", false))
-		return	TFBuilding_Sentrygun;
-	if(StrEqual(classname, "obj_teleporter", false))	{
-		switch(TF2_GetObjectMode(index))	{
-			case	TFObjectMode_Entrance:	return TFBuilding_Teleporter_Entrance;
-			case	TFObjectMode_Exit:		return TFBuilding_Teleporter_Exit;
+	if((IsValidEdict(index) || IsValidEntity(index)))	{
+		char classname[64];
+		GetEntityClassname(index, classname, sizeof(classname));
+		
+		if(StrEqual(classname, "obj_dispenser"))
+			return	TFBuilding_Dispenser;
+		if(StrEqual(classname, "obj_sentrygun"))
+			return	TFBuilding_Sentrygun;
+		if(StrEqual(classname, "obj_teleporter"))	{
+			switch(TF2_GetObjectMode(index))	{
+				case	TFObjectMode_Entrance:	return TFBuilding_Teleporter_Entrance;
+				case	TFObjectMode_Exit:		return TFBuilding_Teleporter_Exit;
+			}
 		}
+		if(StrEqual(classname, "obj_minisentry"))
+			return	TFBuilding_MiniSentry;
 	}
-	if(StrEqual(classname, "obj_minisentry", false))
-		return	TFBuilding_MiniSentry;
 	
 	return TFBuilding_Invalid;
+}
+
+/**
+ *	Sets if the users current class-model should be forced using its class animations.
+ *
+ *	@param	client	The users client index.
+ *	@param	value	The bool on/off value.
+ *	@error	If the user is invalid, nothing will happen.
+ */
+stock void TF2_SetClassAnimations(int client, bool value)	{
+	if(Tklib_IsValidClient(client, _, true))
+		SetEntProp(client, Prop_Send, "m_bUseClassAnimations", view_as<int>(value));
+}
+
+/**
+ *	Sets the clients model.
+ *	This is the alternative to SetClientModel, as this actually puts the model.
+ *	This is paired with GetClientModel.
+ *
+ *	@param	client				The users index.
+ *	@param	model				The model path.
+ *	@param	UseClassAnimations	If true, this will force the model to use the class animations.
+ *	@error	If the user is invalid, nothing will happen.
+ */
+stock void TF2_SetClientModel(int client, char[] model, bool UseClassAnimations)	{
+	if(Tklib_IsValidClient(client, _, true))	{
+		SetVariantString(model);
+		AcceptEntityInput(client, "SetCustomModel");
+		TF2_SetClassAnimations(client, UseClassAnimations);
+	}
 }

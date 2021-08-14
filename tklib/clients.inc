@@ -114,7 +114,6 @@ stock void SetClientDeaths(int client, int value)	{
 }
 
 /**
- *	Tk Libraries: Clients.
  *	Set the clients frag count
  *
  *	@param	client		The users index.
@@ -135,7 +134,7 @@ stock void SetClientFrags(int client, int value)	{
  *	@error	If the client is invalid, nothing will happen.
  */
 stock void SetClientHealth(int client, int value)	{
-	if(!Tklib_IsValidClient(client, true))
+	if(Tklib_IsValidClient(client))
 		SetEntProp(client, Prop_Send, "m_iHealth", value);
 }
 
@@ -147,7 +146,7 @@ stock void SetClientHealth(int client, int value)	{
  *	@error	If the client is invalid, nothing will happen.
  */
 stock void SetClientMaxHealth(int client, int value)	{
-	if(Tklib_IsValidClient(client, true))
+	if(Tklib_IsValidClient(client))
 		SetEntProp(client, Prop_Send, "m_iMaxHealth", value);
 }
 
@@ -261,7 +260,7 @@ stock void SetClientObserverMode(int client, bool value)	{
  */
 stock void SetClientDrawViewModel(int client, bool value)	{
 	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_bDrawViewmodel", value);
+		SetEntProp(client, Prop_Send, "m_bDrawViewmodel", view_as<int>(value));
 }
 
 /**
@@ -272,7 +271,7 @@ stock void SetClientDrawViewModel(int client, bool value)	{
  *	@error	If the client is invalid, it will return false.
  */
 stock bool GetClientDrawViewModel(int client)	{
-	return Tklib_IsValidClient(client, true) ? SetEntProp(client, Prop_Send, "m_bDrawViewmodel"):false;
+	return Tklib_IsValidClient(client, true) ? view_as<bool>(GetEntProp(client, Prop_Send, "m_bDrawViewmodel")):false;
 }
 
 /**
@@ -607,6 +606,20 @@ stock int GetClientCountEx(bool nobots=true)	{
 		}
 	}
 	return	count;
+}
+
+/**
+ *	Set a model path for the specified user.
+ *	If setting model path in tf2, look at TF2_SetClientModel.
+ *	This is paired with GetClientModel.
+ *
+ *	@param	client		The users index.
+ *	@param	model		The model path.
+ *	@error	If the user is invalid, nothing will happen.
+ */
+stock void SetClientModel(int client, char[] model)	{
+	if(Tklib_IsValidClient(client, _, true))
+		SetEntityModel(client, model);
 }
 
 /**
