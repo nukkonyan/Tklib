@@ -3,7 +3,7 @@
  *										 *
  * 		Made by Tk /id/Teamkiller324	 *
  *										 *
- *				Version 1.3.1			 *
+ *				Version 1.3.2			 *
 \*****************************************/
 
 //Changelogs
@@ -80,7 +80,7 @@
 	#endinput
 #endif
 #define		Tklib_Included
-#define		TKlib_Version	"1.3.1"
+#define		TKlib_Version	"1.3.2"
 
 //Core includes
 #include	"tklib/gameidentifier"
