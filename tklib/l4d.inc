@@ -16,8 +16,8 @@ enum	L4DTeam	{
 /**
  *	Returns the users current team.
  *
- *	@param	client		The players index.
- *	@error	If the client is invalid, it will return L4DTeam_Unassigned.
+ *	@param	client		The users index.
+ *	@error	If the user is invalid, it will return L4DTeam_Unassigned.
  */
 stock L4DTeam L4D_GetClientTeam(int client)	{
 	return Tklib_IsValidClient(client) ? view_as<L4DTeam>(GetClientTeam(client)):L4DTeam_Unassigned;
@@ -26,8 +26,8 @@ stock L4DTeam L4D_GetClientTeam(int client)	{
 /**
  *	Changes a users current team.
  *
- *	@param	client		The players index.
- *	@error	If the client is invalid, nothing will happen.
+ *	@param	client		The users index.
+ *	@error	If the user is invalid, nothing will happen.
  */
 stock void L4D_ChangeClientTeam(int client, L4DTeam team)	{
 	if(Tklib_IsValidClient(client))

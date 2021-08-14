@@ -63,6 +63,9 @@
 // + Updated Tk_Include_Version definition to Tklib_Version.
 // + Integrated Fortress Forever include.
 
+// - Version 1.3.2
+// + Minor Corrections.
+
 //SM Includes
 #include	<sdktools>
 #include	<sdkhooks>

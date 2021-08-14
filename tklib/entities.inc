@@ -1,5 +1,4 @@
 /**
- *	Tk Libraries
  *	Returns the Absolute Origin of an entity.
  *
  *	@param	entity		The entity index.
@@ -11,35 +10,38 @@ stock void GetEntityAbsOrigin(int entity, float vec[3])	{
 }
 
 /**
- *	Tk Libraries.
- *	Get entity name
+ *	Returns the entity name
  *
  *	@param entity		Entity index.
  *	@param buffer		Buffer storage.
  *	@param maxlen		Buffer max length.
+ *	@error	If the entity is invalid, it will return false.
  */
-stock int GetEntityName(int entity, char[] buffer, int maxlen)	{
-	GetEntPropString(entity, Prop_Data, "m_iName", buffer, maxlen);
+stock bool GetEntityName(int entity, char[] buffer, int maxlen)	{
+	if(IsValidEdict(entity) || IsValidEntity(entity))	{
+		GetEntPropString(entity, Prop_Data, "m_iName", buffer, maxlen);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Tk Libraries.
  *	Set entity name
  *
- *	@param entity		Entity index.
- *	@param name			Entity name.
+ *	@param	entity		Entity index.
+ *	@param	name		Entity name.
  */
 stock void SetEntityName(int entity, char[] name)	{
-	DispatchKeyValue(entity, "targetname", name);
+	if(IsValidEdict(entity) || IsValidEntity(entity))
+		DispatchKeyValue(entity, "targetname", name);
 }
 
 /**
- *	Tk Libraries.
  *	Find entity if it exists.
  *
- *	@param classname	Entity classname.
- *	@return				Returns true on success, or false on failure.
- *	@error				Invalid entity.
+ *	@param	classname	Entity classname.
+ *	@error	If the entity is invalid, this will return false.
  */
 stock bool FindEntity(char[] classname)	{
 	int entity = -1;
@@ -50,26 +52,27 @@ stock bool FindEntity(char[] classname)	{
 }
 
 /**
- *	Tk Libraries.
  *	Creates an entity by string name but does not spawn it (see DispatchSpawn).
  *	If ForceEdictIndex is not -1, then it will use an edict by that index. If the index is
  *	invalid or there is already an edict using that index, it will error out.
  *	This provides additional ability to force name on the entity you created.
  *
- *	@param classname		Entity classname.
- *	@param name				Entity name it will be referred as.
- *	@param ForceEdictIndex	Edict index used by the created entity (Ignored on Orangebox and above).
- *	@return					Entity index on success, or -1 on failure.
- *	@error					Invalid edict index, or no mod support.
+ *	@param	classname		Entity classname.
+ *	@param	name			Entity name it will be referred as.
+ *	@param	ForceEdictIndex	Edict index used by the created entity (Ignored on Orangebox and above).
+ *	@error	Returns false if invalid edict index, or no mod support.
  */
-stock int CreateEntityByNameEx(char[] classname, char[] name, int ForceEdictIndex=-1)	{
-	int entity = CreateEntityByName(classname, ForceEdictIndex);
-	SetEntityName(entity, name);
-	return entity;
+stock bool CreateEntityByNameEx(char[] classname, char[] name, int ForceEdictIndex=-1)	{
+	int entity = -1;
+	if((entity = CreateEntityByName(classname, ForceEdictIndex)) != -1)	{
+		SetEntityName(entity, name);
+		return	true;
+	}
+	
+	return false;
 }
 
 /**
- *	Tk Libraries.
  *	Should entity start disabled?
  *
  *	@param entity		Entity index.
@@ -80,34 +83,23 @@ stock void SetEntityDisabled(int entity, bool disabled)	{
 }
 
 /**
- *	Tk Libraries.
- *	Sets the entity's model name/path
- *
- *	@param	entity		Entity index.
- *	@param	modelname	The model name path.
- *	@error	If the entity is invalid, nothing will happen.
- */
-stock void SetEntityModelEx(int entity, char[] modelname)	{
-	if(IsValidEdict(entity) || IsValidEntity(entity))
-		SetEntPropString(entity, Prop_Data, "m_ModelName", modelname);
-}
-
-/**
- *	Tk Libraries.
  *	Returns the entity's model name path
  *
  *	@param entity		Entity index.
  *	@param buffer		Buffer storage.
  *	@param maxlen		Length of the buffer.
- *	@error	If the entity is invalid, nothing will happen.
+ *	@error	If the entity is invalid, it will return false.
  */
-stock void GetEntityModel(int entity, char[] buffer, int maxlen)	{
-	if(IsValidEdict(entity) || IsValidEntity(entity))
+stock bool GetEntityModel(int entity, char[] buffer, int maxlen)	{
+	if(IsValidEdict(entity) || IsValidEntity(entity))	{
 		GetEntPropString(entity, Prop_Data, "m_ModelName", buffer, maxlen);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Tk Libraries.
  *	Returns an index of the entity owner.
  *
  *	@param	entity		The entity index.

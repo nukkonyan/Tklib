@@ -87,7 +87,7 @@ stock bool CSGO_SetWeaponSkin(int weapon, int index)	{
 
 /**
  *	Tk Libraries.
- *	Get the Weapon skin.
+ *	Returns the Weapon skin.
  *
  *	@param weapon		Weapon entity.
  *	@param index		The Skin index.
@@ -115,7 +115,7 @@ stock bool CSGO_SetWeaponStatTrak(int weapon, int value=-1)	{
 
 /**
  *	Tk Libraries.
- *	Get the Weapon StatTrak.
+ *	Returns the Weapon StatTrak.
  *
  *	@param weapon		Weapon entity.
  *	@error				If weapon or stattrak module is invalid, it will return -1.
@@ -150,7 +150,7 @@ stock bool CSGO_SetWeaponOwner(int weapon, int client)	{
  *	@param index		Quality index value. By default set to 3, adding a star to the weapon name.
  */
 stock bool CSGO_SetWeaponQuality(int weapon, int index=3)	{
-	if(weapon == -1)
+	if((!IsValidEdict(weapon) || IsValidEntity(weapon)))
 		return	false;
 	
 	SetEntProp(weapon, Prop_Send, "m_iEntityQuality", index);
@@ -167,7 +167,7 @@ stock bool CSGO_SetWeaponQuality(int weapon, int index=3)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetWeaponNametag(int weapon, char[] nametag, int maxlen=128)	{
-	if(weapon == -1)
+	if((!IsValidEdict(weapon) || IsValidEntity(weapon)))
 		return	false;
 	
 	SetEntDataString(weapon, FindSendPropInfo("CBaseAttributableItem", "m_szCustomName"), nametag, maxlen);
@@ -176,7 +176,7 @@ stock bool CSGO_SetWeaponNametag(int weapon, char[] nametag, int maxlen=128)	{
 
 /**
  *	Tk Libraries.
- *	Get the weapon nametag
+ *	Returns the weapon nametag
  *
  *	@param weapon		Weapon entity.
  *	@param buffer		A Nametag or string of characters you specify.
@@ -184,7 +184,7 @@ stock bool CSGO_SetWeaponNametag(int weapon, char[] nametag, int maxlen=128)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_GetWeaponNametag(int weapon, char[] buffer, int maxlen)	{
-	if(weapon == -1)
+	if((!IsValidEdict(weapon) || IsValidEntity(weapon)))
 		return	false;
 	
 	GetEntDataString(weapon, FindSendPropInfo("CBaseAttributableItem", "m_szCustomName"), nametag, maxlen);
@@ -193,10 +193,10 @@ stock bool CSGO_GetWeaponNametag(int weapon, char[] buffer, int maxlen)	{
 
 /**
  *	Tk Libraries.
- *	Get the competitive rank offset. [CS:GO]
+ *	Returns the competitive rank offset. [CS:GO]
  */
 stock int CSGO_GetCompetitiveOffset()	{
-	return	FindSendPropInfo("CCSPlayerResource",	"m_iCompetitiveRanking");
+	return	FindSendPropInfo("CCSPlayerResource", "m_iCompetitiveRanking");
 }
 
 /**
@@ -206,11 +206,11 @@ stock int CSGO_GetCompetitiveOffset()	{
  *	@param array			array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
  */
 stock void CSGO_SetCompetitiveOffset(int entity, const CSGORank[] array)	{
-	SetEntDataArray(entity,	CSGO_GetCompetitiveOffset(),	view_as<int>(array),	MAXPLAYERS+1);
+	SetEntDataArray(entity,	CSGO_GetCompetitiveOffset(), view_as<int>(array), MAXPLAYERS+1);
 }
 
 /**
- *	Get the competitive rank type. [CS:GO]
+ *	Returns the competitive rank type. [CS:GO]
  */
 stock CSGORankType CSGO_GetCompetitiveType()	{
 	return	view_as<CSGORankType>(FindSendPropInfo("CCSPlayerResource",	"m_iCompetitiveRankType"));
@@ -224,7 +224,7 @@ stock CSGORankType CSGO_GetCompetitiveType()	{
  *	@param array			array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
  */
 stock void CSGO_SetCompetitiveType(int entity, const CSGORankType[] array)	{
-	SetEntDataArray(entity,	CSGO_GetCompetitiveType(),	view_as<int>(array),	MAXPLAYERS+1,	1);
+	SetEntDataArray(entity,	CSGO_GetCompetitiveType(), view_as<int>(array), MAXPLAYERS+1, 1);
 }
 
 /**
