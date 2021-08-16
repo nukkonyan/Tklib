@@ -136,7 +136,10 @@ methodmap ConVar < Handle
 	//
 	// Updated for new Syntax || Modified by /id/Teamkiller324
 	//
-	public native ConVar(const char[] name, const char[] defaultValue, const char[] description="", int flags=0, bool hasMin=false, float min=0.0, bool hasMax=false, float max=0.0);
+	public ConVar(const char[] name, const char[] defaultValue, const char[] description="", int flags=0, bool hasMin=false, float min=0.0, bool hasMax=false, float max=0.0)
+	{
+		return CreateConVar(name, defaultValue, description, flags, hasMin, min, hasMax, max);
+	}
 
 	// Sets the boolean value of a console variable.
 	//
