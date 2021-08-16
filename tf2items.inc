@@ -191,7 +191,7 @@ native int TF2Items_GetAttributeId(TF2Items item, int slot);
  */
 native float TF2Items_GetAttributeValue(TF2Items item, int slot); 
 
-#define TF2Items_This view_as<TF2Items>(this)
+#define TF2Items_This view_as<TF2Items>(this) // The 'this' refers the the methodmap 'TF2Items' itself.
 methodmap TF2Items < Handle	{
 	public TF2Items(int flags)
 	{
