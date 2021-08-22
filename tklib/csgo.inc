@@ -5,6 +5,13 @@ stock char CSGO_GetTeamStringName[][]	=	{
 	"{bluegrey}Counter-Terrorists{default}"
 };
 
+stock char CSGO_GetTeamColour[][]	=	{
+	"{grey}",
+	"{grey}",
+	"{orange}",
+	"{bluegrey}"
+};
+
 enum	CSGORank	{
 	CSGORank_UnRanked						=	0,
 	CSGORank_UR								=	0,
@@ -51,6 +58,9 @@ enum	CSGORankType	{
 	CSGORankType_Competitive	=	7
 }
 
+#define	CSGORank(%1)		view_as<CSGORank>(%1)
+#define	CSGORankType(%1)	view_as<CSGORankType>(%1)
+
 /**
  *	Tk Libraries.
  *	Fixes the StatTrak and Skins function not working.
@@ -59,7 +69,7 @@ enum	CSGORankType	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_FixWeaponId(int weapon)	{
-	if((!IsValidEdict(weapon)) || IsValidEntity(weapon))
+	if(!IsValidEntityEx(weapon))
 		return	false;
 	
 	//Fixes skin not appearing.
@@ -73,12 +83,12 @@ stock bool CSGO_FixWeaponId(int weapon)	{
  *	Tk Libraries.
  *	Set the Weapon skin.
  *
- *	@param weapon		Weapon entity.
- *	@param index		The Skin index.
- *	@return				Returns false on failure, true otherwise.
+ *	@param	weapon		Weapon entity.
+ *	@param	index		The skin index.
+ *	@return	If the weapon entity is invalid, nothing will happen.
  */
 stock bool CSGO_SetWeaponSkin(int weapon, int index)	{
-	if((!IsValidEdict(weapon)) || IsValidEntity(weapon))
+	if(!IsValidEntityEx(weapon) || !HasEntProp(weapon, Prop_Send, "m_nFallbackPaintKit"))
 		return	false;
 	
 	SetEntProp(weapon, Prop_Send, "m_nFallbackPaintKit", index);
@@ -94,7 +104,10 @@ stock bool CSGO_SetWeaponSkin(int weapon, int index)	{
  *	@error				If the weapon or painkit is invalid, it will return -1.
  */
 stock int CSGO_GetWeaponSkin(int weapon)	{
-	return	(IsValidEdict(weapon) || IsValidEntity(weapon)) ? GetEntProp(weapon, Prop_Send, "m_nFallbackPaintKit"):-1;
+	if(!IsValidEntityEx(weapon) || !HasEntProp(weapon, Prop_Send, "m_nFallbackPaintKit"))
+		return	-1;
+	
+	return	GetEntProp(weapon, Prop_Send, "m_nFallbackPaintKit");
 }
 
 /**
@@ -106,7 +119,7 @@ stock int CSGO_GetWeaponSkin(int weapon)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetWeaponStatTrak(int weapon, int value=-1)	{
-	if((!IsValidEdict(weapon)) || IsValidEntity(weapon))
+	if(!IsValidEntityEx(weapon) || !HasEntProp(weappon, Prop_Send, "m_nFallbackStatTrak"))
 		return	false;
 	
 	SetEntProp(weapon, Prop_Send, "m_nFallbackStatTrak", value);
@@ -121,7 +134,10 @@ stock bool CSGO_SetWeaponStatTrak(int weapon, int value=-1)	{
  *	@error				If weapon or stattrak module is invalid, it will return -1.
  */
 stock int CSGO_GetWeaponStatTrak(int weapon)	{
-	return	(IsValidEdict(weapon) || IsValidEntity(weapon)) ? GetEntProp(weapon, Prop_Send, "m_nFallbackStatTrak"):-1;
+	if(!IsValidEntityEx(weapon) || !HasEntProp(weapon, "m_nFallbackStatTrak"))
+		return	-1;
+	
+	return	GetEntProp(weapon, Prop_Send, "m_nFallbackStatTrak");
 }
 
 /**
@@ -133,12 +149,21 @@ stock int CSGO_GetWeaponStatTrak(int weapon)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetWeaponOwner(int weapon, int client)	{
-	if((!IsValidEdict(weapon)) || IsValidEntity(weapon))
+	if(!IsValidEntityEx(weapon))
 		return	false;
 	
+	if(!HasEntProp(weapon, Prop_Send, "m_iAccountID"))
+		return	false;
 	SetEntProp(weapon, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+	
+	if(!HasEntProp(weapon, Prop_Send, "m_hOwnerEntity", client))
+		return	false;
 	SetEntPropEnt(weapon, Prop_Send, "m_hOwnerEntity", client);
+	
+	if(!HasEntProp(weapon, Prop_send, "m_hPrevOwner"))
+		return	false;
 	SetEntPropEnt(weapon, Prop_Send, "m_hPrevOwner", -1);
+	
 	return	true;
 }
 
@@ -150,7 +175,7 @@ stock bool CSGO_SetWeaponOwner(int weapon, int client)	{
  *	@param index		Quality index value. By default set to 3, adding a star to the weapon name.
  */
 stock bool CSGO_SetWeaponQuality(int weapon, int index=3)	{
-	if((!IsValidEdict(weapon) || IsValidEntity(weapon)))
+	if(!IsValidEntityEx(weapon) || !HasEntProp(weapon, Prop_Send, "m_iEntityQuality"))
 		return	false;
 	
 	SetEntProp(weapon, Prop_Send, "m_iEntityQuality", index);
@@ -166,12 +191,11 @@ stock bool CSGO_SetWeaponQuality(int weapon, int index=3)	{
  *	@param maxlen		Max character length for the string buffer.
  *	@return				Returns false on failure, true otherwise.
  */
-stock bool CSGO_SetWeaponNametag(int weapon, char[] nametag, int maxlen=128)	{
-	if((!IsValidEdict(weapon) || IsValidEntity(weapon)))
+stock bool CSGO_SetWeaponNametag(int weapon, const char[] nametag)	{
+	if(!IsValidEntityEx(weapon) || !HasEntProp(weapon, Prop_Send, "m_szCustomName"))
 		return	false;
 	
-	SetEntDataString(weapon, FindSendPropInfo("CBaseAttributableItem", "m_szCustomName"), nametag, maxlen);
-	return	true;
+	return	bool(SetEntPropString(weapon, Prop_Send, "m_szCustomName", nametag) != -1);
 }
 
 /**
@@ -184,11 +208,10 @@ stock bool CSGO_SetWeaponNametag(int weapon, char[] nametag, int maxlen=128)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_GetWeaponNametag(int weapon, char[] buffer, int maxlen)	{
-	if((!IsValidEdict(weapon) || IsValidEntity(weapon)))
+	if(!IsValidEntityEx(weapon) || !HasEntProp(weapon, Prop_Send, "m_szCustomName"))
 		return	false;
 	
-	GetEntDataString(weapon, FindSendPropInfo("CBaseAttributableItem", "m_szCustomName"), nametag, maxlen);
-	return	true;
+	return	bool(GetEntPropString(weapon, Prop_Send, "m_szCustomName", nametag, maxlen) == -1);
 }
 
 /**
@@ -206,14 +229,14 @@ stock int CSGO_GetCompetitiveOffset()	{
  *	@param array			array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
  */
 stock void CSGO_SetCompetitiveOffset(int entity, const CSGORank[] array)	{
-	SetEntDataArray(entity,	CSGO_GetCompetitiveOffset(), view_as<int>(array), MAXPLAYERS+1);
+	SetEntDataArray(entity,	CSGO_GetCompetitiveOffset(), int(array), MAXPLAYERS+1);
 }
 
 /**
  *	Returns the competitive rank type. [CS:GO]
  */
 stock CSGORankType CSGO_GetCompetitiveType()	{
-	return	view_as<CSGORankType>(FindSendPropInfo("CCSPlayerResource",	"m_iCompetitiveRankType"));
+	return	CSGORankType(FindSendPropInfo("CCSPlayerResource",	"m_iCompetitiveRankType"));
 }
 
 /**
@@ -224,7 +247,7 @@ stock CSGORankType CSGO_GetCompetitiveType()	{
  *	@param array			array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
  */
 stock void CSGO_SetCompetitiveType(int entity, const CSGORankType[] array)	{
-	SetEntDataArray(entity,	CSGO_GetCompetitiveType(), view_as<int>(array), MAXPLAYERS+1, 1);
+	SetEntDataArray(entity,	CSGO_GetCompetitiveType(), int(array), MAXPLAYERS+1, 1);
 }
 
 /**
@@ -236,9 +259,8 @@ stock void CSGO_SetCompetitiveType(int entity, const CSGORankType[] array)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetArmModel(int client, char[] name)	{
-	if(!Tklib_IsValidClient(client))
+	if(!Tklib_IsValidClient(client) || !HasEntProp(client, Prop_Send, "m_szArmsModel"))
 		return	false;
 	
-	SetEntPropString(client, Prop_Send, "m_szArmsModel", name);
-	return	true;
+	return	bool(SetEntPropString(client, Prop_Send, "m_szArmsModel", name) != -1);
 }

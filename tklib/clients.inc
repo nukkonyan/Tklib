@@ -5,7 +5,7 @@
  *	@param client	The users index.
  */
 stock bool IsClientConsole(int client)	{	
-	return (client == 0)
+	return (client == 0);
 }
 
 /**
@@ -15,7 +15,7 @@ stock bool IsClientConsole(int client)	{
  *	@error	If client is not valid, it will return false.
  */
 stock bool IsClientOwner(int client)	{
-	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_ROOT, false):false
+	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_ROOT, false):false;
 }
 
 /**
@@ -25,7 +25,7 @@ stock bool IsClientOwner(int client)	{
  *	@error	If client is not valid, it will return false.
  */
 stock bool IsClientAdmin(int client)	{
-	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_GENERIC, false):false
+	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_GENERIC, false):false;
 }
 
 /**
@@ -35,7 +35,7 @@ stock bool IsClientAdmin(int client)	{
  *	@error	If client is not valid, it will return false.
  */
 stock bool IsClientModerator(int client)	{
-	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_CUSTOM1, false):false
+	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_CUSTOM1, false):false;
 }
 
 /**
@@ -45,7 +45,7 @@ stock bool IsClientModerator(int client)	{
  *	@error	If client is not valid, it will return false.
  */
 stock bool IsClientVip(int client)	{
-	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_RESERVATION, false):false
+	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_RESERVATION, false):false;
 }
 
 /**
@@ -56,28 +56,32 @@ stock bool IsClientVip(int client)	{
  *	@param	flagaccess	The flag access command. Disabled if empty.
  */
 stock bool IsClientFlag(int client, int adminflags, char[] flagaccess="")	{
-	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, flagaccess, adminflags, false):false
+	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, flagaccess, adminflags, false):false;
+}
+
+/**
+ *	Returns if the client and target is the same player.
+ *
+ *	@param client		Client index.
+ *	@param target		Target index.
+ *	@return				Returns true if it's the same player, false otherwise.
+ */
+stock bool IsSamePlayers(int client, int target)	{
+	return (client == target);
+}
+
+/**
+ *	Returns if the client and target is on the same team.
+ *
+ *	@param client		Client index.
+ *	@param target		Target index.
+ *	@return				Returns true if it's they're on the same team, false otherwise.
+ */
+stock bool IsSameTeam(int client, int target)	{
+	return (GetClientTeam(client) == GetClientTeam(target));
 }
 
 //General stuff
-
-//Cookies
-/**
- *	Simplified version of SetClientCookie
- *	Turns the specified integer into a string
- *
- *	@param	client		The users index.
- *	@param	cookie		Cookie handle.
- *	@param	value			The integer value
- *	@error	If the client or cookie handle is invalid, nothing will happen.
- */
-stock void SetClientCookieInt(int client, ConVar cookie, int value)	{
-	if(Tklib_IsValidClient(client, true) || cookie != null)	{
-		char item[1024];
-		IntToString(value, item, sizeof(item));
-		cookie.Set(client, item);
-	}
-}
 
 /**
  *	Set the clients scoreboard ping
@@ -243,10 +247,10 @@ stock void SetClientObserverTarget(int client, int target)	{
  *	Set the clients Observer mode
  *
  *	@param	client		The users index.
- *	@param	value		Bool value.
+ *	@param	value		Observer mode value.
  *	@error	If the client is invalid, nothing will happen.
  */
-stock void SetClientObserverMode(int client, bool value)	{
+stock void SetClientObserverMode(int client, int value)	{
 	if(Tklib_IsValidClient(client, true))
 		SetEntProp(client, Prop_Send, "m_iObserverMode", value);
 }
@@ -260,7 +264,7 @@ stock void SetClientObserverMode(int client, bool value)	{
  */
 stock void SetClientDrawViewModel(int client, bool value)	{
 	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_bDrawViewmodel", view_as<int>(value));
+		SetEntProp(client, Prop_Send, "m_bDrawViewmodel", int(value));
 }
 
 /**
@@ -271,7 +275,7 @@ stock void SetClientDrawViewModel(int client, bool value)	{
  *	@error	If the client is invalid, it will return false.
  */
 stock bool GetClientDrawViewModel(int client)	{
-	return Tklib_IsValidClient(client, true) ? view_as<bool>(GetEntProp(client, Prop_Send, "m_bDrawViewmodel")):false;
+	return Tklib_IsValidClient(client, true) ? bool(GetEntProp(client, Prop_Send, "m_bDrawViewmodel")):false;
 }
 
 /**
@@ -283,7 +287,7 @@ stock bool GetClientDrawViewModel(int client)	{
  */
 stock void SetClientGodMode(int client, bool godmode)	{
 	if(Tklib_IsValidClient(client))
-		godmode ? SetEntProp(client, Prop_Send, "m_takedamage", 0, 1):SetEntProp(client, Prop_Send, "m_takedamage", 2, 1);
+		SetEntProp(client, Prop_Send, "m_takedamage", godmode ? 0:2, 1);
 }
 
 /**
@@ -293,7 +297,7 @@ stock void SetClientGodMode(int client, bool godmode)	{
  *	@error	If the client is invalid, it will return false.
  */
 stock bool GetClientGodmode(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? (GetEntProp(client, Prop_Send, "m_takedamage", 0, 1) == 1):false
+	return Tklib_IsValidClient(client, _, true) ? bool(GetEntProp(client, Prop_Send, "m_takedamage", 0, 1) == 1):false
 }
 
 /**
@@ -315,7 +319,7 @@ stock void SetClientBuddhaMode(int client, bool buddha)	{
  *	@error	If the client is invalid, it will return false.
  */
 stock bool GetClientBuddhaMode(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? (GetEntProp(client, Prop_Send, "m_takedamage", 1, 1) == 1):false
+	return Tklib_IsValidClient(client, _, true) ? bool(GetEntProp(client, Prop_Send, "m_takedamage", 1, 1) == 1):false
 }
 
 /**
@@ -337,7 +341,7 @@ stock void	SetClientCollision(int client, bool collision)	{
  *	@error	If the client is invalid, it will return false.
  */
 stock bool GetClientCollision(int client)	{
-	return Tklib_IsValidClient(client) ? (GetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 2, 4) == 1):false
+	return Tklib_IsValidClient(client) ? bool(GetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 2, 4) == 1):false
 }
 
 /**
@@ -430,6 +434,18 @@ stock void SetClientLifestate(int client, int value)	{
 		SetEntProp(client, Prop_Send, "m_lifeState", value);
 }
 
+/**
+ *	Returns the clients map navigation location name
+ *
+ *	@param	client		The users index.
+ *	@param	location	Buffer to store the location name.
+ *	@param	len			Size of the buffer.
+ *	@error	If the client is invalid, this will return false.
+ */
+stock bool GetClientNavLocation(int client, char[] location, int maxlen)	{
+	return Tklib_IsValidClient(client, _, true) ? bool(GetEntPropString(client, Prop_Send, "m_szLastPlaceName", location, maxlen)):false;
+}
+
 //Respawning
 
 //Set the respawn time for the specified client
@@ -483,7 +499,7 @@ stock void Respawn(int client)	{
  *	@error	If the client is invalid, it will return false.
  */
 stock bool GetClientAuth(int client, char[] buffer, int maxlen)	{
-	return Tklib_IsValidClient(client) ? GetClientAuthId(client, AuthId_Steam2, buffer, maxlen):false;
+	return Tklib_IsValidClient(client, _, _, false, false) ? GetClientAuthId(client, AuthId_Steam2, buffer, maxlen):false;
 }
 
 /**
@@ -497,7 +513,7 @@ stock bool GetClientAuth(int client, char[] buffer, int maxlen)	{
  *	@error	If the client is invalid, it will return false.
  */
 stock bool GetClientAuth3(int client, char[] buffer, int maxlen)	{
-	return Tklib_IsValidClient(client) ? GetClientAuthId(client, AuthId_Steam3, buffer, maxlen):false;
+	return Tklib_IsValidClient(client, _, _, false, false) ? GetClientAuthId(client, AuthId_Steam3, buffer, maxlen):false;
 }
 
 /**
@@ -507,17 +523,20 @@ stock bool GetClientAuth3(int client, char[] buffer, int maxlen)	{
  *	@return				The users index. If invalid client, returns 0.
  */
 stock int GetClientOfAuth(char[] auth)	{
-	int client = 0;
-	for(int i = 1; i < MaxClients; i++)	{
-		if(!Tklib_IsValidClient(i, true);
+	int user = 0;
+	char tempauth[64];
+	
+	for(int client = 1; client < MaxClients; client++)	{
+		if(!Tklib_IsValidClient(client, _, _, false))
 			continue;
 		
-		char tempauth[64];
-		GetClientAuth(i, tempauth, sizeof(tempauth));
+		GetClientAuth(client, tempauth, sizeof(tempauth));
+		
 		if(StrContainsEx(tempauth, auth, false))
-			client = i;
+			user = client;
 	}
-	return	client;
+	
+	return user;
 }
 
 /**
@@ -527,21 +546,24 @@ stock int GetClientOfAuth(char[] auth)	{
  *	@return				The users index. If invalid client, returns 0.
  */
 stock int GetClientOfAuth3(char[] auth)	{
-	int client = 0;
-	for(int i = 1; i < MaxClients; i++)	{
-		if(!IsClientInGame(i) || IsFakeClient(i))
+	int user = 0;
+	char tempauth[64];
+	
+	for(int client = 1; client < MaxClients; client++)	{
+		if(!Tklib_IsValidClient(client, _, _, false))
 			continue;
 		
-		char tempauth[64];
-		GetClientAuthId(i, AuthId_Steam3, tempauth, sizeof(tempauth));
+		GetClientAuth3(client, tempauth, sizeof(tempauth));
+		
 		if(StrContainsEx(tempauth, auth, false))
-			client = i;
+			user = client;
 	}
-	return	client;
+	
+	return user;
 }
 
 /**
- *	Returns the users name properly.
+ *	Returns the users name properly. (GetClientName is buggy.)
  *
  *	@param	client		The users index.
  *	@param	buffer		Buffer to store the string.
@@ -567,16 +589,17 @@ stock void SetClientNameEx(int client, char[] name)	{
 /**
  *	Returns the users index if found from string.
  *
+ *	@param		client			The user performing action.
  *	@param		player_name		The players name to search.
  *	@param		filter_flags	Filter flags.
  *	@error		If the index of the player was not found or is invalid, it will return -1.
  */
-stock int GetClientOfPlayername(char[] playername, int filter_flags=COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS)	{
+stock int GetClientOfPlayername(int client, char[] playername, int filter_flags=COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS)	{
 	char target_name[64];
 	int target_list[64];
 	bool tn_is_ml;
 	
-	int target_count = ProcessTargetString(playername, 0, target_list, MAXPLAYERS, filter_flags, target_name, sizeof(target_name), tn_is_ml);
+	int target_count = ProcessTargetString(playername, client, target_list, MAXPLAYERS, filter_flags, target_name, sizeof(target_name), tn_is_ml);
 	
 	for(int i = 0; i < target_count; i++)	{
 		return target_list[i];
@@ -594,16 +617,8 @@ stock int GetClientOfPlayername(char[] playername, int filter_flags=COMMAND_FILT
 stock int GetClientCountEx(bool nobots=true)	{
 	int count = 0;
 	for(int i = 1; i < MaxClients; i++)	{
-		switch(nobots)	{
-			case	true:	{
-				if(Tklib_IsValidClient(i, true, false, false))
-					count++;
-			}
-			case	false:	{
-				if(Tklib_IsValidClient(i, false, false, false))
-					count++
-			}
-		}
+		if(Tklib_IsValidClient(i, nobots, false, false))
+			count++;
 	}
 	return	count;
 }
@@ -623,15 +638,16 @@ stock void SetClientModel(int client, char[] model)	{
 }
 
 /**
- *	Returns true or false depending if the client is valid.
+ *	Returns true or false depending if the user is valid.
  *
  *	@param	client				The users index.
  *	@param	IgnoreBot			If true, the bots are counted as 'invalid'.					Defaulted to false.
  *	@param	IgnoreDead			If true, the dead are counted as 'invalid'.					Defaulted to false.
  *	@param	IgnoreNonInGame		If true, the non-ingame users are counted as 'invalid'		Defaulted to true.
  *	@param	IgnoreNonConnected	If true, the non-connected users are counted as 'invalid'	Defaulted to true.
+ *	@param	IgnoreInvalidTeam	If true, the invalid team users are counted as 'invalid'	Defaulted to false.
  */
-stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true)	{
+stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true, bool IgnoreInvalidTeam=false)	{
 	if(client == 0 || client == -1)	//This is to make sure console (index 0) & non-existing client (index -1) is not giving outright errors.
 		return	false;
 	if(client < 1 || client > MaxClients)
@@ -648,6 +664,10 @@ stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead
 		return	false;
 	if(IgnoreDead)	{	//Corrects a bug complaining invalid client index when it actually shouldn't be able to read this line when the boolean was set to off.
 		if(!IsPlayerAlive(client))
+			return	false;
+	}
+	if(IgnoreInvalidTeam)	{
+		if(GetClientTeam(client) < 0)
 			return	false;
 	}
 	return	true;

@@ -1,13 +1,19 @@
 //Get true of false message statements easier.
 stock char Bool[][]	=	{
-	"True",
-	"False"
+	"False",
+	"True"
 };
 
 //Coloured
 stock char BoolEx[][]	=	{
-	"{green}True{default}",
-	"{red}False{default}"
+	"{red}False{default}",
+	"{green}True{default}"
+};
+
+//Useful for simple open/closing door entites. Value 0 = Close, 1 = Open.
+stock char DoorSwitch[][]	=	{
+	"close",
+	"open"
 };
 
 /**
@@ -98,28 +104,6 @@ stock int GetCmdInt(int argnum)	{
 }
 
 /**
- *	Returns if the client and target is the same player.
- *
- *	@param client		Client index.
- *	@param target		Target index.
- *	@return				Returns true if it's the same player, false otherwise.
- */
-stock bool IsSamePlayers(int client, int target)	{
-	return (client == target);
-}
-
-/**
- *	Returns if the client and target is on the same team.
- *
- *	@param client		Client index.
- *	@param target		Target index.
- *	@return				Returns true if it's they're on the same team, false otherwise.
- */
-stock bool IsSameTeam(int client, int target)	{
-	return (GetClientTeam(client) == GetClientTeam(target));
-}
-
-/**
  *	Turns an integer into a floating point.
  *
  *	@param value	Float to convert.
@@ -139,7 +123,7 @@ stock int FloatToInt(float value)	{
  *	@return				If true, game you specified is active, else false.
  */
 stock bool IsCurrentGame(GameIdentifier gameversion)	{
-	return (Identifygame() == gameversion);
+	return (IdentifyGame() == gameversion);
 }
 
 /**
@@ -150,7 +134,7 @@ stock bool IsCurrentGame(GameIdentifier gameversion)	{
  *	@param	substr			Substring to find inside the original string.
  *	@param	caseSensitive	if true (by default), search is case sensitive. If false, search is case insensitive.
  *	*/
-stock bool StrContainsEx(char[] str, char[] substr, bool caseSensitive=true)	{
+stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensitive=true)	{
 	return (StrContains(str, substr, caseSensitive) != -1);
 }
 
@@ -165,7 +149,8 @@ stock bool StrContainsEx(char[] str, char[] substr, bool caseSensitive=true)	{
 stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
 	int team = Tklib_IsValidClient(client) ? GetClientTeam(client):0;
 		
-	char	TeamColour_Default[][]	=	{
+	char
+		TeamColour_Default[][]	=	{
 		"{grey}",
 		"{grey}",
 		"{red}",
@@ -179,7 +164,6 @@ stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
 		"{lightgreen}",
 		"{orange}"
 	},
-
 		TeamColour_CSGO[][]	=	{
 		"{grey}",
 		"{grey}",
@@ -192,12 +176,13 @@ stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
 		"{orange}",
 		"{lightred}"
 	};
-	switch(GetEngineVersion())	{
-		case	Engine_TF2:			Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2[team],		client);
-		case	Engine_CSGO:		Format(buffer, maxlen, "%s%N{default}", TeamColour_CSGO[team],		client);
-		case	Engine_Left4Dead:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
-		case	Engine_Left4Dead2:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
-		default:					Format(buffer, maxlen, "%s%N{default}", TeamColour_Default[team],	client);
+	switch(IdentifyGame())	{
+		case	Game_TF2:	Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2[team],		client);
+		case	Game_TF2C:	Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2[team],		client);
+		case	Game_CSGO:	Format(buffer, maxlen, "%s%N{default}", TeamColour_CSGO[team],		client);
+		case	Game_L4D1:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
+		case	Game_L4D2:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
+		default:			Format(buffer, maxlen, "%s%N{default}", TeamColour_Default[team],	client);
 	}
 	return	true;
 }
@@ -209,7 +194,7 @@ stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
  *	@param		persistent		If true, it will try to use a previous persistent connection.
  *	@param		debug			If true, it will show message if the connection returned 'null' (Error) or if it succeeded.
  */
-stock Database SQL_Connect2(char[] confname, bool persistent=true, bool dbg=false)	{
+stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool dbg=false)	{
 	char error[256];
 	Database database = SQL_Connect(confname, persistent, error, sizeof(error));
 	if(dbg)	{
@@ -250,4 +235,109 @@ stock void CreateNativeEx(const char[] native1, const char[] native2, NativeCall
 stock void MarkNativeAsOptionalEx(const char[] native1, const char[] native2)	{
 	MarkNativeAsOptional(native1);
 	MarkNativeAsOptional(native2);
+}
+
+/**
+ *	Functions the same as CreateNative and MarkNativeAsOptional.
+ *	Useful for having a fairly 'clean' code.
+ *
+ *	@param	name	The dynamic native name.
+ *	@param	func	The dynamic native callback.
+ */
+stock void CreateNativeEx2(const char[] name, NativeCall func)	{
+	CreateNative(name, func);
+	MarkNativeAsOptional(name);
+}
+
+/**
+ *	Alternative to strcopy, adds ability to use extra parameters.
+ *	Pretty much does the same as Format.
+ *
+ *	@param	dest		Destination buffer to copy to.
+ *	@param	destLen		Destination buffer length (includes null terminator).
+ *	@param	
+ */
+stock int strcopyEx(char[] dest, int destLen, const char[] source, any...)	{
+	char format[256];
+	strcopy(format, sizeof(format), source);
+	
+	VFormat(format, sizeof(format), 4);
+	
+	strcopy(dest, destLen, format);
+}
+
+/**
+ *	Auto-switches the bool value on/off.
+ *	Example: if the value is on, it will return off.
+ *	If it off, it will return on.
+ *	Useful for toggling functions in plugins.
+ *
+ *	@param	value		The value to toggle.
+ */
+stock bool AutoSwitch(bool value)	{
+	switch(value)	{
+		case	true:	value = false;
+		case	false:	value = true;
+	}
+	
+	return value;
+}
+
+/**
+ *	Same as AddFileToDownloadsTable but adds support for additional parameters.
+ *
+ *	@param	filename	File path.
+ *	@param	...			Additional parameters.
+ */
+stock void AddFileToDownloadsTableEx(const char[] filename, any ...)	{
+	char download[256];
+	VFormat(download, sizeof(download), filename, 2);
+	AddFileToDownloadsTable(download);
+}
+
+/**
+ *	Adds the specified files within the folder directory onto the downloads table.
+ *
+ *	@param	path		The path directory.
+ *	@param	precache	Should the files be precached?.
+ *	@param	type		The type of file to precache. (materials, models, sound, etc.)
+ *	@param	filter		If non-empty, this will filter to require the meeting to be added to the dl table.
+ *	@param	dbg			If the path is valid, this is useful for debugging seeing what got added to the dl table.
+ *	@error	If the path is invalid or this failed in general, this returns false.
+ */
+stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, const char[] type="", const char[] filter="", bool dbg=false)	{
+	DirectoryListing DLPath = OpenDirectory(path);
+	bool success = false, invalid_filter = false;
+	
+	switch(DLPath == null)	{
+		case	false:	{
+			char FileDir[64], FileDL[256];
+			
+			while(ReadDirEntry(DLPath, FileDir, sizeof(FileDir)))	{
+				if(!StrEqual(FileDir, ".") && !StrEqual(FileDir, ".."))	{
+					invalid_filter = (!StrEqual(filter, "") && !StrContainsEx(FileDir, filter));
+					
+					if(!invalid_filter)	{
+						AddFileToDownloadsTableEx(FileDL, "%s/%s", path, FileDir);
+						if(precache && !StrEqual(type, ""))
+							PrecacheModel(FileDL);
+						
+						if(dbg)
+							PrintToServer("[Tklib: Additional] AddFolderToDownloadsTable: %s/%s", path, FileDir);
+					}
+				}
+			}
+			
+			success = true;
+		}
+		case	true:	{
+			if(dbg)
+				PrintToServer("[Tklib: Additional] AddFolderToDownloadsTable failed due to invalid path (%s)", path);
+		}
+	}
+	
+	
+	delete DLPath;
+	
+	return	success;
 }

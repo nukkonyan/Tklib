@@ -5,6 +5,13 @@ stock char DOD_GetTeamStringName[][]	=	{
 	"{blue}U.S Army{default}"
 };
 
+stock char DODS_GetTeamColour[][]	=	{
+	"{grey}",
+	"{grey}",
+	"{red}",
+	"{blue}"
+};
+
 //Day of Defeat: Source enum
 enum	DODTeam	{
 	DODTeam_Unassigned	=	0,
@@ -13,6 +20,8 @@ enum	DODTeam	{
 	DODTeam_Blue		=	3
 }
 
+#define	DODTeam(%1)		view_as<DODTeam>(%1)
+
 /**
  *	Returns the users current team.
  *
@@ -20,7 +29,7 @@ enum	DODTeam	{
  *	@error	If the user is invalid, it will return DODTeam_Unassigned.
  */
 stock DODTeam DOD_GetClientTeam(int client)	{
-	return Tklib_IsValidClient(client) ? view_as<DODTeam>(GetClientTeam(client)):DODTeam_Unassigned;
+	return Tklib_IsValidClient(client) ? DODTeam(GetClientTeam(client)):DODTeam_Unassigned;
 }
 
 /**

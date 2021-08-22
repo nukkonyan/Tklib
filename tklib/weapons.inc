@@ -20,7 +20,7 @@ stock bool RemoveAllWeapons(int client)	{
  *	@error	If the weapon entity is invalid, it will return -1.
  */
 stock int GetWeaponDefinitionIndex(int weapon)	{
-	return (IsValidEdict(weapon) || IsValidEntity(weapon)) ? GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex"):-1
+	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex"):-1;
 }
 
 /**
@@ -31,7 +31,7 @@ stock int GetWeaponDefinitionIndex(int weapon)	{
  *	@error	If the weapon entity is invalid, nothing will happen.
  */
 stock int SetWeaponDefinitionIndex(int weapon, int value)	{
-	if((IsValidEdict(weapon) || IsValidEntity(weapon)))
+	if(IsValidEntityEx(weapon))
 		SetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex", value);
 }
 
@@ -90,7 +90,7 @@ stock void SetClientWeaponAmmoEx(int client, int primary, int secondary)	{
  *	@param value		Amount value.
  */
 stock void SetWeaponAmmo(int weapon, int value)	{
-	if((IsValidEdict(weapon) || IsValidEntity(weapon)))
+	if(IsValidEntityEx(weapon))
 		SetEntProp(weapon, Prop_Send, "m_iClip1", value);
 }
 
@@ -118,7 +118,7 @@ stock void SetWeaponAmmoEx(int weapon, int primary, int secondary)	{
  *	@error	If the weapon is invalid, it returns -1.
  */
 stock int GetWeaponAmmo(int weapon)	{
-	return (IsValidEdict(weapon || IsValidEntity(weapon))) GetEntProp(weapon, Prop_Send, "m_iClip1"):-1;
+	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_iClip1"):-1;
 }
 
 /**
@@ -151,7 +151,7 @@ stock void SetClientWeaponReserveAmmo(int client, int value)	{
  *	@error	If the weapon entity is invalid, nothing will happen.
  */
 stock void SetWeaponReserveAmmo(int weapon, int value)	{
-	if((IsValidEdict(weapon) || IsValidEntity(weapon)))
+	if(IsValidEntityEx(weapon))
 		SetEntProp(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount", value);
 }
 
@@ -162,7 +162,7 @@ stock void SetWeaponReserveAmmo(int weapon, int value)	{
  *	@error	If the weapon entity is invali, it will return -1.
  */
 stock int GetWeaponReserveAmmo(int weapon)	{
-	return ((IsValidEdict(weapon)) || IsValidEntity(weapon)) GetEntProp(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount"):-1;
+	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount"):-1;
 }
 
 /**
@@ -183,7 +183,7 @@ stock int GetClientWeaponReserveAmmo(int client)	{
  *	@error	If weapon is invalid, it will return -1.
  */
 stock int GetWeaponAmmoType(int weapon)	{
-	return (IsValidEdict(weapon) || IsValidEntity(weapon)) ? GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType"):-1;
+	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType"):-1;
 }
 
 /**

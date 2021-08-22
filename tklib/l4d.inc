@@ -5,6 +5,13 @@ stock char L4D_GetTeamStringName[][]	=	{
 	"{lightred}Zombies{default}"
 };
 
+stock char L4D_GetTeamColour[][]	=	{
+	"{grey}",
+	"{grey}",
+	"{orange}",
+	"{lightred}"
+};
+
 //Left 4 Dead enum
 enum	L4DTeam	{
 	L4DTeam_Unassigned	=	0,
@@ -13,6 +20,8 @@ enum	L4DTeam	{
 	L4DTeam_Infected	=	3
 }
 
+#define	L4DTeam(%1)		view_as<L4DTeam>(%1)
+
 /**
  *	Returns the users current team.
  *
@@ -20,7 +29,7 @@ enum	L4DTeam	{
  *	@error	If the user is invalid, it will return L4DTeam_Unassigned.
  */
 stock L4DTeam L4D_GetClientTeam(int client)	{
-	return Tklib_IsValidClient(client) ? view_as<L4DTeam>(GetClientTeam(client)):L4DTeam_Unassigned;
+	return Tklib_IsValidClient(client) ? L4DTeam(GetClientTeam(client)):L4DTeam_Unassigned;
 }
 
 /**

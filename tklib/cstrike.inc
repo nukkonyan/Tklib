@@ -5,6 +5,13 @@ stock char CSS_GetTeamStringName[][]	=	{
 	"{blue}Counter-Terrorists{default}"
 };
 
+stock char CSS_GetTeamColour[][]	=	{
+	"{grey}",
+	"{grey}",
+	"{red}",
+	"{blue}"
+};
+
 //CS Slots
 enum	CSSlot	{
 	CSSlot_Primary	=	0,
@@ -39,6 +46,10 @@ enum	CSTeam	{
 	CSTeam_CT			=	3
 }
 
+#define	CSSlot(%1)			view_as<CSSlot>(%1)
+#define	CSWeaponType(%1)	view_as<CSWeaponType>(%1)
+#define	CSTeam(%1)			view_as<CSTeam>(%1)
+
 /**
  *	Returns the users current team.
  *
@@ -46,7 +57,7 @@ enum	CSTeam	{
  *	@error	If the client is invalid, this will return CSTeam_Unassigned.
  */
 stock CSTeam CS_GetClientTeam(int client)	{
-	return Tklib_IsValidClient(client) ? view_as<CSTeam>(GetClientTeam(client)):CSTeam_Unassigned;
+	return Tklib_IsValidClient(client) ? CSTeam(GetClientTeam(client)):CSTeam_Unassigned;
 }
 
 /**
@@ -58,7 +69,7 @@ stock CSTeam CS_GetClientTeam(int client)	{
  */
 stock void CS_ChangeClientTeam(int client, CSTeam team)	{
 	if(Tklib_IsValidClient(client))
-		ChangeClientTeam(client, view_as<int>(team));
+		ChangeClientTeam(client, int(team));
 }
 
 /**
@@ -67,7 +78,7 @@ stock void CS_ChangeClientTeam(int client, CSTeam team)	{
  *	@param team			CSTeam team.
  */
 stock int CS_GetTeamClientCount(CSTeam team)	{
-	return GetTeamClientCount(view_as<int>(team));
+	return GetTeamClientCount(int(team));
 }
 
 /**
@@ -80,8 +91,8 @@ stock bool CS_IsWarmupRound()	{
 /**
  *	If true, warmup will start, else will be ended.
  */
-stock bool CS_SetWarmupRound(bool warmup)	{
-	GameRules_SetProp("m_bWarmupPeriod", view_as<int>(warmup));
+stock void CS_SetWarmupRound(bool warmup)	{
+	GameRules_SetProp("m_bWarmupPeriod", int(warmup));
 }
 
 /**
@@ -95,36 +106,8 @@ stock bool CS_IsMatchPaused()	{
  *	Set if the match should be paused.
  *	@param pause		If true, match will be paused. Else unpaused.
  */
-stock bool CS_SetMatchPaused(bool pause)	{
-	GameRules_SetProp("m_bMatchWaitingForResume", view_as<int>(pause));
-}
-
-/**
- *	Returns the clients map navigation location name
- *
- *	@param	client		The users index.
- *	@param	location	Buffer to store the location name.
- *	@param	len			Size of the buffer.
- *	@error	If the client is invalid, this will return false.
- */
-stock bool CS_GetClientNavLocation(int client, char[] location, int maxlen)	{
-	char storage[64];
-	
-	if(!Tklib_IsValidClient(client, _, true))
-		return	false;
-	
-	GetEntPropString(client, Prop_Send, "m_szLastPlaceName", storage, sizeof(storage));
-	
-	if(StrEqual(storage, "BombsiteA"))
-		FormatEx(location, sizeof(maxlen), "Bombsite A");
-	else if(StrEqual(storage, "BombsiteB"))
-		FormatEx(location, sizeof(maxlen), "Bombsite B");
-	else if(StrEqual(storage, "BombsiteC"))
-		FormatEx(location, sizeof(maxlen), "Bombsite C");
-	else
-		FormatEx(location, sizeof(maxlen), "%s", storage);
-	
-	return	true;
+stock void CS_SetMatchPaused(bool pause)	{
+	GameRules_SetProp("m_bMatchWaitingForResume", int(pause));
 }
 
 /**
@@ -199,7 +182,7 @@ stock void CS_SetClientArmor(int client, int value, bool helmet=false, bool heav
  *	@error				If client is invalid, it will return -1.
  */
 stock int CS_GetClientArmor(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntProp(client, Prop_Send, "m_ArmorValue"):-1;
+	return Tklib_IsValidClient(client) ? GetEntProp(client, Prop_Send, "m_ArmorValue"):-1;
 }
 
 /**
@@ -210,7 +193,7 @@ stock int CS_GetClientArmor(int client)	{
  *	@error				If client is invalid, it will return -1.
  */
 stock bool CS_ClientHasHelmet(int client)	{
-	return	Tklib_IsValidClient(client) ? view_as<bool<(GetEntProp(client, Prop_Send, "m_bHasHelmet")):false;
+	return Tklib_IsValidClient(client) ? view_as<bool<(GetEntProp(client, Prop_Send, "m_bHasHelmet")):false;
 }
 
 /**
@@ -221,7 +204,7 @@ stock bool CS_ClientHasHelmet(int client)	{
  *	@error				If client is invalid, it will return false.
  */
 stock bool CS_ClientHasHeavyArmor(int client)	{
-	return	Tklib_IsValidClient(client) ? view_as<bool>(GetEntProp(client, Prop_Send, "m_bHasHeavyArmor")):false;
+	return Tklib_IsValidClient(client) ? view_as<bool>(GetEntProp(client, Prop_Send, "m_bHasHeavyArmor")):false;
 }
 
 /**
@@ -266,7 +249,7 @@ stock void CS_GiveClientWeaponEx2(int client, char[] weapon, CSSlot slot, int pr
  *	@param	slot		CSSlot slot.
  *	@error	If the client or weapon in the specified slot is invalid, nothing will happen.
  */
-stock void CS_ClientDropWeaponSlot(int client, CSSlot slot)	{
+stock void CS_DropPlayerWeaponSlot(int client, CSSlot slot)	{
 	if(Tklib_IsValidClient(client, _, true))	{
 		int weapon = -1;
 		if((weapon = CS_GetPlayerWeaponSlot(client,	slot)) != -1)
@@ -281,7 +264,7 @@ stock void CS_ClientDropWeaponSlot(int client, CSSlot slot)	{
  *	@param	slot		CSSlot weapon slot.
  *	@error	If the client or weapon in the specified slot is invalid, nothing will happen.
  */
-stock void CS_ClientRemoveWeaponSlot(int client, CSSlot slot)	{
+stock void CS_RemovePlayerWeaponSlot(int client, CSSlot slot)	{
 	if(Tklib_IsValidClient(client, _, true))	{
 		int weapon = -1;
 		if((weapon = CS_GetPlayerWeaponSlot(client,	slot)) != -1)	{
@@ -324,7 +307,7 @@ stock int CS_GetPlayerWeaponSlot(int client, CSSlot slot)	{
  *	@error	If the client is invalid, nothing will happen.
 */
 stock int CS_IsWeaponSilenced(int weapon)	{
-	return Tklib_IsValidClient(client, _, true) ? GetEntProp(weapon, Prop_Data, "m_bSilencerOn"):false;
+	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Data, "m_bSilencerOn"):false;
 }
 
 /**
@@ -335,7 +318,7 @@ stock int CS_IsWeaponSilenced(int weapon)	{
  *	@error	If the weapon entity is invalid, nothing will happen.
  */
 stock void CS_SetSniperZoomLevel(int weapon, int value)	{
-	if((IsValidEdict(weapon) || IsValidEntity(weapon)))
+	if(IsValidEntityEx(weapon))
 		SetEntProp(weapon, Prop_Send, "m_zoomLevel", value);
 }
 
@@ -346,7 +329,7 @@ stock void CS_SetSniperZoomLevel(int weapon, int value)	{
  *	@error	If the weapon entity is invalid, it will return -1.
  */
 stock int CS_GetSniperZoomLevel(int weapon)	{
-	return (IsValidEdict(weapon) || IsValidEntity(weapon)) GetEntProp(weapon, Prop_Send, "m_zoomLevel"):-1;
+	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_zoomLevel"):-1;
 }
 
 /**
