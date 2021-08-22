@@ -563,7 +563,7 @@ native void SetHudTextParamsEx(float x, float y, float holdTime, int color1[4],
  *                      This function fails if the mod does not support it.
  * @error               Invalid client index, client not in game, or sync object not valid.
  */
-native int ShowSyncHudText(int client, Handle sync, const char[] message, any ...);
+native int ShowSyncHudText(int client, HudSync sync, const char[] message, any ...);
 
 /**
  * Clears the text on a synchronized HUD channel.
@@ -581,7 +581,7 @@ native int ShowSyncHudText(int client, Handle sync, const char[] message, any ..
  * @param sync          Synchronization object.
  * @error               Invalid client index, client not in game, or sync object not valid.
  */
-native void ClearSyncHud(int client, Handle sync);
+native void ClearSyncHud(int client, HudSync sync);
 
 /**
  * Shows a HUD message to a client on the given channel.
@@ -720,5 +720,17 @@ methodmap HudSync < Handle
 	public HudSync()
 	{
 		return CreateHudSynchronizer();
+	}
+	
+	public void Clear(int client)
+	{
+		ClearSyncHud(client, this);
+	}
+	
+	public void Show(int client, const char[] message, any ...)
+	{
+		char msg[256];
+		VFormat(msg, sizeof(msg), message, 3);
+		ShowSyncHudText(client, this, msg);
 	}
 }
