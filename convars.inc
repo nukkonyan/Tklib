@@ -49,6 +49,7 @@ enum ConVarBounds
  */
 enum ConVarQueryResult
 {
+	ConVarQuery_Cancelled = -1,         //< Client disconnected during query */
 	ConVarQuery_Okay = 0,               //< Retrieval of client convar value was successful. */
 	ConVarQuery_NotFound,               //< Client convar was not found. */
 	ConVarQuery_NotValid,               //< A console command with the same name was found, but there is no convar. */
@@ -120,6 +121,11 @@ methodmap ConVar < Handle
 		public native get();
 		public native set(int flags);
 	}
+
+	// Retrieves the plugin handle of the convar's creator
+	property Handle Plugin {
+		public native get();
+	}
 	
 	//Creates a new console variable.
 	//
@@ -133,9 +139,6 @@ methodmap ConVar < Handle
 	// @param max           Maximum floating point value that the convar can have if hasMax is true.
 	// @return              A handle to the newly created convar. If the convar already exists, a handle to it will still be returned.
 	// @error               Convar name is blank or is the same as an existing console command.
-	//
-	// Updated for new Syntax || Modified by /id/Teamkiller324
-	//
 	public ConVar(const char[] name, const char[] defaultValue, const char[] description="", int flags=0, bool hasMin=false, float min=0.0, bool hasMax=false, float max=0.0)
 	{
 		return CreateConVar(name, defaultValue, description, flags, hasMin, min, hasMax, max);
@@ -168,15 +171,6 @@ methodmap ConVar < Handle
 	// @param notify    If set to true, clients will be notified that the convar has changed.
 	//                  This will only work if the convar has the FCVAR_NOTIFY flag.
 	public native void SetInt(int value, bool replicate=false, bool notify=false);
-	
-	// Gets the integer value of a console variable.
-	//
-	// Note: The replicate and notify params are only relevant for the
-	// original, Dark Messiah, and Episode 1 engines. Newer engines
-	// automatically do these things when the convar value is changed.
-	//
-	// @param value     New integer value.
-	public native void GetInt(int value);
 
 	// Sets the floating point value of a console variable.
 	//
@@ -252,6 +246,12 @@ methodmap ConVar < Handle
 	// @param name       Buffer to store the name of the convar.
 	// @param maxlength  Maximum length of string buffer.
 	public native void GetName(char[] name, int maxlength);
+
+	// Retrieves the description of a console variable.
+	//
+	// @param buffer     Buffer to store the description of the convar.
+	// @param maxlength  Maximum length of string buffer.
+	public native void GetDescription(char[] buffer, int maxlength);
 
 	// Replicates a convar value to a specific client. This does not change the actual convar value.
 	//
