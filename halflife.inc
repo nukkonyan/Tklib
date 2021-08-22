@@ -499,7 +499,7 @@ native void ShowVGUIPanel(int client, const char[] name, Handle Kv=INVALID_HANDL
  *                      If HUD text is not supported on this mod, then
  *                      INVALID_HANDLE is returned.
  */
-native Handle CreateHudSynchronizer();
+native HudSync CreateHudSynchronizer();
 
 /**
  * Sets the HUD parameters for drawing text.  These parameters are stored
@@ -719,6 +719,6 @@ methodmap HudSync < Handle
 {
 	public HudSync()
 	{
-		return view_as<HudSync>(CreateHudSynchronizer());
+		return CreateHudSynchronizer();
 	}
 }
