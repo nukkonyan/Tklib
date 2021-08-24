@@ -1,36 +1,39 @@
 enum	GameIdentifier	{
 	Game_Unknown		= -1,
-	Game_AlienSwarm		= 0,
-	Game_BGT			= 1,
-	Game_BloodyGoodTime	= 1,
-	Game_DarkMessiah	= 2,
-	Game_Eye			= 3,
-	Game_Dota			= 4,
-	Game_Blade			= 5,
-	Game_Insurgency		= 6,
-	Game_Contagion		= 7,
-	Game_BlackMesa		= 8,
-	Game_DOI			= 9,
-	Game_HL2DM			= 10,
-	Game_DODS			= 11,
-	Game_Portal1		= 12,
-	Game_Portal2		= 13,
-	Game_L4D1			= 14,
-	Game_L4D2			= 15,
-	Game_CSGO			= 16,
-	Game_CSS			= 17,
-	Game_TF2			= 18,
-	Game_TF2B			= 19,
-	Game_TF2Beta		= 19,
-	Game_TF2C			= 20,
-	Game_TF2Classic		= 20,
-	Game_TF2V			= 21,
-	Game_TF2Vintage		= 22,
-	Game_TF2OP			= 23,
-	Game_TF2OpenFortress= 23,
-	Game_OpenFortress	= 23,
-	Game_CSPro			= 24,
-	Game_CSPromod		= 24
+	Game_SDK2006		= 0,
+	Game_SDK2007		= 1,
+	Game_SDK2013		= 2,
+	Game_AlienSwarm		= 3,
+	Game_BGT			= 4,
+	Game_BloodyGoodTime	= 5,
+	Game_DarkMessiah	= 6,
+	Game_Eye			= 7,
+	Game_Dota			= 8,
+	Game_Blade			= 9,
+	Game_Insurgency		= 10,
+	Game_Contagion		= 11,
+	Game_BlackMesa		= 12,
+	Game_DOI			= 13,
+	Game_HL2DM			= 14,
+	Game_DODS			= 15,
+	Game_Portal1		= 16,
+	Game_Portal2		= 17,
+	Game_L4D1			= 18,
+	Game_L4D2			= 19,
+	Game_CSGO			= 20,
+	Game_CSS			= 21,
+	Game_TF2			= 22,
+	Game_TF2B			= 23,
+	Game_TF2Beta		= 23,
+	Game_TF2C			= 24,
+	Game_TF2Classic		= 24,
+	Game_TF2V			= 25,
+	Game_TF2Vintage		= 25,
+	Game_TF2OP			= 26,
+	Game_TF2OpenFortress= 26,
+	Game_OpenFortress	= 26,
+	Game_CSPro			= 27,
+	Game_CSPromod		= 27
 }
 
 /**
@@ -72,12 +75,15 @@ stock GameIdentifier IdentifyGame()	{
 			if(StrEqual(checkgame, "open_fortress"))
 				return	Game_TF2OpenFortress;
 		}
+		case	Engine_SourceSDK2006:	return	Game_SDK2006;
 		case	Engine_SourceSDK2007:	{
 			if(StrEqual(checkgame, "portal"))
 				return	Game_Portal1;
-			if(StrEqual(checkgame, "cspromod"))
+			else if(StrEqual(checkgame, "cspromod"))
 				return	Game_CSPromod;
+			else return Game_SDK2007;
 		}
+		case	Engine_SDK2013:			return	Game_SDK2013;
 	}
 	return	Game_Unknown;
 }

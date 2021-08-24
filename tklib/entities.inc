@@ -9,12 +9,8 @@ enum	Entity	{
  *	@param	vec			3 dimensional vector array.
  *	@error	If entity is invalid, it will return false.
  */
-stock bool GetEntityAbsOrigin(int entity, float vec[3])	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Send, "m_vecOrigin"))
-		return	false;
-
-	GetEntPropVector(entity, Prop_Send, "m_vecOrigin", vec);
-	return	true;
+stock bool GetEntityAbsOrigin(any entity, float vec[3])	{
+	return	HasEntPropEx(entity, Prop_Send, "m_vecOrigin") ? GetEntPropVector(entity, Prop_Send, "m_vecOrigin", vec):false;
 }
 
 /**
@@ -25,11 +21,8 @@ stock bool GetEntityAbsOrigin(int entity, float vec[3])	{
  *	@param maxlen		Buffer max length.
  *	@error	If the entity is invalid, it will return false.
  */
-stock bool GetEntityName(int entity, char[] buffer, int maxlen)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Data, "m_iName"))
-		return	false;
-	
-	return	bool(GetEntPropString(entity, Prop_Data, "m_iName", buffer, maxlen) != -1)
+stock bool GetEntityName(any entity, char[] buffer, int maxlen)	{
+	return	HasEntPropEx(entity, Prop_Data, "m_iName")) ? GetEntPropStringEx(entity, Prop_Data, "m_iName", buffer, maxlen):false;
 }
 
 /**
@@ -39,12 +32,8 @@ stock bool GetEntityName(int entity, char[] buffer, int maxlen)	{
  *	@param	name		Entity name.
  *	@error	If entity is invalid, it will returns false.
  */
-stock bool SetEntityName(int entity, const char[] name)	{
-	if(!IsValidEntityEx(entity))
-		return	false;
-	
-	DispatchKeyValue(entity, "targetname", name);
-	return	true;
+stock bool SetEntityName(any entity, const char[] name)	{
+	return	HasEntPropEx(entity, Prop_Data, "m_iName") ? SetEntPropStringEx(entity, Prop_Data, "m_iName", name):false;
 }
 
 /**
@@ -54,8 +43,7 @@ stock bool SetEntityName(int entity, const char[] name)	{
  *	@error	If the entity is invalid, this will return false.
  */
 stock bool FindEntity(const char[] classname)	{
-	int entity = -1;
-	return bool((entity = FindEntityByClassname(entity, classname)) != -1);
+	return bool(FindEntityByClassname(-1, classname) != -1);
 }
 
 /**
@@ -69,9 +57,11 @@ stock bool FindEntity(const char[] classname)	{
  *	@param	ForceEdictIndex	Edict index used by the created entity (Ignored on Orangebox and above).
  *	@error	Invalid edict index, or no mod support.
  */
-stock int CreateEntityByNameEx(const char[] classname, const char[] name, int ForceEdictIndex=-1)	{
+stock int CreateEntityByNameEx(const char[] classname, const char[] name="", int ForceEdictIndex=-1)	{
 	int entity = CreateEntityByName(classname, ForceEdictIndex);
-	SetEntityName(entity, name);
+	
+	if(!StrEqual(name, ""))
+		SetEntityName(entity, name);
 	
 	return entity;
 }
@@ -83,7 +73,7 @@ stock int CreateEntityByNameEx(const char[] classname, const char[] name, int Fo
  *	@param	disabled	If true, starts disabled, else enabled if false
  *	@error	If the entity is invalid, nothing will happen.
  */
-stock void SetEntityDisabled(int entity, bool disabled)	{
+stock void SetEntityDisabled(any entity, bool disabled)	{
 	if(IsValidEntityEx(entity)))
 		DispatchKeyValue(entity, "StartDisabled", disabled ? "true":"false");
 }
@@ -95,10 +85,7 @@ stock void SetEntityDisabled(int entity, bool disabled)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool GetEntityDisabled(int entity)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Send, "m_bDisabled"))
-		return	false;
-	
-	return	GetEntPropBool(entity, Prop_Send, "m_bDisabled");
+	return	HasEntPropEx(entity, Prop_Send, "m_bDisabled")) ? GetEntPropBool(entity, Prop_Send, "m_bDisabled"):false;
 }
 
 /**
@@ -109,10 +96,7 @@ stock bool GetEntityDisabled(int entity)	{
  *	@error	If the entity is invalid, it will return false.
  */
 stock bool SetEntityModelEx(int entity, const char[] model)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Data, "m_ModelName"))
-		return	false;
-	
-	return	bool(SetEntPropString(entity, Prop_Data, "m_ModelName", model) != -1);
+	return	HasEntPropEx(entity, Prop_Data, "m_ModelName") ? SetEntPropStringEx(entity, Prop_Data, "m_ModelName", model):false;
 }
 
 /**
@@ -124,10 +108,7 @@ stock bool SetEntityModelEx(int entity, const char[] model)	{
  *	@error	If the entity is invalid, it will return false.
  */
 stock bool GetEntityModel(int entity, char[] buffer, int maxlen)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Data, "m_ModelName"))
-		return	false;
-	
-	return	bool(GetEntPropString(entity, Prop_Data, "m_ModelName", buffer, maxlen) != -1);
+	return	HasEntPropEx(entity, Prop_Data, "m_ModelName") ? GetEntPropStringEx(entity, Prop_Data, "m_ModelName", buffer, maxlen):false;
 }
 
 /**
@@ -138,10 +119,7 @@ stock bool GetEntityModel(int entity, char[] buffer, int maxlen)	{
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
 stock bool SetEntityOwner(int entity, int client)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Data, "m_hOwnerEntity"))
-		return	false;
-	
-	if(Tklib_IsValidClient(client, _, _, false))
+	if(!HasEntPropEx(entity, Prop_Data, "m_hOwnerEntity") || Tklib_IsValidClient(client, _, _, false))
 		return	false;
 	
 	SetEntPropEnt(entity, Prop_Data, "m_hOwnerEntity", client);
@@ -155,10 +133,7 @@ stock bool SetEntityOwner(int entity, int client)	{
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
 stock int GetEntityOwner(int entity)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Data, "m_hOwnerEntity"))
-		return	-1;
-
-	return	GetEntPropEnt(entity, Prop_Data, "m_hOwnerEntity");
+	return	HasEntPropEx(entity, Prop_Data, "m_hOwnerEntity") ? GetEntPropEnt(entity, Prop_Data, "m_hOwnerEntity"):-1;
 }
 
 /**
@@ -168,8 +143,8 @@ stock int GetEntityOwner(int entity)	{
  *	@param	entity	Entity index.
  *	@error	If the entity or edict is invalid, it will return false.
  */
-stock bool IsValidEntityEx(int entity)	{
-	return	bool((IsValidEdict(entity) || IsValidEntity(entity)));
+stock bool IsValidEntityEx(any entity)	{
+	return	bool((IsValidEdict(int(entity)) || IsValidEntity(int(entity))));
 }
 
 /**
@@ -181,7 +156,7 @@ stock bool IsValidEntityEx(int entity)	{
  *	@error	If entity is invalid, it will return false.
  */
 stock bool KillEntity(any entity, const char[] input="", int activator=-1, int caller=-1, int outputid=0)	{
-	return	IsValidEntityEx(entity) ? AcceptEntityInput(entity, "Kill"):false;
+	return	IsValidEntityEx(entity) ? AcceptEntityInput(int(entity), "Kill"):false;
 }
 
 /**
@@ -191,11 +166,11 @@ stock bool KillEntity(any entity, const char[] input="", int activator=-1, int c
  *	@param	skin	Skin index.
  *	@error	If the entity is invalid, nothing will happen.
  */
-stock bool SetEntitySkin(int entity, int skin)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Send, "m_nSkin"))
+stock bool SetEntitySkin(any entity, int skin)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_nSkin"))
 		return	false;
 	
-	SetEntProp(entity, Prop_Send, "m_nSkin", skin);
+	SetEntProp(int(entity), Prop_Send, "m_nSkin", skin);
 	return	true;
 }
 
@@ -205,11 +180,37 @@ stock bool SetEntitySkin(int entity, int skin)	{
  *	@param	entity	Entity index.
  *	@error	If entity is invalid, this will return -1.
 */
-stock int GetEntitySkin(int entity)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, "m_nSkin"))
+stock int GetEntitySkin(any entity)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_nSkin"))
 		return	-1;
 	
 	return	GetEntProp(entity, Prop_Send, "m_nSkin");
+}
+
+/**
+ *	Sets the classname of an entity.
+ *
+ *	@param	entity		Index of the entity.
+ *	@param	clsname		Buffer to store the classname.
+ *	@param	maxlength	Maximum length of the buffer.
+ *	@return				True on success, false if there is no classname set or has no valid classname/invalid entity.
+ */
+stock bool SetEntityClassname(any entity, const char[] clsname)	{
+	return	HasEntPropEx(int(entity), Prop_Data, "m_iClassname") ? SetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname):false;
+}
+
+/**
+ *	Retrieves the classname of an entity.
+ *	This is like GetEdictClassname(), except it works for ALL
+ *	entities, not just edicts.
+ *
+ *	@param	entity		Index of the entity.
+ *	@param	clsname		Buffer to store the classname.
+ *	@param	maxlength	Maximum length of the buffer.
+ *	@return				True on success, false if there is no classname set or has no valid classname/invalid entity.
+ */
+stock bool GetEntityClassnameEx(any entity, char[] clsname, int maxlength)	{
+	return	HasEntPropEx(int(entity), Prop_Data, "m_iClassname") ? GetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname, maxlength):false;
 }
 
 //Netprops
@@ -227,11 +228,54 @@ stock int GetEntitySkin(int entity)	{
  *						This value is auto-detected, and the size parameter is
  *						only used as a fallback in case detection fails.
  * @param	element		Element # (starting from 0) if property is an array.
- * @return	Bool value at the given property offset.
- * @error	Invalid entity or property not found.
+ * @return				Bool value at the given property offset.
+ * @error				Invalid entity or property not found.
  */
 stock bool GetEntPropBool(int entity, PropType type, const char[] prop, int size=4, int element=0)	{
 	return	bool(GetEntProp(entity, type, prop, size, element));
+}
+
+/**
+ *	Gets a network property as a string.
+ *
+ *	@param	entity		Edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property to use.
+ *	@param	buffer		Destination string buffer.
+ *	@param	maxlen		Maximum length of output string buffer.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *	@return				Returns true/false if the procedure was valid.
+ *	@error				Invalid entity, offset out of reasonable bounds, or property is not a valid string.
+ */
+stock bool GetEntPropStringEx(int entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)	{
+	return	bool(GetEntPropString(entity, type, prop, buffer, maxlen, element) != -1);
+}
+
+/**
+ *	Sets a network property as a string.
+ *
+ *	@param	entity		Edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property to use.
+ *	@param	buffer		String to set.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *	@return				Returns true/false if the procedure was valid.
+ *	@error				Invalid entity, offset out of reasonable bounds, or property is not a valid string.
+ */
+stock bool SetEntPropStringEx(int entity, PropType type, const char[] prop, const char[] buffer, int element=0)	{
+	return	bool(SetEntPropString(entity, type, prop, buffer, element) != -1);
+}
+
+/**
+ *	Returns if the entity is valid and has the network property.
+ *
+ *	@param	entity		Edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property to check.
+ *	@error	If entity or property is invalid/not found, this returns false.
+ */
+stock bool HasEntPropEx(int entity, PropType type, const char[] prop)	{
+	return	bool(IsValidEntityEx(entity) && HasEntProp(entity, type, prop));
 }
 
 //Methodmap
@@ -305,15 +349,15 @@ methodmap	Entity	__nullable__	{
 	{
 		public set(int value)
 		{
-			if(IsValidEntityEx(This))
+			if(HasEntPropEx(This, Prop_Send, "m_iHealth"))
 				SetEntProp(This, Prop_Send, "m_iHealth", value);
 		}
 		public get()
 		{
-			return IsValidEntityEx(This) ? GetEntProp(This, Prop_Send, "m_iHealth"):-1;
+			return	HasEntPropEx(This, Prop_Send, "m_iHealth") ? GetEntProp(This, Prop_Send, "m_iHealth"):-1;
 		}
 	}
-
+	
 	public bool IsValid()
 	{
 		return IsValidEntityEx(This);
@@ -349,6 +393,10 @@ methodmap	Entity	__nullable__	{
 	public bool HasProp(PropType type, const char[] prop)
 	{
 		return HasEntProp(This, type, prop);
+	}
+	public bool HasPropEx(PropType type, const char[] prop)
+	{
+		return HasEntPropEx(This, type, prop);
 	}
 	
 	public void SetProp(PropType type, const char[] prop, any value, int size=4, int element=0)
@@ -390,13 +438,21 @@ methodmap	Entity	__nullable__	{
 		return GetEntPropFloat(This, type, prop, element);
 	}
 	
-	public int SetPropString(PropType type, const char[] prop, const char[] buffer, int element)
+	public int SetPropString(PropType type, const char[] prop, const char[] buffer, int element=0)
 	{
 		return SetEntPropString(This, type, prop, buffer, element);
+	}
+	public bool SetPropStringEx(PropType type, const char[] prop, const char[] buffer, int element=0)
+	{
+		return SetEntPropStringEx(This, type, prop, buffer, element);
 	}
 	public int GetPropString(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
 	{
 		return GetEntPropString(This, type, prop, buffer, maxlen, element);
+	}
+	public bool GetPropStringEx(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
+	{
+		return GetEntPropStringEx(This, type, prop, buffer, maxlen, element);
 	}
 	
 	public void SetPropVector(PropType type, const char[] prop, const float vec[3], int element)
@@ -566,7 +622,7 @@ methodmap	Entity	__nullable__	{
 	//Put 'any' to support team enums.
 	property any Team
 	{
-		public set(any value)
+		public set(any value) 
 		{
 			if(HasEntProp(This, Prop_Send, "m_iTeamNum"))
 				SetEntProp(This, Prop_Send, "m_iTeamNum", value);
@@ -609,13 +665,17 @@ methodmap	Entity	__nullable__	{
 		return IsEntNetworkable(This);
 	}
 	
+	public bool SetClassname(char[] clsname)
+	{
+		return SetEntityClassname(This, clsname);
+	}
 	public bool GetClassname(char[] clsname, int maxlength)
 	{
-		return GetEntityClassname(This, clsname, maxlength);
+		return GetEntityClassnameEx(This, clsname, maxlength);
 	}
 	public bool GetNetClass(char[] clsname, int maxlength)
 	{
-		return GetEntityNetClass(This, clsname, maxlength);
+		return IsValidEntityEx(This) ? GetEntityNetClass(This, clsname, maxlength):false;
 	}
 	public Address GetAddress()
 	{

@@ -392,44 +392,107 @@ stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
 }
 
 /**
- *	Returns if the entity is a building.
+ *	Returns if the entity is building.
  *
- *	@param	entity	Entity index.
+ *	@param	entity	The building entity index.
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_IsEntityBuilding(int entity)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Send, "m_bBuilding"))
-		return	false;
-	
-	return	GetEntPropBool(entity, Prop_Send, "m_bBuilding");
+	return	HasEntProp(entity, Prop_Send, "m_bBuilding") ? GetEntPropBool(entity, Prop_Send, "m_bBuilding"):false;
 }
 
 /**
  *	Returns if the entity is a mini-building.
  *
- *	@param	entity	Entity index.
+ *	@param	entity	The building entity index.
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_IsEntityMiniBuilding(int entity)	{
-	if(!IsValidEntityEx(entity))
-		return	false;
-	
-	if(!HasEntProp(client, Prop_Send, "m_bMiniBuilding"))
-		return	false;
-	
-	return	GetEntPropBool(entity, Prop_Send, "m_bMiniBuilding");
+	return	HasEntPropEx(entity, Prop_Send, "m_bMiniBuilding") ? GetEntPropBool(entity, Prop_Send, "m_bMiniBuilding"):false;
 }
 
 /**
  *	Returns the buildings builder.
  *	Otherwise use GetEntityOwner.
  *
- *	@param	entity	Entity index.
- *	@param	If the entity is invalid, this returns -1.
+ *	@param	entity	The building entity index.
+ *	@error	If the entity is invalid, this returns -1.
  */
-stock int TF2_GetBuildingOwner(int entity)	{
-	if(!IsValidEntityEx(entity) || !HasEntProp(entity, Prop_Send, "m_hBuilder"))
-		return	-1;
+stock int TF2_GetBuildingOwner(any entity)	{
+	return	HasEntPropEx(entity, Prop_Send, "m_hBuilder") ? GetEntProp(entity, Prop_Send, "m_hBuilder"):-1;
+}
+
+/**
+ *	Set the buildings upgrade level.
+ *
+ *	@param	entity	The building entity index.
+ *	@param	level	The level to set.
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingLevel(any entity, int level=1)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iUpgradeLevel"))
+		return	false;
 	
-	return	GetEntProp(entity, Prop_Send, "m_hBuilder");
+	SetEntProp(entity, Prop_Send, "m_iUpgradeLevel", level);
+	return	true;
+}
+
+/**
+ *	Returns the buildings upgrade level.
+ *
+ *	@param	entity	The building entity index.
+ *	@error	If the entity is invalid, this returns -1.
+ */
+stock int TF2_GetBuildingLevel(any entity)	{
+	return	HasEntPropEx(entity, Prop_Send, "m_iUpgradeLevel") ? GetEntProp(entity, Prop_Send, "m_iUpgradeLevel"):-1;
+}
+
+/**
+ *	Set the buildings max upgrade level.
+ *
+ *	@param	entity	The building entity index.
+ *	@param	level	The maximum upgrade level to set.
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingMaxLevel(any entity, int level=3)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel"))
+		return	false;
+	
+	SetEntProp(entity, Prop_Send, "m_iHighestUpgradeLevel", level);
+	return	true;
+}
+
+/**
+ *	Returns the buildings max upgrade level.
+ *
+ *	@param	entity	The building entity index.
+ *	@error	If the entity is invalid, this returns -1.
+ */
+stock int TF2_GetBuildingMaxLevel(any entity)	{
+	return	HasEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel") ? GetEntProp(entity, Prop_Send, "m_iHighestUpgradeLevel"):-1;
+}
+
+/**
+ *	Set the buildings required metal to upgrade to next upgrade level.
+ *
+ *	@param	entity	The building entity index.
+ *	@param	metal	The metal required.
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingMetalRequired(any entity, int metal)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iUpgradeMetalRequired"))
+		return	false;
+	
+	SetEntProp(entity, Prop_Send, "m_iUpgradeMetalRequired", metal);
+	return	true;
+}
+
+/**
+ *	Returns the buildings required metal to upgrade to next upgrade level.
+ *
+ *	@param	entity	The building entity index.
+ *	@error	If the entity is invalid, this returns -1.
+ */
+stock int TF2_GetBuildingMetalRequired(any entity)	{
+	return	HasEntPropEx(entity, Prop_Send, "m_iUpgradeMetalRequired") ? GetEntProp(entity, Prop_Send, "m_iUpgradeMetalRequired"):-1;
 }

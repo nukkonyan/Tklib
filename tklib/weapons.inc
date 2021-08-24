@@ -14,13 +14,13 @@ stock bool RemoveAllWeapons(int client)	{
 }
 
 /**
- *	Get the weapon definition index value
+ *	Returns the weapon definition index value
  *
  *	@param	weapon		Weapon entity.
  *	@error	If the weapon entity is invalid, it will return -1.
  */
 stock int GetWeaponDefinitionIndex(int weapon)	{
-	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex"):-1;
+	return	HasEntPropEx(weapon, Prop_Send, "m_iItemDefinitionIndex") ? GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex"):-1;
 }
 
 /**
@@ -31,7 +31,7 @@ stock int GetWeaponDefinitionIndex(int weapon)	{
  *	@error	If the weapon entity is invalid, nothing will happen.
  */
 stock int SetWeaponDefinitionIndex(int weapon, int value)	{
-	if(IsValidEntityEx(weapon))
+	if(IsValidEntityEx(weapon) && HasEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex"))
 		SetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex", value);
 }
 
@@ -42,7 +42,7 @@ stock int SetWeaponDefinitionIndex(int weapon, int value)	{
  *	@error	If the client is invalid, it will return -1.
  */
 stock int GetClientActiveWeapon(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon"):-1;
+	return	bool(Tklib_IsValidClient(client, _, true) && HasEntProp(client, Prop_Send, "m_hActiveWeapon")) ? GetEntPropEnt(client, Prop_Send, "m_hActiveWeapon"):-1;
 }
 
 /**
@@ -53,7 +53,7 @@ stock int GetClientActiveWeapon(int client)	{
  *	@error	If the client is invalid, nothing will happen.
  */
 stock void SetClientActiveWeapon(int client, int slot)	{
-	if(Tklib_IsValidClient(client, _, true))
+	if(Tklib_IsValidClient(client, _, true) && HasEntProp(client, Prop_Send, "m_hActiveWeapon"))
 		SetEntPropEnt(client, Prop_Send, "m_hActiveWeapon", slot);
 }
 
@@ -65,7 +65,7 @@ stock void SetClientActiveWeapon(int client, int slot)	{
  *	@error	If the client is invalid, nothing will happen.
  */
 stock void SetClientWeaponAmmo(int client, int value)	{
-	if(Tklib_IsValidClient(client, _, true))
+	if(Tklib_IsValidClient(client, _, true) && HasEntProp(GetClientActiveWeapon(client), Prop_Send, "m_iClip1"))
 		SetEntProp(GetClientActiveWeapon(client), Prop_Send, "m_iClip1", value);
 }
 
@@ -76,11 +76,11 @@ stock void SetClientWeaponAmmo(int client, int value)	{
  *	@param	primary		Primary ammo amount.
  *	@param	secondary	Secondary ammo amount.
  */
-stock void SetClientWeaponAmmoEx(int client, int primary, int secondary)	{
+stock void SetClientWeaponAmmoEx(int client, int primary=0, int secondary=0)	{
 	if(primary > 0)
-		SetEntProp(GetClientActiveWeapon(client), Prop_Send, "m_iClip1", primary);
+		SetClientWeaponAmmo(client, primary);
 	if(secondary > 0)
-		SetEntProp(GetClientActiveWeapon(client), Prop_Send, "m_iPrimaryReserveAmmoCount", secondary);
+		SetClientWeaponReserveAmmo(client, secondary);
 }
 
 /**
@@ -89,8 +89,8 @@ stock void SetClientWeaponAmmoEx(int client, int primary, int secondary)	{
  *	@param weapon		Weapon entity.
  *	@param value		Amount value.
  */
-stock void SetWeaponAmmo(int weapon, int value)	{
-	if(IsValidEntityEx(weapon))
+stock void SetWeaponAmmo(any weapon, int value)	{
+	if(HasEntPropEx(weapon, Prop_Send, "m_iClip1"))
 		SetEntProp(weapon, Prop_Send, "m_iClip1", value);
 }
 
@@ -102,12 +102,12 @@ stock void SetWeaponAmmo(int weapon, int value)	{
  *	@param	secondary	Secondary ammo amount. Zero amount input will do nothing.
  *	@error	If the client is invalid, nothing will happen.
  */
-stock void SetWeaponAmmoEx(int weapon, int primary, int secondary)	{
+stock void SetWeaponAmmoEx(any weapon, int primary=0, int secondary=0)	{
 	if(Tklib_IsValidClient(client, _, true))	{
 		if(primary != 0)
-			SetEntProp(weapon, Prop_Send, "m_iClip1", primary);
+			SetWeaponAmmo(weapon, primary);
 		if(secondary != 0)
-			SetEntProp(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount", secondary);
+			SetWeaponReserveAmmo(weapon, secondary);
 	}
 }
 
@@ -118,7 +118,7 @@ stock void SetWeaponAmmoEx(int weapon, int primary, int secondary)	{
  *	@error	If the weapon is invalid, it returns -1.
  */
 stock int GetWeaponAmmo(int weapon)	{
-	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_iClip1"):-1;
+	return	HasEntPropEx(weapon, Prop_Send, "m_iClip1") ? GetEntProp(weapon, Prop_Send, "m_iClip1"):-1;
 }
 
 /**
@@ -128,7 +128,7 @@ stock int GetWeaponAmmo(int weapon)	{
  *	@error	If the client is invalid, it will return -1.
  */
 stock int GetClientWeaponAmmo(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? GetEntProp(GetClientActiveWeapon(client), Prop_Send, "m_iClip1"):-1;
+	return	Tklib_IsValidClient(client, _, true)) ? GetWeaponAmmo(GetClientActiveWeapon(client)):-1;
 }
 
 /**
@@ -140,7 +140,7 @@ stock int GetClientWeaponAmmo(int client)	{
  */
 stock void SetClientWeaponReserveAmmo(int client, int value)	{
 	if(Tklib_IsValidClient(client, _, true))
-		SetEntProp(GetClientActiveWeapon(client), Prop_Send, "m_iPrimaryReserveAmmoCount", value);
+		SetWeaponAmmo(GetClientActiveWeapon(client), value);
 }
 
 /**
@@ -150,8 +150,8 @@ stock void SetClientWeaponReserveAmmo(int client, int value)	{
  *	@param	value		Secondary ammo amount.
  *	@error	If the weapon entity is invalid, nothing will happen.
  */
-stock void SetWeaponReserveAmmo(int weapon, int value)	{
-	if(IsValidEntityEx(weapon))
+stock void SetWeaponReserveAmmo(any weapon, int value)	{
+	if(IsValidEntityEx(weapon) && HasEntProp(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount"))
 		SetEntProp(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount", value);
 }
 
@@ -161,8 +161,8 @@ stock void SetWeaponReserveAmmo(int weapon, int value)	{
  *	@param	weapon		Weapon entity.
  *	@error	If the weapon entity is invali, it will return -1.
  */
-stock int GetWeaponReserveAmmo(int weapon)	{
-	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount"):-1;
+stock int GetWeaponReserveAmmo(any weapon)	{
+	return	HasEntPropEx(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount")) ? GetEntProp(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount"):-1;
 }
 
 /**
@@ -172,7 +172,7 @@ stock int GetWeaponReserveAmmo(int weapon)	{
  *	@error	If the client is invalid, it will return -1.
  */
 stock int GetClientWeaponReserveAmmo(int client)	{
-	return Tklib_IsValidClient(client, _, true) GetEntProp(GetClientActiveWeapon(client), Prop_Send, "m_iPrimaryReserveAmmoCount"):-1;
+	return	Tklib_IsValidClient(client, _, true) ? GetWeaponReserveAmmo(GetClientActiveWeapon(client)):-1;
 }
 
 /**
@@ -182,8 +182,8 @@ stock int GetClientWeaponReserveAmmo(int client)	{
  *	@param	weapon		The weapon entity.
  *	@error	If weapon is invalid, it will return -1.
  */
-stock int GetWeaponAmmoType(int weapon)	{
-	return IsValidEntityEx(weapon) ? GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType"):-1;
+stock int GetWeaponAmmoType(any weapon)	{
+	return HasEntPropEx(weapon, Prop_Send, "m_iPrimaryAmmoType") ? GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType"):-1;
 }
 
 /**
@@ -193,7 +193,7 @@ stock int GetWeaponAmmoType(int weapon)	{
  *	@error	If client is invalid, it will return -1.
  */
 stock int GetClientWeaponArraySize(int client)	{
-	return Tklib_IsValidClient(client, false, true) ? GetEntPropArraySize(client, Prop_Send, "m_hMyWeapons"):-1;
+	return (Tklib_IsValidClient(client, false, true) && HasEntProp(client, Prop_Send, "m_hMyWeapons")) ? GetEntPropArraySize(client, Prop_Send, "m_hMyWeapons"):-1;
 }
 
 /**
@@ -217,7 +217,7 @@ stock int GetClientWeaponEntity(int client, int element)	{
  *	@param	weapon		Weapon entity.
  *	@error	If the client is invalid, nothing will happen.
  */
-stock void EquipPlayerWeaponEx(int client, int weapon)	{
+stock void EquipPlayerWeaponEx(int client, any weapon)	{
 	if(Tklib_IsValidClient(client, _, true))	{
 		//Credits to Bacardi for part of the code.
 		

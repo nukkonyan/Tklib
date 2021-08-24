@@ -78,6 +78,31 @@
 // + Added 'Ent' definition to use for turning integer entity indexes to 'Entity' index. Example: Ent(function)
 // + Updated the functions to check if the netprop exists on the entity/client before proceeding, preventing errors.
 
+// > Version 1.3.4
+// + Updated Entity.Health to properly check if the entity has the property 'm_iHealth', preventing errors.
+// + Updated SetEntityHealth to force name via 'm_iName' over 'DispatchKeyValue'
+// + Updated CSGO_SetClientArmModel.
+// + Added CSGO_GetClientArmModel.
+// + Updated entity stock functions in order for supporting the new Entity constructor.
+// + Added SetEntPropStringEx (Same as SetEntPropString but returns true/false if the procedure was valid)
+// + Added GetEntPropStringEx (Same as GetEntPropString but returns true/false if the procedure was valid)
+// + Added HasEntPropEx (Same as HasEntProp but returns true/false if the network property and entity is valid)
+// + Updated Entity methodmap for the new stock functions.
+// + Updated TF2_IsEntityBuilding.
+// + Updated TF2_IsEntityMiniBuilding.
+// + Added TF2_SetBuildingLevel.
+// + Added TF2_GetBuildingLevel.
+// + Added TF2_SetBuildingMaxLevel.
+// + Added TF2_GetBuildingMaxLevel.
+// + Added TF2_SetBuildingMetalRequired.
+// + Added TF2_GetBuildingMetalRequired. 
+// + Integrated Multicolors.
+// + Updated SetClientObserverTarget.
+// + Added GetClientObserverTarget.
+// + Added GetClientObserverMode.
+// + Updated GameIdentifier, adding Game_SDK2006, Game_SDK2007 & Game_SDK2013.
+
+
 //SM Includes
 #include	<sdktools>
 #include	<sdkhooks>
@@ -109,7 +134,7 @@
 	#endinput
 #endif
 #define		Tklib_Included
-#define		TKlib_Version	"1.3.3"
+#define		TKlib_Version	"1.3.4"
 
 //Core includes
 #include	"tklib/gameidentifier"
@@ -125,3 +150,5 @@
 #include	"tklib/l4d"
 #include	"tklib/dods"
 #include	"tklib/fortress_forever"
+
+#include	"tklib/multicolors"

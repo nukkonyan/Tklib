@@ -67,7 +67,7 @@ stock bool IsClientFlag(int client, int adminflags, char[] flagaccess="")	{
  *	@return				Returns true if it's the same player, false otherwise.
  */
 stock bool IsSamePlayers(int client, int target)	{
-	return (client == target);
+	return bool(client == target);
 }
 
 /**
@@ -240,11 +240,21 @@ stock int GetClientDefaultFOV(int client)	{
  */
 stock void SetClientObserverTarget(int client, int target)	{
 	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_iObserverTarget", target);
+		SetEntPropEnt(client, Prop_Send, "m_iObserverTarget", target);
 }
 
 /**
- *	Set the clients Observer mode
+ *	Returns the users Observer target
+ *
+ *	@param	client 		The users index.
+ *	@error	If the client is invalid, nothing will happen.
+ */
+stock void GetClientObserverTarget(int client)	{
+	return	Tklib_IsValidClient(client, true) ? GetEntPropEnt(client, Prop_Send, "m_iObserverTarget", target):-1;
+}
+
+/**
+ *	Set the users Observer mode
  *
  *	@param	client		The users index.
  *	@param	value		Observer mode value.
@@ -253,6 +263,17 @@ stock void SetClientObserverTarget(int client, int target)	{
 stock void SetClientObserverMode(int client, int value)	{
 	if(Tklib_IsValidClient(client, true))
 		SetEntProp(client, Prop_Send, "m_iObserverMode", value);
+}
+
+/**
+ *	Returns the users Observer mode
+ *
+ *	@param	client		The users index.
+ *	@param	value		Observer mode value.
+ *	@error	If the client is invalid, nothing will happen.
+ */
+stock void GetClientObserverMode(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? GetEntProp(client, Prop_Send, "m_iObserverMode", value):-1;
 }
 
 /**
