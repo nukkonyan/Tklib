@@ -52,15 +52,18 @@ stock void CClearPrefix()	{
 }
 
 /**
- *	Writes a message to a client with the correct stock for the game.
+ *	Writes a message to the user with the correct stock for the game.
  *
  *	@param	client		Users index.
  *	@param	message		Message (formatting rules).
  *	@param	...			Additional parameters
  *
- *	@error	If the client is not connected an error will be thrown.
+ *	@error	If the user is invalid, this returns false.
  */
-stock void CPrintToChat(int client, const char[] message, any ...)	{
+stock bool CPrintToChat(int client, const char[] message, any ...)	{
+	if(!Tklib_IsValidClient(client, true))
+		return	false;
+	
 	char buffer[MAX_MESSAGE_LENGTH];
 	SetGlobalTransTarget(client);
 	VFormat(buffer, sizeof(buffer), message, 3);
@@ -69,6 +72,25 @@ stock void CPrintToChat(int client, const char[] message, any ...)	{
 		CFixColors();
 
 	IsSource2009() ? MC_PrintToChat(client, "%s%s", g_sCPrefix, buffer):C_PrintToChat(client, "%s%s", g_sCPrefix, buffer);
+	return	true;
+}
+
+/**
+ *	Writes a message to the users with the correct stock for the game.
+ *
+ *	@param	client1		First Users index.
+ *	@param	client2		Second Users index.
+ *	@param	message		Message (formatting rules).
+ *	@param	...			Additional parameters
+ *
+ *	@error	If the users is invalid, this returns false.
+ */
+stock bool CPrintToChat2(int client1, int client2, const char[] message, any ...)	{
+	char buffer[MAX_MESSAGE_LENGTH];
+	VFormat(buffer, sizeof(buffer), message, 4);
+	
+	CPrintToChat(client1, buffer);
+	CPrintToChat(client2, buffer);
 }
 
 /**

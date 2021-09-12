@@ -19,21 +19,27 @@ stock char FF_GetTeamStringName[][]	=	{
 /**
  *	Returns the users current team.
  *
- *	@param	client        Client index.
- *	@error	If the user is invalid, it will return FFTeam_Unassigned.
+ *	@param	client        The users index.
+ *
+ *	@error	If the user is invalid, this returns FFTeam_Unassigned.
  */
 stock FFTeam FF_GetClientTeam(int client)	{
-	return Tklib_IsValidClient(client) ? view_as<FFTeam>(GetClientTeam(client)):FFTeam_Unassigned;
+	return Tklib_IsValidClient(client) ? FFTeam(GetClientTeam(client)):FFTeam_Unassigned;
 }
 
 /**
  *	Changes the users current team.
  *
- *	@param	client        Client index.
+ *	@param	client        The users index.
  *	@param	team          FFTeam team symbol.
- *	@error	If the user is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock void FF_ChangeClientTeam(int client, FFTeam team)	{
-	if(Tklib_IsValidClient(client))
-		ChangeClientTeam(client, view_as<int>(team));
+	if(Tklib_IsValidClient(client))	{
+		ChangeClientTeam(client, int(team));
+		return	true;
+	}
+	
+	return	false;
 }

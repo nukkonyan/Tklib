@@ -7,6 +7,8 @@
 #endif
 #define _more_colors_included
 
+#include	<regex>
+
 #define		MC_MAX_MESSAGE_LENGTH   256
 #define		MAX_BUFFER_LENGTH       (MC_MAX_MESSAGE_LENGTH * 4)
 
@@ -160,7 +162,7 @@ stock void MC_SendMessage(int client, const char[] message, int author = 0) {
 				ReplaceString(buffer, sizeof(buffer), "\x03", "\x04", false); // Unassigned gets green
 			else	{
 				char temp[16];
-				Format(temp, sizeof(temp), "\x07%06X", MC_TeamColors[MC_GAME_DODS][team - 1]);
+				Format(temp, sizeof(temp), "\x07%06X", MC_TeamColors[MC_GAME_DODS][GetClientTeam(client) - 1]);
 				ReplaceString(buffer, sizeof(buffer), "\x03", temp, false);
 			}
 		}
@@ -219,14 +221,14 @@ stock void MC_CheckTrie() {
 /**
  *	Replaces color tags in a string with color codes (used internally by MC_PrintToChat, MC_PrintToChatAll, MC_PrintToChatEx, and MC_PrintToChatAllEx
  *
- *	@param buffer		String.
- *	@param author		Optional client index to use for {teamcolor} tags, or 0 for none
- *	@param removeTags	Optional boolean value to determine whether we're replacing tags with colors, or just removing tags, used by MC_RemoveTags
- *	@param maxlen		Optional value for max buffer length, used by MC_RemoveTags
+ *	@param	buffer		String.
+ *	@param	author		Optional client index to use for {teamcolor} tags, or 0 for none
+ *	@param	removeTags	Optional boolean value to determine whether we're replacing tags with colors, or just removing tags, used by MC_RemoveTags
+ *	@param	maxlen		Optional value for max buffer length, used by MC_RemoveTags
  *
  *	@error	If the users is invalid, nothing will happen.
  */
-stock void MC_ReplaceColorCodes(const char[] buffer, int author = 0, bool removeTags = false, int maxlen = MAX_BUFFER_LENGTH) {
+stock void MC_ReplaceColorCodes(char[] buffer, int author = 0, bool removeTags = false, int maxlen = MAX_BUFFER_LENGTH) {
 	MC_CheckTrie();
 	if(!removeTags)
 		ReplaceString(buffer, maxlen, "{default}", "\x01", false);

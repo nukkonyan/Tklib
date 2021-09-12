@@ -53,6 +53,73 @@ enum	CSGORank	{
 	CSGORank_GE								=	18
 }
 
+enum	{
+	CSGO_Weapon_Glock	=	4,
+	CSGO_Weapon_Ak47	=	7,
+	CSGO_Weapon_Aug		=	8,
+	CSGO_Weapon_AWP		=	9,
+	CSGO_Weapon_Famas	=	10,
+	CSGO_Weapon_G3SG1	=	11,
+	CSGO_Weapon_GalilAR	=	13,
+	CSGO_Weapon_M249	=	14,
+	CSGO_Weapon_M4A4	=	16,
+	CSGO_Weapon_Mac10	=	17,
+	CSGO_Weapon_P90		=	19,
+	CSGO_Weapon_MP5		=	23,
+	CSGO_Weapon_MP5SD	=	23,
+	CSGO_Weapon_UMP45	=	24,
+	CSGO_Weapon_XM1014	=	25,
+	CSGO_Weapon_Bizon	=	26,
+	CSGO_Weapon_MAG7	=	27,
+	CSGO_Weapon_Negev	=	28,
+	CSGO_Weapon_SawedOff=	29,
+	CSGO_Weapon_Tec9	=	30,
+	CSGO_Weapon_Zeus	=	31,
+	CSGO_Weapon_Taser	=	31,
+	CSGO_Weapon_P2000	=	32,
+	CSGO_Weapon_MP7		=	33,
+	CSGO_Weapon_MP9		=	34,
+	CSGO_Weapon_Nova	=	35,
+	CSGO_Weapon_Scar20	=	38,
+	CSGO_Weapon_SG556	=	39,
+	CSGO_Weapon_SSG08	=	40,
+	CSGO_Weapon_Scout	=	40,
+	CSGO_Knife_CT		=	41,
+	CSGO_Knife_Gold		=	42,
+	CSGO_Flashbang		=	43,
+	CSGO_HEGrenade		=	44,
+	CSGO_SmokeGrenade	=	45,
+	CSGO_Molotov		=	46,
+	CSGO_Decoy			=	47,
+	CSGO_Incendiary		=	48,
+	CSGO_Knife_T		=	59,
+	CSGO_M4A1_S			=	60,
+	CSGO_USP_S			=	61,
+	CSGO_CZ75_A			=	62,
+	CSGO_Knife_Spectral			=	80,
+	CSGO_Knife_Ghost			=	80,
+	CSGO_Knife_Bayonet			=	500,
+	CSGO_Knife_Classic			=	503,
+	CSGO_Knife_Flip				=	505,
+	CSGO_Knife_Gut				=	506,
+	CSGO_Knife_Karambit			=	507,
+	CSGO_Knife_M9_Bayonet		=	508,
+	CSGO_Knife_Huntsman			=	509,
+	CSGO_Knife_Falchion			=	512,
+	CSGO_Knife_Bowie			=	514,
+	CSGO_Knife_Butterfly		=	515,
+	CSGO_Knife_ShadowDaggers	=	516,
+	CSGO_Knife_ButtPlugs		=	516,
+	CSGO_Knife_Paracord			=	517,
+	CSGO_Knife_Survival			=	518,
+	CSGO_Knife_Ursus			=	519,
+	CSGO_Knife_Navaja			=	520,
+	CSGO_Knife_Nomad			=	521,
+	CSGO_Knife_Stiletto			=	522,
+	CSGO_Knife_Talon			=	523,
+	CSGO_Knife_Skeleton			=	525
+}
+
 //Soon will be finished on.
 enum	CSGORankType	{
 	CSGORankType_Competitive	=	7
@@ -88,11 +155,7 @@ stock bool CSGO_FixWeaponId(any weapon)	{
  *	@return	If the weapon entity is invalid, nothing will happen.
  */
 stock bool CSGO_SetWeaponSkin(int weapon, int index)	{
-	if(!HasEntPropEx(weapon, Prop_Send, "m_nFallbackPaintKit"))
-		return	false;
-	
-	SetEntProp(weapon, Prop_Send, "m_nFallbackPaintKit", index);
-	return	true;
+	return	SetEntPropEx(weapon, Prop_Send, "m_nFallbackPaintKit", index);
 }
 
 /**
@@ -104,9 +167,6 @@ stock bool CSGO_SetWeaponSkin(int weapon, int index)	{
  *	@error				If the weapon or painkit is invalid, it will return -1.
  */
 stock int CSGO_GetWeaponSkin(int weapon)	{
-	if(!HasEntPropEx(weapon, Prop_Send, "m_nFallbackPaintKit"))
-		return	-1;
-	
 	return	GetEntProp(weapon, Prop_Send, "m_nFallbackPaintKit");
 }
 
@@ -119,11 +179,7 @@ stock int CSGO_GetWeaponSkin(int weapon)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetWeaponStatTrak(int weapon, int value=-1)	{
-	if(!HasEntPropEx(weappon, Prop_Send, "m_nFallbackStatTrak"))
-		return	false;
-	
-	SetEntProp(weapon, Prop_Send, "m_nFallbackStatTrak", value);
-	return	true;
+	return	SetEntPropEx(weapon, Prop_Send, "m_nFallbackStatTrak", value); 
 }
 
 /**
@@ -134,9 +190,6 @@ stock bool CSGO_SetWeaponStatTrak(int weapon, int value=-1)	{
  *	@error				If weapon or stattrak module is invalid, it will return -1.
  */
 stock int CSGO_GetWeaponStatTrak(int weapon)	{
-	if(!HasEntPropEx(weapon, "m_nFallbackStatTrak"))
-		return	-1;
-	
 	return	GetEntProp(weapon, Prop_Send, "m_nFallbackStatTrak");
 }
 
@@ -172,11 +225,7 @@ stock bool CSGO_SetWeaponOwner(any weapon, int client)	{
  *	@param index		Quality index value. By default set to 3, adding a star to the weapon name.
  */
 stock bool CSGO_SetWeaponQuality(int weapon, int index=3)	{
-	if(!HasEntPropEx(weapon, Prop_Send, "m_iEntityQuality"))
-		return	false;
-	
-	SetEntProp(weapon, Prop_Send, "m_iEntityQuality", index);
-	return	true;
+	return	SetEntPropEx(weapon, Prop_Send, "m_iEntityQuality", index);
 }
 
 /**
@@ -189,7 +238,7 @@ stock bool CSGO_SetWeaponQuality(int weapon, int index=3)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetWeaponNametag(int weapon, const char[] nametag)	{
-	return	HasEntPropEx(weapon, Prop_Send, "m_szCustomName") ? SetEntPropStringEx(weapon, Prop_Send, "m_szCustomName", nametag):false;
+	return	SetEntPropStringEx(weapon, Prop_Send, "m_szCustomName", nametag);
 }
 
 /**
@@ -202,7 +251,7 @@ stock bool CSGO_SetWeaponNametag(int weapon, const char[] nametag)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_GetWeaponNametag(int weapon, char[] buffer, int maxlen)	{
-	return	HasEntPropEx(weapon, Prop_Send, "m_szCustomName") ? GetEntPropStringEx(weapon, Prop_Send, "m_szCustomName", nametag, maxlen):false;
+	return	GetEntPropStringEx(weapon, Prop_Send, "m_szCustomName", nametag, maxlen);
 }
 
 /**
@@ -250,7 +299,7 @@ stock void CSGO_SetCompetitiveType(any entity, const CSGORankType[] array)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetArmModel(int client, const char[] arms)	{
-	return	HasEntPropEx(client, Prop_Send, "m_szArmsModel") ? SetEntPropStringEx(client, Prop_Send, "m_szArmsModel", name):false;
+	return	SetEntPropStringEx(client, Prop_Send, "m_szArmsModel", name);
 }
 
 /**
@@ -262,5 +311,5 @@ stock bool CSGO_SetArmModel(int client, const char[] arms)	{
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_GetArmModel(int client, char[] buffer, int maxlen)	{
-	return	HasEntProp(client, Prop_Send, "m_szArmsModel") ? GetEntPropStringEx(client, Prop_Send, "m_szArmsModel", buffer, maxlen):false;
+	return	GetEntPropStringEx(client, Prop_Send, "m_szArmsModel", buffer, maxlen);
 }

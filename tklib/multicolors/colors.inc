@@ -215,11 +215,11 @@ stock void C_ReplyToCommand(int client, const char[] message, any ...)	{
 
 	if(client == 0)	{
 		C_RemoveTags(format, sizeof(format));
-		PrintToServer("%s", szCMessage);
+		PrintToServer("%s", format);
 	}
 	else if(GetCmdReplySource() == SM_REPLY_TO_CONSOLE)	{
 		C_RemoveTags(format, sizeof(format));
-		PrintToConsole(client, "%s", szCMessage);
+		PrintToConsole(client, "%s", format);
 	}
 	else
 		C_PrintToChat(client, "%s", format);
@@ -302,9 +302,9 @@ stock void C_PrintToChatEx(int client, int author, const char[] message, any ...
 	SetGlobalTransTarget(client);
 
 	Format(format, sizeof(format), "\x01%s", message);
-	VFormat(formatmsg, sizeof(formatmsg), szBuffer, 4);
+	VFormat(formatmsg, sizeof(formatmsg), format, 4);
 
-	int	index = C_Format(szCMessage, sizeof(szCMessage), author);
+	int	index = C_Format(formatmsg, sizeof(formatmsg), author);
 
 	if(index == NO_INDEX)
 		(client == 0) ? C_ReplyToCommand(client, "%s", formatmsg):PrintToChat(client, "%s", formatmsg);
@@ -347,12 +347,12 @@ stock void C_PrintToChatAllEx(int author, const char[] message, any ...) {
  *	@param	maxlen		The maximum length of the message.
  *	@noreturn
  */
-stock void C_RemoveTags(const char[] message, int maxlen) {
+stock void C_RemoveTags(char[] message, int maxlen)	{
 	for(int i = 0; i < MAX_COLORS; i++)	{
-		ReplaceString(szMessage, maxlength, C_Tag[i], "", false);
+		ReplaceString(message, maxlen, C_Tag[i], "", false);
 	}
 	
-	ReplaceString(szMessage, maxlength, "{teamcolor}", "", false);
+	ReplaceString(message, maxlen, "{teamcolor}", "", false);
 }
 
 /**
@@ -544,7 +544,7 @@ stock void C_SayText2(int client, int author, const char[] message) {
 		Protobuf pb = UserMessageToProtobuf(hBuffer);
 		pb.SetInt("ent_idx", author);
 		pb.SetBool("chat", true);
-		pb.SetString("msg_name", szMessage);
+		pb.SetString("msg_name", message);
 		pb.AddString("params", "");
 		pb.AddString("params", "");
 		pb.AddString("params", "");
@@ -554,7 +554,7 @@ stock void C_SayText2(int client, int author, const char[] message) {
 		BfWrite bf = UserMessageToBfWrite(hBuffer);
 		bf.WriteByte(author);
 		bf.WriteByte(true);
-		bf.WriteString(szMessage);
+		bf.WriteString(message);
 	}
 
 	EndMessage();

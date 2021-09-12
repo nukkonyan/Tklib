@@ -1,145 +1,154 @@
 //Player permissions
 /**
- *	Returns if the client is a Console
+ *	Returns if the user is a Console
  *
  *	@param client	The users index.
  */
 stock bool IsClientConsole(int client)	{	
-	return (client == 0);
+	return	bool(client == 0);
 }
 
 /**
- *	Returns if the client is an Owner
+ *	Returns if the user is the Owner
  *
  *	@param	client		The users index.
- *	@error	If client is not valid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool IsClientOwner(int client)	{
 	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_ROOT, false):false;
 }
 
 /**
- *	Returns if the client is an Admin
+ *	Returns if the user is an Admin
  *
  *	@param	client		The users index.
- *	@error	If client is not valid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool IsClientAdmin(int client)	{
 	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_GENERIC, false):false;
 }
 
 /**
- *	Returns if the client is a Moderator
+ *	Returns if the user is a Moderator
  *
  *	@param	client		The users index.
- *	@error	If client is not valid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool IsClientModerator(int client)	{
 	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_CUSTOM1, false):false;
 }
 
 /**
- *	Returns if the client is a Vip
+ *	Returns if the user is a Vip
  *
  *	@param	client		The users index.
- *	@error	If client is not valid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool IsClientVip(int client)	{
 	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, "", ADMFLAG_RESERVATION, false):false;
 }
 
 /**
- *	Returns if the client is has the specified flag
+ *	Returns if the user is has the specified flag
  *
  *	@param	client		The users index.
  *	@param	adminflags	Administrative flags (bitstring) to use for permissions.
  *	@param	flagaccess	The flag access command. Disabled if empty.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool IsClientFlag(int client, int adminflags, char[] flagaccess="")	{
 	return Tklib_IsValidClient(client, true) ? CheckCommandAccess(client, flagaccess, adminflags, false):false;
 }
 
 /**
- *	Returns if the client and target is the same player.
+ *	Returns if the users is the same player.
  *
- *	@param client		Client index.
- *	@param target		Target index.
+ *	@param	client		The users index.
+ *	@param	target		The targets index.
+ *
  *	@return				Returns true if it's the same player, false otherwise.
  */
 stock bool IsSamePlayers(int client, int target)	{
-	return bool(client == target);
+	return	bool(client == target);
 }
 
 /**
- *	Returns if the client and target is on the same team.
+ *	Returns if the user and target is on the same team.
  *
- *	@param client		Client index.
- *	@param target		Target index.
+ *	@param	client		The users index.
+ *	@param	target		The targets index.
+ *
  *	@return				Returns true if it's they're on the same team, false otherwise.
  */
 stock bool IsSameTeam(int client, int target)	{
-	return (GetClientTeam(client) == GetClientTeam(target));
+	return	bool(GetClientTeam(client) == GetClientTeam(target));
 }
 
 //General stuff
 
 /**
- *	Set the clients scoreboard ping
+ *	Set the users scoreboard ping
  *
  *	@param	client		The users index.
  *	@param	value		Amount value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientPing(int client, int value)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_iPing", value)
+stock bool SetClientPing(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iPing", value):false;
 }
 
 /**
- *	Returns the clients scoreboard ping
+ *	Returns the users scoreboard ping
  *
  *	@param	client		The users index.
- *	@error	If the client is not valid, it will return -1.
+ *
+ *	@error	If the client is not valid, this returns -1.
  */
 stock int GetClientPing(int client)	{
-	return Tklib_IsValidClient(client, true)) ? GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iPing", _, client):-1;
+	return	Tklib_IsValidClient(client, true) ? GetEntProp(GetPlayerResourceEntity(), Prop_Send, "m_iPing", _, client):-1;
 }
 
 /**
- *	Set the clients death count
+ *	Set the users death count
  *
  *	@param	client		The users index.
  *	@param	value		Amount value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientDeaths(int client, int value)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_iDeaths", value);
+stock bool SetClientDeaths(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iDeaths", value):false;
 }
 
 /**
- *	Set the clients frag count
+ *	Set the users frag count
  *
  *	@param	client		The users index.
  *	@param	value		Amount index.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientFrags(int client, int value)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_iFrags", value);
+stock bool SetClientFrags(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iFrags", value):false;
 }
 
 
 /**
- *	Set the clients health
+ *	Set the users health
  *
  *	@param	client		The users index.
  *	@param	value		Amount index.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientHealth(int client, int value)	{
-	if(Tklib_IsValidClient(client))
-		SetEntProp(client, Prop_Send, "m_iHealth", value);
+stock bool SetClientHealth(int client, int value)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_iHealth", value):false;
 }
 
 /**
@@ -147,21 +156,22 @@ stock void SetClientHealth(int client, int value)	{
  *
  *	@param	client		The users index.
  *	@param	value		Amount index.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientMaxHealth(int client, int value)	{
-	if(Tklib_IsValidClient(client))
-		SetEntProp(client, Prop_Send, "m_iMaxHealth", value);
+stock bool SetClientMaxHealth(int client, int value)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_iMaxHealth", value):false;
 }
 
 /**
  *	Returns the users max health
  *
- *	@param	client		The users index..
- *	@error	If the client is not valid, it will return -1.
+ *	@param	client		The users index.
+ *
+ *	@error	If the client is not valid, this returns -1.
  */
 stock int GetClientMaxHealth(int client)	{
-	return Tklib_IsValidClient(client) ? GetEntProp(client, Prop_Data, "m_iMaxHealth"):-1;
+	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Data, "m_iMaxHealth"):-1;
 }
 
 /**
@@ -169,21 +179,22 @@ stock int GetClientMaxHealth(int client)	{
  *
  *	@param	client			The users index.
  *	@param	value			Team index value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientTeamNum(int client, int value)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_iTeamNum", value);
+stock bool SetClientTeamNum(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iTeamNum", value):false;
 }
 
 /**
  *	Returns the users team index number called from the game's netprop m_iTeamNum.
  *
  *	@param	client		The users index.
- *	@error	If the client is not valid, it will return -1.
+ *
+ *	@error	If the user is not valid or mod not supported, this returns -1.
  */
 stock int GetClientTeamNum(int client)	{
-	return Tklib_IsValidClient(client) ? GetEntProp(client, Prop_Send, "m_iTeamNum"):-1;
+	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_iTeamNum"):-1;
 }
 
 /**
@@ -191,44 +202,45 @@ stock int GetClientTeamNum(int client)	{
  *
  *	@param	client		The users index.
  *	@param	value		Amount value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientFOV(int client, int value)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_iFOV", value);
+stock bool SetClientFOV(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iFOV", value):false;
 }
 
 /**
  *	Returns the clients field-of-view.
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, it will return -1.
+ *
+ *	@error	If the user is invalid, this returns -1.
  */
 stock int GetClientFOV(int client)	{
-	return Tklib_IsValidClient(client, true) ? GetEntProp(client, Prop_Send, "m_iFOV"):-1;
+	return	Tklib_IsValidClient(client, true) ? GetEntPropEx(client, Prop_Send, "m_iFOV"):-1;
 }
 
 /**
- *	Set the clients default field-of-view.
+ *	Set the users default field-of-view.
  *
  *	@param	client		The users index.
  *	@param	value		Amount value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientDefaultFOV(int client, int value)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_iDefaultFOV", value);
+stock bool SetClientDefaultFOV(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iDefaultFOV", value):false;
 }
 
 /**
- *	Tk Libraries: Clients.
- *	Returns the clients default fov
+ *	Returns the users default fov
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, it will return -1.
+ *
+ *	@error	If the user is invalid, this returns -1.
  */
 stock int GetClientDefaultFOV(int client)	{
-	return Tklib_IsValidClient(client, true) ? GetEntProp(client, Prop_Send, "m_iDefaultFOV"):-1;
+	return	Tklib_IsValidClient(client, true) ? GetEntPropEx(client, Prop_Send, "m_iDefaultFOV"):-1;
 }
 
 /**
@@ -236,20 +248,21 @@ stock int GetClientDefaultFOV(int client)	{
  *
  *	@param	client 		The users index.
  *	@param	target		Target to observe.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientObserverTarget(int client, int target)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntPropEnt(client, Prop_Send, "m_iObserverTarget", target);
+stock bool SetClientObserverTarget(int client, int target)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEnt(client, Prop_Send, "m_iObserverTarget", target):false;
 }
 
 /**
  *	Returns the users Observer target
  *
  *	@param	client 		The users index.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns -1.
  */
-stock void GetClientObserverTarget(int client)	{
+stock int GetClientObserverTarget(int client)	{
 	return	Tklib_IsValidClient(client, true) ? GetEntPropEnt(client, Prop_Send, "m_iObserverTarget", target):-1;
 }
 
@@ -258,11 +271,11 @@ stock void GetClientObserverTarget(int client)	{
  *
  *	@param	client		The users index.
  *	@param	value		Observer mode value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientObserverMode(int client, int value)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_iObserverMode", value);
+stock bool SetClientObserverMode(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iObserverMode", value):false;
 }
 
 /**
@@ -270,10 +283,11 @@ stock void SetClientObserverMode(int client, int value)	{
  *
  *	@param	client		The users index.
  *	@param	value		Observer mode value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void GetClientObserverMode(int client, int value)	{
-	return	Tklib_IsValidClient(client, true) ? GetEntProp(client, Prop_Send, "m_iObserverMode", value):-1;
+stock bool GetClientObserverMode(int client, int value)	{
+	return	Tklib_IsValidClient(client, true) ? GetEntPropBool(client, Prop_Send, "m_iObserverMode", value):false;
 }
 
 /**
@@ -281,11 +295,11 @@ stock void GetClientObserverMode(int client, int value)	{
  *
  *	@param client		The users index.
  *	@param value		Bool value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientDrawViewModel(int client, bool value)	{
-	if(Tklib_IsValidClient(client, true))
-		SetEntProp(client, Prop_Send, "m_bDrawViewmodel", int(value));
+stock bool SetClientDrawViewModel(int client, bool value)	{
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_bDrawViewmodel", value):false;
 }
 
 /**
@@ -293,10 +307,10 @@ stock void SetClientDrawViewModel(int client, bool value)	{
  *	Returns the clients drawviewmodel value
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, it will return false.
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool GetClientDrawViewModel(int client)	{
-	return Tklib_IsValidClient(client, true) ? bool(GetEntProp(client, Prop_Send, "m_bDrawViewmodel")):false;
+	return	Tklib_IsValidClient(client, true) ? GetEntPropBool(client, Prop_Send, "m_bDrawViewmodel"):false;
 }
 
 /**
@@ -304,183 +318,225 @@ stock bool GetClientDrawViewModel(int client)	{
  *
  *	@param	client		The users index.
  *	@param	godmode		If true, it will enable godmode, else disabled.
- *	@error	If the client is invalid, nothing will happen.
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientGodMode(int client, bool godmode)	{
-	if(Tklib_IsValidClient(client))
-		SetEntProp(client, Prop_Send, "m_takedamage", godmode ? 0:2, 1);
+stock bool SetClientGodMode(int client, bool godmode)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_takedamage", godmode ? 0:2, 1):false;
 }
 
 /**
  *	Returns if client is in godmode
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool GetClientGodmode(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? bool(GetEntProp(client, Prop_Send, "m_takedamage", 0, 1) == 1):false
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_takedamage", 0, 1):false
 }
 
 /**
- *	Set the clients buddha mode
+ *	Set the user buddha mode
  *
  *	@param	client		The users index.
  *	@param	buddha		If true, it will enable buddha mode, else disabled.
- *	@error	If the client is invalid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientBuddhaMode(int client, bool buddha)	{
-	if(Tklib_IsValidClient(client, _, true))
-		buddha ? SetEntProp(client, Prop_Send, "m_takedamage", 1, 1):SetEntProp(client, Prop_Send, "m_takedamage", 2, 1);
+stock bool SetClientBuddhaMode(int client, bool buddha)	{
+	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_takedamage", buddha ? 1:2, 1):false;
 }
 
 /**
- *	Returns if the client is in buddha mode.
+ *	Returns if the user is in buddha mode.
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool GetClientBuddhaMode(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? bool(GetEntProp(client, Prop_Send, "m_takedamage", 1, 1) == 1):false
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_takedamage", 1, 1):false
 }
 
 /**
- *	Set the clients collision
+ *	Set the users collision
  *
  *	@param	client		The users index.
  *	@param	collision	If true, it will enable collision, else disabled.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void	SetClientCollision(int client, bool collision)	{
-	if(Tklib_IsValidClient(client))
+stock bool SetClientCollision(int client, bool collision)	{
+	if(Tklib_IsValidClient(client, _, true))	{
 		collision ? SetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 2, 4):SetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 5, 4);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Returns if the client has collision.
+ *	Returns if the user has collision.
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, it will return false.
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool GetClientCollision(int client)	{
-	return Tklib_IsValidClient(client) ? bool(GetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 2, 4) == 1):false
+	return	Tklib_IsValidClient(client) ? bool(GetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 2, 4) == 1):false
 }
 
 /**
- *	Set the client noclip on/off
+ *	Set the user noclip on/off
  *
  *	@param	client		The users index.
- *	@param	noclip		If true, it will enable nocip, else disabled.
- *	@error	If the client is invalid, nothing will happen.
+ *	@param	noclip		If true, it will enable noclip, else disabled.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientNoclip(int client, bool noclip)	{
-	if(Tklib_IsValidClient(client))
+stock bool SetClientNoclip(int client, bool noclip)	{
+	if(Tklib_IsValidClient(client))	{
 		SetEntityMoveType(client, noclip ? MOVETYPE_NOCLIP:MOVETYPE_WALK);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Set the clients max speed
+ *	Returns if the user is noclipping.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool IsClientNoclipping(int client)	{
+	return	Tklib_IsValidClient(client, _, true) ? bool(GetEntityMoveType(client) == MOVETYPE_NOCLIP):false;
+}
+ 
+
+/**
+ *	Set the users max speed
  *
  *	@param	client		The users index.
  *	@param	value		Float amount value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock float SetClientMaxSpeed(int client, float value)	{
-	if(Tklib_IsValidClient(client))
-		SetEntPropFloat(client,	Prop_Send,	"m_flMaxspeed",	value);
+stock bool SetClientMaxSpeed(int client, float value)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropFloatEx(client, Prop_Send, "m_flMaxspeed", value):false;
 }
 
 /**
- *	Returns the clients max speed
+ *	Returns the users max speed
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, it will return 0.0.
+ *
+ *	@error	If the user is invalid, this returns 0.0.
  */
 stock float GetClientMaxSpeed(int client)	{
-	return Tklib_IsValidClient(client) ? GetEntPropFloat(client, Prop_Send, "m_flMaxspeed"):0.0;
+	return	Tklib_IsValidClient(client) ? GetEntPropFloatEx(client, Prop_Send, "m_flMaxspeed"):0.0;
 }
 
 /**
- *	Returns if the client is muted.
+ *	Returns if the user is muted.
+ *	Considered safer over IsClientMuted.
  *
  *	@param 	client		The users index.
- *	@error	If the client is invalid, it will return false.
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool IsClientMutedEx(int client)	{
-	return Tklib_IsValidClient(client, true) ? (GetClientListeningFlags(client) == VOICE_NORMAL):false;
+	return	Tklib_IsValidClient(client, true) ? bool(GetClientListeningFlags(client) == VOICE_MUTED):false;
 }
 
 /**
- *	Set if the client should be muted or not.
+ *	Set if the user should be muted or not.
  *
  *	@param	client		The users index.
- *	@param	mute		If true, it will enable nocip, else disabled.
- *	@error	If the client is invalid, nothing will happen.
+ *	@param	mute		If true, it will enable noclip, else disabled.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientMute(int client, bool mute)	{
-	if(Tklib_IsValidClient(client, true))
+stock bool SetClientMute(int client, bool mute)	{
+	if(Tklib_IsValidClient(client, true))	{
 		SetClientListeningFlags(client, mute ? VOICE_MUTED:VOICE_NORMAL);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Slay the client.
+ *	Slays the user.
  *
  *	@param	client		The users index.
- *	@param	randomdeath	Should death be random. (Should be used in games where is supported)
- *	@error	If the client is invalid, nothing will happen.
+ *	@param	RandomDeath	Should death be random. (Should be used in games where is supported)
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SlayPlayer(int client, bool RandomDeath=false)	{
-	if(Tklib_IsValidClient(client, _, true))
+stock void SlayClient(int client, bool RandomDeath=false)	{
+	if(Tklib_IsValidClient(client, _, true))	{
 		FakeClientCommandEx(client, RandomDeath ? "kill":GetRandomBool() ? "kill":"death");
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Returns the clients lifestate.
+ *	Returns the users lifestate.
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, it will return -1.
+ *
+ *	@error	If the user is invalid, this returns -1.
  */
 stock int GetClientLifestate(int client)	{
 	return Tklib_IsValidClient(client) ? GetEntProp(client, Prop_Send, "m_lifeState"):-1;
 }
 
 /**
- *	Set the clients lifestate.
+ *	Set the users lifestate.
  *
  *	@param	client		The users index.
  *	@param	value		Lifestate value.
- *	@error	If the client is invalid, it will return -1.
+ *
+ *	@error	If the user is invalid, this returns -1.
  */
-stock void SetClientLifestate(int client, int value)	{
-	if(Tklib_IsValidClient(client))
-		SetEntProp(client, Prop_Send, "m_lifeState", value);
+stock bool SetClientLifestate(int client, int value)	{
+	return Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_lifeState", value):false;
 }
 
 /**
- *	Returns the clients map navigation location name
+ *	Returns the users map navigation location name
  *
  *	@param	client		The users index.
  *	@param	location	Buffer to store the location name.
  *	@param	len			Size of the buffer.
- *	@error	If the client is invalid, this will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool GetClientNavLocation(int client, char[] location, int maxlen)	{
-	return Tklib_IsValidClient(client, _, true) ? bool(GetEntPropString(client, Prop_Send, "m_szLastPlaceName", location, maxlen)):false;
+	return Tklib_IsValidClient(client, _, true) ? GetEntPropStringEx(client, Prop_Send, "m_szLastPlaceName", location, maxlen):false;
 }
 
 //Respawning
 
-//Set the respawn time for the specified client
+//Set the respawn time for the specified user
 
 /**
- *	Set the client to respawn in specified time
+ *	Set the user to respawn in specified time
  *
  *	@param	client		The users index.
  *	@param	value		Respawn time.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock float RespawnTime(int client, float value)	{
-	if(Tklib_IsValidClient(client))
+stock bool RespawnTime(int client, float value)	{
+	if(Tklib_IsValidClient(client))	{
 		CreateTimer(value, SetRespawnTime, client);
+		return	true;
+	}
+	
+	return	false;
 }
 
 //forwards the action to the respawn event
@@ -492,9 +548,10 @@ stock Action SetRespawnTime(Handle timer, any client)	{
  *	Respawn a client
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void Respawn(int client)	{
+stock bool Respawn(int client)	{
 	if(Tklib_IsValidClient(client))	{
 		switch(IdentifyGame())	{
 			case	Game_TF2:
@@ -507,7 +564,11 @@ stock void Respawn(int client)	{
 			case	Game_CSS,Game_CSPromod,Game_CSGO:
 				CS_RespawnPlayer(client);
 		}
+		
+		return	true;
 	}
+	
+	return	false;
 }
 
 /**
@@ -517,10 +578,11 @@ stock void Respawn(int client)	{
  *	@param	client		The users index.
  *	@param	buffer		Buffer storage.
  *	@param	maxlen		Length of the buffer.
- *	@error	If the client is invalid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool GetClientAuth(int client, char[] buffer, int maxlen)	{
-	return Tklib_IsValidClient(client, _, _, false, false) ? GetClientAuthId(client, AuthId_Steam2, buffer, maxlen):false;
+	return	Tklib_IsValidClient(client, _, _, false, false) ? GetClientAuthId(client, AuthId_Steam2, buffer, maxlen):false;
 }
 
 /**
@@ -531,19 +593,23 @@ stock bool GetClientAuth(int client, char[] buffer, int maxlen)	{
  *	@param	client		The users index.
  *	@param	buffer		Buffer storage.
  *	@param	maxlen		Length of the buffer.
- *	@error	If the client is invalid, it will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool GetClientAuth3(int client, char[] buffer, int maxlen)	{
-	return Tklib_IsValidClient(client, _, _, false, false) ? GetClientAuthId(client, AuthId_Steam3, buffer, maxlen):false;
+	return	Tklib_IsValidClient(client, _, _, false, false) ? GetClientAuthId(client, AuthId_Steam3, buffer, maxlen):false;
 }
 
 /**
  *	Returns the user by steam authentication.
  *
  *	@param auth.		Steam Auth.
- *	@return				The users index. If invalid client, returns 0.
+ *
+ *	@return				The users index.
+ *
+ *	@error	If the user is invalid, this returns 0.
  */
-stock int GetClientOfAuth(char[] auth)	{
+stock int GetClientOfAuth(const char[] auth)	{
 	int user = 0;
 	char tempauth[64];
 	
@@ -557,16 +623,19 @@ stock int GetClientOfAuth(char[] auth)	{
 			user = client;
 	}
 	
-	return user;
+	return	user;
 }
 
 /**
- *	Get the client by steam authentication.
+ *	Returns the user by steam authentication.
  *
  *	@param auth.		Steam3 Auth.
- *	@return				The users index. If invalid client, returns 0.
+ *
+ *	@return				The users index.
+ *
+ *	@error	If the user is invalid, this returns 0.
  */
-stock int GetClientOfAuth3(char[] auth)	{
+stock int GetClientOfAuth3(const char[] auth)	{
 	int user = 0;
 	char tempauth[64];
 	
@@ -580,7 +649,7 @@ stock int GetClientOfAuth3(char[] auth)	{
 			user = client;
 	}
 	
-	return user;
+	return	user;
 }
 
 /**
@@ -589,21 +658,25 @@ stock int GetClientOfAuth3(char[] auth)	{
  *	@param	client		The users index.
  *	@param	buffer		Buffer to store the string.
  *	@param	maxlen		Max length of the string buffer.
- *	@error	If the user is invalid, this will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool GetClientNameEx(int client, char[] buffer, int maxlen)	{
-	return Tklib_IsValidClient(client, _, _, false, false) ? GetClientInfo(client, "name", buffer, maxlen):false;
+	return	Tklib_IsValidClient(client, _, _, false, false) ? GetClientInfo(client, "name", buffer, maxlen):false;
 }
 
 /**
- *	Set the users name properly.
+ *	Sets the users name properly.
  *
  *	@param	client		The users index.
  *	@param	buffer		Buffer to store the string.
+ *
  *	@error	If the user is invalid, nothing will happen.
  */
 stock void SetClientNameEx(int client, char[] name)	{
-	if(Tklib_IsValidClient(client, false, false, false, false))
+	if(IsClientConsole(client))
+		name = "Console"
+	else if(Tklib_IsValidClient(client, false, false, false, false))
 		SetClientName(client, "name", name);
 }
 
@@ -613,9 +686,10 @@ stock void SetClientNameEx(int client, char[] name)	{
  *	@param		client			The user performing action.
  *	@param		player_name		The players name to search.
  *	@param		filter_flags	Filter flags.
- *	@error		If the index of the player was not found or is invalid, it will return -1.
+ *
+ *	@error		If the index of the player was not found or is invalid, this returns -1.
  */
-stock int GetClientOfPlayername(int client, char[] playername, int filter_flags=COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS)	{
+stock int GetClientOfPlayername(int client, const char[] playername, int filter_flags=COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS)	{
 	char target_name[64];
 	int target_list[64];
 	bool tn_is_ml;
@@ -626,7 +700,7 @@ stock int GetClientOfPlayername(int client, char[] playername, int filter_flags=
 		return target_list[i];
 	}
 	
-	return -1;
+	return	-1;
 }
 
 /**
@@ -651,11 +725,101 @@ stock int GetClientCountEx(bool nobots=true)	{
  *
  *	@param	client		The users index.
  *	@param	model		The model path.
- *	@error	If the user is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void SetClientModel(int client, char[] model)	{
-	if(Tklib_IsValidClient(client, _, true))
+stock bool SetClientModel(int client, const char[] model)	{
+	if(Tklib_IsValidClient(client, _, true))	{
 		SetEntityModel(client, model);
+		return	true;
+	}
+	
+	return	false;
+}
+
+/**
+ *	Returns the users current viewing angle.
+ *
+ *	@param	client	The users index.
+ *	@param	angle	The angle user is looking at.
+ *
+ *	@error	If the used is invalid, this returns false.
+ */
+stock bool GetClientViewAngles(int client, float view[3])	{
+	if(Tklib_IsValidClient(client))	{
+		float eyes[3], angles[3];
+		GetClientEyePosition(client, eyes); 
+		GetClientEyeAngles(client, angles);
+		TR_TraceRayFilter(eyes, angles, MASK_SOLID, RayType_Infinite, GetClientViewAngles_TraceEntityFilterPlayer, client);
+		if(TR_DidHit())
+			TR_GetEndPosition(view);
+		
+		return	true;
+	}
+	
+	return	false;
+}
+
+stock bool GetClientViewAngles_TraceEntityFilterPlayer(int entity, int contentsMask)	{
+	return	bool(entity > MaxClients);
+}
+
+/**
+ *	Set the users pending new team.
+ *
+ *	@param	client		The users index.
+ *	@param	team		The new team index.
+ *
+ *	@error	If the user or is not supported in the current mod, this returns false.
+ */
+stock bool SetClientPendingTeam(int client, int team)	{
+	return	Tklib_IsValidClient(client) ?  SetEntPropEx(client, Prop_Send, "m_iPendingTeamNum", team):false;
+}
+
+/**
+ *	Returns the users pending new team.
+ *
+ *	@param	client		The users index.
+ *
+ *	@error	If the user or is not supported in the current mod, this returns 0.
+ */
+stock int GetClientPendingTeam(int client)	{
+	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_iPendingTeamNum"):0;
+}
+
+/**
+ *	Returns if the user is ducking.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool IsClientDucking(int client)	{
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Data, "m_bDucking"):false;
+}
+
+/**
+ *	Set users ducking status.
+ *
+ *	@param	client	The users index.
+ *	@param	duck	If true, the user will be ducking, else not.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool SetClientDucking(int client, bool duck)	{
+	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Data, "m_bDucking", duck):false;
+}
+
+/**
+ *	Set if the user should be seen as 'connected'.
+ *
+ *	@param	client	The users index.
+ *	@param	connet	If true, the client will be seen as 'connected'.
+ *
+ *	@error	If the user is invalid or has no connection property, this returns false.
+ */
+stock bool SetClientConnected(int client, bool connect)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_bConnected", connect):false;
 }
 
 /**

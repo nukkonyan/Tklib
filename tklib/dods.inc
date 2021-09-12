@@ -26,7 +26,8 @@ enum	DODTeam	{
  *	Returns the users current team.
  *
  *	@param	client		The users index.
- *	@error	If the user is invalid, it will return DODTeam_Unassigned.
+ *
+ *	@error	If the user is invalid, this returns DODTeam_Unassigned.
  */
 stock DODTeam DOD_GetClientTeam(int client)	{
 	return Tklib_IsValidClient(client) ? DODTeam(GetClientTeam(client)):DODTeam_Unassigned;
@@ -36,9 +37,14 @@ stock DODTeam DOD_GetClientTeam(int client)	{
  *	Changes the users current team.
  *
  *	@param	client		The users index.
- *	@error	If the user is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock void DOD_ChangeClientTeam(int client, DODTeam team)	{
-	if(Tklib_IsValidClient(client))
-		ChangeClientTeam(client,	view_as<int>(team));
+	if(Tklib_IsValidClient(client))	{
+		ChangeClientTeam(client, int(team));
+		return	true;
+	}
+	
+	return	false;
 }

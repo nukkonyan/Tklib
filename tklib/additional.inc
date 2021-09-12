@@ -87,20 +87,30 @@ stock int AdminFlaglagToAdmflag(AdminFlag adminflags)	{
 }
 
 /**
- *	Retrieves a command as integer at its index, from the current console or server command.
+ *	Retrieves a command as integer given its index, from the current console or server command.
  *
  *	@note Argument indexes start at 1; 0 retrieves the command name.
- *	@param argnum		Argument number to retrieve.
+ *	@param	argnum		Argument number to retrieve.
  *	@return				Integer of the returned argument.
  */
 stock int GetCmdInt(int argnum)	{
-	char buffer[64];
+	char buffer[256];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
-	
-	if(StrEqual(buffer, ""))
-		return	-1;
-	
 	return	StringToInt(buffer);
+}
+
+/**
+ *	Retrieves a command as boolean given its index, from the current console or server command.
+ *
+ *	@note Argument indexes start at 1; 0 retrieves the command name.
+ *	@param	argnum		Argument number to retrieve.
+ *
+ *	@return				Integer of the returned argument.
+ */
+stock bool GetCmdBool(int argnum)	{
+	char buffer[256];
+	GetCmdArg(argnum, buffer, sizeof(buffer));
+	return	bool(StringToInt(buffer);
 }
 
 /**
@@ -123,7 +133,7 @@ stock int FloatToInt(float value)	{
  *	@return				If true, game you specified is active, else false.
  */
 stock bool IsCurrentGame(GameIdentifier gameversion)	{
-	return (IdentifyGame() == gameversion);
+	return	bool(IdentifyGame() == gameversion);
 }
 
 /**
@@ -135,7 +145,7 @@ stock bool IsCurrentGame(GameIdentifier gameversion)	{
  *	@param	caseSensitive	if true (by default), search is case sensitive. If false, search is case insensitive.
  *	*/
 stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensitive=true)	{
-	return (StrContains(str, substr, caseSensitive) != -1);
+	return	bool(StrContains(str, substr, caseSensitive) != -1);
 }
 
 /**
@@ -156,7 +166,7 @@ stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
 		"{red}",
 		"{blue}"
 	},
-		TeamColour_TF2[][]	=	{
+		TeamColour_TF2C[][]	=	{
 		"{grey}",
 		"{grey}",
 		"{red}",
@@ -168,7 +178,7 @@ stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
 		"{grey}",
 		"{grey}",
 		"{orange}",
-		"{bluegrey}"
+		"{blue}"
 	},
 		TeamColour_L4D[][]	=	{
 		"{grey}",
@@ -176,14 +186,15 @@ stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
 		"{orange}",
 		"{lightred}"
 	};
+	
 	switch(IdentifyGame())	{
-		case	Game_TF2:	Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2[team],		client);
-		case	Game_TF2C:	Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2[team],		client);
+		case	Game_TF2C:	Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2C[team],		client);
 		case	Game_CSGO:	Format(buffer, maxlen, "%s%N{default}", TeamColour_CSGO[team],		client);
 		case	Game_L4D1:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
 		case	Game_L4D2:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
 		default:			Format(buffer, maxlen, "%s%N{default}", TeamColour_Default[team],	client);
 	}
+	
 	return	true;
 }
 
@@ -203,6 +214,7 @@ stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool db
 			case	false:	PrintToServer("[Tklib: Additional] SQL_Connect2: Connection to database \"%s\" succeeded!", confname);
 		}
 	}
+	
 	return database;
 }
 
@@ -210,7 +222,7 @@ stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool db
  *	Returns GetRandomInt(0, 1) in boolean.
  */
 stock bool GetRandomBool()	{
-	return view_as<bool>(GetRandomInt(0, 1));
+	return	bool(GetRandomInt(0, 1));
 }
 
 /**
@@ -255,7 +267,9 @@ stock void CreateNativeEx2(const char[] name, NativeCall func)	{
  *
  *	@param	dest		Destination buffer to copy to.
  *	@param	destLen		Destination buffer length (includes null terminator).
- *	@param	
+ *	@param	source		Source string to copy from.
+ *
+ *	@return				Number of cells written.
  */
 stock int strcopyEx(char[] dest, int destLen, const char[] source, any...)	{
 	char format[256];
@@ -269,10 +283,11 @@ stock int strcopyEx(char[] dest, int destLen, const char[] source, any...)	{
 /**
  *	Auto-switches the bool value on/off.
  *	Example: if the value is on, it will return off.
- *	If it off, it will return on.
+ *	If it's off, it will return on.
  *	Useful for toggling functions in plugins.
  *
  *	@param	value		The value to toggle.
+ *	@return	Returns the new value.
  */
 stock bool AutoSwitch(bool value)	{
 	switch(value)	{
@@ -336,8 +351,169 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
 		}
 	}
 	
-	
 	delete DLPath;
 	
 	return	success;
+}
+
+/**
+ *	Turns a string into a boolean.
+ *
+ *	@param	str		String to convert.
+ *	@param	nBase	Numerical base to use. 10 is default.
+ *
+ *	@return	Boolean conversion of string or false on failure.
+ */
+stock bool StringToBool(const char[] str, int nBase=10)	{
+	return bool(StringToInt(str, nBase));
+}
+
+/**
+ *	Adds ConVar flag(s).
+ *
+ *	@param	cvar	The ConVar to change.
+ *	@param	flags	The flags to add.
+ *
+ *	@error	If the ConVar is invalid, this returns false.
+ */
+stock bool AddConVarFlags(ConVar cvar, int flags)	{
+	if(cvar == null)
+		return	false;
+	
+	int flag = cvar.Flags;
+	
+	flag |= flags;
+	
+	cvar.Flags = flags;
+	
+	return	true;
+}
+
+/**
+ *	Adds ConVar flag(s).
+ *
+ *	@param	cvar	The ConVar name to change.
+ *	@param	flags	The flags to add.
+ *
+ *	@error	If the ConVar is invalid, this returns false.
+ */
+stock bool AddConVarFlagsEx(const char[] convar, int flags)	{
+	ConVar cvar = FindConVar(convar);
+	if(cvar == null)	{
+		delete cvar;
+		return	false;
+	}
+	
+	int flag = cvar.Flags;
+	
+	flag |= flags;
+	
+	cvar.Flags = flags;
+	
+	delete cvar;
+	
+	return	true;
+}
+
+/**
+ *	Removes ConVar flag(s).
+ *
+ *	@param	cvar	The ConVar to change.
+ *	@param	flags	The flags to remove.
+ *
+ *	@error	If the ConVar is invalid, this returns false.
+ */
+stock bool RemoveConVarFlags(ConVar cvar, int flags)	{
+	if(cvar == null)
+		return	false;
+	
+	int flag = cvar.Flags;
+	
+	flag &= ~flags;
+	
+	cvar.Flags = flag;
+	
+	return	true;
+}
+
+/**
+ *	Removes ConVar flag(s).
+ *
+ *	@param	cvar	The ConVar name to change.
+ *	@param	flags	The flags to remove.
+ *
+ *	@error	If the ConVar is invalid, this returns false.
+ */
+stock bool RemoveConVarFlagsEx(const char[] convar, int flags)	{
+	ConVar cvar = FindConVar(convar);
+	if(cvar == null)	{
+		delete cvar;
+		return	false;
+	}
+	
+	int flag = cvar.Flags;
+	
+	flag &= ~flags;
+	
+	cvar.Flags = flag;
+	
+	delete cvar;
+	
+	return	true;
+}
+
+/**
+ *	Sends a SayText2 usermessage to a client.
+ *
+ *	@param	client		Users index.
+ *	@param	index		Sender index.
+ *	@param	message		Message.
+ *	@noreturn
+ *
+ *	@error	If the user is invalid or the procedure failed/not supported for the current gamemod, this returns false.
+ */
+stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
+	if(!Tklib_IsValidClient(client))
+		return	false;
+	
+	if(!Tklib_IsValidClient(author))
+		return	false;
+	
+	if(GetFeatureStatus(FeatureType_Native, "GetUserMessageType") == FeatureStatus_Unavailable)
+		return	false;
+	
+	if(GetUserMessageId("SayText2") == INVALID_MESSAGE_ID)
+		return	false;
+	
+	Handle msg = null;
+	
+	if((msg = StartMessageOne("SayText2", client, USERMSG_RELIABLE|USERMSG_BLOCKHOOKS)) != null)	{
+		char format[96];
+		VFormat(format, sizeof(format), message, 4);
+		
+		switch(GetUserMessageType())	{
+			case	UM_Protobuf:	{
+				Protobuf pb = UserMessageToProtobuf(msg);
+				pb.SetInt("ent_idx", author);
+				pb.SetBool("chat", true);
+				pb.SetString("msg_name", format);
+				pb.AddString("params", "");
+				pb.AddString("params", "");
+				pb.AddString("params", "");
+				pb.AddString("params", "");
+			}
+			case	UM_BitBuf:	{
+				BfWrite bf = UserMessageToBfWrite(msg);
+				bf.WriteByte(author);
+				bf.WriteByte(true);
+				bf.WriteString(format);
+			}
+		}
+	
+		EndMessage();
+		
+		return	true;
+	}
+	
+	return	false;
 }
