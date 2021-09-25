@@ -178,7 +178,7 @@ stock int CSGO_GetWeaponSkin(any weapon)	{
  *	@error	If the weapon is invalid or procedure failed, this returns false.
  */
 stock bool CSGO_SetWeaponPattern(any weapon, int pattern)	{
-	return	SetEntPropEx(entity, Prop_Send, "m_nFallbackSeed", pattern);
+	return	SetEntPropEx(weapon, Prop_Send, "m_nFallbackSeed", pattern);
 }
 
 /**
@@ -189,7 +189,7 @@ stock bool CSGO_SetWeaponPattern(any weapon, int pattern)	{
  *	@error	If the weapon is invalid or procedure failed, this returns false.
  */
 stock int CSGO_GetWeaponPattern(any weapon)	{
-	return	GetEntPropEx(entity, Prop_Send, "m_nFallbackSeed");
+	return	GetEntPropEx(weapon, Prop_Send, "m_nFallbackSeed");
 }
 
 /**
