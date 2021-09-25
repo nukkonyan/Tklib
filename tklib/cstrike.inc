@@ -563,8 +563,25 @@ stock void CS_GetWeaponName(char[] weapon, char[] output, int maxlen)	{
 stock bool CS_GetTeamName(CSTeam team, char[] buffer, int maxlen)	{
 	Entity index = Entity_Invalid;
 	while((index = Entity.FindByClassname(index, "cs_team_manager")) != Entity_Invalid)	{
-		if(CSTeam(index.GetPropEntEx(Prop_Send, "m_iTeamNum")) == team)
-			return	index.GetPropStringEx(Prop_Send, "m_szClanTeamname", buffer, maxlen)
+		if(CSTeam(index.GetPropEx(Prop_Send, "m_iTeamNum")) == team)	{
+			char checkname[96];
+			bool success = index.GetPropStringEx(Prop_Send, "m_szClanTeamname", buffer, maxlen);
+			
+			if(StrEqual(checkname, ""))	{
+				switch(team)	{
+					case	CSTeam_T:	{
+						strcopy(buffer, maxlen, "Terrorists");
+						return	true;
+					}
+					case	CSTeam_CT:	{
+						strcopy(buffer, maxlen, "Counter-Terrorists");
+						return	true;
+					}
+				}
+			}
+			
+			return	success;
+		}
 	}
 	
 	return	false;

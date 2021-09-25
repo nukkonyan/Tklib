@@ -35,7 +35,7 @@ stock FFTeam FF_GetClientTeam(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock void FF_ChangeClientTeam(int client, FFTeam team)	{
+stock bool FF_ChangeClientTeam(int client, FFTeam team)	{
 	if(Tklib_IsValidClient(client))	{
 		ChangeClientTeam(client, int(team));
 		return	true;

@@ -129,7 +129,6 @@ enum	CSGORankType	{
 #define	CSGORankType(%1)	view_as<CSGORankType>(%1)
 
 /**
- *	Tk Libraries.
  *	Fixes the StatTrak and Skins function not working.
  *
  *	@param weapon		Weapon entity.
@@ -147,115 +146,154 @@ stock bool CSGO_FixWeaponId(any weapon)	{
 }
 
 /**
- *	Tk Libraries.
  *	Set the Weapon skin.
  *
- *	@param	weapon		Weapon entity.
+ *	@param	weapon		The weapon entity.
  *	@param	index		The skin index.
- *	@return	If the weapon entity is invalid, nothing will happen.
+ *
+ *	@return	If the weapon entity is invalid, this returns false.
  */
-stock bool CSGO_SetWeaponSkin(int weapon, int index)	{
+stock bool CSGO_SetWeaponSkin(any weapon, int index)	{
 	return	SetEntPropEx(weapon, Prop_Send, "m_nFallbackPaintKit", index);
 }
 
 /**
- *	Tk Libraries.
  *	Returns the Weapon skin.
  *
- *	@param weapon		Weapon entity.
+ *	@param weapon		The weapon entity.
  *	@param index		The Skin index.
- *	@error				If the weapon or painkit is invalid, it will return -1.
+ *
+ *	@error				If the weapon or painkit is invalid, this returns -1.
  */
-stock int CSGO_GetWeaponSkin(int weapon)	{
-	return	GetEntProp(weapon, Prop_Send, "m_nFallbackPaintKit");
+stock int CSGO_GetWeaponSkin(any weapon)	{
+	return	GetEntPropEx(weapon, Prop_Send, "m_nFallbackPaintKit");
 }
 
 /**
- *	Tk Libraries.
+ *	Set the weapon's pattern/seed.
+ *
+ *	@param	weapon		The weapon entity.
+ *	@param	pattern		The pattern to set.
+ *
+ *	@error	If the weapon is invalid or procedure failed, this returns false.
+ */
+stock bool CSGO_SetWeaponPattern(any weapon, int pattern)	{
+	return	SetEntPropEx(entity, Prop_Send, "m_nFallbackSeed", pattern);
+}
+
+/**
+ *	Returns the weapon's pattern/seed.
+ *
+ *	@param	weapon		The weapon entity.
+ *
+ *	@error	If the weapon is invalid or procedure failed, this returns false.
+ */
+stock int CSGO_GetWeaponPattern(any weapon)	{
+	return	GetEntPropEx(entity, Prop_Send, "m_nFallbackSeed");
+}
+
+/**
  *	Set the Weapon StatTrak.
  *
- *	@param weapon		Weapon entity.
- *	@param value		The 'kill' track amount. If -1 (by default), will be disabled.
- *	@return				Returns false on failure, true otherwise.
+ *	@param	weapon		Weapon entity.
+ *	@param	value		The 'kill' track amount. If -1 (by default), will be disabled.
+ *
+ *	@return	Returns false on failure, true otherwise.
+ *
+ *	@error	If the weapon is invalid or procedure failed, this returns false.
  */
-stock bool CSGO_SetWeaponStatTrak(int weapon, int value=-1)	{
+stock bool CSGO_SetWeaponStatTrak(any weapon, int value=-1)	{
 	return	SetEntPropEx(weapon, Prop_Send, "m_nFallbackStatTrak", value); 
 }
 
 /**
- *	Tk Libraries.
  *	Returns the Weapon StatTrak.
  *
- *	@param weapon		Weapon entity.
+ *	@param weapon		The weapon entity.
+ *
  *	@error				If weapon or stattrak module is invalid, it will return -1.
  */
-stock int CSGO_GetWeaponStatTrak(int weapon)	{
-	return	GetEntProp(weapon, Prop_Send, "m_nFallbackStatTrak");
+stock int CSGO_GetWeaponStatTrak(any weapon)	{
+	return	GetEntPropEx(weapon, Prop_Send, "m_nFallbackStatTrak");
 }
 
 /**
- *	Tk Libraries.
  *	Set the weapon owner.
  *
- *	@param weapon		Weapon entity.
+ *	@param weapon		The weapon entity.
  *	@param client		Users index.
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetWeaponOwner(any weapon, int client)	{
-	if(!HasEntPropEx(int(weapon), Prop_Send, "m_iAccountID"))
-		return	false;
-	SetEntProp(int(weapon), Prop_Send, "m_iAccountID", GetSteamAccountID(client));
-	
-	if(!HasEntPropEx(int(weapon), Prop_Send, "m_hOwnerEntity"))
-		return	false;
-	SetEntPropEnt(int(weapon), Prop_Send, "m_hOwnerEntity", client);
-	
-	if(!HasEntPropEx(int(weapon), Prop_Send, "m_hPrevOwner"))
-		return	false;
-	SetEntPropEnt(int(weapon), Prop_Send, "m_hPrevOwner", -1);
+	SetEntPropEx(weapon, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+	SetEntPropEntEx(weapon, Prop_Send, "m_hOwnerEntity", client);
+	SetEntPropEnt(weapon, Prop_Send, "m_hPrevOwner", -1);
 	
 	return	true;
 }
 
 /**
- *	Tk Libraries.
  *	Set the weapon quality.
  *
- *	@param weapon		Weapon entity.
- *	@param index		Quality index value. By default set to 3, adding a star to the weapon name.
+ *	@param	weapon		The weapon entity.
+ *	@param	index		Quality index value. By default set to 3, adding a star to the weapon name.
+ *
+ *	@error	If the weapon is invalid or procedure failed, this returns false.
  */
-stock bool CSGO_SetWeaponQuality(int weapon, int index=3)	{
+stock bool CSGO_SetWeaponQuality(any weapon, int index=3)	{
 	return	SetEntPropEx(weapon, Prop_Send, "m_iEntityQuality", index);
 }
 
 /**
- *	Tk Libraries.
  *	Set the weapon nametag
  *
- *	@param weapon		Weapon entity.
- *	@param nametag		A Nametag or string of characters you specify.
- *	@param maxlen		Max character length for the string buffer.
- *	@return				Returns false on failure, true otherwise.
+ *	@param	weapon		The weapon entity.
+ *	@param	nametag		A Nametag or string of characters you specify.
+ *	@param	maxlen		Max character length for the string buffer.
+ *
+ *	@return	Returns false on failure, true otherwise.
  */
-stock bool CSGO_SetWeaponNametag(int weapon, const char[] nametag)	{
+stock bool CSGO_SetWeaponNametag(any weapon, const char[] nametag)	{
 	return	SetEntPropStringEx(weapon, Prop_Send, "m_szCustomName", nametag);
 }
 
 /**
- *	Tk Libraries.
  *	Returns the weapon nametag
  *
- *	@param weapon		Weapon entity.
- *	@param buffer		A Nametag or string of characters you specify.
- *	@param maxlen		Length of the buffer.
- *	@return				Returns false on failure, true otherwise.
+ *	@param	weapon		The weapon entity.
+ *	@param	buffer		A Nametag or string of characters you specify.
+ *	@param	maxlen		Length of the buffer.
+ *
+ *	@return	Returns false on failure, true otherwise.
  */
-stock bool CSGO_GetWeaponNametag(int weapon, char[] buffer, int maxlen)	{
+stock bool CSGO_GetWeaponNametag(any weapon, char[] buffer, int maxlen)	{
 	return	GetEntPropStringEx(weapon, Prop_Send, "m_szCustomName", nametag, maxlen);
 }
 
 /**
- *	Tk Libraries.
+ *	Set the weapon wear.
+ *
+ *	@param	weapon		The weapon entity.
+ *	@param	wear		The wear float value.
+ *
+ *	@error	If the weapon is invalid or procedure failed, this returns false.
+ */
+stock bool CSGO_SetWeaponWear(any weapon, float wear)	{
+	return	SetEntPropFloatEx(weapon, Prop_Send, "m_flFallbackWear", wear);
+}
+
+/**
+ *	Returns the weapon's wear float.
+ *
+ *	@param	weapon		The weapon entity.
+ *
+ *	@error	If the weapon is invalid or procedure failed, this returns false.
+ */
+stock float CSGO_GetWeaponWear(any weapon)	{
+	return	GetEntPropFloatEx(entity, Prop_Send, "m_flFallbackWear");
+}
+
+/**
  *	Returns the competitive rank offset. [CS:GO]
  */
 stock int CSGO_GetCompetitiveOffset()	{
@@ -263,10 +301,10 @@ stock int CSGO_GetCompetitiveOffset()	{
 }
 
 /**
- *	Tk Libraries.
  *	Set the competitive rank offset. [CS:GO]
- *	@param entity		The target entity.
- *	@param array			array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
+ *
+ *	@param	entity	The target entity.
+ *	@param	array	array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
  */
 stock void CSGO_SetCompetitiveOffset(any entity, const CSGORank[] array)	{
 	SetEntDataArray(int(entity), CSGO_GetCompetitiveOffset(), int(array), MAXPLAYERS+1);
@@ -280,34 +318,33 @@ stock CSGORankType CSGO_GetCompetitiveType()	{
 }
 
 /**
- *	Tk Libraries.
  *	Set the competitive rank type. [CS:GO]
  *
- *	@param entity		The target entity.
- *	@param array			array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
+ *	@param	entity	The target entity.
+ *	@param	array	array, example arraytest[MAXPLAYERS+1] without the [MAXPLAYERS+1]
  */
 stock void CSGO_SetCompetitiveType(any entity, const CSGORankType[] array)	{
 	SetEntDataArray(int(entity), CSGO_GetCompetitiveType(), int(array), MAXPLAYERS+1, 1);
 }
 
 /**
- *	Tk Libraries.
  *	Set the users arms model.
  *
- *	@param client		Users index.
- *	@param arms			The Arm model path.
- *	@return				Returns false on failure, true otherwise.
+ *	@param	client	The users index.
+ *	@param	arms	The Arm model path.
+ *
+ *	@return	Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetArmModel(int client, const char[] arms)	{
 	return	SetEntPropStringEx(client, Prop_Send, "m_szArmsModel", name);
 }
 
 /**
- *	Tk Libraries.
  *	Return the users arms model.
  *
- *	@param client		Users index.
+ *	@param client		The users index.
  *	@param name			The Arm model path.
+ *
  *	@return				Returns false on failure, true otherwise.
  */
 stock bool CSGO_GetArmModel(int client, char[] buffer, int maxlen)	{

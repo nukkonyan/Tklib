@@ -258,7 +258,7 @@ stock bool SetEntityParentEntity(any entity, any parent)	{
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int GetEntityParentEntity(any entity)	{
-	return	HasEntPropEx(entity, Prop_Send, "m_iParentAttachment") ? GetEntProp(entity, Prop_Send, "m_iParentAttachment"):-1;
+	return	GetEntPropEx(entity, Prop_Send, "m_iParentAttachment");
 }
 
 /**
@@ -676,7 +676,7 @@ methodmap	Entity	__nullable__	{
 		}
 		public get()
 		{
-			return GetEntityDefinitionIndex(This);
+			return	GetEntityDefinitionIndex(This);
 		}
 	}
 	
@@ -684,45 +684,53 @@ methodmap	Entity	__nullable__	{
 	
 	public bool HasProp(PropType type, const char[] prop)
 	{
-		return HasEntProp(This, type, prop);
+		return	HasEntProp(This, type, prop);
 	}
 	public bool HasPropEx(PropType type, const char[] prop)
 	{
-		return HasEntPropEx(This, type, prop);
+		return	HasEntPropEx(This, type, prop);
 	}
 	
 	public void SetProp(PropType type, const char[] prop, any value, int size=4, int element=0)
 	{
 		SetEntProp(This, type, prop, value, size, element);
 	}
+	public bool SetPropEx(PropType type, const char[] prop, any value, int size=4, int element=0)
+	{
+		return	SetEntPropEx(This, type, prop, value, size, element);
+	}
 	public void SetPropEnt(PropType type, const char[] prop, int other, int element=0)
 	{
 		SetEntPropEnt(This, type, prop, other, element);
+	}
+	public bool SetPropEntEx(PropType type, const char[] prop, int other, int element=0)
+	{
+		return	SetEntPropEntEx(This, type, prop, other, element);
 	}
 	public void SetPropBool(PropType type, const char[] prop, bool value, int size=4, int element)
 	{
 		SetEntProp(This, type, prop, value, size, element);
 	}
 	
-	public Entity GetProp(PropType type, const char[] prop, int size=4, int element=0)
+	public int GetProp(PropType type, const char[] prop, int size=4, int element=0)
 	{
-		return	Ent(GetEntProp(This, type, prop, size, element));
+		return	GetEntProp(This, type, prop, size, element);
 	}
-	public Entity GetPropEx(PropType type, const char[] prop, int size=4, int element=0)
+	public int GetPropEx(PropType type, const char[] prop, int size=4, int element=0)
 	{
-		return	Ent(GetEntPropEx(This, type, prop, size, element));
+		return	GetEntPropEx(This, type, prop, size, element);
 	}
-	public Entity GetPropEnt(PropType type, const char[] prop, int element=0)
+	public int GetPropEnt(PropType type, const char[] prop, int element=0)
 	{
-		return	Ent(GetEntPropEnt(This, type, prop, element));
+		return	GetEntPropEnt(This, type, prop, element);
 	}
-	public Entity GetPropEntEx(PropType type, const char[] prop, int element=0)
+	public int GetPropEntEx(PropType type, const char[] prop, int element=0)
 	{
-		return	Ent(GetEntPropEntEx(This, type, prop, element));
+		return	GetEntPropEntEx(This, type, prop, element);
 	}
-	public Entity GetPropArraySize(PropType type, const char[] prop)
+	public int GetPropArraySize(PropType type, const char[] prop)
 	{
-		return	Ent(GetEntPropArraySize(This, type, prop));
+		return	GetEntPropArraySize(This, type, prop);
 	}
 	public bool GetPropBool(PropType type, const char[] prop, int size=4, int element=0)
 	{
@@ -742,17 +750,17 @@ methodmap	Entity	__nullable__	{
 		return	GetEntPropFloat(This, type, prop, element);
 	}
 	
-	public Entity SetPropString(PropType type, const char[] prop, const char[] buffer, int element=0)
+	public int SetPropString(PropType type, const char[] prop, const char[] buffer, int element=0)
 	{
-		return	Ent(SetEntPropString(This, type, prop, buffer, element));
+		return	SetEntPropString(This, type, prop, buffer, element);
 	}
 	public bool SetPropStringEx(PropType type, const char[] prop, const char[] buffer, int element=0)
 	{
 		return	SetEntPropStringEx(This, type, prop, buffer, element);
 	}
-	public Entity GetPropString(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
+	public int GetPropString(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
 	{
-		return	Ent(GetEntPropString(This, type, prop, buffer, maxlen, element));
+		return	GetEntPropString(This, type, prop, buffer, maxlen, element);
 	}
 	public bool GetPropStringEx(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
 	{
@@ -772,18 +780,18 @@ methodmap	Entity	__nullable__	{
 	{
 		SetEntData(offset, value, size, changeState);
 	}
-	public Entity GetData(int offset, int size=4)
+	public int GetData(int offset, int size=4)
 	{
-		return	Ent(GetEntData(This, offset, size));
+		return	GetEntData(This, offset, size);
 	}
 	
 	public void SetDataEnt2(int offset, int other, bool changeState=false)
 	{
 		SetEntDataEnt2(This, offset, other, changeState);
 	}
-	public Entity GetDataEnt2(int offset)
+	public int GetDataEnt2(int offset)
 	{
-		return	Ent(GetEntDataEnt2(This, offset));
+		return	GetEntDataEnt2(This, offset);
 	}
 	
 	public void SetDataFloat(int offset, float value, bool changeState=false)
@@ -799,9 +807,9 @@ methodmap	Entity	__nullable__	{
 	{
 		SetEntDataString(This, offset, buffer, maxlen, changeState);
 	}
-	public Entity GetDataString(int offset, char[] buffer, int maxlen)
+	public int GetDataString(int offset, char[] buffer, int maxlen)
 	{
-		return	Ent(GetEntDataString(This, offset, buffer, maxlen));
+		return	GetEntDataString(This, offset, buffer, maxlen);
 	}
 
 	public void SetDataVector(int offset, const float vec[3], bool changeState=false)
@@ -928,12 +936,11 @@ methodmap	Entity	__nullable__	{
 	{
 		public set(any value) 
 		{
-			if(HasEntProp(This, Prop_Send, "m_iTeamNum"))
-				SetEntProp(This, Prop_Send, "m_iTeamNum", value);
+			SetEntPropEx(This, Prop_Send, "m_iTeamNum", value);
 		}
 		public get()
 		{
-			return HasEntProp(This, Prop_Send, "m_iTeamNum") ? GetEntProp(This, Prop_Send, "m_iTeamNum"):-1;
+			return GetEntPropEx(This, Prop_Send, "m_iTeamNum");
 		}
 	}
 	
