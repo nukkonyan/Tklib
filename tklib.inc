@@ -164,6 +164,7 @@
 // + Added CSGO_GetWeaponWear.
 // + Added CSGO_SetWeaponPattern.
 // + Added CSGO_GetWeaponPattern.
+// + Added NoMultiColors definition if you don't want multi-colors to be included. ('#define NoMultiColors' before including this include to make it prevent.)
 // + Fixed FF_GetClientTeam to properly return a boolean value.
 // + Updated GetEntityParentEntity.
 // + Updated the Get* networking properties to be int instead of Entity on methodmap.
@@ -219,4 +220,6 @@
 #include	<tklib/dods>
 #include	<tklib/fortress_forever>
 
+#if !defined NoMultiColors
 #include	<tklib/multicolors>
+#endif
