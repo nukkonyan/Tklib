@@ -175,6 +175,27 @@ stock int GetClientMaxHealth(int client)	{
 }
 
 /**
+ *	Sets the users health & maximum health.
+ *
+ *	@param	client			The users index.
+ *	@param	health			Health
+ *	@param	maxhealth		Maximum health.
+ *
+ *	@noreturn
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool SetClientHealthEx(int client, int health, int maxhealth)	{
+	if(Tklib_IsValidClient(client, _, true))	{
+		SetClientMaxHealth(client, newmaxhealth);
+		SetClientHealth(client, health);
+		return	true;
+	}
+	
+	return	false;
+}
+
+/**
  *	Set the users team index number called from the game's netprop m_iTeamNum.
  *
  *	@param	client			The users index.

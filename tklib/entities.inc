@@ -330,6 +330,31 @@ stock int GetEntityDefinitionIndex(any entity)	{
 	return	GetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex");
 }
 
+/**
+ *	Returns if the entity classname is fully or partially matching.
+ *
+ *	@param	entity			Entity index.
+ *	@param	classname		Classname to check.
+ *	@param	partialMatch	If true, it will return true if match was partial.
+ *
+ *	@return	Returns if the match was found.
+ *
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool IsEntityClassnameMatching(any entity, const char[] classname, bool partialMatch=false)	{
+	if(!IsValidEntityEx(entity))
+		return	false;
+	
+	//Credits JonnyBoy0719 - Contagion include.
+	char entity_className[64];
+	GetEntityClassname(entity, entity_className, sizeof(entity_className));
+
+	if(partialMatch)
+		return	(StrContainsEx(entity_className, className));
+	
+	return	StrEqual(entity_className, className);
+}
+
 //Netprops
 
 /**

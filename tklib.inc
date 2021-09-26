@@ -169,6 +169,7 @@
 // + Updated GetEntityParentEntity.
 // + Updated the Get* networking properties to be int instead of Entity on methodmap.
 // + Updated CS:GO Include.
+// + Integrated Contagion include into tklib. (late addition, should've been added a while ago.)
 
 //SM Includes
 #include	<sdktools>
@@ -219,6 +220,7 @@
 #include	<tklib/l4d>
 #include	<tklib/dods>
 #include	<tklib/fortress_forever>
+#include	<tklib/contagion>
 
 #if !defined NoMultiColors
 #include	<tklib/multicolors>
