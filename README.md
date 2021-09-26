@@ -4,7 +4,7 @@ This was renamed from Tk Include to Tk Libraries when 1.2.0 was released.
 
 Also includes modified/updated SourceMod includes.
 
-#Note: if you don't want multi-colors to be included in your compile, simply define NoMultiColors before the tklib include.
+# Note: if you don't want multi-colors to be included in your compile, simply define NoMultiColors before the tklib include.
 
 Will be later converted into being natives and using a custom extension to read from.
 
