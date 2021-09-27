@@ -2,7 +2,9 @@
 This is a massive include with quite some additions and will be updated as frequent as possible adding more stuff.
 This was renamed from Tk Include to Tk Libraries when 1.2.0 was released.
 
-Also includes modified/updated SourceMod includes.
+Functions [GitHub Pages](https://github.com/Teamkiller324/Tklib/blob/main/functions.md).
+
+### Also includes modified/updated SourceMod includes.
 
 # Note: if you don't want multi-colors to be included in your compile, simply define NoMultiColors before the tklib include.
 
