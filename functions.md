@@ -1,4 +1,4 @@
-# Functions diveded by sections.
+# Functions divided by sections.
 
 
 # Game Identifier
