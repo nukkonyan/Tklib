@@ -413,9 +413,51 @@ GetClientDefaultFOV()
 
 # Left 4 Dead
 
+```
+Returns the users current team.
+If the user is invalid, this returns L4DTeam_Unassigned.
+
+L4D_GetClientTeam()
+```
+
+```
+Changees the users current team.
+If the user is invalid, this returns false.
+
+L4D_ChangeClientTeam()
+```
+
 # Day of Defeat: Source
 
+```
+Returns the users current team.
+If the user is invalid, this returns DODTeam_Unassigned.
+
+DOD_GetClientTeam()
+```
+
+```
+Changes the users curent team.
+If the user is invalid, this returns false.
+
+DOD_ChangeClientTeam()
+```
+
 # Fortress-Forever
+
+```
+Returns the users current team.
+If the user is invalid, this returns FFTeam_Unassigned.
+
+FF_GetClientTeam()
+```
+
+```
+Changes the users current team.
+If the user is invalid, this returns false.
+
+FF_ChangeClientTeam()
+```
 
 # Contagion
 
