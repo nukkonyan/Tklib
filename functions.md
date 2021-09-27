@@ -253,6 +253,153 @@ EquipPlayerWeaponEx()
 
 # Clients
 
+```
+Returns if the user is the console.
+
+IsClientConsole()
+```
+
+```
+Returns if the user is the Owner.
+
+IsClientOwner()
+```
+
+```
+Returns if the user is an Admin.
+
+IsClientAdmin()
+```
+
+```
+Returns if the user is a Moderator.
+
+IsClientModerator()
+```
+
+```
+Returns if the user is a Vip.
+
+IsClientVip()
+```
+
+```
+Returns if the user has the specified flag access.
+
+IsClientFlag()
+```
+
+```
+Returns if the users is the same player.
+
+IsSamePlayers()
+```
+
+```
+Returns if the user and target is on the same team.
+
+IsSameTeam()
+```
+
+```
+Set the users scoreboard ping.
+If the user is invalid, this returns false.
+
+SetClientPing()
+```
+
+```
+Returns the users scoreboard ping.
+If the user is invalid, this returns -1.
+
+GetClientPing()
+```
+
+```
+Set the users death count.
+If the user is invalid, this returns false.
+
+SetClientDeaths()
+```
+
+```
+Set the users frag count.
+If the user is invalid, this returns false.
+
+SetClientFrags()
+```
+
+```
+Set the users health.
+If the user is invalid, this returns false.
+
+SetClientHealth()
+```
+
+```
+Set the users maximum health.
+If the user is invalid, this returns false.
+
+SetClientMaxHealth()
+```
+
+```
+Returns the users maximum health.
+If the user is invalid, this returns -1.
+
+GetClientMaxHealth()
+```
+
+```
+Set the users health & maximum health.
+If the user is invalid, this returns false.
+
+SetClientHealthEx()
+```
+
+```
+Set the users team index called from game's network property m_iTeamNum.
+If the user is invalid, this returns false.
+
+SetClientTeamNum()
+```
+
+```
+Returns the users team index called from game's network property m_iTeamNum.
+If the user is invalid, this returns -1.
+
+GetClientTeamNum()
+```
+
+```
+Set the users field-of-view.
+If the user is invalid or has no field-of-view property, this returns false.
+
+SetClientFOV()
+```
+
+```
+Returns the users field-of-view.
+If the user is invalid or has no field-of-view property, this returns -1.
+
+GetClientFOV()
+```
+
+```
+Set the users default field-of-view.
+If the user is invalid or has no default field-of-view property, this returns false.
+
+SetClientDefaultFOV()
+```
+
+```
+Returns the users default field-of-view.
+If the user is invalid or has no default field-of-view property, this returns -1.
+
+GetClientDefaultFOV()
+```
+
+
 # Entities
 
 # Additions
