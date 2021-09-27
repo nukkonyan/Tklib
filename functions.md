@@ -1,4 +1,4 @@
-# Functions divided by sections. (WIP)
+# Functions divided by sections. (Work in progress - Not finished)
 
 
 # Game Identifier
