@@ -1,4 +1,4 @@
-# Functions divided by sections.
+# Functions divided by sections. (WIP)
 
 
 # Game Identifier
@@ -97,6 +97,159 @@ GetClientStepSize()
 ```
 
 # Weapons
+
+```
+Removes all weapons from the user.
+If the user is invalid, this returns false.
+
+RemoveAllWeapons()
+```
+
+```
+Returns the weapon definition index value.
+If the weapon entity is invalid or has no definition index property, this returns -1.
+
+GetWeaponDefinitionIndex()
+```
+
+```
+Set the weapon definition index value.
+If the weapon entity is invalid or has no definition index property, this returns false.
+
+SetWeaponDefinitionIndex()
+```
+
+```
+Returns the users current wielding weapon.
+If the user is invalid or has no active weapon, this returns -1.
+
+GetClientActiveWeapon()
+```
+
+```
+Set the users current active weapon.
+If the user is invalid, this returns false
+
+Note this may cause the client to crash if invalid slot was specified.
+
+SetClientActiveWeapon()
+```
+
+```
+Set the users current wielding weapon ammmo.
+If the user is invalid or has no wielding weapon, this returns false.
+
+SetClientWeaponAmmo()
+```
+
+```
+Set the users current wielding weapon primary & secondary ammo.
+If the user is invalid or has no wielding weapon, nothing will happen.
+
+SetClientWeaponAmmoEx()
+```
+
+```
+Set the weapons primary ammo.
+If the weapon entity is invalid or has no primary ammo property, this returns false.
+
+SetWeaponAmmo()
+```
+
+```
+Set the weapons primary & secondary ammo.
+If the weapon entity is invalid or has no primary/reserve ammo property, nothing will happen.
+
+SetWeaponAmmoEx()
+```
+
+```
+Returns the weapons primary ammo.
+If the weapon entity is invalid or has no primary ammo property, this returns -1.
+
+GetWeaponAmmo()
+```
+
+```
+Returns the users current wielding weapons primary ammo.
+If the user is invalid or weapon has no primary ammo property, this returns -1.
+
+GetClientActiveWeaponAmmo()
+```
+
+```
+Returns the users current wielding weapons reserve ammo.
+If the user is invalid or weapon has no secondary ammo property, this returns -1.
+
+GetClientActiveWeaponReserveAmmo()
+```
+
+```
+Set the weapons reserve ammo.
+If the weapon entity is invalid or has no reserve ammo property, this returns false.
+
+SetWeaponReserveAmmo()
+```
+
+```
+Returns the weapons reserve ammo.
+If the weapon entity is invalid or has no reserve ammo property, this returns -1.
+
+GetWeaponReserveAmmo()
+```
+
+```
+Returns the users current wielding weapons reserve ammo.
+If the user or weapon entity is invalid or weapon has no reserve ammo property, this returns -1.
+
+GetClientWeaponReserveAmmo()
+```
+
+```
+Returns the ammotype of the weapon.
+If the weapon is invalid or has no ammotype, this returns -1.
+
+GetWeaponAmmoType()
+```
+
+```
+Returns the array size of weapons from the specified user.
+If the user or weapon is invalid or weapon has no arraysize property, this returns -1.
+
+GetClientActiveWeaponsArraySize()
+```
+
+```
+Returns the weapon entity of a specified user via element/slot.
+If the user is invalid or has no weapon arraysize property, this returns -1.
+
+GetClientWeaponEntity()
+```
+
+```
+Returns the users weapon offsets.
+If the user is invalid or has no weapon arraysize property, this returns -1.
+
+GetClientWeaponOffset()
+```
+
+```
+Returns if the weapon is invalid by searching via its classname if it contains 'weapon_'
+If the weapon is invalid or has no classname property, this returns false.
+
+IsValidWeapon()
+```
+
+```
+Equips a players weapon.
+This is an alternative to EquipPlayerWeapon, this method fixes 0 clip magazines and glitchty animations
+because it was being spawned onto the user too early when using CreateEntityByName()
+
+If the user or weapon is invalid, this returns false.
+
+EquipPlayerWeaponEx()
+```
+
 
 # Clients
 
