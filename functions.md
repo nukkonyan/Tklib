@@ -7,7 +7,7 @@
 Returns the current Game_*
 If the game is unknown. this returns Game_Unknown.
 
-IdentifyGame() f
+IdentifyGame()
 ```
 
 # Resize
