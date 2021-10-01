@@ -80,6 +80,7 @@ enum	{
 	CSGO_Weapon_MP7		=	33,
 	CSGO_Weapon_MP9		=	34,
 	CSGO_Weapon_Nova	=	35,
+	CSGO_Weapon_P250	=	36,
 	CSGO_Weapon_Scar20	=	38,
 	CSGO_Weapon_SG556	=	39,
 	CSGO_Weapon_SSG08	=	40,
