@@ -84,13 +84,13 @@ Entity GetCSGOWeapon(const char[] weapon_name)
 {
 	Entity weapon;
 	
-	if(StrEqual(weapon_name, "weapon_knifegg", false))
+	if(StrEqual(weapon_name, "weapon_knife", false) || StrEqual(weapon_name, "weapon_knifegg", false))
+	{
+		weapon = new Entity(weapon_name);
+	}
+	if(StrContainsEx(weapon_name, "weapon_knife_", false) || StrContainsEx(weapon_name, "weapon_bayonet", false))
 	{
 		weapon = new Entity("weapon_knifegg");
-	}
-	if(StrContainsEx(weapon_name, "weapon_knife", false) || StrContainsEx(weapon_name, "weapon_bayonet", false))
-	{
-		weapon = new Entity("weapon_knife");
 	}
 	else
 	{
