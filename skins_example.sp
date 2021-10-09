@@ -84,7 +84,11 @@ Entity GetCSGOWeapon(const char[] weapon_name)
 {
 	Entity weapon;
 	
-	if(StrContainsEx(weapon_name, "weapon_knife") || StrContainsEx(weapon_name, "weapon_bayonet"))
+	if(StrEqual(weapon_name, "weapon_knifegg", false))
+	{
+		weapon = new Entity("weapon_knifegg");
+	}
+	if(StrContainsEx(weapon_name, "weapon_knife", false) || StrContainsEx(weapon_name, "weapon_bayonet", false))
 	{
 		weapon = new Entity("weapon_knife");
 	}
@@ -98,85 +102,85 @@ Entity GetCSGOWeapon(const char[] weapon_name)
 		return	weapon;
 	}
 	
-	if(StrContainsEx(weapon_name, "weapon_knife_") || StrContainsEx(weapon_name, "weapon_bayonet"))
+	if(StrContainsEx(weapon_name, "weapon_knife_", false) || StrContainsEx(weapon_name, "weapon_bayonet", false))
 	{
-		if(StrContainsEx(weapon_name, "weapon_knife_ghost") || StrContainsEx(weapon_name, "weapon_knife_spectral"))
+		if(StrContainsEx(weapon_name, "weapon_knife_ghost", false) || StrContainsEx(weapon_name, "weapon_knife_spectral", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Spectral;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_bayonet") || StrContainsEx(weapon_name, "weapon_bayonet"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_bayonet", false) || StrContainsEx(weapon_name, "weapon_bayonet", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Bayonet;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_css") || StrContainsEx(weapon_name, "weapon_knife_classic"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_css", false) || StrContainsEx(weapon_name, "weapon_knife_classic", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Classic;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_flip"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_flip", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Flip;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_gut"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_gut", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Gut;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_karambit"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_karambit", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Karambit;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_m9_bayonet") || StrContainsEx(weapon_name, "weapon_m9_bayonet"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_m9_bayonet", false) || StrContainsEx(weapon_name, "weapon_m9_bayonet", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_M9_Bayonet;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_tactical weapon_knife_huntsman"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_tactical", false) || StrContainsEx(weapon_name, "weapon_knife_huntsman", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Huntsman;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_falchion"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_falchion", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Falchion;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_survival_bowie") || StrContainsEx(weapon_name, "weapon_knife_bowie"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_survival_bowie", false) || StrContainsEx(weapon_name, "weapon_knife_bowie", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Bowie;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_butterfly"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_butterfly", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Butterfly;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_push") || StrContainsEx(weapon_name, "weapon_knife_shadowdaggers"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_push", false) || StrContainsEx(weapon_name, "weapon_knife_shadowdaggers", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_ShadowDaggers;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_paracord"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_paracord", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Paracord;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_survival"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_survival", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Survival;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_ursus"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_ursus", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Ursus;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_navaja"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_navaja", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Navaja;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_nomad"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_nomad", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Nomad;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_stiletto"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_stiletto", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Stiletto;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_widowmaker") || StrContainsEx(weapon_name, "weapon_knife_talon"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_widowmaker", false) || StrContainsEx(weapon_name, "weapon_knife_talon", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Talon;
 		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_skeleton"))
+		else if(StrContainsEx(weapon_name, "weapon_knife_skeleton", false))
 		{
 			weapon.DefinitionIndex = CSGO_Knife_Skeleton;
 		}
