@@ -18,7 +18,8 @@ enum	CSSlot	{
 	CSSlot_Secondary=	1,
 	CSSlot_Knife	=	2,
 	CSSlot_Grenade	=	3,
-	CSSlot_C4		=	4
+	CSSlot_C4		=	4,
+	CSSlot_Shield	=	11
 }
 
 enum	CSWeaponType	{
