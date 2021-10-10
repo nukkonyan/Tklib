@@ -635,3 +635,26 @@ stock Bombsite CS_GetBombsite(int entity)	{
 	
 	return	Bombsite_C;
 }
+
+/**
+ *	Returns if the user is in the buy-zone.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool CS_IsClientInBuyZone(int client)	{
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_bInBuyZone"):false;
+}
+
+/**
+ *	Set if the user should be seen as if the user is in the buy-zone.
+ *
+ *	@param	client		The users index.
+ *	@param	buyzone		If true, the user will be seen as if being inside the buy-zone.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool CS_SetClientInBuyZone(int client, bool buyzone)	{
+	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bInBuyZone", buyzone):false;
+}
