@@ -123,9 +123,8 @@ stock CSTeam CS_GetClientPendingTeam(int client)	{
 /**
  *	Returns if the warmup is currently ongoing
  */
-#pragma deprecated Broken, always returning true
 stock bool CS_IsWarmupRound()	{
-	return	bool(GameRules_GetProp("m_bWarmupPeriod") == 1)
+	return	bool(GameRules_GetProp("m_bWarmupPeriod"));
 }
 
 /**
@@ -141,7 +140,7 @@ stock void CS_SetWarmupRound(bool warmup)	{
  *	Returns if the match is currently paused/is in freezetime (CS:GO Only)
  */
 stock bool CS_IsMatchPaused()	{
-	return	bool(GameRules_GetProp("m_bMatchWaitingForResume") == 1)
+	return	bool(GameRules_GetProp("m_bMatchWaitingForResume"));
 }
 
 /**
@@ -157,7 +156,7 @@ stock void CS_SetMatchPaused(bool pause)	{
  *	Returns if the bomb is planted. (CS:GO Only)
  */
 stock bool CS_IsBombPlanted()	{
-	return	bool(GameRules_GetProp("m_bBombPlanted") == 1);
+	return	bool(GameRules_GetProp("m_bBombPlanted"));
 }
 
 /**

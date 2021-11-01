@@ -510,3 +510,11 @@ stock bool TF2_DestroyBuilding(any entity)	{
 	
 	return	false;
 }
+
+/**
+ *	Returns if MvM (Mann-Vs-Machine) mode is active.
+ */
+stock bool TF2_IsMvMGameMode()
+{
+	return	(GameRules_GetProp("m_bPlayingMannVsMachine"));
+}
