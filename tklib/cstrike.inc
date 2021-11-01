@@ -293,7 +293,7 @@ stock bool CS_SetClientDefuserKit(int client, bool defusekit)	{
  *	@param	If the user is invalid, this returns false.
  */
 stock bool CS_ClientHasDefuserKit(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_bHasDefuser"):false;
+	return	Tklib_IsValidClient(client) ? GetEntPropBool(client, Prop_Send, "m_bHasDefuser"):false;
 }
 
 /**
@@ -658,4 +658,29 @@ stock bool CS_IsClientInBuyZone(int client)	{
  */
 stock bool CS_SetClientInBuyZone(int client, bool buyzone)	{
 	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bInBuyZone", buyzone):false;
+}
+
+/**
+ *	Returns if the user is defusing.
+ *
+ *	@param	client		The users index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool CS_IsClientDefusing(int client)
+{
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_bIsDefusing"):false;
+}
+
+/**
+ *	Set the defusing status on the user.
+ *
+ *	@param	client		The users index.
+ *	@param	status		The defusing status to set.
+ *
+ *	@error	If the user is invalid or procedure failed, this returns false.
+ */
+stock bool CS_SetClientDefusing(int client, bool status)
+{
+	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bDefusing", status):false;
 }

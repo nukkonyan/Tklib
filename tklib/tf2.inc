@@ -62,53 +62,47 @@ enum	TFBuilding	{
 /**
  *	Set the users mvm currency/cash.
  *
- *	@param client		The users index.
- *	@param value		Currency value.
+ *	@param	client		The users index.
+ *	@param	value		Currency value.
+ *
+ *	@error	If the user is invalid or has no currency property, this returns false.
  */
 stock bool TF2_SetClientMvMCash(int client, int value)	{
-	if(!Tklib_IsValidClient(client))
-		return	false;
-	
-	SetEntProp(client, Prop_Send, "m_nCurrency", value);
-	return	true;
+	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_nCurrency", value):false;
 }
 
 /**
  *	Returns the users mvm currency/cash
  *
- *	@param client		The users index.
+ *	@param	client		The users index.
+ *
+ *	@error	If the user is invalid or has no currency property, this returns -1.
  */
 stock int TF2_GetClientMvMCash(int client)	{
-	if(!Tklib_IsValidClient(client) || !HasEntProp(client, Prop_Send, "m_nCurrency"))
-		return	-1;
-	
-	return GetEntProp(client, Prop_Send, "m_nCurrency");
+	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_nCurrency"):-1; 
 }
 
 /**
  *	Set the users taunt cam on/off, useful for thirdperson plugin.
  *
- *	@param client		The users index.
- *	@param value		Bool value.
+ *	@param	client		The users index.
+ *	@param	value		Bool value.
+ *
+ *	@error	If the user is invalid or has no taunt cam property, this returns false.
  */
 stock bool TF2_SetClientTauntCam(int client, bool value)	{
-	if(!Tklib_IsValidClient(client, true, true) || !HasEntProp(client, Prop_Send, "m_nForceTauntCam"))
-		return	false;
-	
-	SetEntProp(client, Prop_Send, "m_nForceTauntCam", value);
-	return	true;
+	return	Tklib_IsValidClient(client, true, true) ? SetEntPropEx(client, Prop_Send, "m_nForceTauntCam", value):false;
 }
 
 /**
  *	Returns the users taunt cam.
  *
- *	@param client		The users index.
+ *	@param	client		The users index.
+ *
+ *	@error	If the user is invalid or has no taunt cam property, this returns false.
  */
 stock bool TF2_GetClientTauntCam(int client)	{
-	if(!Tklib_IsValidClient(client, _, true) || !HasEntProp(client, "m_nForceTauntCam"))
-		return	false;
-	
-	return GetEntPropBool(client, Prop_Send, "m_nForceTauntCam");
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_nForceTauntCam"):false;
 }
 
 //Set or get the users killstreak count
@@ -117,111 +111,102 @@ stock bool TF2_GetClientTauntCam(int client)	{
  *
  *	@param	client		The users index.
  *	@param	value		Killstreak count.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void TF2_SetClientKillstreak(int client, int value=5)	{
-	if(Tklib_IsValidClient(client) && HasEntProp(client, Prop_Send, "m_nStreaks"))
-		SetEntProp(client, Prop_Send, "m_nStreaks", value);
+stock bool TF2_SetClientKillstreak(int client, int value=5)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_nStreaks", value):false;
 }
 
 /**
  *	Returns the users killstreak count
  *
  *	@param	client		The users index.
- *	@error	If the user is invalid, this will return -1.
+ *
+ *	@error	If the user is invalid, this returns -1.
  */
 stock int TF2_GetClientKillstreak(int client)	{
-	if(!Tklib_IsValidClient(client) || !HasEntProp(client, Prop_Send, "m_nStreaks"))
-		return	-1;
-	
-	return	GetEntProp(client, Prop_Send, "m_nStreaks");
+	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_nStreaks"):-1;
 }
 
 /**
  *	Returns the users cloak meter.
  *
  *	@param	client		The users index.
- *	@error	If the user is invalid, this will return -1.0. (Altough if the target doesn't have a cloak, this will put out an error)
+ *
+ *	@error	If the user is invalid or has no cloak, this returns -1.0.
  */
 stock float TF2_GetClientCloakMeter(int client)	{
-	if(!Tklib_IsValidClient(client, _, true) || !HasEntProp(client, Prop_Send, "m_flCloakMeter"))
-		return	-1.0;
-	
-	return	GetEntPropFloat(client, Prop_Send, "m_flCloakMeter");
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter"):false;
 }
 
 /**
- *	Set the clients cloak meter.
+ *	Set the users cloak meter.
  *
- *	@param client		The users index.
- *	@param value		Cloak duration.
- *	@error If the user is invalid, nothing will happen. (Altough if the target doesn't have a cloak, this will put out an error)
+ *	@param	client		The users index.
+ *	@param	value		Cloak duration.
+ *
+ *	@error	If the user is invalid or has no cloak, this returns false.
  */
-stock float TF2_SetClientCloakMeter(int client, float value=1.0)	{
-	if(Tklib_IsValidClient(client) && HasEntProp(client, Prop_Send, "m_flCloakMeter"))
-		SetEntPropFloat(client, Prop_Send, "m_flCloakMeter", value);
+stock bool TF2_SetClientCloakMeter(int client, float value=1.0)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter", value):false;
 }
 
 /**
  *	Returns the users glow value.
  *
  *	@param	client		The users index.
- *	@error	If the user is invalid, this will return false.
+ *
+ *	@error	If the user is invalid, this returns false.
 */
 stock bool TF2_GetClientGlow(int client)	{
-	if(!Tklib_IsValidClient(client) || !HasEntProp(client, "m_bGlowEnabled"))
-		return	false;
-	
-	return	GetEntPropBool(client, Prop_Send, "m_bGlowEnabled");
+	return	Tklib_IsValidClient(client) ? GetEntPropBool(client, Prop_Send, "m_bGlowEnabled"):false;
 }
 
 /**
- *	Toggle the clients glow value.
+ *	Toggle the users glow value.
  *
  *	@param	client		The users index.
  *	@param	value		Glow value.
- *	@error	If the user is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns.
  */
-stock void TF2_SetClientGlow(int client, bool value)	{
-	if(Tklib_IsValidClient(client) && HasEntProp(client, Prop_Send, "m_bGlowEnabled"))
-		SetEntProp(client, Prop_Send, "m_bGlowEnabled", value);
+stock bool TF2_SetClientGlow(int client, bool value)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_bGlowEnabled", value):false;
 }
 
 /**
  *	Returns the users ubercharge value,
  *
  *	@param	client		The users index.
- *	@error	If the user is invalid, this will return -1.0.
+ *
+ *	@error	If the user is invalid or has no medigun, this will return -1.0.
 */
 stock float TF2_GetClientUbercharge(int client)	{
-	if(!Tklib_IsValidClient(client, _, true) || !HasEntProp(client, "m_flChargeLevel"))
-		return	-1.0;
-	
-	return	GetEntPropFloat(client, Prop_Send, "m_flChargeLevel");
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel"):false;
 }
 
 /**
- *	Set the clients ubercharge value,
+ *	Set the users ubercharge value,
  *
  *	@param	client		The users index.
  *	@param	value		Ubercharge value, Defaulted to 1.0.
- *	@error	If the user is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid or has no medigun, this returns false.
 */
-stock void TF2_SetClientUbercharge(int client, float value=1.0)	{
-	if(Tklib_IsValidClient(client, _, true) && HasEntProp(client, Prop_Send, "m_flChargeLevel"))
-		SetEntPropFloat(client, Prop_Send, "m_flChargeLevel", value);
+stock bool TF2_SetClientUbercharge(int client, float value=1.0)	{
+	return	Tklib_IsValidClient(client, _, true) ? SetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel", value):false;
 }
 
 /**
  *	Returns the users charge value,
  *
  *	@param	client		The users index.
- *	@error	If the user is invalid, it will return -1.
+ *
+ *	@error	If the user is invalid, this returns -1.0.
 */
 stock float TF2_GetClientChargeMeter(int client)	{
-	if(!Tklib_IsValidClient(client, _, true) || !HasEntProp(client, Prop_Send, "m_flChargeMeter"))
-		return	-1.0;
-	
-	return	GetEntPropFloat(client, Prop_Send, "m_flChargeMeter");
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter"):-1.0;
 }
 
 /**
@@ -229,49 +214,45 @@ stock float TF2_GetClientChargeMeter(int client)	{
  *
  *	@param client		The users index.
  *	@param value		Charge value.
- *	@error				Invalid The users index.
+ *
+ *	@error	If the user is invalid or has no charge-weapon, this returns -1.0.
 */
-stock void TF2_SetClientChargeMeter(int client, float value=1.0)	{
-	if(Tklib_IsValidClient(client, _, true) && HasEntProp(client, Prop_Send, "m_flChargeMeter"))
-		SetEntPropFloat(client, Prop_Send, "m_flChargeMeter", value);
+stock bool TF2_SetClientChargeMeter(int client, float value=1.0)	{
+	return	Tklib_IsValidClient(client, _, true) ? SetEntPropFloatEx(Exclient, Prop_Send, "m_flChargeMeter", value):false;
 }
 
 /**
  *	Returns the users metal value,
  *
  *	@param	client		The users index.
- *	@error	If the user is invalid, it will return -1.
+ *
+ *	@error	If the user is invalid or has no metal-property, this returns -1.
 */
 stock int TF2_GetClientMetal(int client)	{
-	if(!Tklib_IsValidClient(client, _, true) || !HasEntProp(client, Prop_Send, "m_iAmmo"))
-		return	-1;
-	
-	return	GetEntProp(client, Prop_Data, "m_iAmmo", 4, 3);
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropEx(client, Prop_Data, "m_iAmmo", 4, 3):-1;
 }
 
 /**
  *	Set the users metal value,
  *
  *	@param	client		The users index.
- *	@param	value		Metal amount.
- *	@error	If the user is invalid, nothing will happen.
+ *	@param	metal		Metal amount.
+ *
+ *	@error	If the user is invalid or has no metal-property, this returns false.
 */
-stock void TF2_SetClientMetal(int client, int value=200)	{
-	if(Tklib_IsValidClient(client, _, true) && HasEntProp(client, Prop_Send, "m_iAmmo"))
-		SetEntProp(client, Prop_Data, "m_iAmmo", value, 4, 3);
+stock bool TF2_SetClientMetal(int client, int metal=200)	{
+	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Data, "m_iAmmo", metal, 4, 3):false;
 }
 
 /**
  *	Returns the users decapitations value,
  *
  *	@param	client		The users index.
- *	@error	If the client is invalid, this will return -1.
+ *
+ *	@error	If the client is invalid or has no decapitation-property, this returns -1.
 */
 stock int TF2_GetClientDecapitations(int client)	{
-	if(!Tklib_IsValidClient(client) || !HasEntProp(client, "m_iDecapitation"))	
-		return	-1;
-	
-	return	GetEntProp(client, Prop_Send, "m_iDecapitations");
+	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_iDecapitations"):-1;
 }
 
 /**
@@ -279,22 +260,23 @@ stock int TF2_GetClientDecapitations(int client)	{
  *
  *	@param	client		The users index.
  *	@param	value		Decapitations amount.
- *	@error	If the user is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid or has no decapitation-property, this returns false.
 */
-stock void TF2_SetClientDecapitations(int client, int value=10)	{
-	if(Tklib_IsValidClient(client) && HasEntProp(client, Prop_Send, "m_iDecapitations"))
-		SetEntProp(client, Prop_Send, "m_iDecapitations");
+stock bool TF2_SetClientDecapitations(int client, int value=10)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_iDecapitations"):false;
 }
 
 /**
  *	Returns the TF2 Weapon Slot
  *
  *	@param	client		The users index.
- *	@param	slot			TFSlot slot.
- *	@error	If the user is invalid, it will return -1.
+ *	@param	slot		TFSlot slot.
+ *
+ *	@error	If the user is invalid, this returns -1.
  */
 stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
-	return Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, view_as<int>(slot)):-1;
+	return	Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, int(slot)):-1;
 }
 
 /**
@@ -302,9 +284,10 @@ stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
  *
  *	@param	building		The TFBuilding.
  *	@param	buildingname	String to store the building name to.
+ *
  *	@param	maxlen			Maximum length of the string.
  */
-stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int maxlen)	{
+stock void TF2_GetBuildingName(TFBuilding building, const char[] buildingname, int maxlen)	{
 	switch(building)	{
 		case	TFBuilding_Dispenser:			strcopy(buildingname, maxlen, "Dispenser");
 		case	TFBuilding_Sentrygun:			strcopy(buildingname, maxlen, "Sentrygun");
@@ -318,10 +301,11 @@ stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int max
  *	Returns the TFBuilding type.
  *
  *	@param	entity	The building to get TFBuilding type from.
- *	@error	If the building is invalid, it will return TFBuilding_Invalid.
+ *
+ *	@error	If the building is invalid, this returns TFBuilding_Invalid.
  */
-stock TFBuilding TF2_GetBuildingType(int entity)	{
-	if(IsValidEntityEx(entity))	{
+stock TFBuilding TF2_GetBuildingType(any entity)	{
+	if(HasEntPropEx(entity, Prop_Send, "m_hBuilder"))	{
 		char classname[64];
 		GetEntityClassname(entity, classname, sizeof(classname));
 		
@@ -339,19 +323,19 @@ stock TFBuilding TF2_GetBuildingType(int entity)	{
 			return	TFBuilding_MiniSentry;
 	}
 	
-	return TFBuilding_Invalid;
+	return	TFBuilding_Invalid;
 }
 
 /**
  *	Sets if the users current class-model should be forced using its class animations.
  *
- *	@param	client	The users client index.
+ *	@param	client	The users index.
  *	@param	value	The bool on/off value.
- *	@error	If the user is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid or has no class animations, this returns false.
  */
-stock void TF2_SetClassAnimations(int client, bool value)	{
-	if(Tklib_IsValidClient(client, _, true) && HasEntProp(client, Prop_Send, "m_bUseClassAnimations"))
-		SetEntProp(client, Prop_Send, "m_bUseClassAnimations", value);
+stock bool TF2_SetClassAnimations(int client, bool value)	{
+	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bUseClassAnimations", value):false;
 }
 
 /**
@@ -362,14 +346,18 @@ stock void TF2_SetClassAnimations(int client, bool value)	{
  *	@param	client				The users index.
  *	@param	model				The model path.
  *	@param	UseClassAnimations	If true, this will force the model to use the class animations.
- *	@error	If the user is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock void TF2_SetClientModel(int client, char[] model, bool UseClassAnimations)	{
+stock bool TF2_SetClientModel(int client, const char[] model, bool UseClassAnimations)	{
 	if(Tklib_IsValidClient(client, _, true))	{
 		SetVariantString(model);
 		AcceptEntityInput(client, "SetCustomModel");
 		TF2_SetClassAnimations(client, UseClassAnimations);
+		return	true;
 	}
+	
+	return	false;
 }
 
 /**
@@ -378,7 +366,8 @@ stock void TF2_SetClientModel(int client, char[] model, bool UseClassAnimations)
  *
  *	@param	client		The users index.
  *	@param	slot		The weapon slot to target.
- *	@error	If the procedure failed, it returns false.
+ *
+ *	@error	If the procedure failed, this returns false.
  */
 stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
 	int weapon = -1;
@@ -392,23 +381,25 @@ stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
 }
 
 /**
- *	Returns if the entity is building.
+ *	Returns if the entity is a building.
  *
  *	@param	entity	The building entity index.
+ *
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_IsEntityBuilding(int entity)	{
-	return	HasEntProp(entity, Prop_Send, "m_bBuilding") ? GetEntPropBool(entity, Prop_Send, "m_bBuilding"):false;
+	return	GetEntPropBool(entity, Prop_Send, "m_bBuilding");
 }
 
 /**
  *	Returns if the entity is a mini-building.
  *
  *	@param	entity	The building entity index.
+ *
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_IsEntityMiniBuilding(int entity)	{
-	return	HasEntPropEx(entity, Prop_Send, "m_bMiniBuilding") ? GetEntPropBool(entity, Prop_Send, "m_bMiniBuilding"):false;
+	return	GetEntPropBool(entity, Prop_Send, "m_bMiniBuilding");
 }
 
 /**
@@ -416,10 +407,23 @@ stock bool TF2_IsEntityMiniBuilding(int entity)	{
  *	Otherwise use GetEntityOwner.
  *
  *	@param	entity	The building entity index.
+ *
+ *	@error	If the entity is invalid, this returns -1.
+ */
+stock bool TF2_SetBuildingOwner(any entity, int client)	{
+	return	Tklib_IsValidClient(client) ? SetEntPropEntEx(entity, Prop_Send, "m_hBuilder", client):false;
+}
+
+/**
+ *	Returns the buildings builder.
+ *	Otherwise use GetEntityOwner.
+ *
+ *	@param	entity	The building entity index.
+ *
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int TF2_GetBuildingOwner(any entity)	{
-	return	HasEntPropEx(entity, Prop_Send, "m_hBuilder") ? GetEntProp(entity, Prop_Send, "m_hBuilder"):-1;
+	return	GetEntPropEntEx(entity, Prop_Send, "m_hBuilder"):-1;
 }
 
 /**
@@ -427,14 +431,11 @@ stock int TF2_GetBuildingOwner(any entity)	{
  *
  *	@param	entity	The building entity index.
  *	@param	level	The level to set.
+ *
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_SetBuildingLevel(any entity, int level=1)	{
-	if(!HasEntPropEx(entity, Prop_Send, "m_iUpgradeLevel"))
-		return	false;
-	
-	SetEntProp(entity, Prop_Send, "m_iUpgradeLevel", level);
-	return	true;
+	return	SetEntPropEx(entity, Prop_Send, "m_iUpgradeLevel", level);
 }
 
 /**
@@ -452,24 +453,22 @@ stock int TF2_GetBuildingLevel(any entity)	{
  *
  *	@param	entity	The building entity index.
  *	@param	level	The maximum upgrade level to set.
+ *
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_SetBuildingMaxLevel(any entity, int level=3)	{
-	if(!HasEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel"))
-		return	false;
-	
-	SetEntProp(entity, Prop_Send, "m_iHighestUpgradeLevel", level);
-	return	true;
+	return	SetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel", level);
 }
 
 /**
  *	Returns the buildings max upgrade level.
  *
  *	@param	entity	The building entity index.
+ *
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int TF2_GetBuildingMaxLevel(any entity)	{
-	return	HasEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel") ? GetEntProp(entity, Prop_Send, "m_iHighestUpgradeLevel"):-1;
+	return	GetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel");
 }
 
 /**
@@ -477,22 +476,37 @@ stock int TF2_GetBuildingMaxLevel(any entity)	{
  *
  *	@param	entity	The building entity index.
  *	@param	metal	The metal required.
+ *
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_SetBuildingMetalRequired(any entity, int metal)	{
-	if(!HasEntPropEx(entity, Prop_Send, "m_iUpgradeMetalRequired"))
-		return	false;
-	
-	SetEntProp(entity, Prop_Send, "m_iUpgradeMetalRequired", metal);
-	return	true;
+	return	SetEntPropEx(entity, Prop_Send, "m_iUpgradeMetalRequired", metal);
 }
 
 /**
  *	Returns the buildings required metal to upgrade to next upgrade level.
  *
  *	@param	entity	The building entity index.
+ *
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int TF2_GetBuildingMetalRequired(any entity)	{
-	return	HasEntPropEx(entity, Prop_Send, "m_iUpgradeMetalRequired") ? GetEntProp(entity, Prop_Send, "m_iUpgradeMetalRequired"):-1;
+	return	GetEntPropEx(entity, Prop_Send, "m_iUpgradeMetalRequired");
+}
+
+/**
+ *	Destroys the building.
+ *
+ *	@param	entity	The building index.
+ *
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool TF2_DestroyBuilding(any entity)	{
+	if(HasEntPropEx(entity, Prop_Send, "m_hBuilder"))	{
+		SetVariantInt(999999);
+		AcceptEntityInput(entity, "RemoveHealth");
+		return	true;
+	}
+	
+	return	false;
 }

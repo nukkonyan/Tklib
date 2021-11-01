@@ -8,15 +8,15 @@ enum	TF2ResizeType
 }
 
 /**
- *	Tk Libraries: Resize.
- *	Resize a clients body part.
+ *	Resize a users body part.
  *
  *	@param	client		The players client index.
  *	@param	type		ResizeType type.
  *	@param	value		The specified resize value.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the client is invalid, this returns false.
  */
-stock float TF2_SetClientResize(int client, TF2ResizeType type, float value)	{
+stock bool TF2_SetClientSize(int client, TF2ResizeType type, float value)	{
 	if(Tklib_IsValidClient(client, _, true))	{
 		switch(type)	{
 			case	TF2ResizeType_Head:		TF2_SetClientHeadScale(client, value);
@@ -25,146 +25,170 @@ stock float TF2_SetClientResize(int client, TF2ResizeType type, float value)	{
 			case	TF2ResizeType_Model:	SetEntityModelScale(client, value);
 			case	TF2ResizeType_Steps:	SetClientStepSize(client, value);
 		}
+		
+		return	true;
 	}
+	
+	return	false;
 }
 
 /**
- *	Tk Libraries: Resize.
- *	Returns the clients size of a clients body part.
+ *	Returns the size of a users body part.
  *
- *	@param	client		The players client index.
+ *	@param	client		The users index.
  *	@param	type		ResizeType type.
- *	@error	If the client is invalid, it will return -1.0
+ *
+ *	@error	If the user is invalid, this returns -1.0
  */
-stock float TF2_GetClientResize(int client, TF2ResizeType type)	{
+stock float TF2_GetClientSize(int client, TF2ResizeType type)	{
 	if(Tklib_IsValidClient(client, _, true))	{
-		float value;
 		switch(type)	{
-			case	TF2ResizeType_Head: value = TF2_GetClientHeadScale(client);
-			case	TF2ResizeType_Torso:value = TF2_GetClientTorsoScale(client);
-			case	TF2ResizeType_Hand:	value = TF2_GetClientHandScale(client);
-			case	TF2ResizeType_Model:value = GetEntityModelScale(client);
-			case	TF2ResizeType_Steps:value = GetClientStepSize(client);
+			case	TF2ResizeType_Head:		return TF2_GetClientHeadScale(client);
+			case	TF2ResizeType_Torso:	return TF2_GetClientTorsoScale(client);
+			case	TF2ResizeType_Hand:		return TF2_GetClientHandScale(client);
+			case	TF2ResizeType_Model:	return GetEntityModelScale(client);
+			case	TF2ResizeType_Steps:	return GetClientStepSize(client);
 		}
-		return	value;
 	}
-	return -1.0;
+	
+	return	-1.0;
 }
 
 /**
- *	Tk Libraries: Resize.
- *	Set the clients head scale.
+ *	Set the users head scale.
  *
- *	@param	client		The players client index.
+ *	@param	client		The users index.
  *	@param	scale		Head scale.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock float TF2_SetClientHeadScale(int client, float scale)	{
-	if(Tklib_IsValidClient(client, _, true))
+stock bool TF2_SetClientHeadScale(int client, float scale)	{
+	if(Tklib_IsValidClient(client, _, true))	{
 		SetEntPropFloat(client, Prop_Send, "m_flHeadScale", scale);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Tk Libraries: Resize.
- *	Returns the clients head scale.
+ *	Returns the users head scale.
  *
- *	@param	client		The players client index.
- *	@error	If the client is invalid, it will return -1.0.
+ *	@param	client		The users index.
+ *
+ *	@error	If the user is invalid, this return -1.0.
  */
 stock float TF2_GetClientHeadScale(int client)	{
 	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flHeadScale"):-1.0;
 }
 
-
 /**
- *	Tk Libraries: Resize.
- *	Set the clients torso scale.
+ *	Set the users torso scale.
  *
- *	@param client		The players client index.
+ *	@param client		The users index.
  *	@param scale		Torso scale.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
 stock float TF2_SetClientTorsoScale(int client, float scale)	{
-	SetEntPropFloat(client, Prop_Send, "m_flTorsoScale", scale);
+	if(Tklib_IsValidClient(client, _, true))	{
+		SetEntPropFloat(client, Prop_Send, "m_flTorsoScale", scale);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Tk Libraries: Resize.
- *	Returns the clients torso scale.
+ *	Returns the users torso scale.
  *
- *	@param	client		The players client index.
- *	@param	If the client is invalid, it will return 0.0.
+ *	@param	client		The users index.
+ *
+ *	@param	If the user is invalid, this returns 0.0.
  */
 stock float TF2_GetClientTorsoScale(int client)	{
 	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flTorsoScale"):-1.0;
 }
 
 /**
- *	Tk Libraries: Resize.
- *	Set the clients hand scale.
+ *	Set the users hand scale.
  *
- *	@param	client		The players client index.
+ *	@param	client		The users index.
  *	@param	scale		Hand scale.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the client is invalid, this returns false.
  */
 stock float TF2_SetClientHandScale(int client, float scale)	{
-	if(Tklib_IsValidClient(client, _, true))
+	if(Tklib_IsValidClient(client, _, true))	{
 		SetEntPropFloat(client, Prop_Send, "m_flHandScale", scale);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Tk Libraries: Resize.
- *	Returns the clients hand scale.
+ *	Returns the users hand scale.
  *
- *	@param	client		The players client index.
- *	@error	If the client is invalid, it will return -1.0
+ *	@param	client		The users index.
+ *
+ *	@error	If the client is invalid, this returns -1.0
  */
 stock float TF2_GetClientHandScale(int client)	{
 	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flHandScale"):-1.0;
 }
 
 /**
- *	Tk Libraries: Resize.
  *	Set the entitys model scale/size.
  *
  *	@param	entity		Entity index.
  *	@param	scale		The model scale.
- *	@error	If the entity or client is invalid, nothing will happen.
+ *
+ *	@error	If the entity or user is invalid, this returns false.
  */
 stock float SetEntityModelScale(int entity, float scale)	{
-	if(Tklib_IsValidClient(entity, _, true) || (IsValidEdict(entity) || IsValidEntity(entity)))
+	if(Tklib_IsValidClient(entity, _, true) || IsValidEntityEx(entity))	{
 		SetEntPropFloat(entity, Prop_Send, "m_flModelScale", scale);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Tk Libraries: Resize.
  *	Returns the entitys model scale/size.
  *
- *	@param	client		Entity index.
- *	@error	If the entity or client is invalid, it will return -1.0
+ *	@param	entity		Entity index.
+ *
+ *	@error	If the entity or user is invalid, this returns -1.0
  */
 stock float GetEntityModelScale(int entity)	{
-	return (Tklib_IsValidClient(entity, _, true) || (IsValidEdict(entity) || IsValidEntity(entity))) ? GetEntPropFloat(entity, Prop_Send, "m_flModelScale"):-1.0;
+	return	bool(Tklib_IsValidClient(entity, _, true) || IsValidEntityEx(entity)) ? GetEntPropFloat(entity, Prop_Send, "m_flModelScale"):-1.0;
 }
 
 /**
- *	Tk Libraries.
- *	Set the clients step scale/size.
+ *	Set the users step scale/size.
  *
- *	@param	client		The players client index.
+ *	@param	client		The users index.
  *	@param	scale		The size/scale.
- *	@error	If the client is invalid, nothing will happen.
+ *
+ *	@error	If the user is invalid, this returns false.
  */
-stock float SetClientStepSize(int client, float scale)	{
-	if(Tklib_IsValidClient(client, _, true))
+stock bool SetClientStepSize(int client, float scale)	{
+	if(Tklib_IsValidClient(client, _, true))	{
 		SetEntPropFloat(client, Prop_Send, "m_flStepSize", scale);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
- *	Tk Libraries.
- *	Returns the clients step size.
+ *	Returns the users step size.
  *
- *	@param	client		The players client index.
- *	@error	If the client is invalid, it will return -1.0
+ *	@param	client		The users index.
+ *
+ *	@error	If the client is invalid, this returns -1.0
  */
 stock float GetClientStepSize(int client)	{
 	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flStepSize"):-1.0;

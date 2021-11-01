@@ -53,7 +53,7 @@ stock bool IsClientVip(int client)	{
 }
 
 /**
- *	Returns if the user is has the specified flag
+ *	Returns if the user has the specified flag access.
  *
  *	@param	client		The users index.
  *	@param	adminflags	Administrative flags (bitstring) to use for permissions.
@@ -123,7 +123,7 @@ stock int GetClientPing(int client)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool SetClientDeaths(int client, int value)	{
-	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iDeaths", value):false;
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Data, "m_iDeaths", value):false;
 }
 
 /**
@@ -135,7 +135,7 @@ stock bool SetClientDeaths(int client, int value)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool SetClientFrags(int client, int value)	{
-	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Send, "m_iFrags", value):false;
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEx(client, Prop_Data, "m_iFrags", value):false;
 }
 
 
@@ -171,7 +171,7 @@ stock bool SetClientMaxHealth(int client, int value)	{
  *	@error	If the client is not valid, this returns -1.
  */
 stock int GetClientMaxHealth(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Data, "m_iMaxHealth"):-1;
+	return	Tklib_IsValidClient(client) ? GetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", client):-1;
 }
 
 /**

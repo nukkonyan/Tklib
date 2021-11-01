@@ -34,7 +34,7 @@ stock L4DTeam L4D_GetClientTeam(int client)	{
 }
 
 /**
- *	Changes a users current team.
+ *	Changes the users current team.
  *
  *	@param	client		The users index.
  *

@@ -16,6 +16,18 @@ stock char DoorSwitch[][]	=	{
 	"open"
 };
 
+//On - Off switch.
+stock char OnOff[][]	=	{
+	"Off",
+	"On"
+};
+
+//On - Off switch coloured.
+stock char OnOffEx[][]	=	{
+	"{red}Off{default}",
+	"{green}On{default}"
+};
+
 /**
  *	Returns the AdminFlag from the ADMFLAG you specify.
  *
@@ -516,4 +528,18 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 	}
 	
 	return	false;
+}
+
+/**
+ *	Gets a cell in boolean from native parameter.
+ *
+ *	@param	param	Parameter number, starting from 1.
+ *
+ *	@return			Boolean value from cell at the parameter number.
+ *
+ *	@error			Invalid paramteter number or calling from non-native function.
+ */
+stock bool GetNativeBool(int param)
+{
+	return	bool(GetNativeCell(param));
 }

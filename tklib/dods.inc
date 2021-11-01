@@ -40,7 +40,7 @@ stock DODTeam DOD_GetClientTeam(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock void DOD_ChangeClientTeam(int client, DODTeam team)	{
+stock bool DOD_ChangeClientTeam(int client, DODTeam team)	{
 	if(Tklib_IsValidClient(client))	{
 		ChangeClientTeam(client, int(team));
 		return	true;
