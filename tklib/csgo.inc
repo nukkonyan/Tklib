@@ -54,6 +54,7 @@ enum	CSGORank	{
 }
 
 enum	{
+	CSGO_Weapon_Deagle	=	1,
 	CSGO_Weapon_Glock	=	4,
 	CSGO_Weapon_Ak47	=	7,
 	CSGO_Weapon_Aug		=	8,
