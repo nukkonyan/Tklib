@@ -355,6 +355,32 @@ stock bool IsEntityClassnameMatching(any entity, const char[] classname, bool pa
 	return	StrEqual(entity_classname, classname);
 }
 
+/**
+ *	Returns the entity's team index.
+ *
+ *	@param	entity	The entity index.
+ *
+ *	@return	The team index of the entity.
+ *
+ *	@error	If the entity is invalid, this returns -1.
+ */
+stock int GetEntityTeamNum(any entity)	{
+	return	GetEntPropEx(entity, Prop_Send, "m_iTeamNum");
+}
+
+/**
+ *	Set the entity's team index.
+ *
+ *	@param	entity	The entity index.
+ *
+ *	@return	The team index of the entity.
+ *
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool SetEntityTeamNum(any entity, int team)	{
+	return	SetEntPropEx(entity, Prop_Send, "m_iTeamNum", team);
+}
+
 //Netprops
 
 /**
@@ -1026,6 +1052,18 @@ methodmap	Entity	__nullable__	{
 	public void ChangeState(int offset=0)
 	{
 		ChangeEdictState(This, offset);
+	}
+	
+	property int MoveParent
+	{
+		public set(int parent)
+		{
+			SetEntityMoveParent(This, parent);
+		}
+		public get()
+		{
+			return GetEntityMoveParent(This);
+		}
 	}
 	
 	public int FindMapInfo(const char[] prop, PropFieldType type=PropFieldType(0), int num_bits=0, int local_offset=0)
