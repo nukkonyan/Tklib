@@ -1,3 +1,7 @@
+//==========================================//
+// Tklib / Fortress Forever.
+//==========================================//
+
 enum	FFTeam	{
 	FFTeam_Unassigned	=	0,
 	FFTeam_Spectators	=	1,

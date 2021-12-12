@@ -1,11 +1,13 @@
-stock char CSS_GetTeamStringName[][]	=	{
+//==========================================//
+// Tklib / CStrike.
+//==========================================//
+
+stock char CSS_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
 	"{grey}Spectators{default}",
 	"{red}Terrorists{default}",
 	"{blue}Counter-Terrorists{default}"
-};
-
-stock char CSS_GetTeamColour[][]	=	{
+}, CSS_GetTeamColour[][] = {
 	"{grey}",
 	"{grey}",
 	"{red}",

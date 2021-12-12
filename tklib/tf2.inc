@@ -1,14 +1,16 @@
+//==========================================//
+// Tklib / Team Fortress 2.
+//==========================================//
+
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringName[GetClientTeam(client)] will return the correct team name)
-stock char TF2_GetTeamStringName[][]	=	{
+stock char TF2_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
 	"{grey}Spectators{default}",
 	"{red}Red{default}",
 	"{blue}Blu{default}",
 	"{lightgreen}Grn{default}",
 	"{orange}Ylw{default}"
-};
-
-stock char TF2_GetTeamColour[][]	=	{
+}, TF2_GetTeamColour[][] = {
 	"{grey}",
 	"{grey}",
 	"{red}",
@@ -287,7 +289,7 @@ stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
  *
  *	@param	maxlen			Maximum length of the string.
  */
-stock void TF2_GetBuildingName(TFBuilding building, const char[] buildingname, int maxlen)	{
+stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int maxlen)	{
 	switch(building)	{
 		case	TFBuilding_Dispenser:			strcopy(buildingname, maxlen, "Dispenser");
 		case	TFBuilding_Sentrygun:			strcopy(buildingname, maxlen, "Sentrygun");

@@ -1,7 +1,6 @@
-#if defined _multicolors_included
-	#endinput
-#endif
-#define _multicolors_included
+//==========================================//
+// Tklib / Multi-Colors. (Will be standalone later)
+//==========================================//
 
 #include	<tklib/multicolors/morecolors>
 #include	<tklib/multicolors/colors>

@@ -1,11 +1,13 @@
-stock char DOD_GetTeamStringName[][]	=	{
+//==========================================//
+// Tklib / Day of Defeat: Source.
+//==========================================//
+
+stock char DOD_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
 	"{grey}Spectators{defualt}",
 	"{red}Wehrmacht{default}",
 	"{blue}U.S Army{default}"
-};
-
-stock char DODS_GetTeamColour[][]	=	{
+}, DODS_GetTeamColour[][] = {
 	"{grey}",
 	"{grey}",
 	"{red}",

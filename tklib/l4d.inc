@@ -1,11 +1,13 @@
-stock char L4D_GetTeamStringName[][]	=	{
+//==========================================//
+// Tklib / Left 4 Dead.
+//==========================================//
+
+stock char L4D_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
 	"{grey}Spectators{default}",
 	"{orange}Survivors{default}",
 	"{lightred}Zombies{default}"
-};
-
-stock char L4D_GetTeamColour[][]	=	{
+}, L4D_GetTeamColour[][] = {
 	"{grey}",
 	"{grey}",
 	"{orange}",

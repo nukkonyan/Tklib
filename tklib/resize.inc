@@ -1,5 +1,8 @@
-enum	TF2ResizeType
-{
+//==========================================//
+// Tklib / Resize.
+//==========================================//
+
+enum	TF2ResizeType	{
 	TF2ResizeType_Head = 0,
 	TF2ResizeType_Torso = 1,
 	TF2ResizeType_Hand = 2,

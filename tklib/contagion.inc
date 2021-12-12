@@ -1,3 +1,7 @@
+//==========================================//
+// Tklib / Contagion.
+//==========================================//
+
 //Include originally by JonnyBoy0719, updated by Tk /id/Teamkiller324
 
 /**
@@ -18,8 +22,7 @@
 /**
  * Weapon slots.
  */
-enum	CE_WeaponsSlot
-{
+enum	CE_WeaponsSlot	{
 	Slot_Invalid		=	-1,	/** Invalid weapon (slot). */
 	Slot_Primary		=	0,	/** Primary weapon slot. */
 	Slot_Secondary		=	1,	/** Secondary weapon slot. */

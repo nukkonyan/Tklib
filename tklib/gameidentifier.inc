@@ -1,3 +1,7 @@
+//==========================================//
+// Tklib / Game Identifier.
+//==========================================//
+
 enum	GameIdentifier	{
 	Game_Unknown		= -1,
 	Game_SDK2006		= 0,

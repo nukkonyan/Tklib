@@ -1,3 +1,7 @@
+//==========================================//
+// Tklib / Additional.
+//==========================================//
+
 //Get true of false message statements easier.
 stock char Bool[][]	=	{
 	"False",
@@ -488,8 +492,10 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 	if(!Tklib_IsValidClient(client))
 		return	false;
 	
-	if(!Tklib_IsValidClient(author))
-		return	false;
+	if(index != -1)	{
+		if(!Tklib_IsValidClient(index))
+			return	false;
+	}
 	
 	if(GetFeatureStatus(FeatureType_Native, "GetUserMessageType") == FeatureStatus_Unavailable)
 		return	false;
@@ -523,7 +529,6 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 		}
 	
 		EndMessage();
-		
 		return	true;
 	}
 	
@@ -539,7 +544,39 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
  *
  *	@error			Invalid paramteter number or calling from non-native function.
  */
-stock bool GetNativeBool(int param)
-{
+stock bool GetNativeBool(int param)	{
 	return	bool(GetNativeCell(param));
+}
+
+/**
+ *	Returns if the string is valid and is not NULL.
+ *
+ *	@param	str	The string to check.
+ *
+ *	@return	If the string is empty, this returns false.
+ */
+stock bool IsValidString(const char[] str)	{
+	return	bool(!StrEqual(str, NULL_STRING) && strlen(str) > 1);
+}
+
+/**
+ *	Executes a simply query and returns a query Handle for
+ *	recieving the results.
+ *	This one is allows for additional parameters, making Format not required.
+ *
+ *	@param		database	The database handle.
+ *	@param		query		The query string.
+ *
+ *	@return		A new Query Handle on success, else INVALID_HANDLE.
+ *
+ *	@error		If database is invalid, this returns null.
+ */
+stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...)	{
+	if(database != null)	{
+		char format[8192];
+		VFormat(format, sizeof(format), query, 3);
+		return SQL_Query(database, format, -1);
+	}
+	
+	return null;
 }
