@@ -26,11 +26,12 @@
 #define		AdminFlag(%1)		view_as<AdminFlag>(%1)
 #define		PropFieldType(%1)	view_as<PropFieldType>(%1)
 #define		PropType(%1)		view_as<PropType>(%1)
-#define		Ent(%1)				view_as<Entity>(%1)
-#define		This				view_as<any>(this)
-#define		Bot(%1)				IsFakeClient(%1)
-#define		player(%1)			view_as<Player>(%1)
-#define boolean bool
+
+#define Ent(%1)					view_as<Entity>(%1)
+#define This					view_as<any>(this)
+#define Bot(%1)					IsFakeClient(%1)
+#define player(%1)				view_as<Player>(%1)
+#define boolean					bool
 
 #define		CONSOLE			0
 
