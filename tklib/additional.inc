@@ -3,31 +3,27 @@
 //==========================================//
 
 //Get true of false message statements easier.
-stock char Bool[][]	=	{
+stock char Bool[][] = {
 	"False",
 	"True"
 };
-
 //Coloured
-stock char BoolEx[][]	=	{
+stock char BoolEx[][] = {
 	"{red}False{default}",
 	"{green}True{default}"
 };
-
 //Useful for simple open/closing door entites. Value 0 = Close, 1 = Open.
-stock char DoorSwitch[][]	=	{
+stock char DoorSwitch[][] = {
 	"close",
 	"open"
 };
-
 //On - Off switch.
-stock char OnOff[][]	=	{
+stock char OnOff[][] = {
 	"Off",
 	"On"
 };
-
 //On - Off switch coloured.
-stock char OnOffEx[][]	=	{
+stock char OnOffEx[][] = {
 	"{red}Off{default}",
 	"{green}On{default}"
 };
@@ -175,28 +171,24 @@ stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensiti
 stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
 	int team = Tklib_IsValidClient(client) ? GetClientTeam(client):0;
 		
-	char
-		TeamColour_Default[][]	=	{
+	char TeamColour_Default[][] = {
 		"{grey}",
 		"{grey}",
 		"{red}",
 		"{blue}"
-	},
-		TeamColour_TF2C[][]	=	{
+	}, TeamColour_TF2C[][] = {
 		"{grey}",
 		"{grey}",
 		"{red}",
 		"{blue}",
 		"{lightgreen}",
 		"{orange}"
-	},
-		TeamColour_CSGO[][]	=	{
+	}, TeamColour_CSGO[][] = {
 		"{grey}",
 		"{grey}",
 		"{orange}",
 		"{blue}"
-	},
-		TeamColour_L4D[][]	=	{
+	}, TeamColour_L4D[][] = {
 		"{grey}",
 		"{grey}",
 		"{orange}",
@@ -290,9 +282,7 @@ stock void CreateNativeEx2(const char[] name, NativeCall func)	{
 stock int strcopyEx(char[] dest, int destLen, const char[] source, any...)	{
 	char format[256];
 	strcopy(format, sizeof(format), source);
-	
 	VFormat(format, sizeof(format), 4);
-	
 	strcopy(dest, destLen, format);
 }
 
@@ -307,11 +297,9 @@ stock int strcopyEx(char[] dest, int destLen, const char[] source, any...)	{
  */
 stock bool AutoSwitch(bool value)	{
 	switch(value)	{
-		case	true:	value = false;
-		case	false:	value = true;
+		case	true:	return false;
+		case	false:	return true;
 	}
-	
-	return value;
 }
 
 /**
@@ -320,10 +308,15 @@ stock bool AutoSwitch(bool value)	{
  *	@param	filename	File path.
  *	@param	...			Additional parameters.
  */
-stock void AddFileToDownloadsTableEx(const char[] filename, any ...)	{
-	char download[256];
-	VFormat(download, sizeof(download), filename, 2);
-	AddFileToDownloadsTable(download);
+stock bool AddFileToDownloadsTableEx(const char[] filename, any ...)	{
+	if(IsValidString(filename))	{
+		char download[256];
+		VFormat(download, sizeof(download), filename, 2);
+		AddFileToDownloadsTable(download);
+		return	true;
+	}
+	
+	return	false;
 }
 
 /**
@@ -334,6 +327,7 @@ stock void AddFileToDownloadsTableEx(const char[] filename, any ...)	{
  *	@param	type		The type of file to precache. (materials, models, sound, etc.)
  *	@param	filter		If non-empty, this will filter to require the meeting to be added to the dl table.
  *	@param	dbg			If the path is valid, this is useful for debugging seeing what got added to the dl table.
+ *
  *	@error	If the path is invalid or this failed in general, this returns false.
  */
 stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, const char[] type="", const char[] filter="", bool dbg=false)	{
@@ -368,7 +362,6 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
 	}
 	
 	delete DLPath;
-	
 	return	success;
 }
 
@@ -381,7 +374,7 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
  *	@return	Boolean conversion of string or false on failure.
  */
 stock bool StringToBool(const char[] str, int nBase=10)	{
-	return bool(StringToInt(str, nBase));
+	return	bool(StringToInt(str, nBase));
 }
 
 /**
@@ -397,11 +390,8 @@ stock bool AddConVarFlags(ConVar cvar, int flags)	{
 		return	false;
 	
 	int flag = cvar.Flags;
-	
 	flag |= flags;
-	
 	cvar.Flags = flags;
-	
 	return	true;
 }
 
@@ -421,13 +411,9 @@ stock bool AddConVarFlagsEx(const char[] convar, int flags)	{
 	}
 	
 	int flag = cvar.Flags;
-	
 	flag |= flags;
-	
 	cvar.Flags = flags;
-	
 	delete cvar;
-	
 	return	true;
 }
 
@@ -444,11 +430,8 @@ stock bool RemoveConVarFlags(ConVar cvar, int flags)	{
 		return	false;
 	
 	int flag = cvar.Flags;
-	
 	flag &= ~flags;
-	
 	cvar.Flags = flag;
-	
 	return	true;
 }
 
@@ -468,13 +451,9 @@ stock bool RemoveConVarFlagsEx(const char[] convar, int flags)	{
 	}
 	
 	int flag = cvar.Flags;
-	
 	flag &= ~flags;
-	
 	cvar.Flags = flag;
-	
 	delete cvar;
-	
 	return	true;
 }
 
@@ -492,7 +471,7 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 	if(!Tklib_IsValidClient(client))
 		return	false;
 	
-	if(index != -1)	{
+	if(index > 0)	{
 		if(!Tklib_IsValidClient(index))
 			return	false;
 	}
@@ -504,6 +483,7 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 		return	false;
 	
 	Handle msg = null;
+	bool success = false;
 	
 	if((msg = StartMessageOne("SayText2", client, USERMSG_RELIABLE|USERMSG_BLOCKHOOKS)) != null)	{
 		char format[96];
@@ -529,14 +509,14 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 		}
 	
 		EndMessage();
-		return	true;
+		success = true;
 	}
 	
-	return	false;
+	return	success;
 }
 
 /**
- *	Gets a cell in boolean from native parameter.
+ *	Returns a cell in boolean from native parameter.
  *
  *	@param	param	Parameter number, starting from 1.
  *

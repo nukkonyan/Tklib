@@ -30,6 +30,7 @@
 #define		This				view_as<any>(this)
 #define		Bot(%1)				IsFakeClient(%1)
 #define		player(%1)			view_as<Player>(%1)
+#define boolean bool
 
 #define		CONSOLE			0
 
