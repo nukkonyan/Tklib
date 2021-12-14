@@ -283,7 +283,7 @@ stock int GetClientDefaultFOV(any client)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool SetClientObserverTarget(any client, int target)	{
-	return	Tklib_IsValidClient(client, true) ? SetEntPropEnt(client, Prop_Send, "m_iObserverTarget", target):false;
+	return	Tklib_IsValidClient(client, true) ? SetEntPropEntEx(client, Prop_Send, "m_iObserverTarget", target):false;
 }
 
 /**
@@ -294,7 +294,7 @@ stock bool SetClientObserverTarget(any client, int target)	{
  *	@error	If the user is invalid, this returns -1.
  */
 stock int GetClientObserverTarget(any client)	{
-	return	Tklib_IsValidClient(client, true) ? GetEntPropEnt(client, Prop_Send, "m_iObserverTarget", target):-1;
+	return	Tklib_IsValidClient(client, true) ? GetEntPropEntEx(client, Prop_Send, "m_iObserverTarget"):-1;
 }
 
 /**
@@ -313,12 +313,11 @@ stock bool SetClientObserverMode(any client, int value)	{
  *	Returns the users Observer mode
  *
  *	@param	client		The users index.
- *	@param	value		Observer mode value.
  *
- *	@error	If the user is invalid, this returns false.
+ *	@error	If the user is invalid, this returns -1.
  */
-stock bool GetClientObserverMode(any client, int value)	{
-	return	Tklib_IsValidClient(client, true) ? GetEntPropBool(client, Prop_Send, "m_iObserverMode", value):false;
+stock int GetClientObserverMode(any client)	{
+	return	Tklib_IsValidClient(client, true) ? GetEntPropEx(client, Prop_Send, "m_iObserverMode"):-1;
 }
 
 /**
@@ -334,7 +333,6 @@ stock bool SetClientDrawViewModel(any client, bool value)	{
 }
 
 /**
- *	Tk Libraries: Clients.
  *	Returns the clients drawviewmodel value
  *
  *	@param	client		The users index.
