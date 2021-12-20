@@ -161,7 +161,7 @@ stock bool TF2_SetClientCloakMeter(int client, float value=1.0)	{
  *
  *	@error	If the user is invalid, this returns false.
 */
-stock bool TF2_GetClientGlow(int client)	{
+stock bool TF2_IsClientGlowing(int client)	{
 	return	Tklib_IsValidClient(client) ? GetEntPropBool(client, Prop_Send, "m_bGlowEnabled"):false;
 }
 

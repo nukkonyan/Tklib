@@ -868,10 +868,14 @@ stock bool Tklib_IsValidClient(any client, bool IgnoreBot=false, bool IgnoreDead
 		return	false;
 	if(client < 1 || client > MaxClients)
 		return	false;
-	if(!IsClientInGame(client) && IgnoreNonInGame)
-		return	false;
-	if(!IsClientConnected(client) && IgnoreNonConnected)
-		return	false;
+	if(IgnoreNonInGame)	{
+		if(!IsClientInGame(client))
+			return	false;
+	}
+	if(IgnoreNonConnected)	{
+		if(!IsClientConnected(client))
+			return	false;
+	}
 	if(IsClientSourceTV(client))
 		return	false;
 	if(IsClientReplay(client))

@@ -547,7 +547,7 @@ stock bool IsValidString(const char[] str)	{
  *	@param		database	The database handle.
  *	@param		query		The query string.
  *
- *	@return		A new Query Handle on success, else INVALID_HANDLE.
+ *	@return		A new Query Handle on success, else nulll.
  *
  *	@error		If database is invalid, this returns null.
  */
@@ -559,4 +559,17 @@ stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...)	{
 	}
 	
 	return null;
+}
+
+/**
+ *	Returns a cell in address from native parameter.
+ *
+ *	@param	param	Parameter number, starting from 1.
+ *
+ *	@return			Address value from cell at the parameter number.
+ *
+ *	@error			Invalid paramteter number or calling from non-native function.
+ */
+stock Address GetNativeAddress(int param)	{
+	return	Address(GetNativeCell(param));
 }

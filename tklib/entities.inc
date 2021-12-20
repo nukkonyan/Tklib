@@ -385,6 +385,29 @@ stock bool SetEntityTeamNum(any entity, int team)	{
 	return	SetEntPropEx(entity, Prop_Send, "m_iTeamNum", team);
 }
 
+/**
+ *	Set the entity effect.
+ *
+ *	@param	entity		The entity index.
+ *	@param	effect		The effect value.
+ *
+ *	@error	If the index of the entity owner is invalid, it will return -1.
+ */
+stock bool SetEntityEffect(int entity, int value)	{
+	return	SetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity", value);
+}
+
+/**
+ *	Returns a value of the entity effect.
+ *
+ *	@param	entity		The entity index.
+ *
+ *	@error	If the index of the entity owner is invalid, it will return -1.
+ */
+stock int GetEntityEffect(int entity)	{
+	return	GetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity");
+}
+
 //Netprops
 
 /**
@@ -1078,5 +1101,17 @@ methodmap	Entity	__nullable__	{
 	public static int FindPropInfo(const char[] cls, const char[] prop, PropFieldType type=PropFieldType(0), int num_bits=0, int local_offset=0, int array_size=0)
 	{
 		return FindSendPropInfo(cls, prop, type, num_bits, local_offset, array_size);
+	}
+	
+	property int Effect
+	{
+		public set(int value)
+		{
+			SetEntityEffect(This, value);
+		}
+		public get()
+		{
+			return GetEntityEffect(This);
+		}
 	}
 }
