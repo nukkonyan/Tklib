@@ -12,7 +12,7 @@ Using `public` will only make it be part of the compilation even if not used. (C
 Multi-Colors will be separated from Tklib in the near future.
 
 
-# Definitions
+# Available Pre-Include Definitions
 
 `_tklib_no_includes` Disable all includes.
 
