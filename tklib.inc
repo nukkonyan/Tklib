@@ -175,10 +175,6 @@ enum	boolean					{}
 	#include	<tklib/events>
 #endif
 
-#if !defined _tklib_disable_sdk
-	#include	<tklib/sdk>
-#endif
-
 
 #if !defined _tklib_disable_tf2
 	#include	<tklib/tf2>
