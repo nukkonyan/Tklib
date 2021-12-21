@@ -701,13 +701,27 @@ methodmap	Entity	__nullable__	{
 	{
 		return KillEntity(This, input, activator, caller, outputid);
 	}
-	public void Remove()
+	
+	public bool Remove()
 	{
-		RemoveEntity(This);
+		if(IsValidEntityEx(This))
+		{
+			RemoveEntity(This);
+			return	true;
+		}
+		
+		return	false;
 	}
-	public void RemoveEx()
+	
+	public bool RemoveEx()
 	{
-		RemoveEdict(This);
+		if(IsValidEntityEx(This))
+		{
+			RemoveEdict(This);
+			return	true;
+		}
+			
+		return	false;
 	}
 
 	property int Skin
@@ -1049,6 +1063,7 @@ methodmap	Entity	__nullable__	{
 	{
 		DispatchKeyValueVector(This, keyName, vec);
 	}
+	
 	public bool Spawn()
 	{
 		return DispatchSpawn(This);
@@ -1113,5 +1128,16 @@ methodmap	Entity	__nullable__	{
 		{
 			return GetEntityEffect(This);
 		}
+	}
+	
+	public bool EquipWeapon(int client)
+	{
+		if(IsValidEntityEx(This))
+		{
+			EquipPlayerWeapon(client, This);
+			return	true;
+		}
+		
+		return	false;
 	}
 }

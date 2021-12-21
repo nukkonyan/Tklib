@@ -6,10 +6,10 @@
 stock char TF2_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
 	"{grey}Spectators{default}",
-	"{red}Red{default}",
-	"{blue}Blu{default}",
-	"{lightgreen}Grn{default}",
-	"{orange}Ylw{default}"
+	"{red}RED{default}",
+	"{blue}BLU{default}",
+	"{lightgreen}GRN{default}",
+	"{orange}YLW{default}"
 }, TF2_GetTeamColour[][] = {
 	"{grey}",
 	"{grey}",
@@ -36,7 +36,13 @@ enum	TFSlot	{
 	TFSlot_Secondary=	1,
 	TFSlot_Melee	=	2,
 	TFSlot_PDA		=	3,
-	TFSlot_PDA2		=	4
+	TFSlot_PDA2		=	4,
+	TFSlot_Slot6	=	5,
+	TFSlot_Slot7	=	6,
+	TFSlot_Slot8	=	7,
+	TFSlot_Slot9	=	8,
+	TFSlot_Slot10	=	9,
+	TFSlot_Slot11	=	10
 }
 
 enum	TFCritType	{
@@ -54,11 +60,30 @@ enum	TFBuilding	{
 	TFBuilding_MiniSentry			=	4
 }
 
+enum	TFQuality	{
+	TFQuality_SelfMade	=	9,
+	TFQuality_Strange	=	11
+}
+
+enum	TFMethod	{
+	TFFound_Achieved	=	-1,
+	TFFound_Found		=	0,
+	TFFound_Crafted		=	1,
+	TFFound_Traded		=	2,
+	TFFound_Unboxed		=	4,
+	TFFound_Gifted		=	5,
+	TFFound_Earned		=	8,
+	TFFound_Refunded	=	9,
+	TFFound_WrappedGift	=	10
+}
+
 #define	TFTeam(%1)		view_as<TFTeam>(%1)
 #define	TFFlag(%1)		view_as<TFFlag>(%1)
 #define	TFSlot(%1)		view_as<TFSlot>(%1)
 #define	TFCritType(%1)	view_as<TFCritType>(%1)
 #define	TFBuilding(%1)	view_as<TFBuilding>(%1)
+#define	TFQuality(%1)	view_as<TFQuality>(%1)
+#define	TFMethod(%1)	view_as<TFMethod>(%1)
 
 
 /**
