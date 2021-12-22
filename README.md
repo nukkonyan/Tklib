@@ -4,9 +4,7 @@ This was renamed from Tk Include to Tk Libraries when 1.2.0 was released.
 
 # [Functions](https://github.com/Teamkiller324/Tklib/blob/main/functions.md) (Work in progress, not fully finished yet)
 
-### Also includes modified/updated SourceMod includes.
-
-### Note: if you don't want multi-colors to be included in your compile, simply define `_tklib_no_multicolors` before the tklib include.
+### Also includes modified/updated SourceMod includes separately.
 
 Pro tip: using `stock` makes only those that are being used out of the include to be compiled with and the rest will be ignored/not compiled.
 Using `public` will only make it be part of the compilation even if not used. (Compiler will see it as a forward if not used inside plugin).
@@ -14,7 +12,7 @@ Using `public` will only make it be part of the compilation even if not used. (C
 Multi-Colors will be separated from Tklib in the near future.
 
 
-# Definitions
+# Available Pre-Include Definitions
 
 `_tklib_no_includes` Disable all includes.
 
@@ -38,6 +36,6 @@ Multi-Colors will be separated from Tklib in the near future.
 
 `_tklib_no_sdkhooks` Disable tklib loading sdkhooks
 
-`_tklib_no_definitions` Disable integrated definitions such as int(value) which is simplified from view_as<int>(value>
+`_tklib_no_definitions` Disable integrated definitions such as int(value) which is simplified from view_as < int > (value)
 
 `_tklib_no_multicolors` disable Multi-Colors (Will be separated out in the near future.)
