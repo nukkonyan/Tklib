@@ -157,10 +157,14 @@ stock void MC_SendMessage(int client, const char[] message, int author = 0) {
 
 	UserMsg index = GetUserMessageId("SayText2");
 	if(index == INVALID_MESSAGE_ID)	{
-		if(IdentifyGame() == Game_DODS) {
-			if(DOD_GetClientTeam(author) == DODTeam_Unassigned)
-				ReplaceString(buffer, sizeof(buffer), "\x03", "\x04", false); // Unassigned gets green
-			else	{
+		switch(GetEngineVersion() == Engine_DODS) {
+			case	true:	{
+				#if !defined _tklib_disable_dods
+				if(DOD_GetClientTeam(author) == DODTeam_Unassigned)
+					ReplaceString(buffer, sizeof(buffer), "\x03", "\x04", false); // Unassigned gets green
+				#endif
+			}
+			case	false:	{
 				char temp[16];
 				Format(temp, sizeof(temp), "\x07%06X", MC_TeamColors[MC_GAME_DODS][GetClientTeam(client) - 1]);
 				ReplaceString(buffer, sizeof(buffer), "\x03", temp, false);
