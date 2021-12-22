@@ -36,6 +36,6 @@ Multi-Colors will be separated from Tklib in the near future.
 
 `_tklib_no_sdkhooks` Disable tklib loading sdkhooks
 
-`_tklib_no_definitions` Disable integrated definitions such as int(value) which is simplified from view_as<int>(value>
+`_tklib_no_definitions` Disable integrated definitions such as int(value) which is simplified from view_as < int > (value)
 
 `_tklib_no_multicolors` disable Multi-Colors (Will be separated out in the near future.)
