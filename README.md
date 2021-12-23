@@ -1,6 +1,6 @@
 # Tklib or Tk Libraries
 This is a massive include with quite some additions and will be updated as frequent as possible adding more stuff.
-This was renamed from Tk Include to Tk Libraries when 1.2.0 was released.
+This was renamed from Tk Include to Tk Libraries when 1.2.0 was released. Possibly turning this into an extension in the future. (Unsure.)
 
 # [Functions](https://github.com/Teamkiller324/Tklib/blob/main/functions.md) (Work in progress, not fully finished yet)
 
