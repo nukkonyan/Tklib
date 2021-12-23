@@ -16,6 +16,20 @@ Multi-Colors will be separated from Tklib in the near future.
 
 `_tklib_no_includes` Disable all includes.
 
+`_tklib_disable_gameidentifier` Disable Game Identifier Include.
+
+`_tklib_disable_resize` Disable Resize Include.
+
+`_tklib_disable_weapons` Disable weapons Include.
+
+`_tklib_disable_clients` Disable clients Include.
+
+`_tklib_disable_entities` Disable entities Include.
+
+`_tklib_disable_additional` Disable additional Include.
+
+`_tklib_disable_events` Disable events Include.
+
 `_tklib_no_core_includes` Disable all core includes.
 
 `_tklib_no_game_includes` Disable all game includes.
