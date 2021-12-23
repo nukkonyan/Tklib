@@ -41,6 +41,7 @@ enum	CSWeaponType	{
 
 //I made this because TFTeam enum exists and cs doesn't have it :)
 enum	CSTeam	{
+	CSTeam_Invalid		=	-1,
 	CSTeam_Unassigned	=	0,
 	CSTeam_Spectator	=	1,
 	CSTeam_Terrorist	=	2,
@@ -668,8 +669,7 @@ stock bool CS_SetClientInBuyZone(int client, bool buyzone)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool CS_IsClientDefusing(int client)
-{
+stock bool CS_IsClientDefusing(int client)	{
 	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_bIsDefusing"):false;
 }
 
@@ -681,7 +681,15 @@ stock bool CS_IsClientDefusing(int client)
  *
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
-stock bool CS_SetClientDefusing(int client, bool status)
-{
+stock bool CS_SetClientDefusing(int client, bool status)	{
 	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bDefusing", status):false;
+}
+
+/**
+ *	Returns a random CSTeam team (CT or T)
+ *
+ *	@return	Returns a CSTeam team.
+ */
+stock CSTeam CS_GetRandomTeam()	{
+	return	CSTeam(GetRandomInt(2, 3));
 }

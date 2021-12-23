@@ -16,6 +16,7 @@ stock char DOD_GetTeamStringName[][] = {
 
 //Day of Defeat: Source enum
 enum	DODTeam	{
+	DODTeam_Invalid		=	-1,
 	DODTeam_Unassigned	=	0,
 	DODTeam_Spectator	=	1,
 	DODTeam_Red			=	2,
@@ -49,4 +50,13 @@ stock bool DOD_ChangeClientTeam(int client, DODTeam team)	{
 	}
 	
 	return	false;
+}
+
+/**
+ *	Returns a random DODTeam team (Red or Blue)
+ *
+ *	@return	Returns a DODTeam team.
+ */
+stock DODTeam DOD_GetRandomTeam()	{
+	return	DODTeam(GetRandomInt(2, 3));
 }

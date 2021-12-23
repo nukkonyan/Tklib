@@ -34,6 +34,7 @@ enum	CE_WeaponsSlot	{
  * Team numbers.
  */
 enum	CETeam	{
+	CETeam_Invalid		=	-1,
 	CETeam_Unassigned	=	0,
 	CETeam_Spectator	=	1,
 	CETeam_Survivor		=	2,
@@ -353,4 +354,13 @@ stock int CE_GetClientWeapon(int client, const char[] classname)	{
 	}
 	
 	return	INVALID_ENT_REFERENCE;
+}
+
+/**
+ *	Returns a random CETeam team (Survivor or Zombie)
+ *
+ *	@return	Returns a CETeam team.
+ */
+stock CETeam CE_GetRandomTeam()	{
+	return	CETeam(GetRandomInt(2, 3));
 }

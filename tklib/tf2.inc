@@ -541,7 +541,15 @@ stock bool TF2_DestroyBuilding(any entity)	{
 /**
  *	Returns if MvM (Mann-Vs-Machine) mode is active.
  */
-stock bool TF2_IsMvMGameMode()
-{
-	return	(GameRules_GetProp("m_bPlayingMannVsMachine"));
+stock bool TF2_IsMvMGameMode()	{
+	return	bool(GameRules_GetProp("m_bPlayingMannVsMachine"));
+}
+
+/**
+ *	Returns a random TFTeam team (Red or Blue) (Including Green or Yellow if TF2 Classic)
+ *
+ *	@return	Returns a TFTeam team.
+ */
+stock TFTeam TF2_GetRandomTeam()	{
+	return	TFTeam((IdentifyGame() == Game_TF2C) ? GetRandomInt(2, 3, 4, 5) : GetRandomInt(2, 3));
 }

@@ -16,6 +16,7 @@ stock char L4D_GetTeamStringName[][] = {
 
 //Left 4 Dead enum
 enum	L4DTeam	{
+	L4DTeam_Invalid		=	-1,
 	L4DTeam_Unassigned	=	0,
 	L4DTeam_Spectator	=	1,
 	L4DTeam_Survivor	=	2,
@@ -49,4 +50,13 @@ stock bool L4D_ChangeClientTeam(int client, L4DTeam team)	{
 	}
 	
 	return	false;
+}
+
+/**
+ *	Returns a random L4DTeam team (Survivors or Zombies)
+ *
+ *	@return	Returns a L4DTeam team.
+ */
+stock L4DTeam L4D_GetRandomTeam()	{
+	return	L4DTeam(GetRandomInt(2, 3));
 }

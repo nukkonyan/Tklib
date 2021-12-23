@@ -3,6 +3,7 @@
 //==========================================//
 
 enum	FFTeam	{
+	FFTeam_Invalid		=	-1,
 	FFTeam_Unassigned	=	0,
 	FFTeam_Spectators	=	1,
 	FFTeam_Red			=	2,
@@ -46,4 +47,13 @@ stock bool FF_ChangeClientTeam(int client, FFTeam team)	{
 	}
 	
 	return	false;
+}
+
+/**
+ *	Returns a random FFTeam team (Red or Blue)
+ *
+ *	@return	Returns a FFTeam team.
+ */
+stock FFTeam FF_GetRandomTeam()	{
+	return	FFTeam(GetRandomInt(2, 3));
 }
