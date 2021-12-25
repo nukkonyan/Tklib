@@ -329,3 +329,46 @@
 
 #define EVENT_STR_TEAM "team"
 #define EVENT_STR_OLDTEAM "oldteam"
+
+#define EVENT_STR_HOSTNAME "hostname"
+#define EVENT_STR_ADDRESS "address"
+#define EVENT_STR_IP "ip"
+#define EVENT_STR_PORT "port"
+#define EVENT_STR_GAME "game"
+#define EVENT_STR_MAPNAME "mapname"
+#define EVENT_STR_MAXPLAYERS "maxplayers"
+#define EVENT_STR_OS "os"
+#define EVENT_STR_DEDICATED "dedicated"
+#define EVENT_STR_OFFICIAL "official"
+#define EVENT_STR_PASSWORD "password"
+
+#define EVENT_STR_CVARNAME "cvarname"
+#define EVENT_STR_CVARVALUE "cvarvalue"
+
+#define EVENT_STR_TEXT "text"
+
+#define EVENT_STR_NAME "name"
+#define EVENT_STR_NETWORKID "networkid"
+#define EVENT_STR_DURATION "duration"
+#define EVENT_STR_BY "by"
+#define EVENT_STR_KICKED "kicked"
+
+#define EVENT_STR_DISCONNECT "disconnect"
+#define EVENT_STR_AUTOTEAM "autoteam"
+
+//CSGO
+
+#define EVENT_STR_ASSISTEDFLASH "assistedflash"
+#define EVENT_STR_WEAPON_ITEMID "weapon_itemid"
+#define EVENT_STR_WEAPON_FAUXITEMID "weapon_fauxitemid"
+#define EVENT_STR_WEAPON_ORIGINALOWNER "weapon_xuid"
+#define EVENT_STR_HEADSHOT "headshot"
+#define EVENT_STR_DOMINATED "dominated"
+#define EVENT_STR_REVENGE "revenge"
+#define EVENT_STR_WIPE "wipe"
+#define EVENT_STR_PENETRATED "penetrated"
+#define EVENT_STR_NOREPLAY "noreplay"
+#define EVENT_STR_NOSCOPE "noscope"
+#define EVENT_STR_THRUSMOKE "thrusmoke"
+#define EVENT_STR_ATTACKERBLIND "attackerblind"
+#define EVENT_STR_DISTANCE "distance"

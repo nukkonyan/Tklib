@@ -573,3 +573,14 @@ stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...)	{
 stock Address GetNativeAddress(int param)	{
 	return	Address(GetNativeCell(param));
 }
+
+/**
+ *	Returns if the database connection is valid.
+ *
+ *	@param	database	The database Handle.
+ *
+ *	@return	If the database connection is valid, this is true. False otherwise.
+ */
+stock bool IsValidDatabase(Database database)	{
+	return	bool(database != null);
+}

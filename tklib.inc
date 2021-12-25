@@ -23,6 +23,7 @@
 	#define _tklib_disable_entities
 	#define _tklib_disable_additional
 	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
 	#define _tklib_disable_sdk
 #endif
 
@@ -173,6 +174,10 @@ enum	boolean					{}
 
 #if !defined _tklib_disable_events
 	#include	<tklib/events>
+#endif
+
+#if !defined _tklib_disable_usermessages
+	#include	<tklib/usermessages>
 #endif
 
 
