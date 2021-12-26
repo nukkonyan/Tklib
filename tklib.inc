@@ -13,6 +13,8 @@
 	#define _tklib_no_core_includes
 	#define _tklib_no_game_includes
 	#define _tklib_no_multicolors
+	#define _tklib_no_sdktools
+	#define _tklib_no_sdkhooks
 #endif
 
 #if defined _tklib_no_core_includes

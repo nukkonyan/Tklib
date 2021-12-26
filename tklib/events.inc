@@ -356,6 +356,9 @@
 #define EVENT_STR_DISCONNECT "disconnect"
 #define EVENT_STR_AUTOTEAM "autoteam"
 
+#define EVENT_STR_POSX "posx"
+#define EVENT_STR_POSY "posy"
+
 //CSGO
 
 #define EVENT_STR_ASSISTEDFLASH "assistedflash"
@@ -372,3 +375,28 @@
 #define EVENT_STR_THRUSMOKE "thrusmoke"
 #define EVENT_STR_ATTACKERBLIND "attackerblind"
 #define EVENT_STR_DISTANCE "distance"
+
+//TF2
+
+#define EVENT_STR_VICTIM_ENTINDEX "victim_entindex"
+#define EVENT_STR_INFLICTOR_ENTINDEX "inflictor_entindex"
+#define EVENT_STR_WEAPONID "weaponid"
+#define EVENT_STR_DAMAGEBITS "damagebits"
+#define EVENT_STR_CUSTOMKILL "customkill"
+#define EVENT_STR_WEAPON_LOGCLASSNAME "weapon_logclassname"
+#define EVENT_STR_STUN_FLAGS "stun_flags"
+#define EVENT_STR_DEATH_FLAGS "death_flags"
+#define EVENT_STR_SILENT_KILL "silent_kill"
+#define EVENT_STR_PLAYERPENETRATECOUNT "playerpenetratecount"
+#define EVENT_STR_ASSISTER_FALLBACK "assister_fallback"
+#define EVENT_STR_KILL_STREAK_TOTAL "kill_streak_total"
+#define EVENT_STR_KILL_STREAK_WEP "kill_streak_wep"
+#define EVENT_STR_KILL_STREAK_ASSIST "kill_streak_assist"
+#define EVENT_STR_KILL_STREAK_VICTIM "kill_streak_victim"
+#define EVENT_STR_DUCKS_STREAKED "ducks_streaked"
+#define EVENT_STR_DUCK_STREAK_TOTAL "duck_streak_total"
+#define EVENT_STR_DUCK_STREAK_ASSIST "duck_streak_assist"
+#define EVENT_STR_DUCK_STREAK_VICTIM "duck_streak_victim"
+#define EVENT_STR_ROCKET_JUMP "rocket_jump"
+#define EVENT_STR_WEAPON_DEF_INDEX "weapon_def_index"
+#define EVENT_STR_CRIT_TYPE "crit_type"
