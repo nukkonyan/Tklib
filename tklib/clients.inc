@@ -583,6 +583,7 @@ stock Action SetRespawnTime(Handle timer, any client)	{
 stock bool Respawn(any client)	{
 	if(Tklib_IsValidClient(client))	{
 		switch(IdentifyGame())	{
+			#if !defined _tklib_disable_tf2
 			case	Game_TF2:
 				TF2_RespawnPlayer(client);
 			case	Game_TF2C:	{
@@ -590,8 +591,11 @@ stock bool Respawn(any client)	{
 				if(!IsPlayerAlive(client))
 					TF2_RespawnPlayer(client);
 			}
+			#endif
+			#if !defined _tklib_disable_cstrike
 			case	Game_CSS,Game_CSPromod,Game_CSGO:
 				CS_RespawnPlayer(client);
+			#endif
 		}
 		
 		return	true;
@@ -648,7 +652,7 @@ stock any GetClientOfAuth(const char[] auth)	{
 		
 		GetClientAuth(client, tempauth, sizeof(tempauth));
 		
-		if(StrContainsEx(tempauth, auth, false))
+		if(StrEqual(tempauth, auth, false))
 			user = client;
 	}
 	
@@ -674,7 +678,7 @@ stock any GetClientOfAuth3(const char[] auth)	{
 		
 		GetClientAuth3(client, tempauth, sizeof(tempauth));
 		
-		if(StrContainsEx(tempauth, auth, false))
+		if(StrEqual(tempauth, auth, false))
 			user = client;
 	}
 	

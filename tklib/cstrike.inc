@@ -39,6 +39,40 @@ enum	CSWeaponType	{
 	CSWeaponType_Healthshot	=	11
 }
 
+//Might be combined with the csgo enum struct into one later on.
+enum	{
+	CSS_Weapon_Deagle		=	1,
+	CSS_Weapon_Glock		=	2,
+	CSS_Weapon_Ak47			=	3,
+	CSS_Weapon_Aug			=	4,
+	CSS_Weapon_AWP			=	5,
+	CSS_Weapon_Famas		=	6,
+	CSS_Weapon_G3SG1		=	7,
+	CSS_Weapon_Galil		=	8,
+	CSS_Weapon_M249			=	9,
+	CSS_Weapon_M4A1			=	10,
+	CSS_Weapon_Mac10		=	11,
+	CSS_Weapon_P90			=	12,
+	CSS_Weapon_MP5			=	13,
+	CSS_Weapon_MP5Navy		=	13,
+	CSS_Weapon_UMP45		=	14,
+	CSS_Weapon_XM1014		=	15,
+	CSS_Weapon_M3			=	16,
+	CSS_Weapon_USP			=	17,
+	CSS_Weapon_P228			=	18,
+	CSS_Weapon_SG550		=	19,
+	CSS_Weapon_Scar20		=	19,
+	CSS_Weapon_SG552		=	20,
+	CSS_Weapon_Krieg		=	20,
+	CSS_Weapon_SSG08		=	21,
+	CSS_Weapon_Scout		=	21,
+	CSS_Weapon_Knife		=	22,
+	CSS_Grenade_Flashbang	=	23,
+	CSS_Grenade_HEGrenade	=	24,
+	CSS_Grenade_SmokeGrenade=	25,
+	CSS_Weapon_C4			=	26
+}
+
 //I made this because TFTeam enum exists and cs doesn't have it :)
 enum	CSTeam	{
 	CSTeam_Invalid		=	-1,
@@ -692,4 +726,105 @@ stock bool CS_SetClientDefusing(int client, bool status)	{
  */
 stock CSTeam CS_GetRandomTeam()	{
 	return	CSTeam(GetRandomInt(2, 3));
+}
+
+/**
+ *	Returns if the weapon is zoomed in.
+ *
+ *	@param	weapon	The weapon entity.
+ */
+stock bool CS_IsWeaponZoomedIn(any weapon)	{
+	switch(IdentifyGame())	{
+		case	Game_CSS, Game_CSPromod, Game_CSGO, Game_CSCO:
+			return GetEntPropBool(weapon, Prop_Send, "m_weaponMode");
+	}
+	
+	return false;
+}
+
+/**
+ *	Returns the weapon definition index by its entity name.
+ *
+ *	@param	weapon	The weapon entity name.
+ *
+ *	@returns	CSS_* enum (integer). 0 if invalid entity.
+ */
+stock int CSS_GetWeaponDefindex(const char[] weapon)
+{
+	if(StrEqual(weapon, "weapon_ak47", false))
+		return	CSS_Weapon_Ak47;
+	
+	if(StrEqual(weapon, "weapon_m4a1", false))
+		return	CSS_Weapon_M4A1;
+	
+	if(StrEqual(weapon, "weapon_galil", false))
+		return	CSS_Weapon_Galil;
+	
+	if(StrEqual(weapon, "weapon_famas", false))
+		return	CSS_Weapon_Famas;
+	
+	if(StrEqual(weapon, "weapon_sg552", false))
+		return	CSS_Weapon_SG552;
+	
+	if(StrEqual(weapon, "weapon_aug", false))
+		return	CSS_Weapon_Aug;
+	
+	if(StrEqual(weapon, "weapon_scout", false))
+		return	CSS_Weapon_SSG08;
+	
+	if(StrEqual(weapon, "weapon_awp", false))
+		return	CSS_Weapon_AWP;
+	
+	if(StrEqual(weapon, "weapon_sg550", false))
+		return	CSS_Weapon_SG550;
+	
+	if(StrEqual(weapon, "weapon_g3sg1", false))
+		return	CSS_Weapon_G3SG1;
+	
+	if(StrEqual(weapon, "weapon_m3", false))
+		return	CSS_Weapon_M3;
+	
+	if(StrEqual(weapon, "weapon_xm1014", false))
+		return	CSS_Weapon_XM1014;
+	
+	if(StrEqual(weapon, "weapon_m249", false))
+		return	CSS_Weapon_M249;
+	
+	if(StrEqual(weapon, "weapon_c4", false))
+		return	CSS_Weapon_C4;
+	
+	if(StrEqual(weapon, "weapon_hegrenade", false))
+		return	CSS_Grenade_HEGrenade;
+	
+	if(StrEqual(weapon, "weapon_flashbang", false))
+		return	CSS_Grenade_Flashbang;
+	
+	if(StrEqual(weapon, "weapon_smokegrenade", false))
+		return	CSS_Grenade_SmokeGrenade;
+	
+	if(StrEqual(weapon, "weapon_glock", false))
+		return	CSS_Weapon_Glock;
+	
+	if(StrEqual(weapon, "weapon_usp", false))
+		return	CSS_Weapon_USP;
+	
+	if(StrEqual(weapon, "weapon_p228", false))
+		return	CSS_Weapon_P228;
+	
+	if(StrEqual(weapon, "weapon_deagle", false))
+		return	CSS_Weapon_Deagle;
+	
+	if(StrEqual(weapon, "weapon_p90", false))
+		return	CSS_Weapon_P90;
+	
+	if(StrEqual(weapon, "weapon_ump45", false))
+		return	CSS_Weapon_UMP45;
+	
+	if(StrEqual(weapon, "weapon_mp5navy", false))
+		return	CSS_Weapon_MP5;
+	
+	if(StrEqual(weapon, "weapon_knife", false))
+		return	CSS_Weapon_Knife;
+	
+	return 0;
 }
