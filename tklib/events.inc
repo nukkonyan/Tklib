@@ -210,6 +210,8 @@
 
 
 //Team Fortress
+#define EVENT_TEAMPLAY_ROUND_ACTIVE "teamplay_round_active"
+#define EVENT_TEAMPLAY_ROUND_WIN "teamplay_round_win"
 #define EVENT_TEAMPLAY_POINT_STARTCAPTURE "teamplay_point_startcapture"
 #define EVENT_TEAMPLAY_POINT_CAPTURED "teamplay_point_captured"
 #define EVENT_TEAMPLAY_POINT_LOCKED "teamplay_point_locked"
@@ -228,6 +230,19 @@
 #define EVENT_OBJECT_DETONATED "object_detonated"
 #define EVENT_PLAYER_TELEPORTED "player_teleported"
 #define EVENT_PLAYER_INVULNED "player_invulned"
+
+#define EVENT_PUMPKIN_LORD_SUMMONED "pumpkin_lord_summoned"
+#define EVENT_PUMPKIN_LORD_KILLED "pumpkin_lord_killed"
+#define EVENT_MERASMUS_SUMMONED "merasmus_summoned"
+#define EVENT_MERASMUS_KILLED "merasmus_killed"
+#define EVENT_MERASMUS_ESCAPE_WARNING "merasmus_escape_warning"
+#define EVENT_MERASMUS_ESCAPED "merasmus_escaped"
+#define EVENT_EYEBALL_BOSS_SUMMONED "eyeball_boss_summoned"
+#define EVENT_EYEBALL_BOSS_STUNNED "eyeball_boss_stunned"
+#define EVENT_EYEBALL_BOSS_KILLED "eyeball_boss_killed"
+#define EVENT_EYEBALL_BOSS_KILLER "eyeball_boss_killer"
+#define EVENT_EYEBALL_BOSS_ESCAPE_IMMINENT "eyeball_boss_escape_imminent"
+#define EVENT_EYEBALL_BOSS_ESCAPED "eyeball_boss_escaped"
 
 
 //Other Events
@@ -433,3 +448,13 @@
 #define EVENT_STR_CARRIER "carrier"
 #define EVENT_STR_EVENTTYPE "eventtype"
 #define EVENT_STR_HOME "home"
+
+#define EVENT_STR_OBJECT "object"
+#define EVENT_STR_INDEX "index"
+#define EVENT_STR_ISBUILDER "isbuilder"
+#define EVENT_STR_OBJECTTYPE "objecttype"
+#define EVENT_STR_WAS_BUILDING "was_building"
+
+#define EVENT_STR_BUILDERID "builderid"
+#define EVENT_STR_DIST "dist"
+#define EVENT_STR_MEDIC_USERID "medic_userid"

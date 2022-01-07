@@ -17,6 +17,22 @@ stock char TF2_GetTeamStringName[][] = {
 	"{blue}",
 	"{lightgreen}",
 	"{orange}"
+}, TF2_GetFlagTypeName[][] = {
+	"None",
+	"Picked up",
+	"Captured",
+	"Defended",
+	"Dropped",
+	"Carrier"
+}, TF2_GetGameTypeName[][] = {
+	"Unknown",
+	"Capture-The-Flag",
+	"Capture Points",
+	"Payload / Payload Race",
+	"Arena",
+	"Unknown",
+	"Unknown",
+	"Passball"
 };
 
 //TF2 Flag Event
@@ -77,6 +93,15 @@ enum	TFMethod	{
 	TFFound_WrappedGift	=	10
 }
 
+enum	TFGameType	{
+	TFGameType_Unknown	=	0,
+	TFGameType_CTF		=	1,
+	TFGameType_CP		=	2,
+	TFGameType_PL		=	3,
+	TFGameType_Arena	=	4,
+	TFGameType_PassBall	=	7
+}
+
 #define	TFTeam(%1)		view_as<TFTeam>(%1)
 #define	TFFlag(%1)		view_as<TFFlag>(%1)
 #define	TFSlot(%1)		view_as<TFSlot>(%1)
@@ -84,6 +109,7 @@ enum	TFMethod	{
 #define	TFBuilding(%1)	view_as<TFBuilding>(%1)
 #define	TFQuality(%1)	view_as<TFQuality>(%1)
 #define	TFMethod(%1)	view_as<TFMethod>(%1)
+#define	TFGameType(%1)	view_as<TFGameType>(%1)
 
 
 /**
@@ -552,4 +578,20 @@ stock bool TF2_IsMvMGameMode()	{
  */
 stock TFTeam TF2_GetRandomTeam()	{
 	return	TFTeam((IdentifyGame() == Game_TF2C) ? GetRandomInt(2, 3, 4, 5) : GetRandomInt(2, 3));
+}
+
+/**
+ *	Returns the gametype of the server.
+ */
+stock TFGameType TF2_GetGameType()	{
+	return	TFGameType(GameRules_GetProp("m_nGameType"));
+}
+
+/*
+ *	Set the gametype of the server.
+ *
+ *	@param	gametype	TFGameType gametype to set.
+ */
+stock void TF2_SetGameType(TFGameType gametype)	{
+	GameRules_SetProp("m_nGameType", gametype);
 }
