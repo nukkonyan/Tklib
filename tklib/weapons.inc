@@ -31,7 +31,7 @@ stock bool RemoveAllWeapons(int client)	{
  *
  *	@error	If the weapon entity is invalid, this returns -1.
  */
-stock int GetWeaponDefinitionIndex(int weapon)	{
+stock int GetWeaponDefinitionIndex(any weapon)	{
 	return	GetEntPropEx(weapon, Prop_Send, "m_iItemDefinitionIndex");
 }
 
@@ -43,7 +43,7 @@ stock int GetWeaponDefinitionIndex(int weapon)	{
  *
  *	@error	If the weapon entity is invalid, this returns false.
  */
-stock bool SetWeaponDefinitionIndex(int weapon, int value)	{
+stock bool SetWeaponDefinitionIndex(any weapon, int value)	{
 	return	SetEntPropEx(weapon, Prop_Send, "m_iItemDefinitionIndex", value);
 }
 

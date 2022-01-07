@@ -858,6 +858,42 @@ stock bool SetClientConnected(any client, bool connect)	{
 }
 
 /**
+ *	Returns the users m_fFlags status.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid or has no m_fFlags property, this returns -1.
+ */
+stock int GetClientFlags(any client)	{
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropEx(client, Prop_Send, "m_fFlags"):-1;
+}
+
+/**
+ *	Returns if the user is jumping.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid or has no m_bJumping property, this returns false.
+ */
+stock bool IsClientJumping(any client)	{
+	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_bJumping"):false;
+}
+
+/**
+ *	Returns if the user is mid-air.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool IsClientMidAir(any client)	{
+	return	Tklib_IsValidClient(client, _, true) ? 
+	(GetClientFlags(client) == 256
+	|| GetClientFlags(client) == 258
+	|| IsClientJumping(client)):false;
+}
+
+/**
  *	Returns true or false depending if the user is valid.
  *
  *	@param	client				The users index.

@@ -218,8 +218,8 @@ stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool db
 	Database database = SQL_Connect(confname, persistent, error, sizeof(error));
 	if(dbg)	{
 		switch(database == null)	{
-			case	true:	PrintToServer("[Tklib: Additional] SQL_Connect2: Connection to database \"%s\" had an error (%s)", confname, error);
-			case	false:	PrintToServer("[Tklib: Additional] SQL_Connect2: Connection to database \"%s\" succeeded!", confname);
+			case	true:	PrintToServer("[SQL_Connect2] : Connection to database \"%s\" had an error (%s)", confname, error);
+			case	false:	PrintToServer("[SQL_Connect2] : Connection to database \"%s\" succeeded!", confname);
 		}
 	}
 	
@@ -324,7 +324,7 @@ stock bool AddFileToDownloadsTableEx(const char[] filename, any ...)	{
  *
  *	@param	path		The path directory.
  *	@param	precache	Should the files be precached?.
- *	@param	type		The type of file to precache. (materials, models, sound, etc.)
+ *	@param	type		The type of file to precache. (materials, models, decal, sound, etc.)
  *	@param	filter		If non-empty, this will filter to require the meeting to be added to the dl table.
  *	@param	dbg			If the path is valid, this is useful for debugging seeing what got added to the dl table.
  *
@@ -338,17 +338,23 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
 		case	false:	{
 			char FileDir[64], FileDL[256];
 			
-			while(ReadDirEntry(DLPath, FileDir, sizeof(FileDir)))	{
+			while(DLPath.GetNext(FileDir, sizeof(FileDir)))	{
 				if(!StrEqual(FileDir, ".") && !StrEqual(FileDir, ".."))	{
 					invalid_filter = (!StrEqual(filter, "") && !StrContainsEx(FileDir, filter));
 					
 					if(!invalid_filter)	{
 						AddFileToDownloadsTableEx(FileDL, "%s/%s", path, FileDir);
-						if(precache && !StrEqual(type, ""))
-							PrecacheModel(FileDL);
+						if(precache && IsValidString(type))	{
+							if(StrContains(type, "model", false) > 0)
+								PrecacheModel(FileDL, true);
+							if(StrContains(type, "decal", false) > 0)
+								PrecacheDecal(FileDL, true);
+							if(StrContains(type, "sound", false) > 0)
+								PrecacheSound(FileDL, true);
+						}
 						
 						if(dbg)
-							PrintToServer("[Tklib: Additional] AddFolderToDownloadsTable: %s/%s", path, FileDir);
+							PrintToServer("[AddFolderToDownloadsTable] : %s/%s", path, FileDir);
 					}
 				}
 			}
@@ -357,7 +363,7 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
 		}
 		case	true:	{
 			if(dbg)
-				PrintToServer("[Tklib: Additional] AddFolderToDownloadsTable failed due to invalid path (%s)", path);
+				PrintToServer("[AddFolderToDownloadsTable] : failed due to invalid path (%s)", path);
 		}
 	}
 	

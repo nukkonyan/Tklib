@@ -4,10 +4,16 @@
  * 		Made by Tk /id/Teamkiller324	 *
 \*****************************************/
 
+#if defined _smlib_included
+	#error SM Libraries may not be paired with Tk Libraries as they will clash on another
+#endif
+
 #if defined _tklib_included
+	#error Tk Libraries is already included
 	#endinput
 #endif
 
+#define _tklib_included
 
 #if defined _tklib_no_includes
 	#define _tklib_no_core_includes

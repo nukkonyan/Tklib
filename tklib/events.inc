@@ -208,6 +208,28 @@
 #define EVENT_PLAYER_PING_STOP "player_ping_stop"
 #define EVENT_GUARDIAN_WAVE_RESTART "guardian_wave_restart"
 
+
+//Team Fortress
+#define EVENT_TEAMPLAY_POINT_STARTCAPTURE "teamplay_point_startcapture"
+#define EVENT_TEAMPLAY_POINT_CAPTURED "teamplay_point_captured"
+#define EVENT_TEAMPLAY_POINT_LOCKED "teamplay_point_locked"
+#define EVENT_TEAMPLAY_POINT_UNLOCKED "teamplay_point_unlocked"
+#define EVENT_TEAMPLAY_CAPTURE_BROKEN "teamplay_capture_broken"
+#define EVENT_TEAMPLAY_CAPTURE_BLOCKED "teamplay_capture_blocked"
+#define EVENT_TEAMPLAY_FLAG_EVENT "teamplay_flag_event"
+#define EVENT_TEAMPLAY_WIN_PANEL "teamplay_win_panel"
+
+#define EVENT_PLAYER_BUILTOBJECT "player_builtobject"
+#define EVENT_PLAYER_UPGRADEDOBJECT "player_upgradedobject"
+#define EVENT_PLAYER_CARRYOBJECT "player_carryobject"
+#define EVENT_PLAYER_DROPOBJECT "player_dropobject"
+#define EVENT_OBJECT_REMOVED "object_removed"
+#define EVENT_OBJECT_DESTROYED "object_destroyed"
+#define EVENT_OBJECT_DETONATED "object_detonated"
+#define EVENT_PLAYER_TELEPORTED "player_teleported"
+#define EVENT_PLAYER_INVULNED "player_invulned"
+
+
 //Other Events
 #define EVENT_ANNOUNCE_PHASE_END "announce_phase_end"
 #define EVENT_ITEM_PICKUP "item_pickup"
@@ -400,3 +422,14 @@
 #define EVENT_STR_ROCKET_JUMP "rocket_jump"
 #define EVENT_STR_WEAPON_DEF_INDEX "weapon_def_index"
 #define EVENT_STR_CRIT_TYPE "crit_type"
+
+#define EVENT_STR_CP "cp"
+#define EVENT_STR_CPNAME "cpname"
+#define EVENT_STR_CAPTEAM "capteam"
+#define EVENT_STR_CAPPERS "cappers"
+#define EVENT_STR_CAPTIME "captime"
+#define EVENT_STR_TIME_REMAINING "time_remaining"
+#define EVENT_STR_BLOCKER "blocker"
+#define EVENT_STR_CARRIER "carrier"
+#define EVENT_STR_EVENTTYPE "eventtype"
+#define EVENT_STR_HOME "home"
