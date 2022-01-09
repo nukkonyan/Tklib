@@ -18,7 +18,6 @@
 #if defined _tklib_no_includes
 	#define _tklib_no_core_includes
 	#define _tklib_no_game_includes
-	#define _tklib_no_multicolors
 	#define _tklib_no_sdktools
 	#define _tklib_no_sdkhooks
 #endif
@@ -212,9 +211,4 @@ enum	boolean					{}
 
 #if !defined _tklib_disable_contagion
 	#include	<tklib/contagion>
-#endif
-
-
-#if !defined _tklib_no_multicolors
-	#include	<tklib/multicolors>
 #endif

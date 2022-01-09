@@ -9,8 +9,6 @@ This was renamed from Tk Include to Tk Libraries when 1.2.0 was released. Possib
 Pro tip: using `stock` makes only those that are being used out of the include to be compiled with and the rest will be ignored/not compiled.
 Using `public` will only make it be part of the compilation even if not used. (Compiler will see it as a forward if not used inside plugin).
 
-Multi-Colors will be separated from Tklib in the near future.
-
 
 # Available Pre-Include Definitions
 
@@ -51,5 +49,3 @@ Multi-Colors will be separated from Tklib in the near future.
 `_tklib_no_sdkhooks` Disable tklib loading sdkhooks Include.
 
 `_tklib_no_definitions` Disable integrated definitions such as int(value) which is simplified from view_as < int > (value).
-
-`_tklib_no_multicolors` Disable Multi-Colors Include (Will be separated out in the near future.)

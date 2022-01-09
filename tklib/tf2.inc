@@ -33,6 +33,10 @@ stock char TF2_GetTeamStringName[][] = {
 	"Unknown",
 	"Unknown",
 	"Passball"
+}, TF2_GetCritTypeName[][] = {
+	"None",
+	"Mini-Crit",
+	"Crit"
 };
 
 //TF2 Flag Event
@@ -326,7 +330,7 @@ stock bool TF2_SetClientDecapitations(int client, int value=10)	{
  *	@param	client		The users index.
  *	@param	slot		TFSlot slot.
  *
- *	@error	If the user is invalid, this returns -1.
+ *	@error	If the user or slot is invalid, this returns -1.
  */
 stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
 	return	Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, int(slot)):-1;
