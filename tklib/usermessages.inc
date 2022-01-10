@@ -19,7 +19,7 @@ stock bool HookUserMessageEx(UserMsg msg_id,
 							bool intercept=false,
 							MsgPostHook post=INVALID_FUNCTION)	{
 	char temp[8];
-	if(GetUserMessageName(msg_id, temp, sizeof(temp))	{
+	if(GetUserMessageName(msg_id, temp, sizeof(temp)))	{
 		HookUserMessage(msg_id, hook, intercept, post);
 		return	true;
 	}

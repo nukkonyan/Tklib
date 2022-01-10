@@ -77,7 +77,8 @@ enum	TFBuilding	{
 	TFBuilding_Dispenser			=	1,
 	TFBuilding_Teleporter_Entrance	=	2,
 	TFBuilding_Teleporter_Exit		=	3,
-	TFBuilding_MiniSentry			=	4
+	TFBuilding_MiniSentry			=	4,
+	TFBuilding_Sapper				=	5
 }
 
 enum	TFQuality	{
@@ -85,6 +86,7 @@ enum	TFQuality	{
 	TFQuality_Strange	=	11
 }
 
+/* Look up "item_found" event */
 enum	TFMethod	{
 	TFFound_Achieved	=	-1,
 	TFFound_Found		=	0,
@@ -351,6 +353,7 @@ stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int max
 		case	TFBuilding_Teleporter_Entrance:	strcopy(buildingname, maxlen, "Teleporter Entrance");
 		case	TFBuilding_Teleporter_Exit:		strcopy(buildingname, maxlen, "Teleporter Exit");
 		case	TFBuilding_MiniSentry:			strcopy(buildingname, maxlen, "Mini-Sentry");
+		case	TFBuilding_Sapper:				strcopy(buildingname, maxlen, "Sapper");
 	}
 }
 
@@ -362,23 +365,23 @@ stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int max
  *	@error	If the building is invalid, this returns TFBuilding_Invalid.
  */
 stock TFBuilding TF2_GetBuildingType(any entity)	{
-	if(HasEntPropEx(entity, Prop_Send, "m_hBuilder"))	{
-		char classname[64];
-		GetEntityClassname(entity, classname, sizeof(classname));
-		
-		if(StrEqual(classname, "obj_dispenser"))
-			return	TFBuilding_Dispenser;
-		if(StrEqual(classname, "obj_sentrygun"))
-			return	TFBuilding_Sentrygun;
-		if(StrEqual(classname, "obj_teleporter"))	{
-			switch(TF2_GetObjectMode(entity))	{
-				case	TFObjectMode_Entrance:	return TFBuilding_Teleporter_Entrance;
-				case	TFObjectMode_Exit:		return TFBuilding_Teleporter_Exit;
-			}
+	char classname[64];
+	GetEntityClassname(entity, classname, sizeof(classname));
+	
+	if(StrEqual(classname, "obj_dispenser"))
+		return	TFBuilding_Dispenser;
+	if(StrEqual(classname, "obj_sentrygun"))
+		return	TFBuilding_Sentrygun;
+	if(StrEqual(classname, "obj_teleporter"))	{
+		switch(TF2_GetObjectMode(entity))	{
+			case	TFObjectMode_Entrance:	return TFBuilding_Teleporter_Entrance;
+			case	TFObjectMode_Exit:		return TFBuilding_Teleporter_Exit;
 		}
-		if(StrEqual(classname, "obj_minisentry"))
-			return	TFBuilding_MiniSentry;
 	}
+	if(StrEqual(classname, "obj_minisentry"))
+		return	TFBuilding_MiniSentry;
+	if(StrEqual(classname, "obj_sapper"))
+		return	TFBuilding_Sapper;
 	
 	return	TFBuilding_Invalid;
 }

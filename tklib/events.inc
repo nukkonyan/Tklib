@@ -210,6 +210,7 @@
 
 
 //Team Fortress
+#define EVENT_ARENA_ROUND_START "arena_round_start"
 #define EVENT_TEAMPLAY_ROUND_ACTIVE "teamplay_round_active"
 #define EVENT_TEAMPLAY_ROUND_WIN "teamplay_round_win"
 #define EVENT_TEAMPLAY_POINT_STARTCAPTURE "teamplay_point_startcapture"
@@ -230,6 +231,8 @@
 #define EVENT_OBJECT_DETONATED "object_detonated"
 #define EVENT_PLAYER_TELEPORTED "player_teleported"
 #define EVENT_PLAYER_INVULNED "player_invulned"
+#define EVENT_PLAYER_STEALSANDVICH "player_stealsandvich"
+#define EVENT_PLAYER_STUNNED "player_stunned"
 
 #define EVENT_PUMPKIN_LORD_SUMMONED "pumpkin_lord_summoned"
 #define EVENT_PUMPKIN_LORD_KILLED "pumpkin_lord_killed"
@@ -458,3 +461,9 @@
 #define EVENT_STR_BUILDERID "builderid"
 #define EVENT_STR_DIST "dist"
 #define EVENT_STR_MEDIC_USERID "medic_userid"
+
+#define EVENT_STR_TARGET "target"
+#define EVENT_STR_OWNER "owner"
+
+#define EVENT_STR_STUNNER "stunner"
+#define EVENT_STR_BIG_STUN "big_stun"

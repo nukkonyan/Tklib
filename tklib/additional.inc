@@ -6,24 +6,24 @@
 stock char Bool[][] = {
 	"False",
 	"True"
-};
+},
 //Coloured
-stock char BoolEx[][] = {
+BoolEx[][] = {
 	"{red}False{default}",
 	"{green}True{default}"
-};
+},
 //Useful for simple open/closing door entites. Value 0 = Close, 1 = Open.
-stock char DoorSwitch[][] = {
+DoorSwitch[][] = {
 	"close",
 	"open"
-};
+},
 //On - Off switch.
-stock char OnOff[][] = {
+OnOff[][] = {
 	"Off",
 	"On"
-};
+},
 //On - Off switch coloured.
-stock char OnOffEx[][] = {
+OnOffEx[][] = {
 	"{red}Off{default}",
 	"{green}On{default}"
 };
@@ -166,9 +166,10 @@ stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensiti
  *	@param		client		The client index.
  *	@param		buffer		Buffer storage to store the name.
  *	@param		maxlen		Maximum length of the buffer storage.
- *	@return		Returns true if succeeded, else false.
+ *
+ *	@noreturn
  */
-stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
+stock void GetClientTeamString(int client, char[] buffer, int maxlen)	{
 	int team = Tklib_IsValidClient(client) ? GetClientTeam(client):0;
 		
 	char TeamColour_Default[][] = {
@@ -202,8 +203,6 @@ stock bool GetClientTeamString(int client, char[] buffer, int maxlen)	{
 		case	Game_L4D2:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
 		default:			Format(buffer, maxlen, "%s%N{default}", TeamColour_Default[team],	client);
 	}
-	
-	return	true;
 }
 
 /**
