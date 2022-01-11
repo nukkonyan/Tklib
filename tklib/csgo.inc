@@ -57,6 +57,7 @@ enum	CSGORank	{
 
 enum	{
 	CSGO_Weapon_Deagle	=	1,
+	CSGO_Weapon_FiveSeven = 3,
 	CSGO_Weapon_Glock	=	4,
 	CSGO_Weapon_Ak47	=	7,
 	CSGO_Weapon_Aug		=	8,
@@ -456,6 +457,9 @@ stock int CSGO_GetWeaponDefindex(const char[] weapon)
 	if(StrEqual(weapon, "weapon_deagle", false))
 		return	CSGO_Weapon_Deagle;
 	
+	if(StrEqual(weapon, "weapon_fiveseven", false))
+		return	CSGO_Weapon_FiveSeven;
+	
 	if(StrEqual(weapon, "weapon_tec9", false))
 		return	CSGO_Weapon_Tec9;
 	
@@ -476,6 +480,9 @@ stock int CSGO_GetWeaponDefindex(const char[] weapon)
 	
 	if(StrEqual(weapon, "weapon_mp5sd", false))
 		return	CSGO_Weapon_MP5SD;
+	
+	if(StrEqual(weapon, "weapon_bizon", false))
+		return CSGO_Weapon_Bizon;
 	
 	if(StrEqual(weapon, "weapon_knife_t", false))
 		return	CSGO_Knife_T;

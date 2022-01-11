@@ -25,29 +25,6 @@ stock bool RemoveAllWeapons(int client)	{
 }
 
 /**
- *	Returns the weapon definition index value
- *
- *	@param	weapon		Weapon entity.
- *
- *	@error	If the weapon entity is invalid, this returns -1.
- */
-stock int GetWeaponDefinitionIndex(any weapon)	{
-	return	GetEntPropEx(weapon, Prop_Send, "m_iItemDefinitionIndex");
-}
-
-/**
- *	Set the weapon definition index value
- *
- *	@param	weapon		Weapon entity.
- *	@param	value		Definition index value.
- *
- *	@error	If the weapon entity is invalid, this returns false.
- */
-stock bool SetWeaponDefinitionIndex(any weapon, int value)	{
-	return	SetEntPropEx(weapon, Prop_Send, "m_iItemDefinitionIndex", value);
-}
-
-/**
  *	Returns the users current active weapon.
  *
  *	@param	client		The users index.

@@ -108,6 +108,13 @@ enum	TFGameType	{
 	TFGameType_PassBall	=	7
 }
 
+/* See event "halloween_boss_killed" for more info */
+enum	{
+	TFBoss_Killed_HHH = 1,
+	TFBoss_Killed_Monoculus = 2,
+	TFBoss_Killed_Merasmus = 3
+}
+
 #define	TFTeam(%1)		view_as<TFTeam>(%1)
 #define	TFFlag(%1)		view_as<TFFlag>(%1)
 #define	TFSlot(%1)		view_as<TFSlot>(%1)

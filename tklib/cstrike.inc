@@ -734,12 +734,7 @@ stock CSTeam CS_GetRandomTeam()	{
  *	@param	weapon	The weapon entity.
  */
 stock bool CS_IsWeaponZoomedIn(any weapon)	{
-	switch(IdentifyGame())	{
-		case	Game_CSS, Game_CSPromod, Game_CSGO, Game_CSCO:
-			return GetEntPropBool(weapon, Prop_Send, "m_weaponMode");
-	}
-	
-	return false;
+	return	GetEntPropBool(weapon, Prop_Send, "m_weaponMode");
 }
 
 /**
@@ -827,4 +822,164 @@ stock int CSS_GetWeaponDefindex(const char[] weapon)
 		return	CSS_Weapon_Knife;
 	
 	return 0;
+}
+
+/**
+ *	Returns the price of the weapon entity name.
+ *	Price varies from different CS Versions.
+ *	Useful when using CS_OnBuyCommand.
+ *
+ *	@param	weapon	The weapon entity name to read.
+ *
+ *	@return	Returns the price of the specified weapon ("weapon_"-type). 0 if not found.
+ */
+stock int CS_GetPriceFromWeapon(const char[] weapon)	{
+	int price = 0;
+	
+	/* Incase GameIdentifier wasn't included */
+	char folder[32];
+	GetGameFolderName(folder, sizeof(folder));
+	
+	switch(GetEngineVersion())	{
+		case	Engine_CSS:	{
+			/* To be added */
+		}
+		case	Engine_CSGO:	{
+			switch(StrEqual(folder, "csgo"))	{
+				/* CS:GO */
+				case	true:	{
+					if(StrEqual(weapon, "weapon_ak47", false))
+						price = 2700;
+					
+					if(StrEqual(weapon, "weapon_m4a1", false))
+						price = 3100;
+					
+					if(StrEqual(weapon, "weapon_m4a1_silencer", false))
+						price = 2900;
+					
+					if(StrEqual(weapon, "weapon_galilar", false))
+						price = 1800;
+					
+					if(StrEqual(weapon, "weapon_famas", false))
+						price = 2050;
+					
+					if(StrEqual(weapon, "weapon_sg556", false))
+						price = 3000;
+					
+					if(StrEqual(weapon, "weapon_aug", false))
+						price = 3300;
+					
+					if(StrEqual(weapon, "weapon_ssg08", false))
+						price = 1700;
+					
+					if(StrEqual(weapon, "weapon_awp", false))
+						price = 4750;
+					
+					if(StrEqual(weapon, "weapon_scar20", false))
+						price = 5000;
+					
+					if(StrEqual(weapon, "weapon_g3sg1", false))
+						price = 5000;
+					
+					if(StrEqual(weapon, "weapon_nova", false))
+						price = 1050;
+					
+					if(StrEqual(weapon, "weapon_sawedoff", false))
+						price = 1100;
+					
+					if(StrEqual(weapon, "weapon_mag7", false))
+						price = 1300;
+					
+					if(StrEqual(weapon, "weapon_xm1014", false))
+						price = 2000;
+					
+					if(StrEqual(weapon, "weapon_m249", false))
+						price = 5200;
+					
+					if(StrEqual(weapon, "weapon_negev", false))
+						price = 1700;
+					
+					if(StrEqual(weapon, "weapon_taser", false))
+						price = 200;
+					
+					if(StrEqual(weapon, "weapon_hegrenade", false))
+						price = 300;
+					
+					if(StrEqual(weapon, "weapon_flashbang", false))
+						price = 200;
+					
+					if(StrEqual(weapon, "weapon_decoy", false))
+						price = 50;
+					
+					if(StrEqual(weapon, "weapon_smokegrenade", false))
+						price = 300;
+					
+					if(StrEqual(weapon, "weapon_incgrenade", false))
+						price = 600;
+					
+					if(StrEqual(weapon, "weapon_molotov", false))
+						price = 600;
+					
+					if(StrEqual(weapon, "weapon_glock", false))
+						price = 200;
+					
+					if(StrEqual(weapon, "weapon_usp_silencer", false))
+						price = 200;
+					
+					if(StrEqual(weapon, "weapon_hkp2000", false))
+						price = 200;
+					
+					if(StrEqual(weapon, "weapon_p250", false))
+						price = 300;
+					
+					if(StrEqual(weapon, "weapon_deagle", false))
+						price = 700;
+					
+					if(StrEqual(weapon, "weapon_tec9", false))
+						price = 500;
+					
+					if(StrEqual(weapon, "weapon_revolver", false))
+						price = 700;
+					
+					if(StrEqual(weapon, "weapon_fiveseven", false))
+						price = 500;
+					
+					if(StrEqual(weapon, "weapon_elites", false))
+						price = 300;
+					
+					if(StrEqual(weapon, "weapon_p90", false))
+						price = 2350;
+					
+					if(StrEqual(weapon, "weapon_ump45", false))
+						price = 1200;
+					
+					if(StrEqual(weapon, "weapon_mp7", false))
+						price = 1500;
+					
+					if(StrEqual(weapon, "weapon_mp9", false))
+						price = 1250;
+					
+					if(StrEqual(weapon, "weapon_mp5sd", false))
+						price = 2700;
+					
+					if(StrEqual(weapon, "weapon_bison", false))
+						price = 1400;
+					
+					if(StrEqual(weapon, "weapon_shield", false))
+						price = 1100;
+				}
+				/* CS:CO */
+				case	false:	{
+					/* To be added */
+				}
+			}
+		}
+		case	Engine_SourceSDK2007:	{
+			if(StrEqual(folder, "cspromod"))	{
+				
+			}
+		}
+	}
+	
+	return price;
 }
