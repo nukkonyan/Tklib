@@ -466,8 +466,8 @@
 #define EVENT_PASS_SCORE "pass_score"
 #define EVENT_PASS_FREE "pass_free"
 #define EVENT_PASS_PASS_CAUGHT "pass_pass_caught"
-#define EVENT_PASS_PASS_STOLEN "pass_pass_stolen"
-#define EVENT_PASS_PASS_BLOCKED "pass_pass_blocked"
+#define EVENT_PASS_BALL_STOLEN "pass_ball_stolen"
+#define EVENT_PASS_BALL_BLOCKED "pass_ball_blocked"
 #define EVENT_DAMAGE_PREVENTED "damage_prevented"
 #define EVENT_HALLOWEEN_BOSS_KILLED "halloween_boss_killed"
 #define EVENT_ESCAPED_LOOT_ISLAND "escaped_loot_island"
@@ -745,3 +745,14 @@
 
 #define EVENT_STR_STUNNER "stunner"
 #define EVENT_STR_BIG_STUN "big_stun"
+
+#define EVENT_STR_SCORER "scorer"
+#define EVENT_STR_POINTS "points"
+#define EVENT_STR_PASSER "passer"
+#define EVENT_STR_CATCHER "catcher"
+#define EVENT_STR_DIST "dist"
+#define EVENT_STR_DURATION "duration"
+#define EVENT_STR_BLOCKER "blocker"
+
+#define EVENT_STR_BOSS "boss"
+#define EVENT_STR_KILLEr "killer"
