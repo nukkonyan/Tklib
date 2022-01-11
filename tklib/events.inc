@@ -369,6 +369,7 @@
 #define EVENT_PUMPKIN_LORD_SUMMONED "pumpkin_lord_summoned"
 #define EVENT_PUMPKIN_LORD_KILLED "pumpkin_lord_killed"
 #define EVENT_MERASMUS_SUMMONED "merasmus_summoned"
+#define EVENT_MERASMUS_STUNNED "merasmus_stunned"
 #define EVENT_MERASMUS_KILLED "merasmus_killed"
 #define EVENT_MERASMUS_ESCAPE_WARNING "merasmus_escape_warning"
 #define EVENT_MERASMUS_ESCAPED "merasmus_escaped"
@@ -755,4 +756,7 @@
 #define EVENT_STR_BLOCKER "blocker"
 
 #define EVENT_STR_BOSS "boss"
-#define EVENT_STR_KILLEr "killer"
+#define EVENT_STR_KILLER "killer"
+
+#define EVENT_STR_LEVEL "level"
+#define EVENT_STR_PLAYER_ENTINDEX "player_entindex"
