@@ -582,7 +582,7 @@ stock bool TF2_DestroyBuilding(any entity)	{
  *	Returns if MvM (Mann-Vs-Machine) mode is active.
  */
 stock bool TF2_IsMvMGameMode()	{
-	return	bool(GameRules_GetProp("m_bPlayingMannVsMachine"));
+	return	IsCurrentGame(Game_TF2) ? bool(GameRules_GetProp("m_bPlayingMannVsMachine")) : false;
 }
 
 /**
@@ -601,7 +601,7 @@ stock TFGameType TF2_GetGameType()	{
 	return	TFGameType(GameRules_GetProp("m_nGameType"));
 }
 
-/*
+/**
  *	Set the gametype of the server.
  *
  *	@param	gametype	TFGameType gametype to set.

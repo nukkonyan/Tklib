@@ -9,36 +9,37 @@ enum	GameIdentifier	{
 	Game_SDK2013		= 2,
 	Game_AlienSwarm		= 3,
 	Game_BGT			= 4,
-	Game_BloodyGoodTime	= 5,
-	Game_DarkMessiah	= 6,
-	Game_Eye			= 7,
-	Game_Dota			= 8,
-	Game_Blade			= 9,
-	Game_Insurgency		= 10,
-	Game_Contagion		= 11,
-	Game_BlackMesa		= 12,
-	Game_DOI			= 13,
-	Game_HL2DM			= 14,
-	Game_DODS			= 15,
-	Game_Portal1		= 16,
-	Game_Portal2		= 17,
-	Game_L4D1			= 18,
-	Game_L4D2			= 19,
-	Game_CSGO			= 20,
-	Game_CSCO			= 21,
-	Game_CSS			= 22,
-	Game_TF2			= 23,
-	Game_TF2B			= 24,
-	Game_TF2Beta		= 24,
-	Game_TF2C			= 25,
-	Game_TF2Classic		= 25,
-	Game_TF2V			= 26,
-	Game_TF2Vintage		= 26,
-	Game_TF2OP			= 27,
-	Game_TF2OpenFortress= 27,
-	Game_OpenFortress	= 27,
-	Game_CSPro			= 28,
-	Game_CSPromod		= 28
+	Game_BloodyGoodTime	= 4,
+	Game_DarkMessiah	= 5,
+	Game_Eye			= 6,
+	Game_Dota			= 7,
+	Game_Dota2			= 7,
+	Game_Blade			= 8,
+	Game_Insurgency		= 9,
+	Game_Contagion		= 10,
+	Game_BlackMesa		= 11,
+	Game_DOI			= 12,
+	Game_HL2DM			= 13,
+	Game_DODS			= 14,
+	Game_Portal1		= 15,
+	Game_Portal2		= 16,
+	Game_L4D1			= 17,
+	Game_L4D2			= 18,
+	Game_CSGO			= 19,
+	Game_CSCO			= 20,
+	Game_CSS			= 21,
+	Game_TF2			= 22,
+	Game_TF2B			= 23,
+	Game_TF2Beta		= 23,
+	Game_TF2C			= 24,
+	Game_TF2Classic		= 24,
+	Game_TF2V			= 25,
+	Game_TF2Vintage		= 25,
+	Game_TF2OP			= 26,
+	Game_TF2OpenFortress= 26,
+	Game_OpenFortress	= 26,
+	Game_CSPro			= 27,
+	Game_CSPromod		= 27
 }
 
 /**
@@ -55,7 +56,7 @@ stock GameIdentifier IdentifyGame()	{
 		case	Engine_BloodyGoodTime:	return	Game_BloodyGoodTime;
 		case	Engine_DarkMessiah:		return	Game_DarkMessiah;
 		case	Engine_EYE:				return	Game_Eye;
-		case	Engine_DOTA:			return	Game_Dota;
+		case	Engine_DOTA:			return	Game_Dota2;
 		case	Engine_Blade:			return	Game_Blade;
 		case	Engine_Insurgency:		return	Game_Insurgency;
 		case	Engine_Contagion:		return	Game_Contagion;
@@ -96,4 +97,44 @@ stock GameIdentifier IdentifyGame()	{
 		case	Engine_SDK2013:			return	Game_SDK2013;
 	}
 	return	Game_Unknown;
+}
+
+/**
+ *	Returns the title/game name.
+ *
+ *	@param	game_name	String buffer to store.
+ *	@param	maxlen		The maximum length of the buffer.
+ */
+stock void GetGameName(char[] game_name, int maxlen)	{
+	switch(IdentifyGame())	{
+		case	Game_Unknown:		strcopy(game_name, maxlen, "Unknown Game");
+		case	Game_SDK2006:		strcopy(game_name, maxlen, "Source SDK Base 2006");
+		case	Game_SDK2007:		strcopy(game_name, maxlen, "Source SDK Base 2007");
+		case	Game_SDK2013:		strcopy(game_name, maxlen, "Source SDK Base 2013");
+		case	Game_AlienSwarm:	strcopy(game_name, maxlen, "Alien Swarm");
+		case	Game_BGT:			strcopy(game_name, maxlen, "Bloody Good Time");
+		case	Game_DarkMessiah:	strcopy(game_name, maxlen, "Dark Messiah");
+		case	Game_Eye:			strcopy(game_name, maxlen, "E.Y.E. Divine Cybermancy");
+		case	Game_Dota2:			strcopy(game_name, maxlen, "Dota 2");
+		case	Game_Blade:			strcopy(game_name, maxlen, "Blade Symphony");
+		case	Game_Insurgency:	strcopy(game_name, maxlen, "Insurgency");
+		case	Game_Contagion:		strcopy(game_name, maxlen, "Contagion");
+		case	Game_BlackMesa:		strcopy(game_name, maxlen, "Black Mesa");
+		case	Game_DOI:			strcopy(game_name, maxlen, "Day Of Infamy");
+		case	Game_HL2DM:			strcopy(game_name, maxlen, "Half-Life 2: Deathmatch");
+		case	Game_DODS:			strcopy(game_name, maxlen, "Day Of Defeat: Source");
+		case	Game_Portal1:		strcopy(game_name, maxlen, "Portal 1");
+		case	Game_Portal2:		strcopy(game_name, maxlen, "Portal 2");
+		case	Game_L4D1:			strcopy(game_name, maxlen, "Left 4 Dead 1");
+		case	Game_L4D2:			strcopy(game_name, maxlen, "Left 4 Dead 2");
+		case	Game_CSGO:			strcopy(game_name, maxlen, "Counter-Strike: Global Offensive");
+		case	Game_CSCO:			strcopy(game_name, maxlen, "Counter-Strike: Classic Offensive");
+		case	Game_CSS:			strcopy(game_name, maxlen, "Counter-Strike: Source");
+		case	Game_TF2:			strcopy(game_name, maxlen, "Team Fortress 2");
+		case	Game_TF2B:			strcopy(game_name, maxlen, "Team Fortress 2: Beta");
+		case	Game_TF2C:			strcopy(game_name, maxlen, "Team Fortress 2: Classic");
+		case	Game_TF2V:			strcopy(game_name, maxlen, "Team Fortress 2: Vintage");
+		case	Game_TF2OP:			strcopy(game_name, maxlen, "Team Fortress 2: Open Fortress")
+		case	Game_CSPromod:		strcopy(game_name, maxlen, "Counter-Strike: Promod");
+	}
 }

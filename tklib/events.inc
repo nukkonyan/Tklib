@@ -760,3 +760,7 @@
 
 #define EVENT_STR_LEVEL "level"
 #define EVENT_STR_PLAYER_ENTINDEX "player_entindex"
+
+#define EVENT_STR_ISSTRANGE "isstrange"
+#define EVENT_STR_ISUNUSUAL "isunusual"
+#define EVENT_STR_WEAR "wear"
