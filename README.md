@@ -36,6 +36,8 @@ Using `public` will only make it be part of the compilation even if not used. (C
 
 `_tklib_only_cstrike` Only use Counter-Strike stock functions.
 
+`_tklib_only_csgo` Only use Counter-Strike: Global Offensive stock functions.
+
 `_tklib_only_l4d` Only use Left4Dead stock functions.
 
 `_tklib_only_dods` Only use Day of Defeat: Source stock functions.
