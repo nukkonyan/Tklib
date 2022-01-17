@@ -113,17 +113,6 @@
 	#define _tklib_disable_events
 #endif
 
-#if defined _tklib_only_sdk
-	#define _tklib_disable_gameidentifier
-	#define _tklib_disable_resize
-	#define _tklib_disable_weapons
-	#define _tklib_disable_clients
-	#define _tklib_disable_entities
-	#define _tklib_disable_additional
-	#define _tklib_disable_events
-	#define _tklib_disable_usermessages
-#endif
-
 #if defined _tklib_no_game_includes
 	#define _tklib_no_tf2
 	#define _tklib_no_cstrike
