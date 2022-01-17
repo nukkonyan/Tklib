@@ -44,10 +44,28 @@ Using `public` will only make it be part of the compilation even if not used. (C
 
 `_tklib_only_fortress_forever` Only use Fortress-Forever stock functions.
 
-`_tklib_only_contagion` Only use Contagion stock functions
+`_tklib_only_contagion` Only use Contagion stock functions.
 
-`_tklib_no_sdktools` Disable tklib loading sdktools Include.
+`_tklib_only_gameidentifier` Only use GameIdentifier stock functions.
 
-`_tklib_no_sdkhooks` Disable tklib loading sdkhooks Include.
+`_tklib_only_resize` Only use Resize stock functions.
+
+`_tklib_only_weapons` Only use Weapons stock functions.
+
+`_tklib_only_clients` Only use Clients stock functions.
+
+`_tklib_only_entities` Only use Entities stock functions.
+
+`_tklib_only_additional` Only use Additional stock functions.
+
+`_tklib_only_events` Only use Events stock functions.
+
+`_tklib_only_usermessages` Only use UserMessages stock functions.
+
+`_tklib_only_events` Only use Events stock functions.
+
+`_tklib_no_sdktools` Disable tklib loading SDKTools Include.
+
+`_tklib_no_sdkhooks` Disable tklib loading SDKHooks Include.
 
 `_tklib_no_definitions` Disable integrated definitions such as int(value) which is simplified from view_as < int > (value).
