@@ -64,8 +64,8 @@ Using `public` will only make it be part of the compilation even if not used. (C
 
 `_tklib_only_events` Only use Events stock functions.
 
-`_tklib_no_sdktools` Disable tklib loading SDKTools Include.
+`_tklib_no_sdktools` Disable loading SDKTools Include.
 
-`_tklib_no_sdkhooks` Disable tklib loading SDKHooks Include.
+`_tklib_no_sdkhooks` Disable loading SDKHooks Include.
 
 `_tklib_no_definitions` Disable integrated definitions such as int(value) which is simplified from view_as < int > (value).
