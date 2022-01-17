@@ -1109,8 +1109,10 @@ methodmap Player __nullable__	{
 stock bool Tklib_IsValidClient(any client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true, bool IgnoreInvalidTeam=false)	{
 	if(client < 1)
 		return false;
-	if(IsClientConnected(client) && IgnoreNonConnected)
-		return false;
+	if(IgnoreNonConnected)	{
+		if(!IsClientConnected(client))
+			return false;
+	}
 	if(IgnoreNonInGame)	{
 		if(!IsClientInGame(client))
 			return false;
