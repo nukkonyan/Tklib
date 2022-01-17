@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Additional.
 //==========================================//
+#if !defined _tklib_disable_additional
 
 //Get true of false message statements easier.
 stock char Bool[][] = {
@@ -122,7 +123,7 @@ stock int GetCmdInt(int argnum)	{
 stock bool GetCmdBool(int argnum)	{
 	char buffer[256];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
-	return	bool(StringToInt(buffer);
+	return view_as<bool>(StringToInt(buffer);
 }
 
 /**
@@ -134,18 +135,7 @@ stock bool GetCmdBool(int argnum)	{
 stock int FloatToInt(float value)	{
 	char buffer[96];
 	FloatToString(value, buffer, sizeof(buffer));
-	return	StringToInt(buffer);
-}
-
-/**
- *	Returns if the game is the game you you specified.
- *	This can be quite useful for checking things and not take too much space.
- *
- *	@param game			The EngineVersion game you specify.
- *	@return				If true, game you specified is active, else false.
- */
-stock bool IsCurrentGame(GameIdentifier gameversion)	{
-	return	bool(IdentifyGame() == gameversion);
+	return StringToInt(buffer);
 }
 
 /**
@@ -157,52 +147,7 @@ stock bool IsCurrentGame(GameIdentifier gameversion)	{
  *	@param	caseSensitive	if true (by default), search is case sensitive. If false, search is case insensitive.
  *	*/
 stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensitive=true)	{
-	return	bool(StrContains(str, substr, caseSensitive) != -1);
-}
-
-/**
- *	Returns the teamcoloured name of the client specified.
- *
- *	@param		client		The client index.
- *	@param		buffer		Buffer storage to store the name.
- *	@param		maxlen		Maximum length of the buffer storage.
- *
- *	@noreturn
- */
-stock void GetClientTeamString(int client, char[] buffer, int maxlen)	{
-	int team = Tklib_IsValidClient(client) ? GetClientTeam(client):0;
-		
-	char TeamColour_Default[][] = {
-		"{grey}",
-		"{grey}",
-		"{red}",
-		"{blue}"
-	}, TeamColour_TF2C[][] = {
-		"{grey}",
-		"{grey}",
-		"{red}",
-		"{blue}",
-		"{lightgreen}",
-		"{orange}"
-	}, TeamColour_CSGO[][] = {
-		"{grey}",
-		"{grey}",
-		"{orange}",
-		"{blue}"
-	}, TeamColour_L4D[][] = {
-		"{grey}",
-		"{grey}",
-		"{orange}",
-		"{lightred}"
-	};
-	
-	switch(IdentifyGame())	{
-		case	Game_TF2C:	Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2C[team],		client);
-		case	Game_CSGO:	Format(buffer, maxlen, "%s%N{default}", TeamColour_CSGO[team],		client);
-		case	Game_L4D1:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
-		case	Game_L4D2:	Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team],		client);
-		default:			Format(buffer, maxlen, "%s%N{default}", TeamColour_Default[team],	client);
-	}
+	return (StrContains(str, substr, caseSensitive) != -1);
 }
 
 /**
@@ -589,3 +534,5 @@ stock Address GetNativeAddress(int param)	{
 stock bool IsValidDatabase(Database database)	{
 	return	bool(database != null);
 }
+
+#endif

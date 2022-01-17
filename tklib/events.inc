@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Events.
 //==========================================//
+#if !defined _tklib_disable_events
 
 //Generic Events
 #define EVENT_SERVER_SPAWN "server_spawn"
@@ -764,3 +765,5 @@
 #define EVENT_STR_ISSTRANGE "isstrange"
 #define EVENT_STR_ISUNUSUAL "isunusual"
 #define EVENT_STR_WEAR "wear"
+
+#endif

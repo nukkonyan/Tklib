@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Fortress Forever.
 //==========================================//
+#if !defined _tklib_disable_fortress_forever
 
 enum	FFTeam	{
 	FFTeam_Invalid		=	-1,
@@ -57,3 +58,5 @@ stock bool FF_ChangeClientTeam(int client, FFTeam team)	{
 stock FFTeam FF_GetRandomTeam()	{
 	return	FFTeam(GetRandomInt(2, 3));
 }
+
+#endif

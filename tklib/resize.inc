@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Resize.
 //==========================================//
+#if !defined _tklib_disable_resize
 
 enum	TF2ResizeType	{
 	TF2ResizeType_Head = 0,
@@ -196,3 +197,5 @@ stock bool SetClientStepSize(int client, float scale)	{
 stock float GetClientStepSize(int client)	{
 	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flStepSize"):-1.0;
 }
+
+#endif

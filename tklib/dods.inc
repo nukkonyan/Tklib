@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Day of Defeat: Source.
 //==========================================//
+#if !defined _tklib_disable_dods
 
 stock char DOD_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
@@ -14,7 +15,7 @@ stock char DOD_GetTeamStringName[][] = {
 	"{blue}"
 };
 
-//Day of Defeat: Source enum
+//Day Of Defeat: Source enum
 enum	DODTeam	{
 	DODTeam_Invalid		=	-1,
 	DODTeam_Unassigned	=	0,
@@ -23,17 +24,17 @@ enum	DODTeam	{
 	DODTeam_Blue		=	3
 }
 
-#define	DODTeam(%1)		view_as<DODTeam>(%1)
+#define	DODTeam(%1) view_as<DODTeam>(%1)
 
 /**
  *	Returns the users current team.
  *
  *	@param	client		The users index.
  *
- *	@error	If the user is invalid, this returns DODTeam_Unassigned.
+ *	@error	If the user is not connected, this returns DODTeam_Unassigned.
  */
 stock DODTeam DOD_GetClientTeam(int client)	{
-	return Tklib_IsValidClient(client) ? DODTeam(GetClientTeam(client)):DODTeam_Unassigned;
+	return IsClientConnected(client) ? DODTeam(GetClientTeam(client)):DODTeam_Unassigned;
 }
 
 /**
@@ -46,10 +47,10 @@ stock DODTeam DOD_GetClientTeam(int client)	{
 stock bool DOD_ChangeClientTeam(int client, DODTeam team)	{
 	if(Tklib_IsValidClient(client))	{
 		ChangeClientTeam(client, int(team));
-		return	true;
+		return true;
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
@@ -58,5 +59,7 @@ stock bool DOD_ChangeClientTeam(int client, DODTeam team)	{
  *	@return	Returns a DODTeam team.
  */
 stock DODTeam DOD_GetRandomTeam()	{
-	return	DODTeam(GetRandomInt(2, 3));
+	return DODTeam(GetRandomInt(2, 3));
 }
+
+#endif

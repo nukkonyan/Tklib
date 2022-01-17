@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Contagion.
 //==========================================//
+#if !defined _tklib_disable_contagion
 
 //Include originally by JonnyBoy0719, updated by Tk /id/Teamkiller324
 
@@ -364,3 +365,5 @@ stock int CE_GetClientWeapon(int client, const char[] classname)	{
 stock CETeam CE_GetRandomTeam()	{
 	return	CETeam(GetRandomInt(2, 3));
 }
+
+#endif

@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Weapons.
 //==========================================//
+#if !defined _tklib_disable_weapons
 
 /**
  *	Removes all weapons from the user.
@@ -32,7 +33,7 @@ stock bool RemoveAllWeapons(int client)	{
  *	@error	If the user is invalid or has no active weapon, this returns -1.
  */
 stock int GetClientActiveWeapon(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon"):-1;
+	return	GetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon");
 }
 
 /**
@@ -44,7 +45,7 @@ stock int GetClientActiveWeapon(int client)	{
  *	@error	If the user is invalid or has no active weapon, this returns false.
  */
 stock bool SetClientActiveWeapon(int client, int slot)	{
-	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon", slot):false;
+	return	SetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon", slot);
 }
 
 /**
@@ -56,7 +57,7 @@ stock bool SetClientActiveWeapon(int client, int slot)	{
  *	@error	If the user is invalid, nothing will happen.
  */
 stock bool SetClientWeaponAmmo(int client, int ammo)	{
-	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(GetClientActiveWeapon(client), Prop_Send, "m_iClip1", ammo):false;
+	return	SetEntPropEx(GetClientActiveWeapon(client), Prop_Send, "m_iClip1", ammo);
 }
 
 /**
@@ -172,8 +173,8 @@ stock int GetWeaponReserveAmmo(any weapon)	{
  *	@param	client		The users index.
  *	@error	If the client is invalid, this returns -1.
  */
-stock int GetClientWeaponReserveAmmo(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetWeaponReserveAmmo(GetClientActiveWeapon(client)):-1;
+stock int GetClientActiveWeaponReserveAmmo(int client)	{
+	return	GetWeaponReserveAmmo(GetClientActiveWeapon(client));
 }
 
 /**
@@ -195,7 +196,7 @@ stock int GetWeaponAmmoType(any weapon)	{
  *	@error	If user is invalid, this returns -1.
  */
 stock int GetClientActiveWeaponsArraySize(int client)	{
-	return	bool(Tklib_IsValidClient(client, false, true) && HasEntProp(client, Prop_Send, "m_hMyWeapons")) ? GetEntPropArraySize(client, Prop_Send, "m_hMyWeapons"):-1;
+	return	(HasEntPropEx(client, Prop_Send, "m_hMyWeapons")) ? GetEntPropArraySize(client, Prop_Send, "m_hMyWeapons"):-1;
 }
 
 /**
@@ -229,7 +230,7 @@ stock int GetClientWeaponsOffset(int client)	{
  *	@error	If the weapon is invalid, this returns false.
  */
 stock bool IsValidWeapon(any weapon)	{
-	return	IsValidEntityEx(weapon) ? IsEntityClassnameMatching(weapon, "weapon_", true):false;
+	return	IsEntityClassnameMatching(weapon, "weapon_", true);
 }
 
 /**
@@ -243,7 +244,7 @@ stock bool IsValidWeapon(any weapon)	{
  *	@error	If the user is invalid or weapon is invalid, this returns false.
  */
 stock bool EquipPlayerWeaponEx(int client, any weapon)	{
-	if(Tklib_IsValidClient(client) && IsValidEntityEx(weapon))	{
+	if(IsClientInGame(client) && IsPlayerAlive(client) && IsValidEntityEx(weapon))	{
 		//Credits to Bacardi for part of the code.
 		
 		float origin[3];
@@ -259,11 +260,11 @@ stock bool EquipPlayerWeaponEx(int client, any weapon)	{
 		flags |= SF_NORESPAWN;
 		
 		SetEntProp(weapon, Prop_Data, "m_spawnflags", flags);
-		
 		DispatchSpawn(weapon);
-		
 		return	true;
 	}
 	
 	return	false;
 }
+
+#endif

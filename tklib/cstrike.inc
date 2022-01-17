@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / CStrike.
 //==========================================//
+#if !defined _tklib_no_cstrike
 
 stock char CSS_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
@@ -92,10 +93,10 @@ enum	Bombsite	{
 	Bombsite_C			=	3
 }
 
-#define	CSSlot(%1)			view_as<CSSlot>(%1)
-#define	CSWeaponType(%1)	view_as<CSWeaponType>(%1)
-#define	CSTeam(%1)			view_as<CSTeam>(%1)
-#define	Bombsite(%1)		view_as<Bombsite>(%1)
+#define	CSSlot(%1) view_as<CSSlot>(%1)
+#define	CSWeaponType(%1) view_as<CSWeaponType>(%1)
+#define	CSTeam(%1) view_as<CSTeam>(%1)
+#define	Bombsite(%1) view_as<Bombsite>(%1)
 
 /**
  *	Returns the users current team.
@@ -105,7 +106,7 @@ enum	Bombsite	{
  *	@error	If the client is invalid, this returns CSTeam_Unassigned.
  */
 stock CSTeam CS_GetClientTeam(int client)	{
-	return	Tklib_IsValidClient(client) ? CSTeam(GetClientTeam(client)):CSTeam_Unassigned;
+	return IsClientConnected(client) ? CSTeam(GetClientTeam(client)):CSTeam_Unassigned;
 }
 
 /**
@@ -114,24 +115,24 @@ stock CSTeam CS_GetClientTeam(int client)	{
  *	@param	client        The users The users index.
  *	@param	team          CSTeam team symbol.
  *
- *	@error	If the client is invalid, this returns false.
+ *	@error	If the client is not connected, this returns false.
  */
 stock bool CS_ChangeClientTeam(int client, CSTeam team)	{
-	if(Tklib_IsValidClient(client))	{
-		ChangeClientTeam(client, int(team));
-		return	true;
+	if(IsClientConnected(client))	{
+		ChangeClientTeam(client, view_as<int>(team));
+		return true;
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
  *	Returns the teams client count.
  *
- *	@param team			CSTeam team.
+ *	@param team		CSTeam team.
  */
 stock int CS_GetTeamClientCount(CSTeam team)	{
-	return	GetTeamClientCount(int(team));
+	return GetTeamClientCount(view_as<int>(team));
 }
 
 /**
@@ -143,7 +144,7 @@ stock int CS_GetTeamClientCount(CSTeam team)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool CS_SetClientPendingTeam(int client, CSTeam team)	{
-	return	SetClientPendingTeam(client, int(team));
+	return SetClientPendingTeam(client, view_as<int>(team));
 }
 
 /**
@@ -154,16 +155,21 @@ stock bool CS_SetClientPendingTeam(int client, CSTeam team)	{
  *	@error	If the user is invalid, this returns CSTeam_Unassigned.
  */
 stock CSTeam CS_GetClientPendingTeam(int client)	{
-	return	CSTeam(GetClientPendingTeam(client));
+	return view_as<CSTeam>(GetClientPendingTeam(client));
 }
 
+#if !defined _tklib_no_sdktools
 /**
  *	Returns if the warmup is currently ongoing
  */
 stock bool CS_IsWarmupRound()	{
-	return	bool(GameRules_GetProp("m_bWarmupPeriod"));
+	return (GameRules_GetProp("m_bWarmupPeriod") == 1);
 }
+#else
+#error CS_IsWarmupRound() requires SDKTools
+#endif
 
+#if !defined _tklib_no_sdktools
 /**
  *	If true, warmup will start, else will be ended. (CS:GO Only)
  *
@@ -172,14 +178,22 @@ stock bool CS_IsWarmupRound()	{
 stock void CS_SetWarmupRound(bool warmup)	{
 	GameRules_SetProp("m_bWarmupPeriod", warmup);
 }
+#else
+#error CS_IsWarmupRound() requires SDKTools
+#endif
 
+#if !defined _tklib_no_sdktools
 /**
  *	Returns if the match is currently paused/is in freezetime (CS:GO Only)
  */
 stock bool CS_IsMatchPaused()	{
-	return	bool(GameRules_GetProp("m_bMatchWaitingForResume"));
+	return (GameRules_GetProp("m_bMatchWaitingForResume"));
 }
+#else
+#error CS_IsWarmupRound() requires SDKTools
+#endif
 
+#if !defined _tklib_no_sdktools
 /**
  *	Set if the match should be paused. (CS:GO Only)
  *
@@ -188,14 +202,22 @@ stock bool CS_IsMatchPaused()	{
 stock void CS_SetMatchPaused(bool pause)	{
 	GameRules_SetProp("m_bMatchWaitingForResume", pause);
 }
+#else
+#error CS_IsWarmupRound() requires SDKTools
+#endif
 
+#if !defined _tklib_no_sdktools
 /**
  *	Returns if the bomb is planted. (CS:GO Only)
  */
 stock bool CS_IsBombPlanted()	{
-	return	bool(GameRules_GetProp("m_bBombPlanted"));
+	return (GameRules_GetProp("m_bBombPlanted"));
 }
+#else
+#error CS_IsWarmupRound() requires SDKTools
+#endif
 
+#if !defined _tklib_no_sdktools
 /**
  *	Set if the bomb should be planted. (CS:GO Only)
  *
@@ -204,6 +226,9 @@ stock bool CS_IsBombPlanted()	{
 stock void CS_SetBombPlanted(bool planted)	{
 	GameRules_SetProp("m_bBombPlanted", planted);
 }
+#else
+#error CS_IsWarmupRound() requires SDKTools
+#endif
 
 /**
  *	Sets the users current account/cash/money balance
@@ -214,7 +239,7 @@ stock void CS_SetBombPlanted(bool planted)	{
  *	@error	If the user is invalid, this will return false.
  */
 stock bool CS_SetClientMoney(int client, int value)	{
-	return Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_iAccount", value):false;
+	return SetEntPropEx(client, Prop_Send, "m_iAccount", value);
 }
 
 /**
@@ -225,7 +250,7 @@ stock bool CS_SetClientMoney(int client, int value)	{
  *	@error	If the user is invalid, this will return -1.
  */
 stock int CS_GetClientMoney(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_iAccount"):-1;
+	return GetEntPropEx(client, Prop_Send, "m_iAccount");
 }
 
 /**
@@ -237,7 +262,7 @@ stock int CS_GetClientMoney(int client)	{
  *	@error	If the user is invalid, nothing will happen.
  */
 stock bool CS_SetClientFlashDuration(int client, float value)	{
-	return	Tklib_IsValidClient(client) ? SetEntPropFloatEx(client, Prop_Send, "m_flFlashDuration", value):false;
+	return SetEntPropFloatEx(client, Prop_Send, "m_flFlashDuration", value);
 }
 
 /**
@@ -248,7 +273,7 @@ stock bool CS_SetClientFlashDuration(int client, float value)	{
  *	@error	If the user is invalid, this will return -1.0.
  */
 stock float CS_GetClientFlashDuration(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropFloatEx(client, Prop_Send, "m_flFlashDuration"):-1.0;
+	return GetEntPropFloatEx(client, Prop_Send, "m_flFlashDuration");
 }
 
 /**
@@ -257,22 +282,10 @@ stock float CS_GetClientFlashDuration(int client)	{
  *	@param	client	The users index.
  *	@param	value	The armor points.
  *
- *	@error	If the user is invalid, nothing will happen.
+ *	@error	If the user is invalid, returns false.
  */
-stock bool CS_SetClientArmor(int client, int value, bool helmet=false, bool heavyarmor=false)	{
-	if(Tklib_IsValidClient(client, _, true))	{
-		SetEntPropEx(client, Prop_Send, "m_ArmorValue", value);
-		
-		if(helmet)
-			SetEntPropEx(client, Prop_Send, "m_bHasHelmet", 1);
-			
-		if(heavyarmor)
-			SetEntPropEx(client, Prop_Send, "m_bHasHeavyArmor", 1);
-		
-		return	true;
-	}
-	
-	return	false
+stock bool CS_SetClientArmor(int client, int value)	{
+	return SetEntPropEx(client, Prop_Send, "m_ArmorValue", value);
 }
 
 /**
@@ -284,7 +297,19 @@ stock bool CS_SetClientArmor(int client, int value, bool helmet=false, bool heav
  *	@error			If the user is invalid, this will return -1.
  */
 stock int CS_GetClientArmor(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_ArmorValue"):-1;
+	return GetEntPropEx(client, Prop_Send, "m_ArmorValue");
+}
+
+/**
+ *	Set the users armor.
+ *
+ *	@param	client	The users index.
+ *	@param	value	If true, user will have a helmet.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool CS_SetClientHelmet(int client, int value)	{
+	return SetEntPropEx(client, Prop_Send, "m_bHasHelmet", value);
 }
 
 /**
@@ -295,7 +320,19 @@ stock int CS_GetClientArmor(int client)	{
  *	@error			If the user is invalid, this will return false.
  */
 stock bool CS_ClientHasHelmet(int client)	{
-	return Tklib_IsValidClient(client) ? GetEntPropBool(client, Prop_Send, "m_bHasHelmet"):false;
+	return GetEntPropBool(client, Prop_Send, "m_bHasHelmet");
+}
+
+/**
+ *	Set the users armor.
+ *
+ *	@param	client	The users index.
+ *	@param	value	The armor points.
+ *
+ *	@error	If the user is invalid, returns false.
+ */
+stock bool CS_SetClientHeavyArmor(int client, int value)	{
+	return SetEntPropEx(client, Prop_Send, "m_bHasHeavyArmor", value);
 }
 
 /**
@@ -306,7 +343,7 @@ stock bool CS_ClientHasHelmet(int client)	{
  *	@error			If client is invalid, it will return false.
  */
 stock bool CS_ClientHasHeavyArmor(int client)	{
-	return Tklib_IsValidClient(client) ? GetEntPropBool(client, Prop_Send, "m_bHasHeavyArmor"):false;
+	return GetEntPropBool(client, Prop_Send, "m_bHasHeavyArmor");
 }
 
 /**
@@ -318,7 +355,7 @@ stock bool CS_ClientHasHeavyArmor(int client)	{
  *	@param	If the user is invalid, this returns false.
  */
 stock bool CS_SetClientDefuserKit(int client, bool defusekit)	{
-	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_bHasDefuser", defusekit):false;
+	return SetEntPropEx(client, Prop_Send, "m_bHasDefuser", defusekit);
 }
 
 /**
@@ -329,7 +366,7 @@ stock bool CS_SetClientDefuserKit(int client, bool defusekit)	{
  *	@param	If the user is invalid, this returns false.
  */
 stock bool CS_ClientHasDefuserKit(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropBool(client, Prop_Send, "m_bHasDefuser"):false;
+	return GetEntPropBool(client, Prop_Send, "m_bHasDefuser");
 }
 
 /**
@@ -342,13 +379,11 @@ stock bool CS_ClientHasDefuserKit(int client)	{
  
  *	@error	If the user or users active weapon is invalid, this returns false.
  */
-stock bool CS_GetClientWeaponEx(int client, CSSlot slot, char[] output, int maxlen)	{
-	if(Tklib_IsValidClient(client, _, true) || (IsValidEntityEx(CS_GetPlayerWeaponSlot(client, slot))))	{
-		GetEdictClassname(CS_GetPlayerWeaponSlot(client, slot),	output,	sizeof(maxlen));
-		return	true;
-	}
+stock bool CS_GetPlayerWeaponSlotName(int client, CSSlot slot, char[] output, int maxlen)	{
+	if(!(Tklib_IsValidClient(client, false, true) && IsValidEntityEx(CS_GetPlayerWeaponSlot(client, slot))))
+		return false;
 	
-	return	false;
+	return GetEdictClassname(CS_GetPlayerWeaponSlot(client, slot), output, sizeof(maxlen));;
 }
 
 /**
@@ -363,18 +398,15 @@ stock bool CS_GetClientWeaponEx(int client, CSSlot slot, char[] output, int maxl
  *	@error	If the user is invalid, this returns false.
  */
 stock bool CS_GiveClientWeaponEx2(int client, const char[] weapon, CSSlot slot, int primary, int secondary)	{
-	if(Tklib_IsValidClient(client, _, true))	{
+	if(Tklib_IsValidClient(client, false, true))	{
 		CS_ClientRemoveWeaponSlot(client, slot);
 		GivePlayerItem(client, weapon);
-		if(primary > 0)
-			SetClientWeaponAmmo(client,	primary);
-		if(secondary > 0)
-			SetClientWeaponReserveAmmo(client,	secondary);
-		
-		return	true;
+		SetClientWeaponAmmo(client,	primary);
+		SetClientWeaponReserveAmmo(client,	secondary);
+		return true;
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
@@ -386,15 +418,15 @@ stock bool CS_GiveClientWeaponEx2(int client, const char[] weapon, CSSlot slot, 
  *	@error	If the user or weapon in the specified slot is invalid, this returns false.
  */
 stock bool CS_DropPlayerWeaponSlot(int client, CSSlot slot)	{
-	if(Tklib_IsValidClient(client, _, true))	{
+	if(Tklib_IsValidClient(client, false, true))	{
 		int weapon = -1;
-		if((weapon = CS_GetPlayerWeaponSlot(client,	slot)) != -1)
+		if(IsValidEntityEx((weapon = CS_GetPlayerWeaponSlot(client, slot))))
 			CS_DropWeapon(client, weapon, true, true);
 		
-		return	true;
+		return true;
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
@@ -406,17 +438,17 @@ stock bool CS_DropPlayerWeaponSlot(int client, CSSlot slot)	{
  *	@error	If the user or weapon in the specified slot is invalid, this returns false.
  */
 stock bool CS_RemovePlayerWeaponSlot(int client, CSSlot slot)	{
-	if(Tklib_IsValidClient(client, _, true))	{
+	if(IsClientInGame(client) && IsPlayerAlive(client))	{
 		int weapon = -1;
-		if((weapon = CS_GetPlayerWeaponSlot(client,	slot)) != -1)	{
+		if(IsValidEntityEx((weapon = CS_GetPlayerWeaponSlot(client,	slot))))	{
 			RemovePlayerItem(client, weapon);
-			RemoveEdict(weapon)
+			RemoveEdict(weapon);
 		}
 		
-		return	true;
+		return true;
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
@@ -429,13 +461,13 @@ stock bool CS_RemovePlayerWeaponSlot(int client, CSSlot slot)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool CS_GiveClientWeapon(int client, char[] weapon, CSSlot slot)	{
-	if(Tklib_IsValidClient(client), _, true)	{
+	if(IsClientInGame(client) && IsPlayerAlive(client))	{
 		CS_ClientRemoveWeaponSlot(client, slot);
 		GivePlayerItem(client, weapon);
-		return	true;
+		return true;
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
@@ -447,7 +479,7 @@ stock bool CS_GiveClientWeapon(int client, char[] weapon, CSSlot slot)	{
  *	@error	If the user is invalid, this returns -1.
  */
 stock int CS_GetPlayerWeaponSlot(int client, CSSlot slot)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, int(slot)):-1;
+	return Tklib_IsValidClient(client, false, true) ? GetPlayerWeaponSlot(client, int(slot)):-1;
 } 
 
 /**
@@ -457,8 +489,8 @@ stock int CS_GetPlayerWeaponSlot(int client, CSSlot slot)	{
  *
  *	@error	If the weapon is invalid, this returns false.
 */
-stock bool CS_IsWeaponSilenced(int weapon)	{
-	return	IsValidEntityEx(weapon) ? GetEntPropBool(weapon, Prop_Data, "m_bSilencerOn"):false;
+stock bool CS_IsWeaponSilenced(any weapon)	{
+	return GetEntPropBool(weapon, Prop_Data, "m_bSilencerOn");
 }
 
 /**
@@ -469,19 +501,42 @@ stock bool CS_IsWeaponSilenced(int weapon)	{
  *
  *	@error	If the weapon entity is invalid, nothing will happen.
  */
-stock bool CS_SetSniperZoomLevel(int weapon, int value)	{
-	return	IsValidEntityEx(weapon) ? SetEntPropEx(weapon, Prop_Send, "m_zoomLevel", value):false;
+stock bool CS_SetSniperZoomLevel(any weapon, int value)	{
+	return SetEntPropEx(weapon, Prop_Send, "m_zoomLevel", value);
 }
 
 /**
  *	Returns the sniper's scope level.
  *
- *	@param	weapon		Weapon entity.
+ *	@param	weapon	Weapon entity.
  *
- *	@error	If the weapon entity is invalid, it will return -1.
+ *	@error	If the weapon entity is invalid, this returns -1.
  */
-stock int CS_GetSniperZoomLevel(int weapon)	{
-	return	IsValidEntityEx(weapon) ? GetEntPropEx(weapon, Prop_Send, "m_zoomLevel"):-1;
+stock int CS_GetSniperZoomLevel(any weapon)	{
+	return GetEntPropEx(weapon, Prop_Send, "m_zoomLevel");
+}
+
+/**
+ *	Force the weapon to be in burst mode.
+ *
+ *	@param	weapon	Weapon entity.
+ *	@param	value	If true, this forces burst mode on.
+ *
+ *	@error	If the weapon entity is invalid, this returns false.
+ */
+stock bool CS_SetWeaponInBurstMode(any weapon, bool value)	{
+	return SetEntPropEx(weapon, Prop_Send, "m_bBurstMode", value);
+}
+
+/**
+ *	Returns if the weapon is in burst mode.
+ *
+ *	@param	weapon	Weapon entity.
+ *
+ *	@error	If the weapon entity is invalid, this returns false.
+ */
+stock bool CS_IsWeaponInBurstMode(any weapon)	{
+	return GetEntPropBool(weapon, Prop_Send, "m_bBurstMode");
 }
 
 /**
@@ -491,7 +546,7 @@ stock int CS_GetSniperZoomLevel(int weapon)	{
  *	@param name			Buffer to store in.
  *	@param maxlen		Maximum length of the buffer.
  */
-stock void CS_GetWeaponName(char[] weapon, char[] output, int maxlen)	{
+stock void CS_GetWeaponName(const char[] weapon, char[] output, int maxlen)	{
 	//Rifles
 	if(StrEqual(weapon,	"weapon_ak47"))	//They talk about my 1taps, aiming is so easy
 		strcopy(output, maxlen, "AK-47");
@@ -585,7 +640,7 @@ stock void CS_GetWeaponName(char[] weapon, char[] output, int maxlen)	{
 		strcopy(output, maxlen, "Zeus-X21");
 	
 	if(StrEqual(weapon,	"weapon_m4a1"))
-		strcopy(output, len, IdentifyGame() == Game_CSS|Game_CSPromod ? "M4A1":"M4A4");
+		strcopy(output, len, ((GetEngineVersion() == Engine_CSS) || GetEngineVersion() == Engine_SourceSDK2007) ? "M4A1":"M4A4");
 }
 
 /**
@@ -598,30 +653,30 @@ stock void CS_GetWeaponName(char[] weapon, char[] output, int maxlen)	{
  *	@error	If the procedure failed, this returns false.
  */
 stock bool CS_GetTeamName(CSTeam team, char[] buffer, int maxlen)	{
-	Entity index = Entity_Invalid;
-	while((index = Entity.FindByClassname(index, "cs_team_manager")) != Entity_Invalid)	{
-		if(CSTeam(index.GetPropEx(Prop_Send, "m_iTeamNum")) == team)	{
+	int index = -1;
+	while((index = FindEntityByClassname(index, "cs_team_manager")) != -1)	{
+		if(view_as<CSTeam>(GetEntPropEx(Prop_Send, "m_iTeamNum")) == team)	{
 			char checkname[96];
-			bool success = index.GetPropStringEx(Prop_Send, "m_szClanTeamname", buffer, maxlen);
+			bool success = GetEntPropStringEx(Prop_Send, "m_szClanTeamname", buffer, maxlen);
 			
 			if(StrEqual(checkname, ""))	{
 				switch(team)	{
 					case	CSTeam_T:	{
 						strcopy(buffer, maxlen, "Terrorists");
-						return	true;
+						success = true;
 					}
 					case	CSTeam_CT:	{
 						strcopy(buffer, maxlen, "Counter-Terrorists");
-						return	true;
+						success = true;
 					}
 				}
 			}
 			
-			return	success;
+			return success;
 		}
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
@@ -634,7 +689,7 @@ stock int CS_GetBombsiteCount()	{
 	while((site = FindEntityByClassname(site, "func_bomb_target")) != -1)
 		count++;
 	
-	return	count;
+	return count;
 }
 
 /**
@@ -648,29 +703,28 @@ stock Bombsite CS_GetBombsite(int entity)	{
 	if(!IsValidEntityEx(entity))
 		return	Bombsite_Invalid;
 	
-	Entity index = Ent(Entity.Find("cs_player_manager"));
-	if(index == Entity_Invalid)
-		return	Bombsite_Invalid;
+	int index = view_as<int>(FindEntity("cs_player_manager")));
+	if(!FindEntity("cs_player_manager"))
+		return Bombsite_Invalid;
 	
 	float Site_A[3], Site_B[3];
-	index.GetPropVector(Prop_Send, "m_bombsiteCenterA", Site_A);
-	index.GetPropVector(Prop_Send, "m_bombsiteCenterB", Site_B);
+	GetEntPropVector(index, Prop_Send, "m_bombsiteCenterA", Site_A);
+	GetEntPropVector(index, Prop_Send, "m_bombsiteCenterB", Site_B);
 	
-	Entity site = Entity_Invalid;
-	while((site = Entity.FindByClassname(site, "func_bomb_target")) != Entity_Invalid)	{
+	int site = -1;
+	while((site = FindEntityByClassname(site, "func_bomb_target")) != -1)	{
 		float VecMin[3], VecMax[3];
 		
-		site.GetPropVector(Prop_Send, "m_vecMins", VecMin);
-		site.GetPropVector(Prop_Send, "m_vecMax", VecMax);
+		GetEntPropVector(site, Prop_Send, "m_vecMins", VecMin);
+		GetEntPropVector(site, Prop_Send, "m_vecMax", VecMax);
 		
 		if(VecMin[0] <= Site_A[0] <= VecMax[0] && VecMin[1] <= Site_A[1] <= VecMax[1] && VecMin[2] <= Site_A[2] <= VecMax[2])
-			return	Bombsite_A;
+			return Bombsite_A;
 		else if(VecMin[0] <= Site_B[0] <= VecMax[0] && VecMin[1] <= Site_B[1] <= VecMax[1] && VecMin[2] <= Site_B[2] <= VecMax[2])
-			return	Bombsite_B;
+			return Bombsite_B;
 	}
 	
-	
-	return	Bombsite_C;
+	return Bombsite_C;
 }
 
 /**
@@ -681,7 +735,7 @@ stock Bombsite CS_GetBombsite(int entity)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool CS_IsClientInBuyZone(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_bInBuyZone"):false;
+	return GetEntPropBool(client, Prop_Send, "m_bInBuyZone");
 }
 
 /**
@@ -693,7 +747,7 @@ stock bool CS_IsClientInBuyZone(int client)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool CS_SetClientInBuyZone(int client, bool buyzone)	{
-	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bInBuyZone", buyzone):false;
+	return SetEntPropEx(client, Prop_Send, "m_bInBuyZone", buyzone);
 }
 
 /**
@@ -704,7 +758,7 @@ stock bool CS_SetClientInBuyZone(int client, bool buyzone)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool CS_IsClientDefusing(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_bIsDefusing"):false;
+	return GetEntPropBool(client, Prop_Send, "m_bIsDefusing");
 }
 
 /**
@@ -716,7 +770,7 @@ stock bool CS_IsClientDefusing(int client)	{
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
 stock bool CS_SetClientDefusing(int client, bool status)	{
-	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bDefusing", status):false;
+	return SetEntPropEx(client, Prop_Send, "m_bDefusing", status);
 }
 
 /**
@@ -725,7 +779,7 @@ stock bool CS_SetClientDefusing(int client, bool status)	{
  *	@return	Returns a CSTeam team.
  */
 stock CSTeam CS_GetRandomTeam()	{
-	return	CSTeam(GetRandomInt(2, 3));
+	return view_as<CSTeam>(GetRandomInt(2, 3));
 }
 
 /**
@@ -734,7 +788,7 @@ stock CSTeam CS_GetRandomTeam()	{
  *	@param	weapon	The weapon entity.
  */
 stock bool CS_IsWeaponZoomedIn(any weapon)	{
-	return	GetEntPropBool(weapon, Prop_Send, "m_weaponMode");
+	return GetEntPropBool(weapon, Prop_Send, "m_weaponMode");
 }
 
 /**
@@ -744,8 +798,7 @@ stock bool CS_IsWeaponZoomedIn(any weapon)	{
  *
  *	@returns	CSS_* enum (integer). 0 if invalid entity.
  */
-stock int CSS_GetWeaponDefindex(const char[] weapon)
-{
+stock int CSS_GetWeaponDefindex(const char[] weapon)	{
 	if(StrEqual(weapon, "weapon_ak47", false))
 		return	CSS_Weapon_Ak47;
 	
@@ -983,3 +1036,5 @@ stock int CS_GetPriceFromWeapon(const char[] weapon)	{
 	
 	return price;
 }
+
+#endif

@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Left 4 Dead.
 //==========================================//
+#if !defined _tklib_disable_l4d
 
 stock char L4D_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
@@ -60,3 +61,5 @@ stock bool L4D_ChangeClientTeam(int client, L4DTeam team)	{
 stock L4DTeam L4D_GetRandomTeam()	{
 	return	L4DTeam(GetRandomInt(2, 3));
 }
+
+#endif

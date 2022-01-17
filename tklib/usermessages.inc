@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / User Messages.
 //==========================================//
+#if !defined _tklib_disable_usermessages
 
 /**
  *	Hooks a user message.
@@ -26,3 +27,5 @@ stock bool HookUserMessageEx(UserMsg msg_id,
 	
 	return	false;
 }
+
+#endif

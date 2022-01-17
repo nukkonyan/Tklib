@@ -1,6 +1,7 @@
 //==========================================//
 // Tklib / Team Fortress 2.
 //==========================================//
+#if !defined _tklib_no_tf2
 
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringName[GetClientTeam(client)] will return the correct team name)
 stock char TF2_GetTeamStringName[][] = {
@@ -40,7 +41,7 @@ stock char TF2_GetTeamStringName[][] = {
 };
 
 //TF2 Flag Event
-enum	TFFlag	{
+enum TFFlag	{
 	TFFlag_None		=	0,
 	TFFlag_PickedUp	=	1,
 	TFFlag_Captured	=	2,
@@ -50,7 +51,7 @@ enum	TFFlag	{
 }
 
 //TF Slots
-enum	TFSlot	{
+enum TFSlot	{
 	TFSlot_Invalid	=	-1,
 	TFSlot_Primary	=	0,
 	TFSlot_Secondary=	1,
@@ -65,13 +66,13 @@ enum	TFSlot	{
 	TFSlot_Slot11	=	10
 }
 
-enum	TFCritType	{
+enum TFCritType	{
 	TFCritType_None		=	0,
 	TFCritType_Minicrit	=	1,
 	TFCritType_Crit		=	2
 }
 
-enum	TFBuilding	{
+enum TFBuilding	{
 	TFBuilding_Invalid				=	-1,
 	TFBuilding_Sentrygun			=	0,
 	TFBuilding_Dispenser			=	1,
@@ -81,13 +82,13 @@ enum	TFBuilding	{
 	TFBuilding_Sapper				=	5
 }
 
-enum	TFQuality	{
+enum TFQuality	{
 	TFQuality_SelfMade	=	9,
 	TFQuality_Strange	=	11
 }
 
 /* Look up "item_found" event */
-enum	TFMethod	{
+enum TFMethod	{
 	TFFound_Achieved	=	-1,
 	TFFound_Found		=	0,
 	TFFound_Crafted		=	1,
@@ -99,7 +100,7 @@ enum	TFMethod	{
 	TFFound_WrappedGift	=	10
 }
 
-enum	TFGameType	{
+enum TFGameType	{
 	TFGameType_Unknown	=	0,
 	TFGameType_CTF		=	1,
 	TFGameType_CP		=	2,
@@ -578,12 +579,16 @@ stock bool TF2_DestroyBuilding(any entity)	{
 	return	false;
 }
 
+#if !defined _tklib_no_sdktools
 /**
  *	Returns if MvM (Mann-Vs-Machine) mode is active.
  */
 stock bool TF2_IsMvMGameMode()	{
-	return	IsCurrentGame(Game_TF2) ? bool(GameRules_GetProp("m_bPlayingMannVsMachine")) : false;
+	return view_as<bool>(GameRules_GetProp("m_bPlayingMannVsMachine"));
 }
+#else
+#error TF2_IsMvMGameMode() requires SDKTools include
+#endif
 
 /**
  *	Returns a random TFTeam team (Red or Blue) (Including Green or Yellow if TF2 Classic)
@@ -609,3 +614,53 @@ stock TFGameType TF2_GetGameType()	{
 stock void TF2_SetGameType(TFGameType gametype)	{
 	GameRules_SetProp("m_nGameType", gametype);
 }
+
+/**
+ *	Returns if Waiting For Players phase is active.
+ */
+stock bool TF2_IsWaitingForPlayers()	{
+	return	bool(GameRules_GetProp("m_bInWaitingForPlayers"));
+}
+
+/**
+ *	Set the Waiting For Players phase.
+ *
+ *	@param	value	If true, this forces waiting for players phase to be active.
+ */
+stock void TF2_SetWarmupForPlayers(bool value)	{
+	GameRules_SetProp("m_bInWaitingForPlayers", value);
+}
+
+/**
+ *	Returns if Powerup Mode is active.
+ */
+stock bool TF2_IsPowerupMode()	{
+	return	bool(GameRules_GetProp("m_bPowerupMode"));
+}
+
+/**
+ *	Set the Powerup Mode.
+ *
+ *	@param	value	If true, this forces Powerup Mode to be active.
+ */
+stock void TF2_SetPowerupMode(bool value)	{
+	GameRules_SetProp("m_bPowerupMode", value);
+}
+
+/**
+ *	Returns if Truce is active.
+ */
+stock bool TF2_IsTruceActive()	{
+	return	bool(GameRules_GetProp("m_bTruceActive"));
+}
+
+/**
+ *	Set the Truce.
+ *
+ *	@param	value	If true, this forces Truce to be active.
+ */
+stock void TF2_SetTruce(bool value)	{
+	GameRules_SetProp("m_bTruceActive", value);
+}
+
+#endif

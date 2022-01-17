@@ -1,10 +1,15 @@
 //==========================================//
 // Tklib / Entities.
 //==========================================//
+#if !defined _tklib_disable_entities
 
-enum	Entity	{
-	Entity_Invalid = -1
+enum Entity	{
+	Entity_Unsupported = -2,
+	Entity_Invalid = -1,
+	Entity_Empty = 0
 }
+
+#define Ent(%1) view_as<Entity>(%1)
 
 /**
  *	Returns the absolute origin of an entity.
@@ -15,11 +20,7 @@ enum	Entity	{
  *	@error	If entity is invalid, this returns false.
  */
 stock bool GetEntityAbsOrigin(any entity, float vec[3])	{
-	if(!HasEntPropEx(entity, Prop_Send, "m_vecOrigin"))
-		return	false;
-	
-	GetEntPropVector(entity, Prop_Send, "m_vecOrigin", vec);
-	return	true;
+	return GetEntPropVectorEx(entity, Prop_Send, "m_vecOrigin", vec);
 }
 
 /**
@@ -31,11 +32,7 @@ stock bool GetEntityAbsOrigin(any entity, float vec[3])	{
  *	@error	If entity is invalid, this returns false.
  */
 stock bool SetEntityAbsOrigin(any entity, const float vec[3])	{
-	if(!HasEntPropEx(entity, Prop_Send, "m_vecOrigin"))
-		return	false;
-	
-	SetEntPropVector(entity, Prop_Send, "m_vecOrigin", vec);
-	return	true;
+	return SetEntPropVectorEx(entity, Prop_Send, "m_vecOrigin", vec);
 }
 
 /**
@@ -48,7 +45,7 @@ stock bool SetEntityAbsOrigin(any entity, const float vec[3])	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool GetEntityName(any entity, char[] buffer, int maxlen)	{
-	return	GetEntPropStringEx(entity, Prop_Data, "m_iName", buffer, maxlen);
+	return GetEntPropStringEx(entity, Prop_Data, "m_iName", buffer, maxlen);
 }
 
 /**
@@ -60,7 +57,7 @@ stock bool GetEntityName(any entity, char[] buffer, int maxlen)	{
  *	@error	If entity is invalid, it will returns false.
  */
 stock bool SetEntityName(any entity, const char[] name)	{
-	return	SetEntPropStringEx(entity, Prop_Data, "m_iName", name);
+	return SetEntPropStringEx(entity, Prop_Data, "m_iName", name);
 }
 
 /**
@@ -71,7 +68,7 @@ stock bool SetEntityName(any entity, const char[] name)	{
  *	@error	If the entity is invalid, this will return false.
  */
 stock bool FindEntity(const char[] classname)	{
-	return bool(FindEntityByClassname(-1, classname) != -1);
+	return FindEntityByClassname(-1, classname) != -1;
 }
 
 /**
@@ -89,7 +86,7 @@ stock bool FindEntity(const char[] classname)	{
 stock int CreateEntityByNameEx(const char[] classname, const char[] name="", int ForceEdictIndex=-1)	{
 	int entity = CreateEntityByName(classname, ForceEdictIndex);
 	
-	if(!StrEqual(name, ""))
+	if(!StrEqual(name, NULL_STRING))
 		SetEntityName(entity, name);
 	
 	return entity;
@@ -104,7 +101,7 @@ stock int CreateEntityByNameEx(const char[] classname, const char[] name="", int
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool SetEntityDisabled(any entity, bool disabled)	{
-	return	IsValidEntityEx(entity) ? DispatchKeyValue(entity, "StartDisabled", disabled ? "true":"false"):false;
+	return IsValidEntityEx(entity) ? DispatchKeyValue(entity, "StartDisabled", disabled ? "true":"false"):false;
 }
 
 /**
@@ -115,7 +112,7 @@ stock bool SetEntityDisabled(any entity, bool disabled)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool GetEntityDisabled(int entity)	{
-	return	GetEntPropBool(entity, Prop_Send, "m_bDisabled");
+	return GetEntPropBool(entity, Prop_Send, "m_bDisabled");
 }
 
 /**
@@ -127,7 +124,7 @@ stock bool GetEntityDisabled(int entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool SetEntityModelEx(int entity, const char[] model)	{
-	return	SetEntPropStringEx(entity, Prop_Data, "m_ModelName", model);
+	return SetEntPropStringEx(entity, Prop_Data, "m_ModelName", model);
 }
 
 /**
@@ -140,7 +137,7 @@ stock bool SetEntityModelEx(int entity, const char[] model)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool GetEntityModel(int entity, char[] buffer, int maxlen)	{
-	return	GetEntPropStringEx(entity, Prop_Data, "m_ModelName", buffer, maxlen);
+	return GetEntPropStringEx(entity, Prop_Data, "m_ModelName", buffer, maxlen);
 }
 
 /**
@@ -152,7 +149,7 @@ stock bool GetEntityModel(int entity, char[] buffer, int maxlen)	{
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
 stock bool SetEntityOwner(int entity, int client)	{
-	return	SetEntPropEntEx(entity, Prop_Data, "m_hOwnerEntity", client);
+	return SetEntPropEntEx(entity, Prop_Data, "m_hOwnerEntity", client);
 }
 
 /**
@@ -163,19 +160,7 @@ stock bool SetEntityOwner(int entity, int client)	{
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
 stock int GetEntityOwner(int entity)	{
-	return	GetEntPropEntEx(entity, Prop_Data, "m_hOwnerEntity");
-}
-
-/**
- *	Returns if the entity or edict is valid.
- *	Use this over IsValidEntity and IsValidEdict as this combines them.
- *
- *	@param	entity	Entity index.
- *
- *	@error	If the entity/edict is invalid, this returns false.
- */
-stock bool IsValidEntityEx(any entity)	{
-	return	bool(IsValidEdict(int(entity)) || IsValidEntity(int(entity)));
+	return GetEntPropEntEx(entity, Prop_Data, "m_hOwnerEntity");
 }
 
 /**
@@ -188,7 +173,7 @@ stock bool IsValidEntityEx(any entity)	{
  *	@error	If entity is invalid, this returns false.
  */
 stock bool KillEntity(any entity, const char[] input="", int activator=-1, int caller=-1, int outputid=0)	{
-	return	IsValidEntityEx(entity) ? AcceptEntityInput(entity, "Kill"):false;
+	return IsValidEntityEx(entity) ? AcceptEntityInput(entity, "Kill"):false;
 }
 
 /**
@@ -200,7 +185,7 @@ stock bool KillEntity(any entity, const char[] input="", int activator=-1, int c
  *	@error	If the entity is invalid, nothing will happen.
  */
 stock bool SetEntitySkin(any entity, int skin)	{
-	return	SetEntPropEx(entity, Prop_Send, "m_nSkin", skin);
+	return SetEntPropEx(entity, Prop_Send, "m_nSkin", skin);
 }
 
 /**
@@ -210,7 +195,7 @@ stock bool SetEntitySkin(any entity, int skin)	{
  *	@error	If entity is invalid, this will return -1.
 */
 stock int GetEntitySkin(any entity)	{
-	return	GetEntPropEx(entity, Prop_Send, "m_nSkin");
+	return GetEntPropEx(entity, Prop_Send, "m_nSkin");
 }
 
 /**
@@ -225,7 +210,7 @@ stock int GetEntitySkin(any entity)	{
  *	@error	If the entity has no valid classname, this returns false.
  */
 stock bool SetEntityClassname(any entity, const char[] clsname)	{
-	return	SetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname);
+	return SetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname);
 }
 
 /**
@@ -239,7 +224,7 @@ stock bool SetEntityClassname(any entity, const char[] clsname)	{
  *	@return				True on success, false if there is no classname set or has no valid classname/invalid entity.
  */
 stock bool GetEntityClassnameEx(any entity, char[] clsname, int maxlength)	{
-	return	GetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname, maxlength);
+	return GetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname, maxlength);
 }
 
 /**
@@ -251,7 +236,7 @@ stock bool GetEntityClassnameEx(any entity, char[] clsname, int maxlength)	{
  *	@error	If the entities is invalid, this returns false.
  */
 stock bool SetEntityParentEntity(any entity, any parent)	{
-	return	SetEntPropEx(entity, Prop_Send, "m_iParentAttachment", parent);
+	return SetEntPropEx(entity, Prop_Send, "m_iParentAttachment", parent);
 }
 
 /**
@@ -262,7 +247,7 @@ stock bool SetEntityParentEntity(any entity, any parent)	{
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int GetEntityParentEntity(any entity)	{
-	return	GetEntPropEx(entity, Prop_Send, "m_iParentAttachment");
+	return GetEntPropEx(entity, Prop_Send, "m_iParentAttachment");
 }
 
 /**
@@ -274,7 +259,7 @@ stock int GetEntityParentEntity(any entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool SetEntityMoveParent(any entity, any parent)	{
-	return	SetEntPropEntEx(entity, Prop_Data, "m_hMoveParent", parent);
+	return SetEntPropEntEx(entity, Prop_Data, "m_hMoveParent", parent);
 }
 
 /**
@@ -285,7 +270,7 @@ stock bool SetEntityMoveParent(any entity, any parent)	{
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int GetEntityMoveParent(any entity)	{
-	return	GetEntPropEntEx(entity, Prop_Data, "m_hMoveParent");
+	return GetEntPropEntEx(entity, Prop_Data, "m_hMoveParent");
 }
 
 /**
@@ -297,7 +282,7 @@ stock int GetEntityMoveParent(any entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool SetEntityInitialized(any entity, bool initialized)	 {
-	return	SetEntPropEx(entity, Prop_Send, "m_bInitialized", initialized);
+	return SetEntPropEx(entity, Prop_Send, "m_bInitialized", initialized);
 }
 
 /**
@@ -308,7 +293,7 @@ stock bool SetEntityInitialized(any entity, bool initialized)	 {
  *	@error	If the entity is invalid, this will return false.
  */
 stock bool IsEntityInitialized(any entity)	{
-	return	GetEntPropBool(entity, Prop_Send, "m_bInitialized");
+	return GetEntPropBool(entity, Prop_Send, "m_bInitialized");
 }
 
 /**
@@ -320,7 +305,7 @@ stock bool IsEntityInitialized(any entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool SetEntityDefinitionIndex(any entity, int value)	{
-	return	SetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex", value);
+	return SetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex", value);
 }
 
 /**
@@ -331,7 +316,7 @@ stock bool SetEntityDefinitionIndex(any entity, int value)	{
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int GetEntityDefinitionIndex(any entity)	{
-	return	GetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex");
+	return GetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex");
 }
 
 /**
@@ -354,9 +339,9 @@ stock bool IsEntityClassnameMatching(any entity, const char[] classname, bool pa
 	GetEntityClassname(entity, entity_classname, sizeof(entity_classname));
 
 	if(partialMatch)
-		return	(StrContainsEx(entity_classname, classname));
+		return (StrContains(entity_classname, classname) != -1);
 	
-	return	StrEqual(entity_classname, classname);
+	return StrEqual(entity_classname, classname);
 }
 
 /**
@@ -369,7 +354,7 @@ stock bool IsEntityClassnameMatching(any entity, const char[] classname, bool pa
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int GetEntityTeamNum(any entity)	{
-	return	GetEntPropEx(entity, Prop_Send, "m_iTeamNum");
+	return GetEntPropEx(entity, Prop_Send, "m_iTeamNum");
 }
 
 /**
@@ -382,7 +367,7 @@ stock int GetEntityTeamNum(any entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool SetEntityTeamNum(any entity, int team)	{
-	return	SetEntPropEx(entity, Prop_Send, "m_iTeamNum", team);
+	return SetEntPropEx(entity, Prop_Send, "m_iTeamNum", team);
 }
 
 /**
@@ -394,7 +379,7 @@ stock bool SetEntityTeamNum(any entity, int team)	{
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
 stock bool SetEntityEffect(int entity, int value)	{
-	return	SetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity", value);
+	return SetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity", value);
 }
 
 /**
@@ -405,217 +390,12 @@ stock bool SetEntityEffect(int entity, int value)	{
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
 stock int GetEntityEffect(int entity)	{
-	return	GetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity");
-}
-
-//Netprops
-
-/**
- *	Sets an integer value in an entity's property.
- *
- *	This function is considered safer and more robust over SetEntData,
- *	because it performs strict offset checking and typing rules.
- *
- *	@param	entity		Entity/edict index.
- *	@param	type		Property type.
- *	@param	prop		Property name.
- *	@param	value		Value to set.
- *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						This value is auto-detected, and the size parameter is
- *						only used as a fallback in case detection fails.
- *	@param	element		Element # (starting from 0) if property is an array.
- *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
- */
-stock bool SetEntPropEx(any entity, PropType type, const char[] prop, any value, int size=4, int element=0)	{
-	if(HasEntProp(entity, type, prop))	{
-		SetEntProp(entity, type, prop, value, size, element);
-		return	true;
-	}
-	
-	return	false;	
-}
-
-/**
- *	Sets an entity index in an entity's property.
- *
- *	This function is considered safer and more robust over SetEntDataEnt*,
- *	because it performs strict offset checking and typing rules.
- *
- *	@param	entity		Entity/edict index.
- *	@param	type		Property type.
- *	@param	prop		Property name.
- *	@param	other		Entity index to set, or -1 to unset.
- *	@param	element		Element # (starting from 0) if property is an array.
- *
- *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
- */
-stock bool SetEntPropEntEx(any entity, PropType type, const char[] prop, int other, int element=0)	{
-	if(HasEntProp(entity, type, prop))	{
-		SetEntPropEnt(entity, type, prop, other, element);
-		return	true;
-	}
-	
-	return	false;	
-}
-
-/**
- *	Retrieves an integer value from an entity's property.
- *	Considered safer over GetEntProp.
- *
- *	This function is considered safer and more robust over GetEntData,
- *	because it performs strict offset checking and typing rules.
- *
- *	@param	entity		Entity/edict index.
- *	@param	type		Property type.
- *	@param	prop		Property name.
- *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						This value is auto-detected, and the size parameter is
- *						only used as a fallback in case detection fails.
- *	@param	element		Element # (starting from 0) if property is an array.
- *
- *	@return				Bool value at the given property offset.
- *
- *	@error				If entity is invalid or property not found, this returns -1.
- */
-stock int GetEntPropEx(any entity, PropType type, const char[] prop, int size=4, int element=0)	{
-	return	HasEntPropEx(entity, type, prop) ? GetEntProp(entity, type, prop, size, element):-1;
-}
-
-/**
- *	Retrieves an integer value from an entity's property.
- *	Considered safer over GetEntProp.
- *
- *	This function is considered safer and more robust over GetEntDataEnt*,
- *	because it performs strict offset checking and typing rules.
- *
- *	@param	entity		Entity/edict index.
- *	@param	type		Property type.
- *	@param	prop		Property name.
- *	@param	element		Element # (starting from 0) if property is an array.
- *
- *	@return				Bool value at the given property offset.
- *
- *	@error				If entity is invalid or property not found, this returns -1.
- */
-stock int GetEntPropEntEx(any entity, PropType type, const char[] prop, int element=0)	{
-	return	HasEntPropEx(entity, type, prop) ? GetEntPropEnt(entity, type, prop, element):-1;
-}
-
-/**
- *	Retrieves a boolean value from an entity's property.
- *	Considered safer over GetEntProp.
- *
- *	This function is considered safer and more robust over GetEntData,
- *	because it performs strict offset checking and typing rules.
- *
- *	@param	entity		Entity/edict index.
- *	@param	type		Property type.
- *	@param	prop		Property name.
- *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						This value is auto-detected, and the size parameter is
- *						only used as a fallback in case detection fails.
- *	@param	element		Element # (starting from 0) if property is an array.
- *
- *	@return				Bool value at the given property offset.
- *
- * @error				If entity is invalid or property not found, this returns false.
- */
-stock bool GetEntPropBool(any entity, PropType type, const char[] prop, int size=4, int element=0)	{
-	return	HasEntPropEx(entity, type, prop) ? bool(GetEntProp(entity, type, prop, size, element)):false;
-}
-
-/**
- *	Gets a network property as a string.
- *
- *	@param	entity		Entity/Edict index.
- *	@param	type		Property type.
- *	@param	prop		Property to use.
- *	@param	buffer		Destination string buffer.
- *	@param	maxlen		Maximum length of output string buffer.
- *	@param	element		Element # (starting from 0) if property is an array.
- *
- *	@return				Returns true/false if the procedure was valid.
- *
- *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
- */
-stock bool GetEntPropStringEx(any entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)	{
-	return	HasEntPropEx(entity, type, prop) ? bool(GetEntPropString(entity, type, prop, buffer, maxlen, element) != -1):false;
-}
-
-/**
- *	Sets a network property as a string.
- *
- *	@param	entity		Entity/Edict index.
- *	@param	type		Property type.
- *	@param	prop		Property to use.
- *	@param	buffer		String to set.
- *	@param	element		Element # (starting from 0) if property is an array.
- *
- *	@return				Returns true/false if the procedure was valid.
- *
- *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
- */
-stock bool SetEntPropStringEx(any entity, PropType type, const char[] prop, const char[] buffer, int element=0)	{
-	return	HasEntPropEx(entity, type, prop) ? bool(SetEntPropString(entity, type, prop, buffer, element) != -1):false;
-}
-
-/**
- *	Returns if the entity is valid and has the network property.
- *
- *	@param	entity		Entity/Edict index.
- *	@param	type		Property type.
- *	@param	prop		Property to check.
- *
- *	@error	If entity or property is invalid/not found, this returns false.
- */
-stock bool HasEntPropEx(any entity, PropType type, const char[] prop)	{
-	return	bool(IsValidEntityEx(entity) && HasEntProp(entity, type, prop));
-}
-
-/**
- *	Sets a float value in an entity's property.
- *	This function is considered safer and more robust over SetEntDataFloat,
- *	because it performs strict offset checking and typing rules.
- *
- *	@param	entity		Entity/Edict index.
- *	@param	type		Property type.
- *	@param	prop		Property name.
- *	@param	value		Value to set.
- *	@param	element		Element # (starting from 0) if property is an array.
- *
- *	@error				If entity, offset or property is not valid, this returns false. (if out of bounds, this spits out an error).
- */
-stock bool SetEntPropFloatEx(any entity, PropType type, const char[] prop, float value, int element=0)	{
-	if(HasEntPropEx(entity, type, prop))	{
-		SetEntPropFloat(entity, type, prop, value, element);
-		return	true;
-	}
-	
-	return	false;
-}
-
-/**
- *	Retrieves a float value from an entity's property.
- *
- *	This function is considered safer and more robust over GetEntDataFloat,
- *	because it performs strict offset checking and typing rules.
- *
- *	@param	entity		Entity/edict index.
- *	@param	type		Property type.
- *	@param	prop		Property name.
- *	@param	element		Element # (starting from 0) if property is an array.
- *
- *	@return				Value at the given property offset.
- *
- *	@error				If entity is invalid, offset out of reasonable bounds or invalid property, this returns -1.0.
- */
-stock float GetEntPropFloatEx(any entity, PropType type, const char[] prop, int element=0)	{
-	return	HasEntPropEx(entity, type, prop) ? GetEntPropFloat(entity, type, prop, element):-1;
+	return GetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity");
 }
 
 //Methodmap
 
-methodmap	Entity	__nullable__	{
+methodmap Entity __nullable__	{
 	public Entity(const char[] classname="", const char[] name="", int ForceEdictIndex=-1)
 	{
 		return Ent(CreateEntityByNameEx(classname, name, ForceEdictIndex));
@@ -1140,4 +920,273 @@ methodmap	Entity	__nullable__	{
 		
 		return	false;
 	}
+}
+
+#endif
+
+/* These are important */
+
+/**
+ *	Returns if the entity or edict is valid.
+ *	Use this over IsValidEntity and IsValidEdict as this combines them.
+ *
+ *	@param	entity	Entity index.
+ *
+ *	@error	If the entity/edict is invalid, this returns false.
+ */
+stock bool IsValidEntityEx(any entity)	{
+	return (IsValidEdict(entity) || IsValidEntity(entity));
+}
+
+//Netprops
+
+/**
+ *	Sets an integer value in an entity's property.
+ *
+ *	This function is considered safer and more robust over SetEntData,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	value		Value to set.
+ *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
+ *						This value is auto-detected, and the size parameter is
+ *						only used as a fallback in case detection fails.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
+ */
+stock bool SetEntPropEx(any entity, PropType type, const char[] prop, any value, int size=4, int element=0)	{
+	if(HasEntProp(entity, type, prop))	{
+		SetEntProp(entity, type, prop, value, size, element);
+		return	true;
+	}
+	
+	return	false;	
+}
+
+/**
+ *	Sets an entity index in an entity's property.
+ *
+ *	This function is considered safer and more robust over SetEntDataEnt*,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	other		Entity index to set, or -1 to unset.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
+ */
+stock bool SetEntPropEntEx(any entity, PropType type, const char[] prop, int other, int element=0)	{
+	if(HasEntProp(entity, type, prop))	{
+		SetEntPropEnt(entity, type, prop, other, element);
+		return	true;
+	}
+	
+	return	false;	
+}
+
+/**
+ *	Retrieves an integer value from an entity's property.
+ *	Considered safer over GetEntProp.
+ *
+ *	This function is considered safer and more robust over GetEntData,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
+ *						This value is auto-detected, and the size parameter is
+ *						only used as a fallback in case detection fails.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@return				Bool value at the given property offset.
+ *
+ *	@error				If entity is invalid or property not found, this returns -1.
+ */
+stock int GetEntPropEx(any entity, PropType type, const char[] prop, int size=4, int element=0)	{
+	return	HasEntPropEx(entity, type, prop) ? GetEntProp(entity, type, prop, size, element):-1;
+}
+
+/**
+ *	Retrieves an integer value from an entity's property.
+ *	Considered safer over GetEntProp.
+ *
+ *	This function is considered safer and more robust over GetEntDataEnt*,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@return				Bool value at the given property offset.
+ *
+ *	@error				If entity is invalid or property not found, this returns -1.
+ */
+stock int GetEntPropEntEx(any entity, PropType type, const char[] prop, int element=0)	{
+	return	HasEntPropEx(entity, type, prop) ? GetEntPropEnt(entity, type, prop, element):-1;
+}
+
+/**
+ *	Retrieves a boolean value from an entity's property.
+ *	Considered safer over GetEntProp.
+ *
+ *	This function is considered safer and more robust over GetEntData,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
+ *						This value is auto-detected, and the size parameter is
+ *						only used as a fallback in case detection fails.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@return				Bool value at the given property offset.
+ *
+ * @error				If entity is invalid or property not found, this returns false.
+ */
+stock bool GetEntPropBool(any entity, PropType type, const char[] prop, int size=4, int element=0)	{
+	return	HasEntPropEx(entity, type, prop) ? bool(GetEntProp(entity, type, prop, size, element)):false;
+}
+
+/**
+ *	Gets a network property as a string.
+ *
+ *	@param	entity		Entity/Edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property to use.
+ *	@param	buffer		Destination string buffer.
+ *	@param	maxlen		Maximum length of output string buffer.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@return				Returns true/false if the procedure was valid.
+ *
+ *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
+ */
+stock bool GetEntPropStringEx(any entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)	{
+	return	HasEntPropEx(entity, type, prop) ? bool(GetEntPropString(entity, type, prop, buffer, maxlen, element) != -1):false;
+}
+
+/**
+ *	Sets a network property as a string.
+ *
+ *	@param	entity		Entity/Edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property to use.
+ *	@param	buffer		String to set.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@return				Returns true/false if the procedure was valid.
+ *
+ *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
+ */
+stock bool SetEntPropStringEx(any entity, PropType type, const char[] prop, const char[] buffer, int element=0)	{
+	return	HasEntPropEx(entity, type, prop) ? bool(SetEntPropString(entity, type, prop, buffer, element) != -1):false;
+}
+
+/**
+ *	Returns if the entity is valid and has the network property.
+ *
+ *	@param	entity		Entity/Edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property to check.
+ *
+ *	@error	If entity or property is invalid/not found, this returns false.
+ */
+stock bool HasEntPropEx(any entity, PropType type, const char[] prop)	{
+	return	bool(IsValidEntityEx(entity) && HasEntProp(entity, type, prop));
+}
+
+/**
+ *	Sets a float value in an entity's property.
+ *	This function is considered safer and more robust over SetEntDataFloat,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/Edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	value		Value to set.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@error				If entity, offset or property is not valid, this returns false. (if out of bounds, this spits out an error).
+ */
+stock bool SetEntPropFloatEx(any entity, PropType type, const char[] prop, float value, int element=0)	{
+	if(HasEntPropEx(entity, type, prop))	{
+		SetEntPropFloat(entity, type, prop, value, element);
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+ *	Retrieves a float value from an entity's property.
+ *
+ *	This function is considered safer and more robust over GetEntDataFloat,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@return				Value at the given property offset.
+ *
+ *	@error				If entity is invalid, offset out of reasonable bounds or invalid property, this returns -1.0.
+ */
+stock float GetEntPropFloatEx(any entity, PropType type, const char[] prop, int element=0)	{
+	return HasEntPropEx(entity, type, prop) ? GetEntPropFloat(entity, type, prop, element):-1.0;
+}
+
+/**
+ *	Retrieves a vector of floats from an entity, given a named network property.
+ *
+ *	This function is considered safer and more robust over GetEntDataVector,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	vec			Vector buffer to store data in.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@error				If entity is invalid, property not found, or property not
+ *						actually a vector data type, this returns false.
+ */
+stock bool GetEntPropVectorEx(int entity, PropType type, const char[] prop, float vec[3], int element=0)	{
+	if(HasEntPropEx(entity, type, prop))	{
+		GetEntPropVector(entity, type, prop, vec, element);
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+ *	Sets a vector of floats in an entity, given a named network property.
+ *
+ *	This function is considered safer and more robust over SetEntDataVector,
+ *	because it performs strict offset checking and typing rules.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *	@param	vec			Vector to set.
+ *	@param	element		Element # (starting from 0) if property is an array.
+ *
+ *	@error				If entity is invalid, property not found, or property not
+ *						actually a vector data type, this returns false.
+ */
+stock bool SetEntPropVectorEx(int entity, PropType type, const char[] prop, const float vec[3], int element=0)	{
+	if(HasEntPropEx(entity, type, prop))	{
+		SetEntPropVector(entity, type, prop, vec, element);
+		return true;
+	}
+	
+	return false;
 }
