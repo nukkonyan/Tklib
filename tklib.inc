@@ -31,7 +31,97 @@
 	#define _tklib_disable_additional
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
-	#define _tklib_disable_sdk
+#endif
+
+#if defined _tklib_only_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_weapons
+	#define _tklib_disable_clients
+	#define _tklib_disable_entities
+	#define _tklib_disable_additional
+	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
+#endif
+
+#if defined _tklib_only_resize
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_weapons
+	#define _tklib_disable_clients
+	#define _tklib_disable_entities
+	#define _tklib_disable_additional
+	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
+#endif
+
+#if defined _tklib_only_weapons
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_clients
+	#define _tklib_disable_entities
+	#define _tklib_disable_additional
+	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
+#endif
+
+#if defined _tklib_only_clients
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_weapons
+	#define _tklib_disable_entities
+	#define _tklib_disable_additional
+	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
+#endif
+
+#if defined _tklib_only_entities
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_weapons
+	#define _tklib_disable_clients
+	#define _tklib_disable_additional
+	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
+#endif
+
+#if defined _tklib_only_additional
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_weapons
+	#define _tklib_disable_clients
+	#define _tklib_disable_entities
+	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
+#endif
+
+#if defined _tklib_only_events
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_weapons
+	#define _tklib_disable_clients
+	#define _tklib_disable_entities
+	#define _tklib_disable_additional
+	#define _tklib_disable_usermessages
+#endif
+
+#if defined _tklib_only_usermessages
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_weapons
+	#define _tklib_disable_clients
+	#define _tklib_disable_entities
+	#define _tklib_disable_additional
+	#define _tklib_disable_events
+#endif
+
+#if defined _tklib_only_sdk
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_weapons
+	#define _tklib_disable_clients
+	#define _tklib_disable_entities
+	#define _tklib_disable_additional
+	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
 #endif
 
 #if defined _tklib_no_game_includes
@@ -57,6 +147,16 @@
 #endif
 
 #if defined _tklib_only_cstrike
+	#define _tklib_no_tf2
+	#define _tklib_disable_tf2
+	#define _tklib_disable_l4d
+	#define _tklib_disable_dods
+	#define _tklib_disable_fortress_forever
+	#define _tklib_disable_contagion
+#endif
+
+#if defined _tklib_only_csgo
+	#define _tklib_no_cstrike
 	#define _tklib_no_tf2
 	#define _tklib_disable_tf2
 	#define _tklib_disable_l4d
@@ -133,20 +233,20 @@
 
 #if !defined _tklib_no_definitions
 //Extra things that should be part of SourceMod, making it easier.
-#define		int(%1) view_as<int>(%1)
-#define		any(%1) view_as<any>(%1)
-#define		float(%1) view_as<float>(%1)		// doesn't break float(int value) function.
-#define		bool(%1) view_as<bool>(%1)		// %1 means it is the first parameter,
-#define		char(%1) view_as<char>(%1)		// %2 would be second, and so on (you get it).
-#define		Handle(%1) view_as<Handle>(%1)
-#define		Database(%1) view_as<Database>(%1)
-#define		DBResult(%1) view_as<DBResult>(%1)
-#define		DBResultSet(%1) view_as<DBResultSet(%1)
-#define		APLRes(%1) view_as<APLRes>(%1)
-#define		AdminFlag(%1) view_as<AdminFlag>(%1)
-#define		PropFieldType(%1) view_as<PropFieldType>(%1)
-#define		PropType(%1) view_as<PropType>(%1)
-#define		Address(%1) view_as<Address>(%1)
+#define	int(%1) view_as<int>(%1)
+#define	any(%1) view_as<any>(%1)
+#define	float(%1) view_as<float>(%1) // doesn't break float(int value) function.
+#define	bool(%1) view_as<bool>(%1) // %1 means it is the first parameter,
+#define	char(%1) view_as<char>(%1) // %2 would be second, and so on (you get it).
+#define	Handle(%1) view_as<Handle>(%1)
+#define	Database(%1) view_as<Database>(%1)
+#define	DBResult(%1) view_as<DBResult>(%1)
+#define	DBResultSet(%1) view_as<DBResultSet(%1)
+#define	APLRes(%1) view_as<APLRes>(%1)
+#define	AdminFlag(%1) view_as<AdminFlag>(%1)
+#define	PropFieldType(%1) view_as<PropFieldType>(%1)
+#define	PropType(%1) view_as<PropType>(%1)
+#define	Address(%1) view_as<Address>(%1)
 
 #define This view_as<any>(this)
 #define Bot(%1) IsFakeClient(%1)
@@ -154,11 +254,10 @@
 #define integer int
 #define CONSOLE 0
 
-enum	boolean					{}
+enum boolean	{}
 #endif
 
-
-//Core includes
+//Includes
 #include <tklib/gameidentifier>
 #include <tklib/clients>
 #include <tklib/additional>
