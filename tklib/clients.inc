@@ -874,7 +874,7 @@ stock bool SetClientConnected(any client, bool connect)	{
  *	@noreturn
  */
 stock void GetClientTeamString(int client, char[] buffer, int maxlen)	{
-	int team = IsClientConnected(client) ? GetClientTeam(client):0;
+	int team = Tklib_IsValidClient(client) ? GetClientTeam(client):0;
 		
 	char TeamColour_Default[][] = {
 		"{grey}",
@@ -1107,7 +1107,7 @@ methodmap Player __nullable__	{
  *	@param	IgnoreInvalidTeam	If true, the invalid team users are counted as 'invalid'	Defaulted to false.
  */
 stock bool Tklib_IsValidClient(any client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true, bool IgnoreInvalidTeam=false)	{
-	if(client < 1)
+	if(client == -1 || client == 0 || client < 1 || client > MaxClients)
 		return false;
 	if(IgnoreNonConnected)	{
 		if(!IsClientConnected(client))

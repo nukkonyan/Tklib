@@ -527,6 +527,37 @@
 #define EVENT_MAINMENU_STABILIZED "mainmenu_stabilized"
 #define EVENT_WORLD_STATUS_CHANGED "world_status_changed"
 
+//Day Of Defeat
+#define EVENT_DOD_ROUND_START "dod_round_start"
+#define EVENT_DOD_ROUND_ACTIVE "dod_round_active"
+#define EVENT_DOD_HINT "dod_hint"
+#define EVENT_DOD_WARMUP_BEGINS "dod_warmup_begins"
+#define EVENT_DOD_WARMUP_ENDS "dod_warmup_ends"
+#define EVENT_DOD_RESTART_ROUND "dod_restart_round"
+#define EVENT_DOD_READY_RESTART "dod_ready_restart"
+#define EVENT_DOD_ALLIES_READY "dod_allies_ready"
+#define EVENT_DOD_AXIS_READY "dod_axis_ready"
+#define EVENT_DOD_ROUND_RESTART_SECONDS "dod_round_restart_seconds"
+#define EVENT_DOD_TEAM_SCORES "dod_team_scores"
+#define EVENT_DOD_POINT_CAPTURED "dod_point_captured"
+#define EVENT_DOD_CAPTURE_BLOCKED "dod_capture_blocked"
+#define EVENT_DOD_ROUND_WIN "dod_round_win"
+#define EVENT_DOD_TICK_POINTS "dod_tick_points"
+#define EVENT_DOD_GAME_OVER "dod_game_over"
+#define EVENT_DOD_BROADCAST_AUDIO "dod_broadcast_audio"
+#define EVENT_DOD_STATS_WEAPON_ATTACK "dod_stats_weapon_attack"
+#define EVENT_DOD_STATS_PLAYER_DAMAGE "dod_stats_player_damage"
+#define EVENT_DOD_STATS_PLAYER_KILLED "dod_stats_player_killed"
+#define EVENT_DOD_WIN_PANEL "dod_win_panel"
+#define EVENT_DOD_TIMER_TIME_ADDED "dod_timer_time_added"
+#define EVENT_DOD_TIMER_FLASH "dod_timer_flash"
+#define EVENT_DOD_MAP_TIME_REMAINING "dod_map_time_remaining"
+#define EVENT_DOD_TNT_PICKUP "dod_tnt_pickup"
+#define EVENT_DOD_BOMB_PLANTED "dod_bomb_planted"
+#define EVENT_DOD_BOMB_EXPLODED "dod_bomb_exploded"
+#define EVENT_DOD_BOMB_DEFUSED "dod_bomb_defused"
+#define EVENT_DOD_KILL_PLANTER "dod_kill_planter"
+#define EVENT_DOD_KILL_DEFUSER "dod_kill_defuser"
 
 //Other Events
 #define EVENT_ANNOUNCE_PHASE_END "announce_phase_end"
@@ -679,6 +710,8 @@
 #define EVENT_STR_POSX "posx"
 #define EVENT_STR_POSY "posy"
 
+
+
 //CSGO
 
 #define EVENT_STR_ASSISTEDFLASH "assistedflash"
@@ -765,5 +798,9 @@
 #define EVENT_STR_ISSTRANGE "isstrange"
 #define EVENT_STR_ISUNUSUAL "isunusual"
 #define EVENT_STR_WEAR "wear"
+
+//DOD:S
+
+
 
 #endif

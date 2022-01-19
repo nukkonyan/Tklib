@@ -378,7 +378,7 @@ stock bool SetEntityTeamNum(any entity, int team)	{
  *
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
-stock bool SetEntityEffect(int entity, int value)	{
+stock bool SetEntityEffect(any entity, int value)	{
 	return SetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity", value);
 }
 
@@ -389,8 +389,32 @@ stock bool SetEntityEffect(int entity, int value)	{
  *
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
-stock int GetEntityEffect(int entity)	{
+stock int GetEntityEffect(any entity)	{
 	return GetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity");
+}
+
+/**
+ *	Returns the distance between 2 entities in meters.
+ *	This is experimental and may be incorrect.
+ *	In CS:GO, use "distance" from event "player_death" for more accurate numbers.
+ *	This one is very similiar to that one but incorrect at times.
+ *
+ *	@param	entity		The entity index.
+ *	@param	target		The target entity index.
+ *
+ *	@error	If the entity we use or the one we compare with is invalid, this returns -1.0.
+ */
+stock float GetEntityDistance(any entity, any target)	{
+	if(IsValidEntityEx(entity) && IsValidEntityEx(target))	{
+		float pos[2][3];
+		GetEntPropVector(entity, Prop_Send, "m_vecOrigin", pos[0]);
+		GetEntPropVector(target, Prop_Send, "m_vecOrigin", pos[1]);
+		
+		//return ((pos[0][0] / pos[1][0]) * 5);
+		return (GetVectorDistance(pos[1], pos[0]) / 41.0);
+	}
+	
+	return -1.0;
 }
 
 //Methodmap
@@ -919,6 +943,11 @@ methodmap Entity __nullable__	{
 		}
 		
 		return	false;
+	}
+	
+	public float GetDistance(any target)
+	{
+		return GetEntityDistance(This, target);
 	}
 }
 
