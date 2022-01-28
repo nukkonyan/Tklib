@@ -38,30 +38,30 @@ stock AdminFlag AdmflagToAdminFlag(int adminflags)	{
 	AdminFlag adminflag;
 	
 	switch(adminflags)	{
-		case	ADMFLAG_RESERVATION:	adminflag = Admin_Reservation;
-		case	ADMFLAG_GENERIC:		adminflag = Admin_Generic;
-		case	ADMFLAG_KICK:			adminflag = Admin_Kick;
-		case	ADMFLAG_BAN:			adminflag = Admin_Ban;
-		case	ADMFLAG_UNBAN:			adminflag = Admin_Unban;
-		case	ADMFLAG_SLAY:			adminflag = Admin_Slay;
-		case	ADMFLAG_CHANGEMAP:		adminflag = Admin_Changemap;
-		case	ADMFLAG_CONVARS:		adminflag = Admin_Convars;
-		case	ADMFLAG_CONFIG:			adminflag = Admin_Config;
-		case	ADMFLAG_CHAT:			adminflag = Admin_Chat;
-		case	ADMFLAG_VOTE:			adminflag = Admin_Vote;
-		case	ADMFLAG_PASSWORD:		adminflag = Admin_Password;
-		case	ADMFLAG_RCON:			adminflag = Admin_RCON;
-		case	ADMFLAG_CHEATS:			adminflag = Admin_Cheats;
-		case	ADMFLAG_ROOT:			adminflag = Admin_Root;
-		case	ADMFLAG_CUSTOM1:		adminflag = Admin_Custom1;
-		case	ADMFLAG_CUSTOM2:		adminflag = Admin_Custom2;
-		case	ADMFLAG_CUSTOM3:		adminflag = Admin_Custom3;
-		case	ADMFLAG_CUSTOM4:		adminflag = Admin_Custom4;
-		case	ADMFLAG_CUSTOM5:		adminflag = Admin_Custom5;
-		case	ADMFLAG_CUSTOM6:		adminflag = Admin_Custom6;
+		case ADMFLAG_RESERVATION:	adminflag = Admin_Reservation;
+		case ADMFLAG_GENERIC:		adminflag = Admin_Generic;
+		case ADMFLAG_KICK:			adminflag = Admin_Kick;
+		case ADMFLAG_BAN:			adminflag = Admin_Ban;
+		case ADMFLAG_UNBAN:			adminflag = Admin_Unban;
+		case ADMFLAG_SLAY:			adminflag = Admin_Slay;
+		case ADMFLAG_CHANGEMAP:		adminflag = Admin_Changemap;
+		case ADMFLAG_CONVARS:		adminflag = Admin_Convars;
+		case ADMFLAG_CONFIG:		adminflag = Admin_Config;
+		case ADMFLAG_CHAT:			adminflag = Admin_Chat;
+		case ADMFLAG_VOTE:			adminflag = Admin_Vote;
+		case ADMFLAG_PASSWORD:		adminflag = Admin_Password;
+		case ADMFLAG_RCON:			adminflag = Admin_RCON;
+		case ADMFLAG_CHEATS:		adminflag = Admin_Cheats;
+		case ADMFLAG_ROOT:			adminflag = Admin_Root;
+		case ADMFLAG_CUSTOM1:		adminflag = Admin_Custom1;
+		case ADMFLAG_CUSTOM2:		adminflag = Admin_Custom2;
+		case ADMFLAG_CUSTOM3:		adminflag = Admin_Custom3;
+		case ADMFLAG_CUSTOM4:		adminflag = Admin_Custom4;
+		case ADMFLAG_CUSTOM5:		adminflag = Admin_Custom5;
+		case ADMFLAG_CUSTOM6:		adminflag = Admin_Custom6;
 	}
 	
-	return	adminflag;
+	return adminflag;
 }
 
 /**
@@ -73,30 +73,30 @@ stock int AdminFlaglagToAdmflag(AdminFlag adminflags)	{
 	int adminflag;
 	
 	switch(adminflags)	{
-		case	Admin_Reservation:	adminflag = ADMFLAG_RESERVATION;
-		case	Admin_Generic:		adminflag = ADMFLAG_GENERIC;
-		case	Admin_Kick:			adminflag = ADMFLAG_KICK;
-		case	Admin_Ban:			adminflag = ADMFLAG_BAN;
-		case	Admin_Unban:		adminflag = ADMFLAG_UNBAN;
-		case	Admin_Slay:			adminflag = ADMFLAG_SLAY;
-		case	Admin_Changemap:	adminflag = ADMFLAG_CHANGEMAP;
-		case	Admin_Convars:		adminflag = ADMFLAG_CONVARS;
-		case	Admin_Config:		adminflag = ADMFLAG_CONFIG;
-		case	Admin_Chat:			adminflag = ADMFLAG_CHAT;
-		case	Admin_Vote:			adminflag = ADMFLAG_VOTE;
-		case	Admin_Password:		adminflag = ADMFLAG_PASSWORD;
-		case	Admin_RCON:			adminflag = ADMFLAG_RCON;
-		case	Admin_Cheats:		adminflag = ADMFLAG_CHEATS;
-		case	Admin_Root:			adminflag = ADMFLAG_ROOT;
-		case	Admin_Custom1:		adminflag = ADMFLAG_CUSTOM1;
-		case	Admin_Custom2:		adminflag = ADMFLAG_CUSTOM2;
-		case	Admin_Custom3:		adminflag = ADMFLAG_CUSTOM3;
-		case	Admin_Custom4:		adminflag = ADMFLAG_CUSTOM4;
-		case	Admin_Custom5:		adminflag = ADMFLAG_CUSTOM5;
-		case	Admin_Custom6:		adminflag = ADMFLAG_CUSTOM6;
+		case Admin_Reservation:	adminflag = ADMFLAG_RESERVATION;
+		case Admin_Generic:		adminflag = ADMFLAG_GENERIC;
+		case Admin_Kick:		adminflag = ADMFLAG_KICK;
+		case Admin_Ban:			adminflag = ADMFLAG_BAN;
+		case Admin_Unban:		adminflag = ADMFLAG_UNBAN;
+		case Admin_Slay:		adminflag = ADMFLAG_SLAY;
+		case Admin_Changemap:	adminflag = ADMFLAG_CHANGEMAP;
+		case Admin_Convars:		adminflag = ADMFLAG_CONVARS;
+		case Admin_Config:		adminflag = ADMFLAG_CONFIG;
+		case Admin_Chat:		adminflag = ADMFLAG_CHAT;
+		case Admin_Vote:		adminflag = ADMFLAG_VOTE;
+		case Admin_Password:	adminflag = ADMFLAG_PASSWORD;
+		case Admin_RCON:		adminflag = ADMFLAG_RCON;
+		case Admin_Cheats:		adminflag = ADMFLAG_CHEATS;
+		case Admin_Root:		adminflag = ADMFLAG_ROOT;
+		case Admin_Custom1:		adminflag = ADMFLAG_CUSTOM1;
+		case Admin_Custom2:		adminflag = ADMFLAG_CUSTOM2;
+		case Admin_Custom3:		adminflag = ADMFLAG_CUSTOM3;
+		case Admin_Custom4:		adminflag = ADMFLAG_CUSTOM4;
+		case Admin_Custom5:		adminflag = ADMFLAG_CUSTOM5;
+		case Admin_Custom6:		adminflag = ADMFLAG_CUSTOM6;
 	}
 	
-	return	adminflag;
+	return adminflag;
 }
 
 /**
@@ -109,7 +109,7 @@ stock int AdminFlaglagToAdmflag(AdminFlag adminflags)	{
 stock int GetCmdInt(int argnum)	{
 	char buffer[256];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
-	return	StringToInt(buffer);
+	return StringToInt(buffer);
 }
 
 /**
@@ -147,7 +147,7 @@ stock int FloatToInt(float value)	{
  *	@param	caseSensitive	if true (by default), search is case sensitive. If false, search is case insensitive.
  *	*/
 stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensitive=true)	{
-	return (StrContains(str, substr, caseSensitive) != -1);
+	return view_as<bool>(StrContains(str, substr, caseSensitive) > 0);
 }
 
 /**
@@ -162,8 +162,8 @@ stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool db
 	Database database = SQL_Connect(confname, persistent, error, sizeof(error));
 	if(dbg)	{
 		switch(database == null)	{
-			case	true:	PrintToServer("[SQL_Connect2] : Connection to database \"%s\" had an error (%s)", confname, error);
-			case	false:	PrintToServer("[SQL_Connect2] : Connection to database \"%s\" succeeded!", confname);
+			case true: PrintToServer("[SQL_Connect2] : Connection to database \"%s\" had an error (%s)", confname, error);
+			case false: PrintToServer("[SQL_Connect2] : Connection to database \"%s\" succeeded!", confname);
 		}
 	}
 	
@@ -174,7 +174,7 @@ stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool db
  *	Returns GetRandomInt(0, 1) in boolean.
  */
 stock bool GetRandomBool()	{
-	return	bool(GetRandomInt(0, 1));
+	return view_as<bool>(GetRandomInt(0, 1));
 }
 
 /**
@@ -241,8 +241,8 @@ stock int strcopyEx(char[] dest, int destLen, const char[] source, any...)	{
  */
 stock bool AutoSwitch(bool value)	{
 	switch(value)	{
-		case	true:	return false;
-		case	false:	return true;
+		case true: return false;
+		case false: return true;
 	}
 }
 
@@ -257,10 +257,10 @@ stock bool AddFileToDownloadsTableEx(const char[] filename, any ...)	{
 		char download[256];
 		VFormat(download, sizeof(download), filename, 2);
 		AddFileToDownloadsTable(download);
-		return	true;
+		return true;
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
@@ -279,7 +279,7 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
 	bool success = false, invalid_filter = false;
 	
 	switch(DLPath == null)	{
-		case	false:	{
+		case false:	{
 			char FileDir[64], FileDL[256];
 			
 			while(DLPath.GetNext(FileDir, sizeof(FileDir)))	{
@@ -305,7 +305,7 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
 			
 			success = true;
 		}
-		case	true:	{
+		case true:	{
 			if(dbg)
 				PrintToServer("[AddFolderToDownloadsTable] : failed due to invalid path (%s)", path);
 		}
@@ -324,7 +324,7 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
  *	@return	Boolean conversion of string or false on failure.
  */
 stock bool StringToBool(const char[] str, int nBase=10)	{
-	return	bool(StringToInt(str, nBase));
+	return view_as<bool>(StringToInt(str, nBase));
 }
 
 /**
@@ -342,7 +342,7 @@ stock bool AddConVarFlags(ConVar cvar, int flags)	{
 	int flag = cvar.Flags;
 	flag |= flags;
 	cvar.Flags = flags;
-	return	true;
+	return true;
 }
 
 /**
@@ -364,7 +364,7 @@ stock bool AddConVarFlagsEx(const char[] convar, int flags)	{
 	flag |= flags;
 	cvar.Flags = flags;
 	delete cvar;
-	return	true;
+	return true;
 }
 
 /**
@@ -382,7 +382,7 @@ stock bool RemoveConVarFlags(ConVar cvar, int flags)	{
 	int flag = cvar.Flags;
 	flag &= ~flags;
 	cvar.Flags = flag;
-	return	true;
+	return true;
 }
 
 /**
@@ -404,7 +404,7 @@ stock bool RemoveConVarFlagsEx(const char[] convar, int flags)	{
 	flag &= ~flags;
 	cvar.Flags = flag;
 	delete cvar;
-	return	true;
+	return true;
 }
 
 /**
@@ -421,16 +421,14 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 	if(!Tklib_IsValidClient(client))
 		return	false;
 	
-	if(index > 0)	{
+	if(index != -1)	{
 		if(!Tklib_IsValidClient(index))
 			return	false;
 	}
 	
-	if(GetFeatureStatus(FeatureType_Native, "GetUserMessageType") == FeatureStatus_Unavailable)
-		return	false;
-	
-	if(GetUserMessageId("SayText2") == INVALID_MESSAGE_ID)
-		return	false;
+	if(GetFeatureStatus(FeatureType_Native, "GetUserMessageType") == FeatureStatus_Unavailable
+	|| GetUserMessageId("SayText2") == INVALID_MESSAGE_ID)
+		return false;
 	
 	Handle msg = null;
 	bool success = false;
@@ -462,7 +460,7 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 		success = true;
 	}
 	
-	return	success;
+	return success;
 }
 
 /**
@@ -475,7 +473,7 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
  *	@error			Invalid paramteter number or calling from non-native function.
  */
 stock bool GetNativeBool(int param)	{
-	return	bool(GetNativeCell(param));
+	return view_as<bool>(GetNativeCell(param));
 }
 
 /**
@@ -486,7 +484,7 @@ stock bool GetNativeBool(int param)	{
  *	@return	If the string is empty, this returns false.
  */
 stock bool IsValidString(const char[] str)	{
-	return	bool(!StrEqual(str, NULL_STRING) && strlen(str) > 1);
+	return (!StrEqual(str, NULL_STRING) && strlen(str) > 0);
 }
 
 /**
@@ -521,7 +519,7 @@ stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...)	{
  *	@error			Invalid paramteter number or calling from non-native function.
  */
 stock Address GetNativeAddress(int param)	{
-	return	Address(GetNativeCell(param));
+	return view_as<Address>(GetNativeCell(param));
 }
 
 /**
@@ -532,7 +530,7 @@ stock Address GetNativeAddress(int param)	{
  *	@return	If the database connection is valid, this is true. False otherwise.
  */
 stock bool IsValidDatabase(Database database)	{
-	return	bool(database != null);
+	return (database != null);
 }
 
 #endif

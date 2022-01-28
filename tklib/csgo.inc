@@ -566,4 +566,79 @@ stock int CSGO_GetWeaponDefindex(const char[] weapon)	{
 	return 0;
 }
 
+/**
+ *	Returns the weapon name by its entity name.
+ *
+ *	@param	classname	The weapon entity classname.
+ *	@param	name		The weapon's name.
+ *	@param	maxlen		The maximum length of the name.
+ *
+ *	@noreturn
+ */
+stock void CSGO_GetWeaponName(const char[] classname, char[] name, int maxlen)	{
+	if(StrEqual(classname, "weapon_ak47", false))					strcopy(name, maxlen, "Ak-47");
+	if(StrEqual(classname, "weapon_m4a1", false))					strcopy(name, maxlen, "M4A4");
+	if(StrEqual(classname, "weapon_m4a1_silencer", false))			strcopy(name, maxlen, "M4A1-S");
+	if(StrEqual(classname, "weapon_galilar", false))				strcopy(name, maxlen, "Galil AR");
+	if(StrEqual(classname, "weapon_famas", false))					strcopy(name, maxlen, "Famas");
+	if(StrEqual(classname, "weapon_sg556", false))					strcopy(name, maxlen, "SG556");
+	if(StrEqual(classname, "weapon_aug", false))					strcopy(name, maxlen, "AUG");
+	if(StrEqual(classname, "weapon_ssg08", false))					strcopy(name, maxlen, "Scout");
+	if(StrEqual(classname, "weapon_awp", false))					strcopy(name, maxlen, "AWP");
+	if(StrEqual(classname, "weapon_scar20", false))					strcopy(name, maxlen, "Scar-20");
+	if(StrEqual(classname, "weapon_g3sg1", false))					strcopy(name, maxlen, "G3SG1");
+	if(StrEqual(classname, "weapon_nova", false))					strcopy(name, maxlen, "Nova");
+	if(StrEqual(classname, "weapon_sawedoff", false))				strcopy(name, maxlen, "Sawed-Off");
+	if(StrEqual(classname, "weapon_mag7", false))					strcopy(name, maxlen, "MAG-7");
+	if(StrEqual(classname, "weapon_xm1014", false))					strcopy(name, maxlen, "XM1014");
+	if(StrEqual(classname, "weapon_m249", false))					strcopy(name, maxlen, "M249");
+	if(StrEqual(classname, "weapon_negev", false))					strcopy(name, maxlen, "Negev");
+	if(StrEqual(classname, "weapon_taser", false))					strcopy(name, maxlen, "Taser");
+	if(StrEqual(classname, "weapon_c4", false))						strcopy(name, maxlen, "C4 Bomb");
+	if(StrEqual(classname, "weapon_hegrenade", false))				strcopy(name, maxlen, "HE Grenade");
+	if(StrEqual(classname, "weapon_flashbang", false))				strcopy(name, maxlen, "Flashbang");
+	if(StrEqual(classname, "weapon_decoy", false))					strcopy(name, maxlen, "Decoy");
+	if(StrEqual(classname, "weapon_smokegrenade", false))			strcopy(name, maxlen, "Smokegrenade");
+	if(StrEqual(classname, "weapon_incgrenade", false))				strcopy(name, maxlen, "Incendiary");
+	if(StrEqual(classname, "weapon_molotov", false))				strcopy(name, maxlen, "Molotov");
+	if(StrEqual(classname, "weapon_tagrenade"))						strcopy(name, maxlen, "TA-Grenade");
+	if(StrEqual(classname, "weapon_breachcharge"))					strcopy(name, maxlen, "Breach Charge");
+	if(StrEqual(classname, "weapon_glock", false))					strcopy(name, maxlen, "Glock");
+	if(StrEqual(classname, "weapon_usp_silencer", false))			strcopy(name, maxlen, "USP-S");
+	if(StrEqual(classname, "weapon_hkp2000", false))				strcopy(name, maxlen, "P2000");
+	if(StrEqual(classname, "weapon_p250", false))					strcopy(name, maxlen, "P250");
+	if(StrEqual(classname, "weapon_deagle", false))					strcopy(name, maxlen, "Deagle");
+	if(StrEqual(classname, "weapon_fiveseven", false))				strcopy(name, maxlen, "Five-SeveN");
+	if(StrEqual(classname, "weapon_tec9", false))					strcopy(name, maxlen, "Tec-9");
+	if(StrEqual(classname, "weapon_revolver", false))				strcopy(name, maxlen, "R8 Revolver");
+	if(StrEqual(classname, "weapon_p90", false))					strcopy(name, maxlen, "P90");
+	if(StrEqual(classname, "weapon_ump45", false))					strcopy(name, maxlen, "UMP-45");
+	if(StrEqual(classname, "weapon_mp7", false))					strcopy(name, maxlen, "MP7");
+	if(StrEqual(classname, "weapon_mp9", false))					strcopy(name, maxlen, "MP9");
+	if(StrEqual(classname, "weapon_mp5sd", false))					strcopy(name, maxlen, "MP5");
+	if(StrEqual(classname, "weapon_bizon", false))					strcopy(name, maxlen, "Bizon");
+	if(StrEqual(classname, "weapon_knife_t", false))				strcopy(name, maxlen, "T Knife");
+	if(StrEqual(classname, "weapon_knife_ct", false))				strcopy(name, maxlen, "CT Knife");
+	if(StrEqual(classname, "weapon_knife", false))					strcopy(name, maxlen, "Knife");
+	if(StrEqual(classname, "weapon_knifegg", false))				strcopy(name, maxlen, "Golden Knife");
+	if(StrEqual(classname, "weapon_knife_css", false))				strcopy(name, maxlen, "Classic Knife");
+	if(StrEqual(classname, "weapon_bayonet", false))				strcopy(name, maxlen, "Bayonet");
+	if(StrEqual(classname, "weapon_knife_flip", false))				strcopy(name, maxlen, "Flip Knife");
+	if(StrEqual(classname, "weapon_knife_gut", false))				strcopy(name, maxlen, "Gut Knife");
+	if(StrEqual(classname, "weapon_knife_karambit", false))			strcopy(name, maxlen, "Karambit Knife");
+	if(StrEqual(classname, "weapon_knife_m9_bayonet", false))		strcopy(name, maxlen, "M9 Bayonet Knife");
+	if(StrEqual(classname, "weapon_knife_tactical", false))			strcopy(name, maxlen, "Huntsman Knife");
+	if(StrEqual(classname, "weapon_knife_butterfly", false))		strcopy(name, maxlen, "Butterfly Knife");
+	if(StrEqual(classname, "weapon_knife_falchion", false))			strcopy(name, maxlen, "Falchion Knife");
+	if(StrEqual(classname, "weapon_knife_push", false))				strcopy(name, maxlen, "Shadow Daggers");
+	if(StrEqual(classname, "weapon_knife_survival_bowie", false))	strcopy(name, maxlen, "Bowie Knife");
+	if(StrEqual(classname, "weapon_knife_ursus", false))			strcopy(name, maxlen, "Ursus Knife");
+	if(StrEqual(classname, "weapon_knife_gypsy_jackknife", false))	strcopy(name, maxlen, "Navaja Knife");
+	if(StrEqual(classname, "weapon_knife_stiletto", false))			strcopy(name, maxlen, "Stilleto");
+	if(StrEqual(classname, "weapon_knife_widowmaker", false))		strcopy(name, maxlen, "Talon Knife");
+	if(StrEqual(classname, "weapon_knife_canis", false))			strcopy(name, maxlen, "Survival Knife");
+	if(StrEqual(classname, "weapon_knife_cord", false))				strcopy(name, maxlen, "Paracord Knife");
+	if(StrEqual(classname, "weapon_knife_skeleton", false))			strcopy(name, maxlen, "Skeleton Knife");
+	if(StrEqual(classname, "weapon_knife_outdoor", false))			strcopy(name, maxlen, "Nomad Knife");
+}
 #endif

@@ -749,12 +749,8 @@ stock int GetClientOfPlayername(any client, const char[] playername, int filter_
 stock int GetClientCountEx(bool nobots=true)	{
 	int count = 0;
 	for(int i = 1; i < MaxClients; i++)	{
-		if(IsClientConnected(i))	{
-			if(IsFakeClient(i) && nobots)
-				break;
-			
+		if(Tklib_IsValidClient(i, nobots, false, false))
 			count++;
-		}
 	}
 	return count;
 }
@@ -770,7 +766,7 @@ stock int GetClientCountEx(bool nobots=true)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool SetClientModel(any client, const char[] model)	{
-	if(IsClientConnected(client) && IsClientInGame(client))	{
+	if(Tklib_IsValidClient(client))	{
 		SetEntityModel(client, model);
 		return true;
 	}
@@ -787,7 +783,7 @@ stock bool SetClientModel(any client, const char[] model)	{
  *	@error	If the used is invalid, this returns false.
  */
 stock bool GetClientViewAngles(any client, float view[3])	{
-	if(IsClientConnected(client))	{
+	if(Tklib_IsValidClient(client))	{
 		float eyes[3], angles[3];
 		GetClientEyePosition(client, eyes); 
 		GetClientEyeAngles(client, angles);
@@ -802,7 +798,7 @@ stock bool GetClientViewAngles(any client, float view[3])	{
 }
 
 stock bool GetClientViewAngles_TraceEntityFilterPlayer(int entity, int contentsMask)	{
-	return bool(entity > MaxClients);
+	return (entity > MaxClients);
 }
 
 /**

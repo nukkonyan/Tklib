@@ -75,7 +75,7 @@ stock bool FindEntity(const char[] classname)	{
  *	Creates an entity by string name but does not spawn it (see DispatchSpawn).
  *	If ForceEdictIndex is not -1, then it will use an edict by that index. If the index is
  *	invalid or there is already an edict using that index, it will error out.
- *	This provides additional ability to force name on the entity you created.
+ *	this provides additional ability to force name on the entity you created.
  *
  *	@param	classname		Entity classname.
  *	@param	name			Entity name it will be referred as.
@@ -166,7 +166,7 @@ stock int GetEntityOwner(int entity)	{
 /**
  *	Kills the entity.
  *	Same as AcceptEntityInput with "Kill".
- *	This one makes sure if the entity is valid or not.
+ *	this one makes sure if the entity is valid or not.
  *
  *	@param	entity	Entity index.
  *
@@ -215,7 +215,7 @@ stock bool SetEntityClassname(any entity, const char[] clsname)	{
 
 /**
  *	Retrieves the classname of an entity.
- *	This is like GetEdictClassname(), except it works for ALL
+ *	this is like GetEdictClassname(), except it works for ALL
  *	entities, not just edicts.
  *
  *	@param	entity		Index of the entity.
@@ -395,9 +395,9 @@ stock int GetEntityEffect(any entity)	{
 
 /**
  *	Returns the distance between 2 entities in meters.
- *	This is experimental and may be incorrect.
+ *	this is experimental and may be incorrect.
  *	In CS:GO, use "distance" from event "player_death" for more accurate numbers.
- *	This one is very similiar to that one but incorrect at times.
+ *	this one is very similiar to that one but incorrect at times.
  *
  *	@param	entity		The entity index.
  *	@param	target		The target entity index.
@@ -420,159 +420,290 @@ stock float GetEntityDistance(any entity, any target)	{
 //Methodmap
 
 methodmap Entity __nullable__	{
+	/**
+	 *	Creates an entity by string name but does not spawn it (see DispatchSpawn).
+	 *	If ForceEdictIndex is not -1, then it will use an edict by that index. If the index is
+	 *	invalid or there is already an edict using that index, it will error out.
+	 *	this provides additional ability to force name on the entity you created.
+	 *
+	 *	@param	classname		Entity classname.
+	 *	@param	name			Entity name it will be referred as.
+	 *	@param	ForceEdictIndex	Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@error	Invalid edict index, or no mod support.
+	 */
 	public Entity(const char[] classname="", const char[] name="", int ForceEdictIndex=-1)
 	{
-		return Ent(CreateEntityByNameEx(classname, name, ForceEdictIndex));
+		return view_as<Entity>(CreateEntityByNameEx(classname, name, ForceEdictIndex));
 	}
 	
+	/**
+	 *	Gives an entity to a player.
+	 *
+	 *	@param	client		The users index.
+	 *	@param	clasname	Item classname (such as weapon_ak47).
+	 *	@param	iSubType	Unknown.
+	 *
+	 *	@error		If invalid client or client not in game, or lack of mod support, this returns Entity_Invalid or Entity_NotSupported.
+	 */
+	public static Entity GiveItem(any client, const char[] classname, int iSubType=0)
+	{
+		return view_as<Entity>(GivePlayerItem(client, classname, iSubType));
+	}
+	
+	/**
+	 *	Returns the absolute origin of an entity.
+	 *
+	 *	@param	vec			3 dimensional vector array.
+	 *
+	 *	@error	If entity is invalid, this returns false.
+	 */
 	public bool GetAbsOrigin(float vec[3])
 	{
-		return GetEntityAbsOrigin(This, vec);
+		return GetEntityAbsOrigin(view_as<int>(this), vec);
 	}
 	
+	/**
+	 *	Returns the entity name
+	 *
+	 *	@param buffer		Buffer storage.
+	 *	@param maxlen		Buffer max length.
+	 *
+	 *	@error	If the entity is invalid, this returns false.
+	 */
 	public bool GetName(char[] buffer, int maxlen)
 	{
-		return GetEntityName(This, buffer, maxlen);
+		return GetEntityName(view_as<int>(this), buffer, maxlen);
 	}
 	
+	
+	/**
+	 *	Set entity name
+	 *
+	 *	@param	name		Entity name.
+	 *
+	 *	@error	If entity is invalid, it will returns false.
+	 */
 	public bool SetName(const char[] name)
 	{
-		return SetEntityName(This, name);
+		return SetEntityName(view_as<int>(this), name);
 	}
 	
 	public static Entity FindByClassname(any startEnt, const char[] classname)
 	{
-		return Ent(FindEntityByClassname(startEnt, classname));
+		return view_as<Entity>(FindEntityByClassname(startEnt, classname));
 	}
 	
+	/**
+	 *	Find entity via classname if it exists.
+	 *
+	 *	@param	classname	Entity classname.
+	 *
+	 *	@error	If the entity is invalid, this will return false.
+	 */
 	public static bool Find(const char[] classname)
 	{
 		return FindEntity(classname);
 	}
 	
+	
+	/**
+	 *	Entity's disabled status.
+	 */
 	property bool Disabled
 	{
 		public set(bool value)
 		{
-			SetEntityDisabled(This, value);
+			SetEntityDisabled(view_as<int>(this), value);
 		}
 		public get()
 		{
-			return GetEntityDisabled(This);
+			return GetEntityDisabled(view_as<int>(this));
 		}
 	}
 	
+	/**
+	 *	Sets the entity's model name path
+	 *
+	 *	@param	model		Model path.
+	 *
+	 *	@error	If the entity is invalid, this returns false.
+	 */
 	public bool SetModel(const char[] model)
 	{
-		return SetEntityModelEx(This, model);
+		return SetEntityModelEx(view_as<int>(this), model);
 	}
 	
+	/**
+	 *	Returns the entity's model name path
+	 *
+	 *	@param	buffer		Buffer storage.
+	 *	@param	maxlen		Length of the buffer.
+	 *
+	 *	@error	If the entity is invalid, this returns false.
+	 */
 	public bool GetModel(char[] buffer, int maxlen)
 	{
-		return GetEntityModel(This, buffer, maxlen);
+		return GetEntityModel(view_as<int>(this), buffer, maxlen);
 	}
 	
+	/**
+	 *	The entity's owner entity index.
+	 */
 	property int Owner
 	{
 		public set(int client)
 		{
-			SetEntityOwner(This, client);
+			SetEntityOwner(view_as<int>(this), client);
 		}
 		public get()
 		{
-			return GetEntityOwner(This);
+			return GetEntityOwner(view_as<int>(this));
 		}
 	}
-
+	
+	/**
+	 *	The entity health amount
+	 */
 	property int Health
 	{
 		public set(int value)
 		{
-			SetEntPropEx(This, Prop_Send, "m_iHealth", value);
+			SetEntPropEx(view_as<int>(this), Prop_Send, "m_iHealth", value);
 		}
 		public get()
 		{
-			return	GetEntPropEx(This, Prop_Send, "m_iHealth");
+			return	GetEntPropEx(view_as<int>(this), Prop_Send, "m_iHealth");
 		}
 	}
 	
+	/**
+	 *	Returns if the entity or edict is valid.
+	 *	Use this over IsValidEntity and IsValidEdict as this combines them.
+	 *
+	 *	@error	If the entity/edict is invalid, this returns false.
+	 */
 	public bool IsValid()
 	{
-		return IsValidEntityEx(This);
+		return IsValidEntityEx(view_as<int>(this));
 	}
 	
+	/**
+	 *	Kills the entity.
+	 *	Same as AcceptEntityInput with "Kill".
+	 *	this one makes sure if the entity is valid or not.
+	 *
+	 *	@error	If entity is invalid, this returns false.
+	 */
 	public bool Kill(const char[] input="", int activator=-1, int caller=-1, int outputid=0)
 	{
-		return KillEntity(This, input, activator, caller, outputid);
+		return KillEntity(view_as<int>(this), input, activator, caller, outputid);
 	}
 	
+	/**
+	 *	Marks an entity for deletion.
+	 *
+	 *	@error		If invalid entity, this returns false.
+	 */
 	public bool Remove()
 	{
-		if(IsValidEntityEx(This))
+		if(IsValidEntity(view_as<int>(this)))
 		{
-			RemoveEntity(This);
-			return	true;
+			RemoveEntity(view_as<int>(this));
+			return true;
 		}
 		
 		return	false;
 	}
 	
+	/**
+	 *	Marks an edict for deletion.
+	 *
+	 *	@error		If invalid dict, this returns false.
+	 */
 	public bool RemoveEx()
 	{
-		if(IsValidEntityEx(This))
+		if(IsValidEdict(view_as<int>(this)))
 		{
-			RemoveEdict(This);
-			return	true;
+			RemoveEdict(view_as<int>(this));
+			return true;
 		}
 			
 		return	false;
 	}
-
+	
+	/**
+	 *	The entity's Skin index.
+	 */
 	property int Skin
 	{
 		public set(int skin)
 		{
-			SetEntitySkin(This, skin);
+			SetEntitySkin(view_as<int>(this), skin);
 		}
 		public get()
 		{
-			return GetEntitySkin(This);
+			return GetEntitySkin(view_as<int>(this));
 		}
 	}
 	
+	/**
+	 *	The entity's parent entity index.
+	 */
 	property int ParentEntity
 	{
 		public set(int parent)
 		{
-			SetEntityParentEntity(This, parent);
+			SetEntityParentEntity(view_as<int>(this), parent);
 		}
 		public get()
 		{
-			return GetEntityParentEntity(This);
+			return GetEntityParentEntity(view_as<int>(this));
 		}
 	}
 	
+	/**
+	 *	The entity's parent entity index.
+	 */
+	property Entity ParentEntityEx
+	{
+		public set(Entity parent)
+		{
+			SetEntityParentEntity(view_as<Entity>(this), parent);
+		}
+		public get()
+		{
+			return view_as<Entity>(GetEntityParentEntity(view_as<Entity>(this)));
+		}
+	}
+	
+	/**
+	 *	The entity's initialized status.
+	 */
 	property bool Initialized
 	{
 		public set(bool initialized)
 		{
-			SetEntityInitialized(This, initialized);
+			SetEntityInitialized(view_as<int>(this), initialized);
 		}
 		public get()
 		{
-			return IsEntityInitialized(This);
+			return IsEntityInitialized(view_as<int>(this));
 		}
 	}
 	
+	/**
+	 *	The entity's definition index.
+	 */
 	property int DefinitionIndex
 	{
 		public set(int defindex)
 		{
-			SetEntityDefinitionIndex(This, defindex);
+			SetEntityDefinitionIndex(view_as<int>(this), defindex);
 		}
 		public get()
 		{
-			return	GetEntityDefinitionIndex(This);
+			return GetEntityDefinitionIndex(view_as<int>(this));
 		}
 	}
 	
@@ -580,96 +711,96 @@ methodmap Entity __nullable__	{
 	
 	public bool HasProp(PropType type, const char[] prop)
 	{
-		return	HasEntProp(This, type, prop);
+		return	HasEntProp(view_as<int>(this), type, prop);
 	}
 	public bool HasPropEx(PropType type, const char[] prop)
 	{
-		return	HasEntPropEx(This, type, prop);
+		return	HasEntPropEx(view_as<int>(this), type, prop);
 	}
 	
 	public void SetProp(PropType type, const char[] prop, any value, int size=4, int element=0)
 	{
-		SetEntProp(This, type, prop, value, size, element);
+		SetEntProp(view_as<int>(this), type, prop, value, size, element);
 	}
 	public bool SetPropEx(PropType type, const char[] prop, any value, int size=4, int element=0)
 	{
-		return	SetEntPropEx(This, type, prop, value, size, element);
+		return	SetEntPropEx(view_as<int>(this), type, prop, value, size, element);
 	}
 	public void SetPropEnt(PropType type, const char[] prop, int other, int element=0)
 	{
-		SetEntPropEnt(This, type, prop, other, element);
+		SetEntPropEnt(view_as<int>(this), type, prop, other, element);
 	}
 	public bool SetPropEntEx(PropType type, const char[] prop, int other, int element=0)
 	{
-		return	SetEntPropEntEx(This, type, prop, other, element);
+		return	SetEntPropEntEx(view_as<int>(this), type, prop, other, element);
 	}
 	public void SetPropBool(PropType type, const char[] prop, bool value, int size=4, int element)
 	{
-		SetEntProp(This, type, prop, value, size, element);
+		SetEntProp(view_as<int>(this), type, prop, value, size, element);
 	}
 	
 	public int GetProp(PropType type, const char[] prop, int size=4, int element=0)
 	{
-		return	GetEntProp(This, type, prop, size, element);
+		return	GetEntProp(view_as<int>(this), type, prop, size, element);
 	}
 	public int GetPropEx(PropType type, const char[] prop, int size=4, int element=0)
 	{
-		return	GetEntPropEx(This, type, prop, size, element);
+		return	GetEntPropEx(view_as<int>(this), type, prop, size, element);
 	}
 	public int GetPropEnt(PropType type, const char[] prop, int element=0)
 	{
-		return	GetEntPropEnt(This, type, prop, element);
+		return	GetEntPropEnt(view_as<int>(this), type, prop, element);
 	}
 	public int GetPropEntEx(PropType type, const char[] prop, int element=0)
 	{
-		return	GetEntPropEntEx(This, type, prop, element);
+		return	GetEntPropEntEx(view_as<int>(this), type, prop, element);
 	}
 	public int GetPropArraySize(PropType type, const char[] prop)
 	{
-		return	GetEntPropArraySize(This, type, prop);
+		return	GetEntPropArraySize(view_as<int>(this), type, prop);
 	}
 	public bool GetPropBool(PropType type, const char[] prop, int size=4, int element=0)
 	{
-		return	GetEntPropBool(This, type, prop, size, element);
+		return	GetEntPropBool(view_as<int>(this), type, prop, size, element);
 	}
 	
 	public void SetPropFloat(PropType type, const char[] prop, float value, int element=0)
 	{
-		SetEntPropFloat(This, type, prop, value, element);
+		SetEntPropFloat(view_as<int>(this), type, prop, value, element);
 	}
 	public bool	SetPropFloatEx(PropType type, const char[] prop, float value, int element=0)
 	{
-		return SetEntPropFloatEx(This, type, prop, value, element);
+		return SetEntPropFloatEx(view_as<int>(this), type, prop, value, element);
 	}
 	public float GetPropFloat(PropType type, const char[] prop, int element=0)
 	{
-		return	GetEntPropFloat(This, type, prop, element);
+		return	GetEntPropFloat(view_as<int>(this), type, prop, element);
 	}
 	
 	public int SetPropString(PropType type, const char[] prop, const char[] buffer, int element=0)
 	{
-		return	SetEntPropString(This, type, prop, buffer, element);
+		return	SetEntPropString(view_as<int>(this), type, prop, buffer, element);
 	}
 	public bool SetPropStringEx(PropType type, const char[] prop, const char[] buffer, int element=0)
 	{
-		return	SetEntPropStringEx(This, type, prop, buffer, element);
+		return	SetEntPropStringEx(view_as<int>(this), type, prop, buffer, element);
 	}
 	public int GetPropString(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
 	{
-		return	GetEntPropString(This, type, prop, buffer, maxlen, element);
+		return	GetEntPropString(view_as<int>(this), type, prop, buffer, maxlen, element);
 	}
 	public bool GetPropStringEx(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
 	{
-		return	GetEntPropStringEx(This, type, prop, buffer, maxlen, element);
+		return	GetEntPropStringEx(view_as<int>(this), type, prop, buffer, maxlen, element);
 	}
 	
 	public void SetPropVector(PropType type, const char[] prop, const float vec[3], int element)
 	{
-		SetEntPropVector(This, type, prop, vec, element);
+		SetEntPropVector(view_as<int>(this), type, prop, vec, element);
 	}
 	public void GetPropVector(PropType type, const char[] prop, float vec[3], int element=0)
 	{
-		GetEntPropVector(This, type, prop, vec, element);
+		GetEntPropVector(view_as<int>(this), type, prop, vec, element);
 	}
 	
 	public void SetData(int offset, any value, int size=4, bool changeState=false)
@@ -678,52 +809,52 @@ methodmap Entity __nullable__	{
 	}
 	public int GetData(int offset, int size=4)
 	{
-		return	GetEntData(This, offset, size);
+		return	GetEntData(view_as<int>(this), offset, size);
 	}
 	
 	public void SetDataEnt2(int offset, int other, bool changeState=false)
 	{
-		SetEntDataEnt2(This, offset, other, changeState);
+		SetEntDataEnt2(view_as<int>(this), offset, other, changeState);
 	}
 	public int GetDataEnt2(int offset)
 	{
-		return	GetEntDataEnt2(This, offset);
+		return	GetEntDataEnt2(view_as<int>(this), offset);
 	}
 	
 	public void SetDataFloat(int offset, float value, bool changeState=false)
 	{
-		SetEntDataFloat(This, offset, value, changeState);
+		SetEntDataFloat(view_as<int>(this), offset, value, changeState);
 	}
 	public float GetDataFloat(int offset)
 	{
-		return	GetEntDataFloat(This, offset);
+		return	GetEntDataFloat(view_as<int>(this), offset);
 	}
 	
 	public void SetDataString(int offset, const char[] buffer, int maxlen, bool changeState=false)
 	{
-		SetEntDataString(This, offset, buffer, maxlen, changeState);
+		SetEntDataString(view_as<int>(this), offset, buffer, maxlen, changeState);
 	}
 	public int GetDataString(int offset, char[] buffer, int maxlen)
 	{
-		return	GetEntDataString(This, offset, buffer, maxlen);
+		return	GetEntDataString(view_as<int>(this), offset, buffer, maxlen);
 	}
 
 	public void SetDataVector(int offset, const float vec[3], bool changeState=false)
 	{
-		SetEntDataVector(This, offset, vec, changeState);
+		SetEntDataVector(view_as<int>(this), offset, vec, changeState);
 	}
 	public void GetDataVector(int offset, float vec[3])
 	{
-		GetEntDataVector(This, offset, vec);
+		GetEntDataVector(view_as<int>(this), offset, vec);
 	}
 	
 	public void SetDataArray(int offset, const int[] array, int arraySize, int dataSize=4, bool changeState=false)
 	{
-		SetEntDataArray(This, offset, array, arraySize, dataSize, changeState);
+		SetEntDataArray(view_as<int>(this), offset, array, arraySize, dataSize, changeState);
 	}
 	public void GetDataArray(int offset, int[] array, int arraySize, int dataSize=4)
 	{
-		GetEntDataArray(This, offset, array, arraySize, dataSize);
+		GetEntDataArray(view_as<int>(this), offset, array, arraySize, dataSize);
 	}
 	
 	//Other
@@ -732,11 +863,11 @@ methodmap Entity __nullable__	{
 	{
 		public set(int flags)
 		{
-			SetEntityFlags(This, flags);
+			SetEntityFlags(view_as<int>(this), flags);
 		}
 		public get()
 		{
-			GetEntityFlags(This);
+			GetEntityFlags(view_as<int>(this));
 		}
 	}
 	
@@ -744,11 +875,11 @@ methodmap Entity __nullable__	{
 	{
 		public set(int flags)
 		{
-			SetEdictFlags(This, flags);
+			SetEdictFlags(view_as<int>(this), flags);
 		}
 		public get()
 		{
-			GetEdictFlags(This);
+			GetEdictFlags(view_as<int>(this));
 		}
 	}
 	
@@ -756,11 +887,11 @@ methodmap Entity __nullable__	{
 	{
 		public set(float amount)
 		{
-			SetEntityGravity(This, amount);
+			SetEntityGravity(view_as<int>(this), amount);
 		}
 		public get()
 		{
-			GetEntityFlags(This);
+			GetEntityFlags(view_as<int>(this));
 		}
 	}
 	
@@ -768,63 +899,63 @@ methodmap Entity __nullable__	{
 	{
 		public set(MoveType mt)
 		{
-			SetEntityMoveType(This, mt);
+			SetEntityMoveType(view_as<int>(this), mt);
 		}
 		public get()
 		{
-			GetEntityMoveType(This);
+			GetEntityMoveType(view_as<int>(this));
 		}
 	}
 	
 	public void SetRenderColor(int r=255, int g=255, int b=255, int a=255)
 	{
-		SetEntityRenderColor(This, r, g, b, a);
+		SetEntityRenderColor(view_as<int>(this), r, g, b, a);
 	}
 	public void GetRenderColor(int& r, int& g, int& b, int& a)
 	{
-		GetEntityRenderColor(This, r, g, b, a);
+		GetEntityRenderColor(view_as<int>(this), r, g, b, a);
 	}
 	
 	public void SetRenderFx(RenderFx fx)
 	{
-		SetEntityRenderFx(This, fx);
+		SetEntityRenderFx(view_as<int>(this), fx);
 	}
 	public RenderFx GetRenderFx()
 	{
-		return GetEntityRenderFx(This);
+		return GetEntityRenderFx(view_as<int>(this));
 	}
 	
 	public void SetRenderMode(RenderMode mode)
 	{
-		SetEntityRenderMode(This, mode);
+		SetEntityRenderMode(view_as<int>(this), mode);
 	}
 	public RenderMode GetRenderMode()
 	{
-		return GetEntityRenderMode(This);
+		return GetEntityRenderMode(view_as<int>(this));
 	}
 	
 	public bool AcceptInput(const char[] input, any activator=-1, any caller=-1, int outputid=0)
 	{
-		return AcceptEntityInput(This, input, activator, caller, outputid);
+		return AcceptEntityInput(view_as<int>(this), input, activator, caller, outputid);
 	}
 	
 	public void SetVariant()
 	{
-		SetVariantEntity(This);
+		SetVariantEntity(view_as<int>(this));
 	}
 	
 	public void FireOutput(const char[] output, int activator=-1, float delay=0.0)
 	{
-		FireEntityOutput(This, output, activator, delay);
+		FireEntityOutput(view_as<int>(this), output, activator, delay);
 	}
 	
 	public void Activate()
 	{
-		ActivateEntity(This);
+		ActivateEntity(view_as<int>(this));
 	}
 	public void Extinguish()
 	{
-		ExtinguishEntity(This);
+		ExtinguishEntity(view_as<int>(this));
 	}
 	
 	//Put 'any' to support team enums.
@@ -832,89 +963,89 @@ methodmap Entity __nullable__	{
 	{
 		public set(any value) 
 		{
-			SetEntPropEx(This, Prop_Send, "m_iTeamNum", value);
+			SetEntPropEx(view_as<int>(this), Prop_Send, "m_iTeamNum", value);
 		}
 		public get()
 		{
-			return GetEntPropEx(This, Prop_Send, "m_iTeamNum");
+			return GetEntPropEx(view_as<int>(this), Prop_Send, "m_iTeamNum");
 		}
 	}
 	
 	public bool IsClassnameMatching(const char[] classname, bool partialMatch=false)
 	{
-		return	IsEntityClassnameMatching(This, classname, partialMatch);
+		return	IsEntityClassnameMatching(view_as<int>(this), classname, partialMatch);
 	}
 	
 	public void Ignite(float time, bool npc=false, float size=0.0, bool level=false)
 	{
-		IgniteEntity(This, time, npc, size, level);
+		IgniteEntity(view_as<int>(this), time, npc, size, level);
 	}
 	
 	public void Teleport(const float origin[3]=NULL_VECTOR, const float angles[3]=NULL_VECTOR, const float velocity[3]=NULL_VECTOR)
 	{
-		TeleportEntity(This, origin, angles, velocity);
+		TeleportEntity(view_as<int>(this), origin, angles, velocity);
 	}
 	
 	public void Kv(const char[] keyName, const char[] value)
 	{
-		DispatchKeyValue(This, keyName, value);
+		DispatchKeyValue(view_as<int>(this), keyName, value);
 	}
 	public void KvFloat(const char[] keyName, float value)
 	{
-		DispatchKeyValueFloat(This, keyName, value);
+		DispatchKeyValueFloat(view_as<int>(this), keyName, value);
 	}
 	public void KvVec(const char[] keyName, const float vec[3])
 	{
-		DispatchKeyValueVector(This, keyName, vec);
+		DispatchKeyValueVector(view_as<int>(this), keyName, vec);
 	}
 	
 	public bool Spawn()
 	{
-		return DispatchSpawn(This);
+		return DispatchSpawn(view_as<int>(this));
 	}
 	
 	public bool IsNetworkable()
 	{
-		return IsEntNetworkable(This);
+		return IsEntNetworkable(view_as<int>(this));
 	}
 	
 	public bool SetClassname(char[] clsname)
 	{
-		return SetEntityClassname(This, clsname);
+		return SetEntityClassname(view_as<int>(this), clsname);
 	}
 	public bool GetClassname(char[] clsname, int maxlength)
 	{
-		return GetEntityClassnameEx(This, clsname, maxlength);
+		return GetEntityClassnameEx(view_as<int>(this), clsname, maxlength);
 	}
 	public bool GetNetClass(char[] clsname, int maxlength)
 	{
-		return IsValidEntityEx(This) ? GetEntityNetClass(This, clsname, maxlength):false;
+		return IsValidEntityEx(view_as<int>(this)) ? GetEntityNetClass(view_as<int>(this), clsname, maxlength):false;
 	}
 	public Address GetAddress()
 	{
-		return GetEntityAddress(This);
+		return GetEntityAddress(view_as<int>(this));
 	}
 	
 	public void ChangeState(int offset=0)
 	{
-		ChangeEdictState(This, offset);
+		ChangeEdictState(view_as<int>(this), offset);
 	}
 	
 	property int MoveParent
 	{
 		public set(int parent)
 		{
-			SetEntityMoveParent(This, parent);
+			SetEntityMoveParent(view_as<int>(this), parent);
 		}
 		public get()
 		{
-			return GetEntityMoveParent(This);
+			return GetEntityMoveParent(view_as<int>(this));
 		}
 	}
 	
 	public int FindMapInfo(const char[] prop, PropFieldType type=PropFieldType(0), int num_bits=0, int local_offset=0)
 	{
-		return IsValidEntityEx(This) ? FindDataMapInfo(This, prop, type, num_bits, local_offset):-1;
+		return IsValidEntityEx(view_as<int>(this)) ? FindDataMapInfo(view_as<int>(this), prop, type, num_bits, local_offset):-1;
 	}
 	
 	public static int FindPropInfo(const char[] cls, const char[] prop, PropFieldType type=PropFieldType(0), int num_bits=0, int local_offset=0, int array_size=0)
@@ -926,28 +1057,26 @@ methodmap Entity __nullable__	{
 	{
 		public set(int value)
 		{
-			SetEntityEffect(This, value);
+			SetEntityEffect(view_as<int>(this), value);
 		}
 		public get()
 		{
-			return GetEntityEffect(This);
+			return GetEntityEffect(view_as<int>(this));
 		}
 	}
 	
+	#if !defined _tklib_disable_weapons
 	public bool EquipWeapon(int client)
 	{
-		if(IsValidEntityEx(This))
-		{
-			EquipPlayerWeapon(client, This);
-			return	true;
-		}
-		
-		return	false;
+		return EquipPlayerWeaponEx(client, view_as<int>(this));
 	}
+	#else
+	#error Entity.EquipWeapon requires Weapons included to not be disabled ( EquipPlayerWeaponEx() )
+	#endif
 	
 	public float GetDistance(any target)
 	{
-		return GetEntityDistance(This, target);
+		return GetEntityDistance(view_as<int>(this), target);
 	}
 }
 
@@ -957,7 +1086,7 @@ methodmap Entity __nullable__	{
 
 /**
  *	Returns if the entity or edict is valid.
- *	Use this over IsValidEntity and IsValidEdict as this combines them.
+ *	Use view_as<int>(this) over IsValidEntity and IsValidEdict as view_as<int>(this) combines them.
  *
  *	@param	entity	Entity index.
  *
@@ -972,7 +1101,7 @@ stock bool IsValidEntityEx(any entity)	{
 /**
  *	Sets an integer value in an entity's property.
  *
- *	This function is considered safer and more robust over SetEntData,
+ *	view_as<int>(this) function is considered safer and more robust over SetEntData,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -980,7 +1109,7 @@ stock bool IsValidEntityEx(any entity)	{
  *	@param	prop		Property name.
  *	@param	value		Value to set.
  *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						This value is auto-detected, and the size parameter is
+ *						view_as<int>(this) value is auto-detected, and the size parameter is
  *						only used as a fallback in case detection fails.
  *	@param	element		Element # (starting from 0) if property is an array.
  *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
@@ -997,7 +1126,7 @@ stock bool SetEntPropEx(any entity, PropType type, const char[] prop, any value,
 /**
  *	Sets an entity index in an entity's property.
  *
- *	This function is considered safer and more robust over SetEntDataEnt*,
+ *	view_as<int>(this) function is considered safer and more robust over SetEntDataEnt*,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1021,14 +1150,14 @@ stock bool SetEntPropEntEx(any entity, PropType type, const char[] prop, int oth
  *	Retrieves an integer value from an entity's property.
  *	Considered safer over GetEntProp.
  *
- *	This function is considered safer and more robust over GetEntData,
+ *	view_as<int>(this) function is considered safer and more robust over GetEntData,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
  *	@param	type		Property type.
  *	@param	prop		Property name.
  *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						This value is auto-detected, and the size parameter is
+ *						view_as<int>(this) value is auto-detected, and the size parameter is
  *						only used as a fallback in case detection fails.
  *	@param	element		Element # (starting from 0) if property is an array.
  *
@@ -1044,7 +1173,7 @@ stock int GetEntPropEx(any entity, PropType type, const char[] prop, int size=4,
  *	Retrieves an integer value from an entity's property.
  *	Considered safer over GetEntProp.
  *
- *	This function is considered safer and more robust over GetEntDataEnt*,
+ *	view_as<int>(this) function is considered safer and more robust over GetEntDataEnt*,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1064,14 +1193,14 @@ stock int GetEntPropEntEx(any entity, PropType type, const char[] prop, int elem
  *	Retrieves a boolean value from an entity's property.
  *	Considered safer over GetEntProp.
  *
- *	This function is considered safer and more robust over GetEntData,
+ *	view_as<int>(this) function is considered safer and more robust over GetEntData,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
  *	@param	type		Property type.
  *	@param	prop		Property name.
  *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						This value is auto-detected, and the size parameter is
+ *						view_as<int>(this) value is auto-detected, and the size parameter is
  *						only used as a fallback in case detection fails.
  *	@param	element		Element # (starting from 0) if property is an array.
  *
@@ -1133,7 +1262,7 @@ stock bool HasEntPropEx(any entity, PropType type, const char[] prop)	{
 
 /**
  *	Sets a float value in an entity's property.
- *	This function is considered safer and more robust over SetEntDataFloat,
+ *	view_as<int>(this) function is considered safer and more robust over SetEntDataFloat,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/Edict index.
@@ -1142,7 +1271,7 @@ stock bool HasEntPropEx(any entity, PropType type, const char[] prop)	{
  *	@param	value		Value to set.
  *	@param	element		Element # (starting from 0) if property is an array.
  *
- *	@error				If entity, offset or property is not valid, this returns false. (if out of bounds, this spits out an error).
+ *	@error				If entity, offset or property is not valid, this returns false. (if out of bounds, view_as<int>(this) spits out an error).
  */
 stock bool SetEntPropFloatEx(any entity, PropType type, const char[] prop, float value, int element=0)	{
 	if(HasEntPropEx(entity, type, prop))	{
@@ -1156,7 +1285,7 @@ stock bool SetEntPropFloatEx(any entity, PropType type, const char[] prop, float
 /**
  *	Retrieves a float value from an entity's property.
  *
- *	This function is considered safer and more robust over GetEntDataFloat,
+ *	view_as<int>(this) function is considered safer and more robust over GetEntDataFloat,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1175,7 +1304,7 @@ stock float GetEntPropFloatEx(any entity, PropType type, const char[] prop, int 
 /**
  *	Retrieves a vector of floats from an entity, given a named network property.
  *
- *	This function is considered safer and more robust over GetEntDataVector,
+ *	view_as<int>(this) function is considered safer and more robust over GetEntDataVector,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1199,7 +1328,7 @@ stock bool GetEntPropVectorEx(int entity, PropType type, const char[] prop, floa
 /**
  *	Sets a vector of floats in an entity, given a named network property.
  *
- *	This function is considered safer and more robust over SetEntDataVector,
+ *	view_as<int>(this) function is considered safer and more robust over SetEntDataVector,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1218,4 +1347,19 @@ stock bool SetEntPropVectorEx(int entity, PropType type, const char[] prop, cons
 	}
 	
 	return false;
+}
+
+/**
+ *	Retrieves the count of values that an entity property's array can store.
+ *
+ *	@param	entity		Entity/edict index.
+ *	@param	type		Property type.
+ *	@param	prop		Property name.
+ *
+ *	@return				Size of array (in elements) or 1 if property is not an array.
+ *
+ *	@error				If invalid entity or property not found, this returns -1.
+ */
+stock int GetEntPropArraySizeEx(int entity, PropType type, const char[] prop)	{
+	return HasEntPropEx(entity, type, prop) ? GetEntPropArraySize(entity, type, prop):-1;
 }

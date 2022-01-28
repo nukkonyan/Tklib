@@ -1022,7 +1022,7 @@ stock int CS_GetPriceFromWeapon(const char[] weapon)	{
 						price = 1100;
 				}
 				/* CS:CO */
-				case	false:	{
+				case false:	{
 					/* To be added */
 				}
 			}

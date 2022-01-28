@@ -33,7 +33,7 @@ stock bool RemoveAllWeapons(int client)	{
  *	@error	If the user is invalid or has no active weapon, this returns -1.
  */
 stock int GetClientActiveWeapon(int client)	{
-	return	GetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon");
+	return GetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon");
 }
 
 /**
@@ -45,7 +45,7 @@ stock int GetClientActiveWeapon(int client)	{
  *	@error	If the user is invalid or has no active weapon, this returns false.
  */
 stock bool SetClientActiveWeapon(int client, int slot)	{
-	return	SetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon", slot);
+	return SetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon", slot);
 }
 
 /**
@@ -56,8 +56,8 @@ stock bool SetClientActiveWeapon(int client, int slot)	{
  *
  *	@error	If the user is invalid, nothing will happen.
  */
-stock bool SetClientWeaponAmmo(int client, int ammo)	{
-	return	SetEntPropEx(GetClientActiveWeapon(client), Prop_Send, "m_iClip1", ammo);
+stock bool SetClientActiveWeaponAmmo(int client, int ammo)	{
+	return SetEntPropEx(GetClientActiveWeapon(client), Prop_Send, "m_iClip1", ammo);
 }
 
 /**
@@ -71,7 +71,7 @@ stock bool SetClientWeaponAmmo(int client, int ammo)	{
  *
  *	@error	If the user is invalid, nothing will happen.
  */
-stock void SetClientWeaponAmmoEx(int client, int primary=0, int secondary=0)	{
+stock void SetClientActiveWeaponAmmoEx(int client, int primary=0, int secondary=0)	{
 	if(primary > 0)
 		SetClientWeaponAmmo(client, primary);
 	if(secondary > 0)
@@ -87,7 +87,7 @@ stock void SetClientWeaponAmmoEx(int client, int primary=0, int secondary=0)	{
  *	@error	If the weapon entity is invalid, this returns false.
  */
 stock bool SetWeaponAmmo(any weapon, int value)	{
-	return	SetEntPropEx(weapon, Prop_Send, "m_iClip1", value);
+	return SetEntPropEx(weapon, Prop_Send, "m_iClip1", value);
 }
 
 /**
@@ -102,7 +102,7 @@ stock bool SetWeaponAmmo(any weapon, int value)	{
  *	@error	If the user is invalid, nothing will happen.
  */
 stock void SetWeaponAmmoEx(any weapon, int primary=0, int secondary=0)	{
-	if(Tklib_IsValidClient(client, _, true))	{
+	if(IsValidEntityEx(weapon))	{
 		if(primary != 0)
 			SetWeaponAmmo(weapon, primary);
 		if(secondary != 0)
@@ -118,7 +118,7 @@ stock void SetWeaponAmmoEx(any weapon, int primary=0, int secondary=0)	{
  *	@error	If the weapon is invalid, it returns -1.
  */
 stock int GetWeaponAmmo(any weapon)	{
-	return	GetEntPropEx(weapon, Prop_Send, "m_iClip1");
+	return GetEntPropEx(weapon, Prop_Send, "m_iClip1");
 }
 
 /**
@@ -129,7 +129,7 @@ stock int GetWeaponAmmo(any weapon)	{
  *	@error	If the client is invalid, this returns -1.
  */
 stock int GetClientActiveWeaponAmmo(int client)	{
-	return	GetWeaponAmmo(GetClientActiveWeapon(client));
+	return GetWeaponAmmo(GetClientActiveWeapon(client));
 }
 
 /**
@@ -141,7 +141,7 @@ stock int GetClientActiveWeaponAmmo(int client)	{
  *	@error	If the user is invalid or has no active weapon, this returns false.
  */
 stock bool SetClientWeaponReserveAmmo(int client, int value)	{
-	return	SetWeaponAmmo(GetClientActiveWeapon(client), value);
+	return SetWeaponAmmo(GetClientActiveWeapon(client), value);
 }
 
 /**
@@ -153,7 +153,7 @@ stock bool SetClientWeaponReserveAmmo(int client, int value)	{
  *	@error	If the weapon entity is invalid, this returns false.
  */
 stock bool SetWeaponReserveAmmo(any weapon, int value)	{
-	return	SetEntPropEx(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount", value);
+	return SetEntPropEx(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount", value);
 }
 
 /**
@@ -164,7 +164,7 @@ stock bool SetWeaponReserveAmmo(any weapon, int value)	{
  *	@error	If the weapon entity is invalid, this returns -1.
  */
 stock int GetWeaponReserveAmmo(any weapon)	{
-	return	GetEntPropEx(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount");
+	return GetEntPropEx(weapon, Prop_Send, "m_iPrimaryReserveAmmoCount");
 }
 
 /**
@@ -174,7 +174,7 @@ stock int GetWeaponReserveAmmo(any weapon)	{
  *	@error	If the client is invalid, this returns -1.
  */
 stock int GetClientActiveWeaponReserveAmmo(int client)	{
-	return	GetWeaponReserveAmmo(GetClientActiveWeapon(client));
+	return GetWeaponReserveAmmo(GetClientActiveWeapon(client));
 }
 
 /**
@@ -185,7 +185,7 @@ stock int GetClientActiveWeaponReserveAmmo(int client)	{
  *	@error	If weapon is invalid, this returns -1.
  */
 stock int GetWeaponAmmoType(any weapon)	{
-	return	GetEntPropEx(weapon, Prop_Send, "m_iPrimaryAmmoType");
+	return GetEntPropEx(weapon, Prop_Send, "m_iPrimaryAmmoType");
 }
 
 /**
@@ -196,7 +196,7 @@ stock int GetWeaponAmmoType(any weapon)	{
  *	@error	If user is invalid, this returns -1.
  */
 stock int GetClientActiveWeaponsArraySize(int client)	{
-	return	(HasEntPropEx(client, Prop_Send, "m_hMyWeapons")) ? GetEntPropArraySize(client, Prop_Send, "m_hMyWeapons"):-1;
+	return GetEntPropArraySizeEx(client, Prop_Send, "m_hMyWeapons");
 }
 
 /**
@@ -208,7 +208,7 @@ stock int GetClientActiveWeaponsArraySize(int client)	{
  *	@error	If user or weapon entity is invalid, this returns -1.
  */
 stock int GetClientWeaponEntity(int client, int element)	{
-	return	Tklib_IsValidClient(client, false, true) ? GetEntPropEntEx(client, Prop_Send, "m_hMyWeapons", element):-1;
+	return GetEntPropEntEx(client, Prop_Send, "m_hMyWeapons", element);
 }
 
 /**
@@ -219,7 +219,7 @@ stock int GetClientWeaponEntity(int client, int element)	{
  *	@error	If the user or offset is invalid, this returns -1.
  */
 stock int GetClientWeaponsOffset(int client)	{
-	return	Tklib_IsValidClient(client) ? FindDataMapInfo(client, "m_hMyWeapons"):-1;
+	return Tklib_IsValidClient(client) ? FindDataMapInfo(client, "m_hMyWeapons"):-1;
 }
 
 /**
@@ -230,7 +230,7 @@ stock int GetClientWeaponsOffset(int client)	{
  *	@error	If the weapon is invalid, this returns false.
  */
 stock bool IsValidWeapon(any weapon)	{
-	return	IsEntityClassnameMatching(weapon, "weapon_", true);
+	return IsEntityClassnameMatching(weapon, "weapon_", true);
 }
 
 /**
@@ -244,7 +244,7 @@ stock bool IsValidWeapon(any weapon)	{
  *	@error	If the user is invalid or weapon is invalid, this returns false.
  */
 stock bool EquipPlayerWeaponEx(int client, any weapon)	{
-	if(IsClientInGame(client) && IsPlayerAlive(client) && IsValidEntityEx(weapon))	{
+	if(Tklib_IsValidClient(client, _, true) && IsValidEntityEx(weapon))	{
 		//Credits to Bacardi for part of the code.
 		
 		float origin[3];
@@ -261,10 +261,21 @@ stock bool EquipPlayerWeaponEx(int client, any weapon)	{
 		
 		SetEntProp(weapon, Prop_Data, "m_spawnflags", flags);
 		DispatchSpawn(weapon);
-		return	true;
+		return true;
 	}
 	
-	return	false;
+	return false;
+}
+
+/**
+ *	Returns the weapon of the players weapon array.
+ *
+ *	@param	client		The users index.
+ *	@param	array		The slot array index to get weapon entity from.
+ */
+stock int GetClientActiveWeaponSlot(any client, int array)
+{
+	return GetEntPropEntEx(client, Prop_Send, "m_hMyWeapons", array);
 }
 
 #endif
