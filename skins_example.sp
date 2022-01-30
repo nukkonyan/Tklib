@@ -1,14 +1,14 @@
-#include	<tklib>
+#pragma semicolon 1
+#pragma newdecls required
+#pragma tabsize 0
+#include <tklib>
 
-#pragma		semicolon	1
-#pragma		newdecls	required
-
-public	Plugin	myinfo	=	{
-	name		=	"[CS:GO] Skins Example",
-	author		=	"Tk /id/Teamkiller324",
-	description	=	"Plugin",
-	version		=	"0.01a",
-	url			=	"https://steamcommunity.com/id/Teamkiller324"
+public Plugin myinfo = {
+	name		= "[CS:GO] Skins Example",
+	author		= "Tk /id/Teamkiller324",
+	description	= "Plugin",
+	version		= "1.01",
+	url			= "https://steamcommunity.com/id/Teamkiller324"
 }
 
 public void OnPluginStart()	{
@@ -44,38 +44,50 @@ Action SkinCmd(int client, int args)	{
 	CSGO_SetWeaponOwner(weapon, client);
 	
 	//Set skin.
-	if(!StrEqual(arg2, ""))
+	if(IsValidString(arg2))
 	{
 		CSGO_SetWeaponSkin(weapon, StringToInt(arg2));
 	}
 	
 	//Set wear.
-	if(!StrEqual(arg3, ""))
+	if(IsValidString(arg3))
 	{
 		CSGO_SetWeaponWear(weapon, StringToFloat(arg3));
 	}
 	
 	//Set pattern.
-	if(!StrEqual(arg4, ""))
+	if(IsValidString(arg4))
 	{
 		CSGO_SetWeaponPattern(weapon, StringToInt(arg4));
 	}
 	
 	//Set nametag.
-	if(!StrEqual(arg5, ""))
+	if(IsValidString(arg5))
 	{
 		CSGO_SetWeaponNametag(weapon, arg5);
 	}
 	
 	//Set stattrak.
-	if(!StrEqual(arg6, ""))
+	if(IsValidString(arg6))
 	{
 		CSGO_SetWeaponStatTrak(weapon, StringToInt(arg6));
 	}
 	
+	//Set entity's owner.
+	weapon.Owner = client;
+	
 	PrintToChat(client, "[Skins Example] Weapon has been created.");
 	
-	EquipPlayerWeaponEx(client, weapon);
+	weapon.EquipWeapon(client);
+	
+	/* Force back the entity's actual classname. */
+	if(StrContains(arg1, "knife", false) != -1 || StrContains(arg1, "bayonet", false) != -1)
+	{
+		char temp_classname[64];
+		CSGO_GetClassnameDefindex(weapon.DefinitionIndex, temp_classname, sizeof(temp_classname));
+		
+		weapon.SetClassname(temp_classname);
+	}
 	
 	return	Plugin_Handled;
 }
@@ -88,104 +100,14 @@ Entity GetCSGOWeapon(const char[] weapon_name)
 	{
 		weapon = new Entity(weapon_name);
 	}
-	if(StrContainsEx(weapon_name, "weapon_knife_", false) || StrContainsEx(weapon_name, "weapon_bayonet", false))
+	else if(IsValidKnife(weapon_name))
 	{
 		weapon = new Entity("weapon_knifegg");
+		weapon.DefinitionIndex = CSGO_GetWeaponDefindex(weapon_name);
 	}
 	else
 	{
 		weapon = new Entity(weapon_name);
-	}
-	
-	if(weapon == Entity_Invalid)
-	{
-		return	weapon;
-	}
-	
-	if(StrContainsEx(weapon_name, "weapon_knife_", false) || StrContainsEx(weapon_name, "weapon_bayonet", false))
-	{
-		if(StrContainsEx(weapon_name, "weapon_knife_ghost", false) || StrContainsEx(weapon_name, "weapon_knife_spectral", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Spectral;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_bayonet", false) || StrContainsEx(weapon_name, "weapon_bayonet", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Bayonet;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_css", false) || StrContainsEx(weapon_name, "weapon_knife_classic", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Classic;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_flip", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Flip;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_gut", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Gut;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_karambit", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Karambit;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_m9_bayonet", false) || StrContainsEx(weapon_name, "weapon_m9_bayonet", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_M9_Bayonet;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_tactical", false) || StrContainsEx(weapon_name, "weapon_knife_huntsman", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Huntsman;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_falchion", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Falchion;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_survival_bowie", false) || StrContainsEx(weapon_name, "weapon_knife_bowie", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Bowie;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_butterfly", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Butterfly;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_push", false) || StrContainsEx(weapon_name, "weapon_knife_shadowdaggers", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_ShadowDaggers;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_paracord", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Paracord;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_survival", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Survival;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_ursus", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Ursus;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_navaja", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Navaja;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_nomad", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Nomad;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_stiletto", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Stiletto;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_widowmaker", false) || StrContainsEx(weapon_name, "weapon_knife_talon", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Talon;
-		}
-		else if(StrContainsEx(weapon_name, "weapon_knife_skeleton", false))
-		{
-			weapon.DefinitionIndex = CSGO_Knife_Skeleton;
-		}
-		
-		weapon.SetClassname("weapon_knifegg");
 	}
 	
 	return	weapon;
@@ -216,13 +138,13 @@ Action Skins_Listener(int client, const char[] command, int args)
 			item_selected[client] = "";
 			
 			//Lets stop here if cancelled, we shall not keep the event continuing to prevent messing things up.
-			return	Plugin_Handled;
+			return Plugin_Handled;
 		}
 		
 		if(!StrContainsNumber(arg1) && !StrEqual(arg1, "off", false))
 		{
 			PrintToChat(client, "[Skins Example] Please specify a valid skin index number. Type '!cancel' to cancel this procedure.");
-			return	Plugin_Handled;
+			return Plugin_Handled;
 		}
 		
 		//Lets grab the skin index the user specified.
@@ -234,7 +156,7 @@ Action Skins_Listener(int client, const char[] command, int args)
 		wear_select[client] = true;
 		
 		//Block the chat message.
-		return	Plugin_Handled;
+		return Plugin_Handled;
 	}
 	
 	if(wear_select[client])
@@ -246,13 +168,13 @@ Action Skins_Listener(int client, const char[] command, int args)
 			item_selected[client] = "";
 			
 			//Lets stop here if cancelled.
-			return	Plugin_Handled;
+			return Plugin_Handled;
 		}
 		
 		if(!StrContainsNumber(arg1) && !StrEqual(arg1, "off", false))
 		{
 			PrintToChat(client, "[Skins Example] Please specify a valid wear float. Type '!cancel' to cancel this procedure.");
-			return	Plugin_Handled;
+			return Plugin_Handled;
 		}
 		
 		//Lets grab the float number the user specified.
@@ -264,7 +186,7 @@ Action Skins_Listener(int client, const char[] command, int args)
 		pattern_select[client] = true;
 		
 		//Block the chat message.
-		return	Plugin_Handled;
+		return Plugin_Handled;
 	}
 	
 	if(pattern_select[client])
@@ -276,7 +198,7 @@ Action Skins_Listener(int client, const char[] command, int args)
 			item_selected[client] = "";
 			
 			//Lets stop here if cancelled.
-			return	Plugin_Handled;
+			return Plugin_Handled;
 		}
 		
 		//Lets grab the pattern index number.
@@ -288,7 +210,7 @@ Action Skins_Listener(int client, const char[] command, int args)
 		stattrak_select[client] = true;
 		
 		//Block the chat message.
-		return	Plugin_Handled;
+		return Plugin_Handled;
 	}
 	
 	if(stattrak_select[client])
@@ -300,13 +222,13 @@ Action Skins_Listener(int client, const char[] command, int args)
 			item_selected[client] = "";
 			
 			//Lets stop here if cancelled.
-			return	Plugin_Handled;
+			return Plugin_Handled;
 		}
 		
 		if(!StrContainsNumber(arg1) && !StrEqual(arg1, "off", false))
 		{
 			PrintToChat(client, "[Skins Example] Please specify a valid number. Type 'off' for no stattrak counter. \nOr '!cancel' to cancel this procedure");
-			return	Plugin_Handled;
+			return Plugin_Handled;
 		}
 		
 		//Lets grab the stattrak count.
@@ -322,10 +244,11 @@ Action Skins_Listener(int client, const char[] command, int args)
 		//We finished grabbing, now lets proceed equipping the weapon.
 		CSGO_FixWeaponId(entity_selected[client]);
 		CSGO_SetWeaponOwner(entity_selected[client], client);
-		EquipPlayerWeaponEx(client, entity_selected[client]);
+		entity_selected[client].Owner = client;
+		entity_selected[client].EquipWeapon(client);
 		
 		//Block the chat message.
-		return	Plugin_Handled;
+		return Plugin_Handled;
 	}
 	
 	return	Plugin_Continue;
@@ -370,7 +293,7 @@ Action SkinsCmd(int client, int args)
 	menu.AddItem("weapon_sawedoff",			"Sawed-Off");
 	menu.AddItem("weapon_taser",			"Zeus");
 	menu.AddItem("weapon_nova",				"Nova");
-	menu.AddItem("weapon_knife_ct",			"CT Knife");
+	menu.AddItem("weapon_knife",			"CT Knife");
 	menu.AddItem("weapon_knife_t",			"T Knife");
 	menu.AddItem("weapon_knifegg",			"Golden Knife");
 	menu.AddItem("weapon_knife_spectral",	"Spectral Knife");
@@ -428,7 +351,7 @@ int Handler_Skins(Menu menu, MenuAction action, int client, int selection)
 	}
 }
 
-/*
+/**
  *	Returns if the string contains a number.
  *
  *	@param	str		String buffer to check.
@@ -456,4 +379,14 @@ bool StrContainsNumber(const char[] str)
 	}
 	
 	return	true;
+}
+
+/**
+ *	Returns if the string contains a knife classname.
+ *
+ *	@param	clsname		The buffer string to check.
+ */
+bool IsValidKnife(const char[] clsname)
+{
+	return view_as<bool>(StrContains(clsname, "knife", false) != -1 || StrContains(clsname, "bayonet", false) != -1);
 }
