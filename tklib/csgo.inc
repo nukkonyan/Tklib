@@ -347,7 +347,7 @@ stock void CSGO_SetCompetitiveType(any entity, const CSGORankType[] array)	{
  *	@return	Returns false on failure, true otherwise.
  */
 stock bool CSGO_SetArmModel(int client, const char[] arms)	{
-	return SetEntPropStringEx(client, Prop_Send, "m_szArmsModel", name);
+	return SetEntPropStringEx(client, Prop_Send, "m_szArmsModel", arms);
 }
 
 /**
@@ -640,5 +640,161 @@ stock void CSGO_GetWeaponName(const char[] classname, char[] name, int maxlen)	{
 	if(StrEqual(classname, "weapon_knife_cord", false))				strcopy(name, maxlen, "Paracord Knife");
 	if(StrEqual(classname, "weapon_knife_skeleton", false))			strcopy(name, maxlen, "Skeleton Knife");
 	if(StrEqual(classname, "weapon_knife_outdoor", false))			strcopy(name, maxlen, "Nomad Knife");
+}
+
+/**
+ *	Returns the weapon name by its definition index.
+ *
+ *	@param	defindex	The weapon definition index.
+ *	@param	name		The weapon's name.
+ *	@param	maxlen		The maximum length of the name.
+ *
+ *	@noreturn
+ */
+stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen)	{
+	switch(defindex)
+	{
+		case CSGO_Weapon_Ak47:			strcopy(name, maxlen, "Ak-47");
+		case CSGO_Weapon_M4A4:			strcopy(name, maxlen, "M4A4");
+		case CSGO_Weapon_M4A1_S:		strcopy(name, maxlen, "M4A1-S");
+		case CSGO_Weapon_GalilAR:		strcopy(name, maxlen, "Galil AR");
+		case CSGO_Weapon_Famas:			strcopy(name, maxlen, "Famas");
+		case CSGO_Weapon_SG556:			strcopy(name, maxlen, "SG556");
+		case CSGO_Weapon_Aug:			strcopy(name, maxlen, "AUG");
+		case CSGO_Weapon_Scout:			strcopy(name, maxlen, "Scout");
+		case CSGO_Weapon_AWP:			strcopy(name, maxlen, "AWP");
+		case CSGO_Weapon_Scar20:		strcopy(name, maxlen, "Scar-20");
+		case CSGO_Weapon_G3SG1:			strcopy(name, maxlen, "G3SG1");
+		case CSGO_Weapon_Nova:			strcopy(name, maxlen, "Nova");
+		case CSGO_Weapon_SawedOff:		strcopy(name, maxlen, "Sawed-Off");
+		case CSGO_Weapon_MAG7:			strcopy(name, maxlen, "MAG-7");
+		case CSGO_Weapon_XM1014:		strcopy(name, maxlen, "XM1014");
+		case CSGO_Weapon_M249:			strcopy(name, maxlen, "M249");
+		case CSGO_Weapon_Negev:			strcopy(name, maxlen, "Negev");
+		case CSGO_Weapon_Taser:			strcopy(name, maxlen, "Taser");
+		case CSGO_Weapon_C4:			strcopy(name, maxlen, "C4 Bomb");
+		case CSGO_Grenade_HEGrenade:	strcopy(name, maxlen, "HE Grenade");
+		case CSGO_Grenade_Flashbang:	strcopy(name, maxlen, "Flashbang");
+		case CSGO_Grenade_Decoy:		strcopy(name, maxlen, "Decoy");
+		case CSGO_Grenade_SmokeGrenade:	strcopy(name, maxlen, "Smokegrenade");
+		case CSGO_Grenade_Incendiary:	strcopy(name, maxlen, "Incendiary");
+		case CSGO_Grenade_Molotov:		strcopy(name, maxlen, "Molotov");
+		case CSGO_Grenade_TAGrenade:	strcopy(name, maxlen, "TA-Grenade");
+		case CSGO_Grenade_BreachCharge:	strcopy(name, maxlen, "Breach Charge");
+		case CSGO_Weapon_Glock:			strcopy(name, maxlen, "Glock");
+		case CSGO_Weapon_USP_S:			strcopy(name, maxlen, "USP-S");
+		case CSGO_Weapon_P2000:			strcopy(name, maxlen, "P2000");
+		case CSGO_Weapon_P250:			strcopy(name, maxlen, "P250");
+		case CSGO_Weapon_Deagle:		strcopy(name, maxlen, "Deagle");
+		case CSGO_Weapon_FiveSeven:		strcopy(name, maxlen, "Five-SeveN");
+		case CSGO_Weapon_Tec9:			strcopy(name, maxlen, "Tec-9");
+		case CSGO_Weapon_Revolver:		strcopy(name, maxlen, "R8 Revolver");
+		case CSGO_Weapon_P90:			strcopy(name, maxlen, "P90");
+		case CSGO_Weapon_UMP45:			strcopy(name, maxlen, "UMP-45");
+		case CSGO_Weapon_MP7:			strcopy(name, maxlen, "MP7");
+		case CSGO_Weapon_MP9:			strcopy(name, maxlen, "MP9");
+		case CSGO_Weapon_MP5:			strcopy(name, maxlen, "MP5");
+		case CSGO_Weapon_Bizon:			strcopy(name, maxlen, "Bizon");
+		case CSGO_Knife_T:				strcopy(name, maxlen, "T Knife");
+		case CSGO_Knife_CT:				strcopy(name, maxlen, "CT Knife");
+		case CSGO_Knife_Gold:			strcopy(name, maxlen, "Golden Knife");
+		case CSGO_Knife_Classic:		strcopy(name, maxlen, "Classic Knife");
+		case CSGO_Knife_Bayonet:		strcopy(name, maxlen, "Bayonet");
+		case CSGO_Knife_Flip:			strcopy(name, maxlen, "Flip Knife");
+		case CSGO_Knife_Gut:			strcopy(name, maxlen, "Gut Knife");
+		case CSGO_Knife_Karambit:		strcopy(name, maxlen, "Karambit Knife");
+		case CSGO_Knife_M9_Bayonet:		strcopy(name, maxlen, "M9 Bayonet Knife");
+		case CSGO_Knife_Huntsman:		strcopy(name, maxlen, "Huntsman Knife");
+		case CSGO_Knife_Butterfly:		strcopy(name, maxlen, "Butterfly Knife");
+		case CSGO_Knife_Falchion:		strcopy(name, maxlen, "Falchion Knife");
+		case CSGO_Knife_ShadowDaggers:	strcopy(name, maxlen, "Shadow Daggers");
+		case CSGO_Knife_Bowie:			strcopy(name, maxlen, "Bowie Knife");
+		case CSGO_Knife_Ursus:			strcopy(name, maxlen, "Ursus Knife");
+		case CSGO_Knife_Navaja:			strcopy(name, maxlen, "Navaja Knife");
+		case CSGO_Knife_Stiletto:		strcopy(name, maxlen, "Stilleto");
+		case CSGO_Knife_Talon:			strcopy(name, maxlen, "Talon Knife");
+		case CSGO_Knife_Survival:		strcopy(name, maxlen, "Survival Knife");
+		case CSGO_Knife_Paracord:		strcopy(name, maxlen, "Paracord Knife");
+		case CSGO_Knife_Skeleton:		strcopy(name, maxlen, "Skeleton Knife");
+		case CSGO_Knife_Nomad:			strcopy(name, maxlen, "Nomad Knife");
+	}
+}
+
+/**
+ *	Returns the classname by its definition index.
+ *
+ *	@param	defindex	The weapon definition index.
+ *	@param	name		The weapon's name.
+ *	@param	maxlen		The maximum length of the name.
+ *
+ *	@noreturn
+ */
+stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen)	{
+	switch(defindex)
+	{
+		case CSGO_Weapon_Ak47:			strcopy(name, maxlen, "weapon_ak47");
+		case CSGO_Weapon_M4A4:			strcopy(name, maxlen, "weapon_m4a1");
+		case CSGO_Weapon_M4A1_S:		strcopy(name, maxlen, "weapon_m4a1_silencer");
+		case CSGO_Weapon_GalilAR:		strcopy(name, maxlen, "weapon_galilar");
+		case CSGO_Weapon_Famas:			strcopy(name, maxlen, "weapon_famas");
+		case CSGO_Weapon_SG556:			strcopy(name, maxlen, "weapon_sg556");
+		case CSGO_Weapon_Aug:			strcopy(name, maxlen, "weapon_aug");
+		case CSGO_Weapon_Scout:			strcopy(name, maxlen, "weapon_ssg08");
+		case CSGO_Weapon_AWP:			strcopy(name, maxlen, "weapon_awp");
+		case CSGO_Weapon_Scar20:		strcopy(name, maxlen, "weapon_scar20");
+		case CSGO_Weapon_G3SG1:			strcopy(name, maxlen, "weapon_g3sg1");
+		case CSGO_Weapon_Nova:			strcopy(name, maxlen, "weapon_nova");
+		case CSGO_Weapon_SawedOff:		strcopy(name, maxlen, "weapon_sawedoff");
+		case CSGO_Weapon_MAG7:			strcopy(name, maxlen, "weapon_mag7");
+		case CSGO_Weapon_XM1014:		strcopy(name, maxlen, "weapon_xm1014");
+		case CSGO_Weapon_M249:			strcopy(name, maxlen, "weapon_m249");
+		case CSGO_Weapon_Negev:			strcopy(name, maxlen, "weapon_negev");
+		case CSGO_Weapon_Taser:			strcopy(name, maxlen, "weapon_taser");
+		case CSGO_Weapon_C4:			strcopy(name, maxlen, "weapon_c4");
+		case CSGO_Grenade_HEGrenade:	strcopy(name, maxlen, "weapon_hegrenade");
+		case CSGO_Grenade_Flashbang:	strcopy(name, maxlen, "weapon_flashbang");
+		case CSGO_Grenade_Decoy:		strcopy(name, maxlen, "weapon_decoy");
+		case CSGO_Grenade_SmokeGrenade:	strcopy(name, maxlen, "weapon_smokegrenade");
+		case CSGO_Grenade_Incendiary:	strcopy(name, maxlen, "weapon_incgrenade");
+		case CSGO_Grenade_Molotov:		strcopy(name, maxlen, "weapon_molotov");
+		case CSGO_Grenade_TAGrenade:	strcopy(name, maxlen, "weapon_tagrenade");
+		case CSGO_Grenade_BreachCharge:	strcopy(name, maxlen, "weapon_breachcharge");
+		case CSGO_Weapon_Glock:			strcopy(name, maxlen, "weapon_glock");
+		case CSGO_Weapon_USP_S:			strcopy(name, maxlen, "weapon_usp_silencer");
+		case CSGO_Weapon_P2000:			strcopy(name, maxlen, "weapon_p2000");
+		case CSGO_Weapon_P250:			strcopy(name, maxlen, "weapon_p250");
+		case CSGO_Weapon_Deagle:		strcopy(name, maxlen, "weapon_deagle");
+		case CSGO_Weapon_FiveSeven:		strcopy(name, maxlen, "weapon_fiveseven");
+		case CSGO_Weapon_Tec9:			strcopy(name, maxlen, "weapon_ec9");
+		case CSGO_Weapon_Revolver:		strcopy(name, maxlen, "weapon_revolver");
+		case CSGO_Weapon_P90:			strcopy(name, maxlen, "weapon_p90");
+		case CSGO_Weapon_UMP45:			strcopy(name, maxlen, "weapon_ump45");
+		case CSGO_Weapon_MP7:			strcopy(name, maxlen, "weapon_mp7");
+		case CSGO_Weapon_MP9:			strcopy(name, maxlen, "weapon_mp9");
+		case CSGO_Weapon_MP5:			strcopy(name, maxlen, "weapon_mp5sd");
+		case CSGO_Weapon_Bizon:			strcopy(name, maxlen, "weapon_bizon");
+		case CSGO_Knife_T:				strcopy(name, maxlen, "weapon_knife_t");
+		case CSGO_Knife_CT:				strcopy(name, maxlen, "weapon_knife_ct");
+		case CSGO_Knife_Gold:			strcopy(name, maxlen, "weapon_knifegg");
+		case CSGO_Knife_Classic:		strcopy(name, maxlen, "weapon_knife_css");
+		case CSGO_Knife_Bayonet:		strcopy(name, maxlen, "weapon_bayonet");
+		case CSGO_Knife_Flip:			strcopy(name, maxlen, "weapon_knife_flip");
+		case CSGO_Knife_Gut:			strcopy(name, maxlen, "weapon_knife_gut");
+		case CSGO_Knife_Karambit:		strcopy(name, maxlen, "weapon_knife_karambit");
+		case CSGO_Knife_M9_Bayonet:		strcopy(name, maxlen, "weapon_knife_m9_bayonet");
+		case CSGO_Knife_Huntsman:		strcopy(name, maxlen, "weapon_knife_tactical");
+		case CSGO_Knife_Butterfly:		strcopy(name, maxlen, "weapon_knife_butterfly");
+		case CSGO_Knife_Falchion:		strcopy(name, maxlen, "weapon_knife_falchion");
+		case CSGO_Knife_ShadowDaggers:	strcopy(name, maxlen, "weapon_knife_push");
+		case CSGO_Knife_Bowie:			strcopy(name, maxlen, "weapon_knife_survival_bowie");
+		case CSGO_Knife_Ursus:			strcopy(name, maxlen, "weapon_knife_ursus");
+		case CSGO_Knife_Navaja:			strcopy(name, maxlen, "weapon_knife_gypsy_jackknife");
+		case CSGO_Knife_Stiletto:		strcopy(name, maxlen, "weapon_knife_stiletto");
+		case CSGO_Knife_Talon:			strcopy(name, maxlen, "weapon_knife_widowmaker");
+		case CSGO_Knife_Survival:		strcopy(name, maxlen, "weapon_knife_canis");
+		case CSGO_Knife_Paracord:		strcopy(name, maxlen, "weapon_knife_cord");
+		case CSGO_Knife_Skeleton:		strcopy(name, maxlen, "weapon_knife_skeleton");
+		case CSGO_Knife_Nomad:			strcopy(name, maxlen, "weapon_knife_outdoor");
+	}
 }
 #endif

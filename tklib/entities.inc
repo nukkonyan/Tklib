@@ -407,14 +407,86 @@ stock int GetEntityEffect(any entity)	{
 stock float GetEntityDistance(any entity, any target)	{
 	if(IsValidEntityEx(entity) && IsValidEntityEx(target))	{
 		float pos[2][3];
-		GetEntPropVector(entity, Prop_Send, "m_vecOrigin", pos[0]);
-		GetEntPropVector(target, Prop_Send, "m_vecOrigin", pos[1]);
+		GetEntPropVectorEx(entity, Prop_Send, "m_vecOrigin", pos[0]);
+		GetEntPropVectorEx(target, Prop_Send, "m_vecOrigin", pos[1]);
 		
 		//return ((pos[0][0] / pos[1][0]) * 5);
 		return (GetVectorDistance(pos[1], pos[0]) / 41.0);
 	}
 	
 	return -1.0;
+}
+
+/**
+ *	Returns the entity's absolute velocity.
+ *
+ *	@param	entity		Entity index.
+ *	@param	velocity	The velocity.
+ *
+ *	@error	If the entity is invalid or has no absolute velocity, this returns -1.0.
+ */
+stock bool GetEntityAbsVelocity(any entity, float velocity[3])	{
+	return GetEntPropVectorEx(entity, Prop_Data, "m_vecAbsVelocity", velocity);
+}
+
+/**
+ *	Set the entity's absolute velocity.
+ *
+ *	@param	entity		Entity index.
+*	@param	velocity	The velocity.
+ *
+ *	@error	If the entity is invalid or has no absolute velocity, this returns -1.0.
+ */
+stock bool SetEntityAbsVelocity(any entity, const float velocity[3])	{
+	return SetEntPropVectorEx(entity, Prop_Data, "m_vecAbsVelocity", velocity);
+}
+
+/**
+ *	Returns the entity's base velocity.
+ *
+ *	@param	entity		Entity index.
+ *	@param	velocity	The velocity.
+ *
+ *	@error	If the entity is invalid or has no base velocity, this returns -1.0.
+ */
+stock bool GetEntityBaseVelocity(any entity, float velocity[3])	{
+	return GetEntPropVectorEx(entity, Prop_Data, "m_vecBaseVelocity", velocity);
+}
+
+/**
+ *	Set the entity's base velocity.
+ *
+ *	@param	entity		Entity index.
+*	@param	velocity	The velocity.
+ *
+ *	@error	If the entity is invalid or has no base velocity, this returns -1.0.
+ */
+stock bool SetEntityBaseOrigin(any entity, const float velocity[3])	{
+	return SetEntPropVectorEx(entity, Prop_Data, "m_vecBaseVelocity", velocity);
+}
+
+/**
+ *	Returns the entity's velocity.
+ *
+ *	@param	entity		Entity index.
+ *	@param	velocity	The velocity.
+ *
+ *	@error	If the entity is invalid or has no velocity, this returns -1.0.
+ */
+stock bool GetEntityVelocity(any entity, float velocity[3])	{
+	return GetEntPropVectorEx(entity, Prop_Data, "m_vecVelocity", velocity);
+}
+
+/**
+ *	Set the entity's velocity.
+ *
+ *	@param	entity		Entity index.
+*	@param	velocity	The velocity.
+ *
+ *	@error	If the entity is invalid or has no velocity, this returns -1.0.
+ */
+stock bool SetEntityVelocity(any entity, const float velocity[3])	{
+	return SetEntPropVectorEx(entity, Prop_Data, "m_vecVelocity", velocity);
 }
 
 //Methodmap

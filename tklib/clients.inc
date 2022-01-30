@@ -945,6 +945,63 @@ stock bool IsClientMidAir(any client)	{
 	|| IsClientJumping(client)):false;
 }
 
+/**
+ *	Returns the users water level
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns -1.
+ */
+stock int GetClientWaterLevel(int client)	{
+	return GetEntPropEx(client, Prop_Send, "m_nWaterLevel");
+}
+
+/**
+ *	Set the users water level
+ *
+ *	@param	client	The users index.
+ *	@param	level	The water level to set.
+ *
+ *	@error	If the user is invalid or procedure failed , this returns false.
+ */
+stock int SetClientWaterLevel(int client, int level)	{
+	return SetEntPropEx(client, Prop_Send, "m_nWaterLevel", level);
+}
+
+/**
+ *	Returns the users decal spray cooldown.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns -1.0.
+ */
+stock float GetClientSprayCooldown(int client)	{
+	return GetEntPropFloatEx(client, Prop_Send, "m_flNextDecalTime");
+}
+
+/**
+ *	Set the users decal spray cooldown.
+ *
+ *	@param	client		The users index.
+ *	@param	cooldown	The cooldown to set.
+ *
+ *	@error	If the user is invalid or procedure failed, this returns false.
+ */
+stock bool SetClientSprayCooldown(int client, float cooldown)	{
+	return SetEntPropFloatEx(client, Prop_Send, "m_flNextDecalTime", cooldown);
+}
+
+/**
+ *	Returns if the user is actively using a ladder.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool IsClientUsingLadder(int client)	{
+	return Tklib_IsValidClient(client, _, true) ? (GetEntityMoveType(client) == MOVETYPE_LADDER) : false;
+}
+
 //Work in progress
 /*
 
