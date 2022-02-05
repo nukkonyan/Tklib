@@ -535,4 +535,45 @@ stock bool IsValidDatabase(Database database)	{
 	return (database != null);
 }
 
+
+/**
+ *	Returns if SourceBans is loaded.
+ *
+ *	@param	comms	If true, this checks if SourceComms of SourceBans is loaded instead.
+ */
+stock bool IsSourceBansLoaded(bool comms = false)
+{
+	switch(comms)
+	{
+		case true:
+		{
+			if(GetFeatureStatus(FeatureType_Native, "SourceComms_SetClientMute") == FeatureStatus_Available)
+				return true;
+			
+			if(GetFeatureStatus(FeatureType_Native, "SourceComms_SetClientGag") == FeatureStatus_Available)
+				return true;
+			
+			if(GetFeatureStatus(FeatureType_Native, "SourceComms_GetClientMuteType") == FeatureStatus_Available)
+				return true;
+			
+			if(GetFeatureStatus(FeatureType_Native, "SourceComms_GetClientGagType") == FeatureStatus_Available)
+				return true;
+		}
+		
+		case false:
+		{
+			if(GetFeatureStatus(FeatureType_Native, "SBBanPlayer") == FeatureStatus_Available)
+				return true;
+			
+			if(GetFeatureStatus(FeatureType_Native, "SBPP_BanPlayer") == FeatureStatus_Available)
+				return true;
+			
+			if(GetFeatureStatus(FeatureType_Native, "SBPP_ReportPlayer") == FeatureStatus_Available)
+				return true;
+		}
+	}
+	
+	return false;
+}
+
 #endif

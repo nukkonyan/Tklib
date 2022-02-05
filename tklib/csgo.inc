@@ -797,4 +797,26 @@ stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen)	{
 		case CSGO_Knife_Nomad:			strcopy(name, maxlen, "weapon_knife_outdoor");
 	}
 }
+
+/**
+ *	Returns the name of the gloves by its definition index.
+ *
+ *	@param	defindex		The definition index.
+ *	@param	gloves_name		The name of the gloves.
+ *	@param	maxlen			The maximum length of the gloves name.
+ */
+stock void CSGO_GetGlovesNameDefindex(int defindex, char[] gloves_name, int maxlen)
+{
+	switch(defindex)
+	{
+		case 4725: strcopy(gloves_name, maxlen, "Broken Fang Gloves");
+		case 5027: strcopy(gloves_name, maxlen, "Bloodhound Gloves");
+		case 5030: strcopy(gloves_name, maxlen, "Sport Gloves");
+		case 5031: strcopy(gloves_name, maxlen, "Driver Gloves");
+		case 5032: strcopy(gloves_name, maxlen, "Hand Wraps");
+		case 5033: strcopy(gloves_name, maxlen, "Moto Gloves");
+		case 5034: strcopy(gloves_name, maxlen, "Specialist Gloves");
+		case 5035: strcopy(gloves_name, maxlen, "Hydra Gloves");
+	}
+}
 #endif

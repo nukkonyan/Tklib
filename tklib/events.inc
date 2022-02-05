@@ -12,6 +12,7 @@
 #define EVENT_SERVER_REMOVEBAN "server_removeban"
 #define EVENT_PLAYER_CONNECT "player_connect"
 #define EVENT_PLAYER_CONNECT_CLIENT "player_connect_client"
+#define EVENT_PLAYER_CONNECT_FULL "player_connect_full"
 #define EVENT_PLAYER_INFO "player_info"
 #define EVENT_PLAYER_DISCONNECT "player_disconnect"
 #define EVENT_PLAYER_ACTIVATE "player_activate"

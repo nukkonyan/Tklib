@@ -595,15 +595,19 @@ stock bool TF2_IsMvMGameMode()	{
  *
  *	@return	Returns a TFTeam team.
  */
+#if !defined _tklib_disable_gameidentifier
 stock TFTeam TF2_GetRandomTeam()	{
-	return	TFTeam((IdentifyGame() == Game_TF2C) ? GetRandomInt(2, 3, 4, 5) : GetRandomInt(2, 3));
+	return view_as<TFTeam>(IsCurrentGame(Game_TF2C) ? GetRandomInt(2, 5) : GetRandomInt(2, 3));
 }
+#else
+#error TF2_GetRandomTeam() requires GameIdentifer include. [IsCurrentGame()]
+#endif
 
 /**
  *	Returns the gametype of the server.
  */
 stock TFGameType TF2_GetGameType()	{
-	return	TFGameType(GameRules_GetProp("m_nGameType"));
+	return TFGameType(GameRules_GetProp("m_nGameType"));
 }
 
 /**
@@ -661,6 +665,72 @@ stock bool TF2_IsTruceActive()	{
  */
 stock void TF2_SetTruce(bool value)	{
 	GameRules_SetProp("m_bTruceActive", value);
+}
+
+/**
+ *	Get users airdash count.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns -1.
+ */
+stock int TF2_GetClientAirDash(any client)
+{
+	return GetEntPropEx(client, Prop_Send, "m_iAirDash");
+}
+
+/**
+ *	Set users airdash count.
+ *
+ *	@param	client	The users index.
+ *	@param	value	The value to set.
+ *
+ *	@error	If the user is invalid or has no m_iAirDash property, this returns false.
+ */
+stock bool TF2_SetClientAirDash(int client, int value)
+{
+	return SetEntPropEx(client, Prop_Send, "m_iAirDash", value);
+}
+
+/**
+ *	Returns if TF2Attributes is available.
+ */
+stock bool IsTF2AttributesLoaded()
+{
+	return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Attrib_SetByName") == FeatureStatus_Available);
+}
+
+/**
+ *	Returns the Footprint name type.
+ *
+ *	@param	defindex	The definition index of the footprint.
+ *	@param	type		The buffer to store the name.
+ *	@param	maxlen		The maximum length of the buffer.
+ *
+ *	@noreturn.
+ */
+stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen)
+{
+	switch(defindex)
+	{
+		case 1: strcopy(type, maxlen, "Team Based");
+		case 2: strcopy(type, maxlen, "Purple");
+		case 3: strcopy(type, maxlen, "4 8 15 16 23 42");
+		case 7777: strcopy(type, maxlen, "Blue");
+		case 83552: strcopy(type, maxlen, "Ghost in the Machine");
+		case 300000: strcopy(type, maxlen, "Satan's Blue");
+		case 933333: strcopy(type, maxlen, "Light Blue");
+		case 3100495: strcopy(type, maxlen, "Dark Green");
+		case 4552221: strcopy(type, maxlen, "Corrupted Green");
+		case 5322826: strcopy(type, maxlen, "Brown");
+		case 8208497: strcopy(type, maxlen, "Cream");
+		case 8355220: strcopy(type, maxlen, "Oak Tree Brown");
+		case 8421376: strcopy(type, maxlen, "Yellow");
+		case 13595446: strcopy(type, maxlen, "Flames");
+		case 41234123: strcopy(type, maxlen, "Pink");
+		case 51234123: strcopy(type, maxlen, "Lime");
+		default: strcopy(type, maxlen, "Unknown");
+	}
 }
 
 #endif
