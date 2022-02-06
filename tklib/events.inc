@@ -241,7 +241,7 @@
 #define EVENT_TEAMPLAY_TEAM_READY "teamplay_team_ready"
 #define EVENT_TEAMPLAY_ROUND_WIN "teamplay_round_win"
 #define EVENT_TEAMPLAY_UPDATE_TIMER "teamplay_update_timer"
-#define EVENT_TEAMPLAY_ROUND_STALEMENT "teamplay_round_stalemate"
+#define EVENT_TEAMPLAY_ROUND_STALEMATE "teamplay_round_stalemate"
 #define EVENT_TEAMPLAY_OVERTIME_BEGIN "teamplay_overtime_begin"
 #define EVENT_TEAMPLAY_OVERTIME_END "teamplay_overtime_end"
 #define EVENT_TEAMPLAY_SUDDENDEATH_BEGIN "teamplay_suddendeath_begin"

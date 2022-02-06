@@ -576,4 +576,73 @@ stock bool IsSourceBansLoaded(bool comms = false)
 	return false;
 }
 
+/**
+ *	Return an appropriate name for the source colour tag.
+ *
+ *	@param	source	Source string to check.
+ *	@param	colour	Buffer string to store the colour name.
+ *	@param	maxlen	Maximum length of the buffer string.
+ *
+ *	@noreturn.
+ */
+stock void GetNameFromColourTag(const char[] source, char[] colour, int maxlen)
+{
+	if(StrEqual(source, "{default}", false))
+		strcopy(colour, maxlen, "Default");
+	
+	if(StrEqual(source, "{darkred}", false))
+		strcopy(colour, maxlen, "Dark Red");
+	
+	if(StrEqual(source, "{green}", false))
+		strcopy(colour, maxlen, "Green");
+	
+	if(StrEqual(source, "{lightgreen}", false))
+		strcopy(colour, maxlen, "Light Green");
+	
+	if(StrEqual(source, "{red}", false))
+		strcopy(colour, maxlen, "Red");
+	
+	if(StrEqual(source, "{blue}", false))
+		strcopy(colour, maxlen, "Blue");
+	
+	if(StrEqual(source, "{olive}", false))
+		strcopy(colour, maxlen, "Olive");
+	
+	if(StrEqual(source, "{lime}", false))
+		strcopy(colour, maxlen, "Lime");
+	
+	if(StrEqual(source, "{lightred}", false))
+		strcopy(colour, maxlen, "Light Red");
+	
+	if(StrEqual(source, "{purple}", false))
+		strcopy(colour, maxlen, "Purple");
+	
+	if(StrEqual(source, "{grey}", false))
+		strcopy(colour, maxlen, "Grey");
+	
+	if(StrEqual(source, "{yellow}", false))
+		strcopy(colour, maxlen, "Yellow");
+	
+	if(StrEqual(source, "{orange}", false))
+		strcopy(colour, maxlen, "Orange");
+	
+	if(StrEqual(source, "{bluegrey}", false))
+		strcopy(colour, maxlen, "Blue Grey");
+	
+	if(StrEqual(source, "{lightblue}", false))
+		strcopy(colour, maxlen, "Light Blue");
+	
+	if(StrEqual(source, "{darkblue}", false))
+		strcopy(colour, maxlen, "Dark Blue");
+	
+	if(StrEqual(source, "{grey2}"))
+		strcopy(colour, maxlen, "Grey 2");
+	
+	if(StrEqual(source, "{orchid}", false))
+		strcopy(colour, maxlen, "Orchid");
+	
+	if(StrEqual(source, "{lightred2}", false))
+		strcopy(colour, maxlen, "Light Red 2");
+}
+
 #endif
