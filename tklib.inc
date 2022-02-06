@@ -221,9 +221,6 @@
 #endif
 
 #if !defined _tklib_no_definitions
-// For some reason MenuEnd_ExitBack which is used for 'back' buttons is a '-5' value. The 'back' seem to only return -6. (lol)
-#define MenuEnd_ExitBackFixed -6
-
 //Extra things that should be part of SourceMod, making it easier.
 #define	int(%1) view_as<int>(%1)
 #define	any(%1) view_as<any>(%1)
