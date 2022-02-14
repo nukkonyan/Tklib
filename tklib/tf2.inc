@@ -873,23 +873,23 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
  *	@param	level		The item level.
  *	@param	quality		The item quality.
  *
- *	@return	Returns the entity index.
+ *	@return	Returns the weapon entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{	
-	char classname[256], netclass[64];
+stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
+	int item = -1;
+	
+	char classname[256];
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
 	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
-	int item = CreateEntityByName(classname);
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(IsValidEntityEx(item))	{
-		GetEntityNetClass(item, netclass, sizeof(netclass));
-		SetEntData(item, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
-		SetEntData(item, FindSendPropInfo(netclass, "m_bInitialized"), 1);
-		SetEntData(item, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
-		SetEntData(item, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
-		SetEntData(item, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), 1);
-		SetEntProp(item, Prop_Send, "m_hOwnerEntity", client);
+	if(IsValidEntityEx((item = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true))	{
+		SetEntityDefinitionIndex(item, defindex);
+		SetEntityInitialized(item, true);
+		SetEntityLevel(item,level);
+		SetEntityQuality(item, quality);
+		SetEntProp(item, Prop_Send, "m_bValidatedAttachedEntity", 1);
+		SetEntityOwner(item, client);
 		SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
 		
 		switch(defindex)	{
@@ -901,7 +901,7 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
 				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
 			}
-			case 998: SetEntData(item, FindSendPropInfo(netclass, "m_nChargeResistType"), GetRandomInt(0,2));
+			case 998: SetEntProp(item, Prop_Send, "m_nChargeResistType", GetRandomInt(0,2));
 			#if defined _tf2attributes_included
 			case 1071:	{
 				TF2Attrib_SetByName(item, "item style override", 0.0);
@@ -920,6 +920,45 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 #else
 #error TF2_GiveWeapon() requires TF2EconData to function.
 #endif
+
+/**
+ *	Give the wearable to the client.
+ *
+ *	@param	client		The users index.
+ *	@param	defindex	The wearable definition index.
+ *	@param	quality		The wearable quality index.
+ *	@param	level		The wearable level.
+ *
+ *	@return	Returns the wearable entity index. If invalid user or entity is invalid returns -1.
+ */
+stock int TF2_GiveWearable(int client, int defindex, int level, int quality)	{
+	int item = -1;
+	Handle EquipWearable;
+	
+	/* Credits to PC Gamer for most of the code. */
+	if(IsValidEntityEx((item = CreateEntityByName("tf_wearable"))) && Tklib_IsValidClient(client, _, true))	{
+		GameData data = new GameData("sm-tf2.games");
+		StartPrepSDKCall(SDKCall_Player);
+		PrepSDKCall_SetVirtual(data.GetOffset("RemoveWearable")-1);
+		PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
+		if((EquipWearable = EndPrepSDKCall()) != null)	{
+			SetEntityDefinitionIndex(item, defindex);
+			SetEntityLevel(item, level);
+			SetEntityQuality(item, quality);
+			SetEntityInitialized(item, true);
+			SetEntProp(item, Prop_Send, "m_bValidatedAttachedEntity", 1);
+			SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+			SetEntityOwner(item, client);
+			DispatchSpawn(item);
+			SDKCall(EquipWearable, client, item);
+		}
+			
+		delete EquipWearable;
+		delete data;
+	}
+	
+	return item;
+}
 
 /**
  *	Returns wheter the definition index has an australium variant available.
@@ -968,7 +1007,7 @@ stock void TF2_TurnAustralium(any weapon)	{
 	
 	/* Turn the weapon to strange quality and random level. */
 	SetEntityQuality(weapon, 11); /* Strange. */
-	SetEntityQuality(weapon, GetRandomInt(0, 100)); /* Random level between 0 and 100. */
+	SetEntityLevel(weapon, GetRandomInt(0, 100)); /* Random level between 0 and 100. */
 	
 	/* Frying Pan. */
 	switch(defindex == 264)	{
@@ -978,12 +1017,15 @@ stock void TF2_TurnAustralium(any weapon)	{
 			TF2Attrib_SetByName(weapon, "killstreak tier", 1.0);
 			TF2Attrib_SetByName(weapon, "killstreak effect", view_as<float>(GetRandomInt(2002, 2008)));
 			TF2Attrib_SetByName(weapon, "killstreak idleeffect", view_as<float>(GetRandomInt(1, 7)));
+			TF2Attrib_SetByName(weapon, "item style override", 0.0);
 		}
 		/* Turn the weapon to australium. */
-		case false:	TF2Attrib_SetByName(weapon, "is australium item", 1.0);
+		case false:	{
+			TF2Attrib_SetByName(weapon, "is australium item", 1.0);
+			TF2Attrib_SetByName(weapon, "item style override", 1.0);
+		}
 	}
-
-	TF2Attrib_SetByName(weapon, "item style override", 1.0);
+	
 	TF2Attrib_SetByName(weapon, "loot rarity", 1.0);
 }
 #else
