@@ -898,7 +898,7 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 		SetEntData(item, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
 		SetEntData(item, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
 		SetEntData(item, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), 1);
-		SetEntProp(item, Prop_Data, "m_hOwnerEntity", client);
+		SetEntProp(item, Prop_Send, "m_hOwnerEntity", client);
 		SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
 		
 		switch(defindex)	{
