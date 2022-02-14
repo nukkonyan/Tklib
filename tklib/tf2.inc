@@ -876,14 +876,13 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
  *	@return	Returns the entity index.
  */
 stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{	
-	int item = CreateEntityByName(classname[TF2_GetPlayerClass(client)]);
+	char classname[256], netclass[64];
+	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
+	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
+	int item = CreateEntityByName(classname);
 	
 	/* Credits to PC Gamer for most of the code. */
 	if(IsValidEntityEx(item))	{
-		char classname[256], netclass[64];
-		TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
-		TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
-		
 		GetEntityNetClass(item, netclass, sizeof(netclass));
 		SetEntData(item, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
 		SetEntData(item, FindSendPropInfo(netclass, "m_bInitialized"), 1);
