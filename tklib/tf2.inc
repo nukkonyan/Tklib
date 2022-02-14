@@ -927,4 +927,73 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 	return item;
 }
 
+/**
+ *	Returns wheter the definition index has an australium variant available.
+ *
+ *	@param	defindex	The weapon definition index.
+ */
+stock bool TF2_IsValidAustralium(int defindex)	{
+	switch(defindex)	{
+		case 4, 7, 13, 14, 15, 16, 18, 19, 20, 21, 29, 36, 38, 45, 61, 132,
+		141, 194, 197, 200, 201, 202, 203, 205, 206, 207, 208, 211, 228, 264, 424: return true;
+	}
+	
+	return false;
+}
+
+#if defined _tf2attributes_included
+/**
+ *	Turns the weapon into australium variant.
+ *
+ *	@param	weapon	The weapon entity index.
+ *
+ *	@noreturn.
+ */
+stock void TF2_TurnAustralium(any weapon)	{
+	if(!IsValidEntityEx(weapon))
+		return;
+	
+	int defindex = GetEntityDefinitionIndex(weapon);
+	
+	if(!TF2_IsValidAustralium(defindex))
+		return;
+	
+	/* Force the stock weapons to be 'upgradable' version. */
+	switch(defindex)	{
+		case 7: SetEntityDefinitionIndex(weapon, 197);
+		case 13: SetEntityDefinitionIndex(weapon, 200);
+		case 14: SetEntityDefinitionIndex(weapon, 201);
+		case 15: SetEntityDefinitionIndex(weapon, 202);
+		case 16: SetEntityDefinitionIndex(weapon, 203);
+		case 18: SetEntityDefinitionIndex(weapon, 205);
+		case 19: SetEntityDefinitionIndex(weapon, 206);
+		case 20: SetEntityDefinitionIndex(weapon, 207);
+		case 21: SetEntityDefinitionIndex(weapon, 208);
+		case 29: SetEntityDefinitionIndex(weapon, 211);
+	}
+	
+	/* Turn the weapon to strange quality and random level. */
+	SetEntityQuality(weapon, 11); /* Strange. */
+	SetEntityQuality(weapon, GetRandomInt(0, 100)); /* Random level between 0 and 100. */
+	
+	/* Frying Pan. */
+	switch(defindex == 264)	{
+		case true:	{
+			SetEntityDefinitionIndex(weapon, 1071); /* Turn to golden frying pan. */
+			TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
+			TF2Attrib_SetByName(weapon, "killstreak tier", 1.0);
+			TF2Attrib_SetByName(weapon, "killstreak effect", view_as<float>(GetRandomInt(2002, 2008)));
+			TF2Attrib_SetByName(weapon, "killstreak idleeffect", view_as<float>(GetRandomInt(1, 7)));
+		}
+		/* Turn the weapon to australium. */
+		case false:	TF2Attrib_SetByName(weapon, "is australium item", 1.0);
+	}
+
+	TF2Attrib_SetByName(weapon, "item style override", 1.0);
+	TF2Attrib_SetByName(weapon, "loot rarity", 1.0);
+}
+#else
+#error TF2_TurnAustralium() requires TF2Attributes.
+#endif
+
 #endif
