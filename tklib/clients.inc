@@ -216,7 +216,7 @@ stock bool SetClientHealthEx(any client, int health, int maxhealth)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientTeamNum(any client, int value)	{
+stock bool SetClientTeamNum(any client, any value)	{
 	return SetEntPropEx(client, Prop_Send, "m_iTeamNum", value);
 }
 

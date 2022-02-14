@@ -187,7 +187,7 @@ stock void CS_SetWarmupRound(bool warmup)	{
  *	Returns if the match is currently paused/is in freezetime (CS:GO Only)
  */
 stock bool CS_IsMatchPaused()	{
-	return (GameRules_GetProp("m_bMatchWaitingForResume"));
+	return view_as<bool>(GameRules_GetProp("m_bMatchWaitingForResume") == 1);
 }
 #else
 #error CS_IsWarmupRound() requires SDKTools

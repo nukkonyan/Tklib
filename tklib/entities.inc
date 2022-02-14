@@ -172,8 +172,8 @@ stock int GetEntityOwner(int entity)	{
  *
  *	@error	If entity is invalid, this returns false.
  */
-stock bool KillEntity(any entity, const char[] input="", int activator=-1, int caller=-1, int outputid=0)	{
-	return IsValidEntityEx(entity) ? AcceptEntityInput(entity, "Kill"):false;
+stock bool KillEntity(any entity, int activator=-1, int caller=-1, int outputid=0)	{
+	return IsValidEntityEx(entity) ? AcceptEntityInput(entity, "Kill", activator, caller, outputid):false;
 }
 
 /**
@@ -481,12 +481,58 @@ stock bool GetEntityVelocity(any entity, float velocity[3])	{
  *	Set the entity's velocity.
  *
  *	@param	entity		Entity index.
-*	@param	velocity	The velocity.
+ *	@param	velocity	The velocity.
  *
  *	@error	If the entity is invalid or has no velocity, this returns -1.0.
  */
 stock bool SetEntityVelocity(any entity, const float velocity[3])	{
 	return SetEntPropVectorEx(entity, Prop_Data, "m_vecVelocity", velocity);
+}
+
+/**
+ *	Set the entity's quality.
+ *
+ *	@param	entity		Entity index.
+ *	@param	quality		The quality.
+ *
+ *	@error	If the entity is invalid or has no quality property, this returns false.
+ */
+stock bool SetEntityQuality(any entity, int quality)	{
+	return SetEntPropEx(entity, Prop_Send, "m_iEntityQuality", quality);
+}
+
+/**
+ *	Returns the entity's quality.
+ *
+ *	@param	entity		Entity index.
+ *
+ *	@error	If the entity is invalid or has no quality property, this returns -1.
+ */
+stock int GetEntityQuality(any entity)	{
+	return GetEntPropEx(entity, Prop_Send, "m_iEntityQuality");
+}
+
+/**
+ *	Set the entity's level.
+ *
+ *	@param	entity		Entity index.
+ *
+ *	@error	If the entity is invalid or has no level property, this returns -1.
+ */
+stock int SetEntityLevel(any entity, int level)	{
+	return SetEntPropEx(entity, Prop_Send, "m_iEntityLevel", level);
+}
+
+/**
+ *	Returns the entity's level.
+ *
+ *	@param	entity		Entity index.
+ *	@param	level		The level.
+ *
+ *	@error	If the entity is invalid or has no level property, this returns false.
+ */
+stock int GetEntityLevel(any entity)	{
+	return GetEntPropEx(entity, Prop_Send, "m_iEntityLevel");
 }
 
 //Methodmap
@@ -667,9 +713,9 @@ methodmap Entity __nullable__	{
 	 *
 	 *	@error	If entity is invalid, this returns false.
 	 */
-	public bool Kill(const char[] input="", int activator=-1, int caller=-1, int outputid=0)
+	public bool Kill(int activator=-1, int caller=-1, int outputid=0)
 	{
-		return KillEntity(view_as<int>(this), input, activator, caller, outputid);
+		return KillEntity(view_as<int>(this), activator, caller, outputid);
 	}
 	
 	/**
@@ -877,7 +923,7 @@ methodmap Entity __nullable__	{
 	
 	public void SetData(int offset, any value, int size=4, bool changeState=false)
 	{
-		SetEntData(offset, value, size, changeState);
+		SetEntData(view_as<int>(this), offset, value, size, changeState);
 	}
 	public int GetData(int offset, int size=4)
 	{
@@ -1137,8 +1183,18 @@ methodmap Entity __nullable__	{
 		}
 	}
 	
-	#if !defined _tklib_disable_weapons
 	public bool EquipWeapon(int client)
+	{
+		if(IsValidEntityEx(view_as<int>(this)))	{
+			EquipPlayerWeapon(client, view_as<int>(this));
+			return true;
+		}
+		
+		return false;
+	}
+	
+	#if !defined _tklib_disable_weapons
+	public bool EquipWeaponEx(int client)
 	{
 		return EquipPlayerWeaponEx(client, view_as<int>(this));
 	}
@@ -1149,6 +1205,46 @@ methodmap Entity __nullable__	{
 	public float GetDistance(any target)
 	{
 		return GetEntityDistance(view_as<int>(this), target);
+	}
+	
+	/**
+	 *	The entity's quality.
+	 *
+	 *	@param	entity		Entity index.
+	 *	@param	level		The level.
+	 *
+	 *	@error	If the entity is invalid or has no quality property, this returns false.
+	 */
+	property int Quality
+	{
+		public set(int qualitylevel)
+		{
+			SetEntityQuality(view_as<int>(this), qualitylevel);
+		}
+		public get()
+		{
+			return GetEntityQuality(view_as<int>(this));
+		}
+	}
+	
+	/**
+	 *	The entity's level.
+	 *
+	 *	@param	entity		Entity index.
+	 *	@param	level		The level.
+	 *
+	 *	@error	If the entity is invalid or has no level property, this returns false.
+	 */
+	property int Level
+	{
+		public set(int level)
+		{
+			SetEntityLevel(view_as<int>(this), level);
+		}
+		public get()
+		{
+			return GetEntityLevel(view_as<int>(this));
+		}
 	}
 }
 

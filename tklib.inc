@@ -14,6 +14,8 @@
 #endif
 
 #define _tklib_included
+#define _tklib_author "Tk /id/Teamkiller324"
+#define _tklib_author_url "https://steamcommunity.com/id/Teamkiller324"
 
 #if defined _tklib_no_includes
 	#define _tklib_no_core_includes

@@ -415,7 +415,6 @@ stock bool RemoveConVarFlagsEx(const char[] convar, int flags)	{
  *	@param	client		Users index.
  *	@param	index		Sender index.
  *	@param	message		Message.
- *	@noreturn
  *
  *	@error	If the user is invalid or the procedure failed/not supported for the current gamemod, this returns false.
  */
@@ -436,13 +435,13 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 	bool success = false;
 	
 	if((msg = StartMessageOne("SayText2", client, USERMSG_RELIABLE|USERMSG_BLOCKHOOKS)) != null)	{
-		char format[96];
+		char format[256];
 		VFormat(format, sizeof(format), message, 4);
 		
 		switch(GetUserMessageType())	{
 			case	UM_Protobuf:	{
 				Protobuf pb = UserMessageToProtobuf(msg);
-				pb.SetInt("ent_idx", author);
+				pb.SetInt("ent_idx", index);
 				pb.SetBool("chat", true);
 				pb.SetString("msg_name", format);
 				pb.AddString("params", "");
@@ -452,7 +451,7 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 			}
 			case	UM_BitBuf:	{
 				BfWrite bf = UserMessageToBfWrite(msg);
-				bf.WriteByte(author);
+				bf.WriteByte(index);
 				bf.WriteByte(true);
 				bf.WriteString(format);
 			}
@@ -463,6 +462,24 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 	}
 	
 	return success;
+}
+
+/**
+ *	Sends a SayText2 usermessage to everyone.
+ *
+ *	@param	index		Sender index.
+ *	@param	message		Message.
+ *
+ *	@noreturn
+ */
+stock void SayText2All(int index=-1, const char[] message, any ...)	{
+	char format[256];
+	VFormat(format, sizeof(format), message, 2);
+	
+	for(int client = 1; client < MaxClients; client++)	{
+		if(Tklib_IsValidClient(client))
+			SayText2(client, index, format);
+	}
 }
 
 /**
@@ -486,7 +503,7 @@ stock bool GetNativeBool(int param)	{
  *	@return	If the string is empty, this returns false.
  */
 stock bool IsValidString(const char[] str)	{
-	return (!StrEqual(str, NULL_STRING) && strlen(str) > 0);
+	return (!StrEqual(str, "") && strlen(str) > 0);
 }
 
 /**

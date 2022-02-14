@@ -38,6 +38,18 @@ stock char TF2_GetTeamStringName[][] = {
 	"None",
 	"Mini-Crit",
 	"Crit"
+}, TF2_GetClassTypeName[][] = {
+	"Unknown",
+	"Scout",
+	"Sniper",
+	"Soldier",
+	"Demoman",
+	"Medic",
+	"Heavy",
+	"Pyro",
+	"Spy",
+	"Engineer",
+	"Civilian"
 };
 
 //TF2 Flag Event
@@ -116,6 +128,101 @@ enum	{
 	TFBoss_Killed_Merasmus = 3
 }
 
+/* Achievement id's
+enum	{
+	TF2AchID_SentryGunner = 127,
+	TF2AchID_Nemesis = 128,
+	TF2AchID_HardToKill = 129,
+	TF2AchID_MasterOfDisguise = 130,
+	TF2AchID_WithFriendsLikeThese = 131,
+	TF2AchID_Dynasty = 132,
+	TF2AchID_Hardcore = 133,
+	TF2AchID_PowerhouseOffense = 134,
+	TF2AchID_LightningOffense = 135,
+	TF2AchID_RelentlessOffense = 136,
+	TF2AchID_ImpenetrableDefense = 137,
+	TF2AchID_ImpossibleDefense = 138,
+	TF2AchID_HeadOfTheClass = 139,
+	TF2AchID_WorldTraveler = 140,
+	TF2AchID_TeamDoctor = 141,
+	TF2AchID_Flamethrower = 142,
+	TF2AchID_GreyMatter = 145,
+	TF2AchID_Riftwalker = 150,
+	TF2AchID_ReadyForDuty = 151,
+	TF2AchID_EscapeTheHeat = 152,
+	TF2AchID_TheGreatDeflate = 153,
+	TF2AchID_BFF2 = 154,
+	TF2AchID_MassHysteria = 155,
+	TF2AchID_AFreshPairOfEyes = 156,
+	TF2AchID_NoseDive = 157,
+	TF2AchID_PunchingBag = 158,
+	TF2AchID_EmergencyBrake = 159,
+	TF2AchID_PartyCrasher = 160,
+	TF2AchID_CongaLine = 161,
+	TF2AchID_OnTheRocks = 162,
+	TF2AchID_RunningWithScissors = 163,
+	TF2AchID_MayICutInToo = 164,
+	TF2AchID_Showboat = 165,
+	TF2AchID_TuneMerasmusMultDimensionalTelevision = 166,
+	TF2AchID_Jackpot = 167,
+	TF2AchID_FirstBlood = 1001,
+	TF2AchID_FirstBloodPart2 = 1002,
+	TF2AchID_QuickHook = 1003,
+	TF2AchID_AYearToRemember = 1004,
+	TF2AchID_TheCycle = 1005,
+	TF2AchID_Closer = 1006,
+	TF2AchID_IfYouBuildIt = 1007,
+	TF2AchID_GunDown = 1008,
+	TF2AchID_BatterUp = 1009,
+	TF2AchID_DoctoringTheBall = 1010,
+	TF2AchID_Dodgers1Giants0 = 1011,
+	TF2AchID_BattingTheDoctor = 1012,
+	TF2AchID_ImBatMan = 1013,
+	TF2AchID_TripleSteal = 1014,
+	TF2AchID_PopFly = 1015,
+	TF2AchID_RoundTripper = 1016,
+	TF2AchID_ArtfulDodger = 1017,
+	TF2AchID_FallClassic = 1018,
+	TF2AchID_StrikeZone = 1019,
+	TF2AchID_FoulTerritory = 1020,
+	TF2AchID_TheBigHurt = 1021,
+	TF2AchID_Brushback = 1022,
+	TF2AchID_MoonShot = 1023,
+	TF2AchID_Beanball = 1024,
+	TF2AchID_RetireTheRunner = 1025,
+	TF2AchID_CaughtNapping = 1026,
+	TF2AchID_SideRetired = 1027,
+	TF2AchID_TriplePlay = 1028,
+	TF2AchID_StealingHome = 1029,
+	TF2AchID_SetTheTable = 1030,
+	TF2AchID_BlockThePlate = 1031,
+	TF2AchID_BelittledBeleaguer = 1032,
+	TF2AchID_NoHitter = 1033,
+	TF2AchID_RaceForThePennant = 1034,
+	TF2AchID_OutOfThePark = 1035,
+	TF2AchID_ScoutMilestone1 = 1036,
+	TF2AchID_ScoutMilestone2 = 1037,
+	TF2AchID_ScoutMilestone3 = 1038,
+	TF2AchID_BackInBusiness = 1039,
+	TF2AchID_Back2Back = 1040,
+	TF2AchID_SeveredTies = 1041,
+	TF2AchID_RodeHardPutAwayWet = 1101,
+	TF2AchID_BePolite = 1102,
+	TF2AchID_BeEfficient = 1103,
+	TF2AchID_HaveAPlan = 1104,
+	TF2AchID_KillEveryoneYouMeet = 1105,
+	TF2AchID_TriplePrey = 1106,
+	TF2AchID_SelfDestructSequence = 1107,
+	TF2AchID_DeSentrylized = 1108,
+	TF2AchID_ShootTheBreeze = 1109,
+	TF2AchID_DroppedDead = 1110,
+	TF2AchID_TheLastWave = 1111,
+	TF2AchID_AustralianRules = 1112,
+	TF2AchID_KookTheSpook = 1112,
+	TF2AchID_SocketToHim = 1113,
+}
+*/
+
 #define	TFTeam(%1)		view_as<TFTeam>(%1)
 #define	TFFlag(%1)		view_as<TFFlag>(%1)
 #define	TFSlot(%1)		view_as<TFSlot>(%1)
@@ -135,7 +242,7 @@ enum	{
  *	@error	If the user is invalid or has no currency property, this returns false.
  */
 stock bool TF2_SetClientMvMCash(int client, int value)	{
-	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_nCurrency", value):false;
+	return Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_nCurrency", value):false;
 }
 
 /**
@@ -146,7 +253,7 @@ stock bool TF2_SetClientMvMCash(int client, int value)	{
  *	@error	If the user is invalid or has no currency property, this returns -1.
  */
 stock int TF2_GetClientMvMCash(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_nCurrency"):-1; 
+	return Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_nCurrency"):-1; 
 }
 
 /**
@@ -158,7 +265,7 @@ stock int TF2_GetClientMvMCash(int client)	{
  *	@error	If the user is invalid or has no taunt cam property, this returns false.
  */
 stock bool TF2_SetClientTauntCam(int client, bool value)	{
-	return	Tklib_IsValidClient(client, true, true) ? SetEntPropEx(client, Prop_Send, "m_nForceTauntCam", value):false;
+	return Tklib_IsValidClient(client, true, true) ? SetEntPropEx(client, Prop_Send, "m_nForceTauntCam", value):false;
 }
 
 /**
@@ -169,7 +276,7 @@ stock bool TF2_SetClientTauntCam(int client, bool value)	{
  *	@error	If the user is invalid or has no taunt cam property, this returns false.
  */
 stock bool TF2_GetClientTauntCam(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_nForceTauntCam"):false;
+	return Tklib_IsValidClient(client, _, true) ? GetEntPropBool(client, Prop_Send, "m_nForceTauntCam"):false;
 }
 
 //Set or get the users killstreak count
@@ -182,7 +289,7 @@ stock bool TF2_GetClientTauntCam(int client)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool TF2_SetClientKillstreak(int client, int value=5)	{
-	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_nStreaks", value):false;
+	return Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_nStreaks", value):false;
 }
 
 /**
@@ -193,7 +300,7 @@ stock bool TF2_SetClientKillstreak(int client, int value=5)	{
  *	@error	If the user is invalid, this returns -1.
  */
 stock int TF2_GetClientKillstreak(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_nStreaks"):-1;
+	return Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_nStreaks"):-1;
 }
 
 /**
@@ -204,7 +311,7 @@ stock int TF2_GetClientKillstreak(int client)	{
  *	@error	If the user is invalid or has no cloak, this returns -1.0.
  */
 stock float TF2_GetClientCloakMeter(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter"):false;
+	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter"):false;
 }
 
 /**
@@ -216,7 +323,7 @@ stock float TF2_GetClientCloakMeter(int client)	{
  *	@error	If the user is invalid or has no cloak, this returns false.
  */
 stock bool TF2_SetClientCloakMeter(int client, float value=1.0)	{
-	return	Tklib_IsValidClient(client) ? SetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter", value):false;
+	return Tklib_IsValidClient(client) ? SetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter", value):false;
 }
 
 /**
@@ -227,7 +334,7 @@ stock bool TF2_SetClientCloakMeter(int client, float value=1.0)	{
  *	@error	If the user is invalid, this returns false.
 */
 stock bool TF2_IsClientGlowing(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropBool(client, Prop_Send, "m_bGlowEnabled"):false;
+	return Tklib_IsValidClient(client) ? GetEntPropBool(client, Prop_Send, "m_bGlowEnabled"):false;
 }
 
 /**
@@ -250,7 +357,7 @@ stock bool TF2_SetClientGlow(int client, bool value)	{
  *	@error	If the user is invalid or has no medigun, this will return -1.0.
 */
 stock float TF2_GetClientUbercharge(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel"):false;
+	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel"):false;
 }
 
 /**
@@ -262,7 +369,7 @@ stock float TF2_GetClientUbercharge(int client)	{
  *	@error	If the user is invalid or has no medigun, this returns false.
 */
 stock bool TF2_SetClientUbercharge(int client, float value=1.0)	{
-	return	Tklib_IsValidClient(client, _, true) ? SetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel", value):false;
+	return Tklib_IsValidClient(client, _, true) ? SetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel", value):false;
 }
 
 /**
@@ -273,7 +380,7 @@ stock bool TF2_SetClientUbercharge(int client, float value=1.0)	{
  *	@error	If the user is invalid, this returns -1.0.
 */
 stock float TF2_GetClientChargeMeter(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter"):-1.0;
+	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter"):-1.0;
 }
 
 /**
@@ -285,7 +392,7 @@ stock float TF2_GetClientChargeMeter(int client)	{
  *	@error	If the user is invalid or has no charge-weapon, this returns -1.0.
 */
 stock bool TF2_SetClientChargeMeter(int client, float value=1.0)	{
-	return	Tklib_IsValidClient(client, _, true) ? SetEntPropFloatEx(Exclient, Prop_Send, "m_flChargeMeter", value):false;
+	return Tklib_IsValidClient(client, _, true) ? SetEntPropFloatEx(Exclient, Prop_Send, "m_flChargeMeter", value):false;
 }
 
 /**
@@ -296,7 +403,7 @@ stock bool TF2_SetClientChargeMeter(int client, float value=1.0)	{
  *	@error	If the user is invalid or has no metal-property, this returns -1.
 */
 stock int TF2_GetClientMetal(int client)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetEntPropEx(client, Prop_Data, "m_iAmmo", 4, 3):-1;
+	return Tklib_IsValidClient(client, _, true) ? GetEntPropEx(client, Prop_Data, "m_iAmmo", 4, 3):-1;
 }
 
 /**
@@ -308,7 +415,7 @@ stock int TF2_GetClientMetal(int client)	{
  *	@error	If the user is invalid or has no metal-property, this returns false.
 */
 stock bool TF2_SetClientMetal(int client, int metal=200)	{
-	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Data, "m_iAmmo", metal, 4, 3):false;
+	return Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Data, "m_iAmmo", metal, 4, 3):false;
 }
 
 /**
@@ -319,7 +426,7 @@ stock bool TF2_SetClientMetal(int client, int metal=200)	{
  *	@error	If the client is invalid or has no decapitation-property, this returns -1.
 */
 stock int TF2_GetClientDecapitations(int client)	{
-	return	Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_iDecapitations"):-1;
+	return Tklib_IsValidClient(client) ? GetEntPropEx(client, Prop_Send, "m_iDecapitations"):-1;
 }
 
 /**
@@ -331,7 +438,7 @@ stock int TF2_GetClientDecapitations(int client)	{
  *	@error	If the user is invalid or has no decapitation-property, this returns false.
 */
 stock bool TF2_SetClientDecapitations(int client, int value=10)	{
-	return	Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_iDecapitations"):false;
+	return Tklib_IsValidClient(client) ? SetEntPropEx(client, Prop_Send, "m_iDecapitations"):false;
 }
 
 /**
@@ -343,7 +450,7 @@ stock bool TF2_SetClientDecapitations(int client, int value=10)	{
  *	@error	If the user or slot is invalid, this returns -1.
  */
 stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
-	return	Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, int(slot)):-1;
+	return Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, int(slot)):-1;
 }
 
 /**
@@ -356,12 +463,12 @@ stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
  */
 stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int maxlen)	{
 	switch(building)	{
-		case	TFBuilding_Dispenser:			strcopy(buildingname, maxlen, "Dispenser");
-		case	TFBuilding_Sentrygun:			strcopy(buildingname, maxlen, "Sentrygun");
-		case	TFBuilding_Teleporter_Entrance:	strcopy(buildingname, maxlen, "Teleporter Entrance");
-		case	TFBuilding_Teleporter_Exit:		strcopy(buildingname, maxlen, "Teleporter Exit");
-		case	TFBuilding_MiniSentry:			strcopy(buildingname, maxlen, "Mini-Sentry");
-		case	TFBuilding_Sapper:				strcopy(buildingname, maxlen, "Sapper");
+		case TFBuilding_Dispenser: strcopy(buildingname, maxlen, "Dispenser");
+		case TFBuilding_Sentrygun: strcopy(buildingname, maxlen, "Sentrygun");
+		case TFBuilding_Teleporter_Entrance: strcopy(buildingname, maxlen, "Teleporter Entrance");
+		case TFBuilding_Teleporter_Exit: strcopy(buildingname, maxlen, "Teleporter Exit");
+		case TFBuilding_MiniSentry: strcopy(buildingname, maxlen, "Mini-Sentry");
+		case TFBuilding_Sapper: strcopy(buildingname, maxlen, "Sapper");
 	}
 }
 
@@ -377,21 +484,21 @@ stock TFBuilding TF2_GetBuildingType(any entity)	{
 	GetEntityClassname(entity, classname, sizeof(classname));
 	
 	if(StrEqual(classname, "obj_dispenser"))
-		return	TFBuilding_Dispenser;
+		return TFBuilding_Dispenser;
 	if(StrEqual(classname, "obj_sentrygun"))
-		return	TFBuilding_Sentrygun;
+		return TFBuilding_Sentrygun;
 	if(StrEqual(classname, "obj_teleporter"))	{
 		switch(TF2_GetObjectMode(entity))	{
-			case	TFObjectMode_Entrance:	return TFBuilding_Teleporter_Entrance;
-			case	TFObjectMode_Exit:		return TFBuilding_Teleporter_Exit;
+			case TFObjectMode_Entrance:	return TFBuilding_Teleporter_Entrance;
+			case TFObjectMode_Exit:		return TFBuilding_Teleporter_Exit;
 		}
 	}
 	if(StrEqual(classname, "obj_minisentry"))
-		return	TFBuilding_MiniSentry;
-	if(StrEqual(classname, "obj_sapper"))
-		return	TFBuilding_Sapper;
+		return TFBuilding_MiniSentry;
+	if(StrContainsEx(classname, "sapper", false))
+		return TFBuilding_Sapper;
 	
-	return	TFBuilding_Invalid;
+	return TFBuilding_Invalid;
 }
 
 /**
@@ -403,7 +510,7 @@ stock TFBuilding TF2_GetBuildingType(any entity)	{
  *	@error	If the user is invalid or has no class animations, this returns false.
  */
 stock bool TF2_SetClassAnimations(int client, bool value)	{
-	return	Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bUseClassAnimations", value):false;
+	return Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bUseClassAnimations", value):false;
 }
 
 /**
@@ -422,7 +529,7 @@ stock bool TF2_SetClientModel(int client, const char[] model, bool UseClassAnima
 		SetVariantString(model);
 		AcceptEntityInput(client, "SetCustomModel");
 		TF2_SetClassAnimations(client, UseClassAnimations);
-		return	true;
+		return true;
 	}
 	
 	return	false;
@@ -440,8 +547,8 @@ stock bool TF2_SetClientModel(int client, const char[] model, bool UseClassAnima
 stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
 	int weapon = -1;
 	if((weapon = GetPlayerWeaponSlot(client, int(slot))) != -1)	{
-		RemoveEdict(weapon);
 		RemovePlayerItem(client, weapon);
+		RemoveEdict(weapon);
 		return true;
 	}
 	
@@ -456,7 +563,7 @@ stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_IsEntityBuilding(int entity)	{
-	return	GetEntPropBool(entity, Prop_Send, "m_bBuilding");
+	return GetEntPropBool(entity, Prop_Send, "m_bBuilding");
 }
 
 /**
@@ -467,7 +574,7 @@ stock bool TF2_IsEntityBuilding(int entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_IsEntityMiniBuilding(int entity)	{
-	return	GetEntPropBool(entity, Prop_Send, "m_bMiniBuilding");
+	return GetEntPropBool(entity, Prop_Send, "m_bMiniBuilding");
 }
 
 /**
@@ -479,7 +586,7 @@ stock bool TF2_IsEntityMiniBuilding(int entity)	{
  *	@error	If the entity is invalid, this returns -1.
  */
 stock bool TF2_SetBuildingOwner(any entity, int client)	{
-	return	Tklib_IsValidClient(client) ? SetEntPropEntEx(entity, Prop_Send, "m_hBuilder", client):false;
+	return Tklib_IsValidClient(client) ? SetEntPropEntEx(entity, Prop_Send, "m_hBuilder", client):false;
 }
 
 /**
@@ -674,8 +781,7 @@ stock void TF2_SetTruce(bool value)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int TF2_GetClientAirDash(any client)
-{
+stock int TF2_GetClientAirDash(any client)	{
 	return GetEntPropEx(client, Prop_Send, "m_iAirDash");
 }
 
@@ -687,16 +793,14 @@ stock int TF2_GetClientAirDash(any client)
  *
  *	@error	If the user is invalid or has no m_iAirDash property, this returns false.
  */
-stock bool TF2_SetClientAirDash(int client, int value)
-{
+stock bool TF2_SetClientAirDash(int client, int value)	{
 	return SetEntPropEx(client, Prop_Send, "m_iAirDash", value);
 }
 
 /**
  *	Returns if TF2Attributes is available.
  */
-stock bool IsTF2AttributesLoaded()
-{
+stock bool IsTF2AttributesLoaded()	{
 	return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Attrib_SetByName") == FeatureStatus_Available);
 }
 
@@ -709,10 +813,8 @@ stock bool IsTF2AttributesLoaded()
  *
  *	@noreturn.
  */
-stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen)
-{
-	switch(defindex)
-	{
+stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen)	{
+	switch(defindex)	{
 		case 1: strcopy(type, maxlen, "Team Based");
 		case 2: strcopy(type, maxlen, "Purple");
 		case 3: strcopy(type, maxlen, "4 8 15 16 23 42");
@@ -731,6 +833,76 @@ stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen)
 		case 51234123: strcopy(type, maxlen, "Lime");
 		default: strcopy(type, maxlen, "Unknown");
 	}
+}
+
+/**
+ *	Attach an effect particle onto an entity.
+ *
+ *	@param	entity			The entity index to target.
+ *	@param	particle_name	Particle name to set.
+ *	@param	offset			Offset by Z-Angle.
+ *
+ *	@return	Returns the particle entity.
+ */
+stock int TF2_AttachParticle(any entity, const char[] particle_name, float offset=0.0)	{
+	int particle = CreateEntityByName("info_particle_system");
+	if(IsValidEntityEx(particle))	{
+		float pos[3];
+		GetEntityAbsOrigin(entity, pos);
+		pos[2] += offset;
+		
+		TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
+		DispatchKeyValue(particle, "effect_name", particle_name);
+		DispatchSpawn(particle);
+		SetVariantString("!activator");
+		AcceptEntityInput(particle, "SetParent", entity);
+		ActivateEntity(particle);
+		AcceptEntityInput(particle, "start");
+	}
+	
+	return particle;
+}
+
+/**
+ *	Spawns a weapon entity.
+ *	The weapons spawned are visible to everyone.
+ *
+ *	@param	client		The users index.
+ *	@param	defindex	The item definition index.
+ *	@param	level		The item level.
+ *	@param	quality		The item quality.
+ *
+ *	@return	Returns the entity index.
+ */
+stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
+	char classname[][] = {
+		/* 0 */ "tf_weapon_club",
+		/* 1 */ "tf_weapon_bat",
+		/* 2 */ "tf_weapon_club",
+		/* 3 */ "tf_weapon_shovel",
+		/* 4 */ "tf_weapon_bottle",
+		/* 5 */ "tf_weapon_bonesaw",
+		/* 6 */ "tf_weapon_fists",
+		/* 7 */ "tf_weapon_pyro",
+		/* 8 */ "tf_weapon_spy",
+		/* 9 */ "tf_weapon_wrench"
+	};
+	
+	int item = CreateEntityByName(classname[TF2_GetPlayerClass(client)]);
+	
+	if(IsValidEntityEx(item))	{
+		SetEntProp(item, Prop_Send, "m_iItemDefinitionIndex", defindex);
+		SetEntProp(item, Prop_Send, "m_bInitialized", 1);
+		SetEntProp(item, Prop_Send, "m_iEntityLevel", level);
+		SetEntProp(item, Prop_Send, "m_iEntityQuality", quality);
+		SetEntProp(item, Prop_Send, "m_bValidatedAttachedEntity", 1);
+		SetEntPropEnt(item, Prop_Data, "m_hOwnerEntity", client);
+		SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+		DispatchSpawn(item);
+		EquipPlayerWeapon(client, item);
+	}
+	
+	return item;
 }
 
 #endif
