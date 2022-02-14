@@ -863,6 +863,7 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
 	return particle;
 }
 
+#if defined __tf_econ_data_included
 /**
  *	Spawns a weapon entity.
  *	The weapons spawned are visible to everyone.
@@ -874,24 +875,15 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
  *
  *	@return	Returns the entity index.
  */
-stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
-	char classname[][] = {
-		/* 0 */ "tf_weapon_club",
-		/* 1 */ "tf_weapon_bat",
-		/* 2 */ "tf_weapon_club",
-		/* 3 */ "tf_weapon_shovel",
-		/* 4 */ "tf_weapon_bottle",
-		/* 5 */ "tf_weapon_bonesaw",
-		/* 6 */ "tf_weapon_fists",
-		/* 7 */ "tf_weapon_pyro",
-		/* 8 */ "tf_weapon_spy",
-		/* 9 */ "tf_weapon_wrench"
-	}, netclass[64];
-	
+stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{	
 	int item = CreateEntityByName(classname[TF2_GetPlayerClass(client)]);
 	
 	/* Credits to PC Gamer for most of the code. */
 	if(IsValidEntityEx(item))	{
+		char classname[256], netclass[64];
+		TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
+		TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
+		
 		GetEntityNetClass(item, netclass, sizeof(netclass));
 		SetEntData(item, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
 		SetEntData(item, FindSendPropInfo(netclass, "m_bInitialized"), 1);
@@ -926,6 +918,9 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 	
 	return item;
 }
+#else
+TF2_GiveWeapon() requires TF2EconData to function.
+#endif
 
 /**
  *	Returns wheter the definition index has an australium variant available.
