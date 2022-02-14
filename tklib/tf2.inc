@@ -886,18 +886,40 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 		/* 7 */ "tf_weapon_pyro",
 		/* 8 */ "tf_weapon_spy",
 		/* 9 */ "tf_weapon_wrench"
-	};
+	}, netclass[64];
 	
 	int item = CreateEntityByName(classname[TF2_GetPlayerClass(client)]);
 	
+	/* Credits to PC Gamer for most of the code. */
 	if(IsValidEntityEx(item))	{
-		SetEntProp(item, Prop_Send, "m_iItemDefinitionIndex", defindex);
-		SetEntProp(item, Prop_Send, "m_bInitialized", 1);
-		SetEntProp(item, Prop_Send, "m_iEntityLevel", level);
-		SetEntProp(item, Prop_Send, "m_iEntityQuality", quality);
-		SetEntProp(item, Prop_Send, "m_bValidatedAttachedEntity", 1);
-		SetEntPropEnt(item, Prop_Data, "m_hOwnerEntity", client);
+		GetEntityNetClass(item, netclass, sizeof(netclass));
+		SetEntData(item, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
+		SetEntData(item, FindSendPropInfo(netclass, "m_bInitialized"), 1);
+		SetEntData(item, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
+		SetEntData(item, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
+		SetEntData(item, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), 1);
+		SetEntProp(item, Prop_Data, "m_hOwnerEntity", client);
 		SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+		
+		switch(defindex)	{
+			case 735,736,810,831,933,1080,1102:	{
+				SetEntProp(item, Prop_Send, "m_iObjectType", 3);
+				SetEntProp(item, Prop_Data, "m_iSubType", 3);
+				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 0, _, 0);
+				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 0, _, 1);
+				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
+				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
+			}
+			case 998: SetEntData(item, FindSendPropInfo(netclass, "m_nChargeResistType"), GetRandomInt(0,2));
+			#if defined _tf2attributes_included
+			case 1071:	{
+				TF2Attrib_SetByName(item, "item style override", 0.0);
+				TF2Attrib_SetByName(item, "loot rarity", 1.0);
+				TF2Attrib_SetByName(item, "turn to gold", 1.0);
+			}
+			#endif
+		}
+		
 		DispatchSpawn(item);
 		EquipPlayerWeapon(client, item);
 	}
