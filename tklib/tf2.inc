@@ -918,7 +918,7 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 	return item;
 }
 #else
-TF2_GiveWeapon() requires TF2EconData to function.
+#error TF2_GiveWeapon() requires TF2EconData to function.
 #endif
 
 /**
