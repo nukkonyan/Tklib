@@ -863,10 +863,11 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
 	return particle;
 }
 
-#if defined __tf_econ_data_included
 /**
  *	Spawns a weapon entity.
  *	The weapons spawned are visible to everyone.
+ *	Requires TF2Econ Data plugin.
+ *	TF2Attributes for golden frying pan to be corrected.
  *
  *	@param	client		The users index.
  *	@param	defindex	The item definition index.
@@ -917,9 +918,6 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 	
 	return item;
 }
-#else
-#error TF2_GiveWeapon() requires TF2EconData to function.
-#endif
 
 /**
  *	Give the wearable to the client.
@@ -974,9 +972,9 @@ stock bool TF2_IsValidAustralium(int defindex)	{
 	return false;
 }
 
-#if defined _tf2attributes_included
 /**
  *	Turns the weapon into australium variant.
+ *	Requires TF2Attributes.
  *
  *	@param	weapon	The weapon entity index.
  *
@@ -1028,8 +1026,145 @@ stock void TF2_TurnAustralium(any weapon)	{
 	
 	TF2Attrib_SetByName(weapon, "loot rarity", 1.0);
 }
-#else
-#error TF2_TurnAustralium() requires TF2Attributes.
-#endif
+
+/**
+ *	Returns the killstreaker name.
+ *
+ *	@param	defindex	The definition index.
+ *	@param	buffer		Buffer to store the killstreaker name.
+ *	@param	maxlen		Maximum length of the buffer.
+ *
+ *	@return	Returns true if the definition index is valie, false otherwise. 
+ */
+stock bool TF2_GetKillstreakerEffectName(int defindex, char[] buffer, int maxlen)	{
+	switch(defindex)	{
+		/* Fire Horns. */
+		case 2002:	{
+			strcopy(buffer, maxlen, "Fire Horns");
+			return true;
+		}
+		
+		/* Cerebral Discharge. */
+		case 2003:	{
+			strcopy(buffer, maxlen, "Cerebral Discharge");
+			return true;
+		}
+		
+		/* Tornado. */
+		case 2004:	{
+			strcopy(buffer, maxlen, "Tornade");
+			return true;
+		}
+		
+		/* Flames. */
+		case 2005:	{
+			strcopy(buffer, maxlen, "Flames");
+			return true;
+		}
+		
+		/* Singularity. */
+		case 2006:	{
+			strcopy(buffer, maxlen, "Singularity");
+			return true;
+		}
+		
+		/* Incinerator. */
+		case 2007:	{
+			strcopy(buffer, maxlen, "Incinerator");
+			return true;
+		}
+		
+		/* Hypno-Beam. */
+		case 2008:	{
+			strcopy(buffer, maxlen, "Hypno-Beam");
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+/**
+ *	Returns the killstreak sheen name.
+ *
+ *	@param	defindex	The sheen definition index.
+ *	@param	buffer		The sheen name buffer string.
+ *	@param	maxlen		The maximum length of the sheen name.
+ *
+ *	@return	Returns true if the definition index is valid, false otherwise.
+ */
+stock bool TF2_GetKillstreakSheenName(int defindex, char[] buffer, int maxlen)	{
+	switch(defindex)	{
+		/* Team Shine. */
+		case 1:	{
+			strcopy(buffer, maxlen, "Team Shine");
+			return true;
+		}
+		
+		/* Deadly Daffodil. */
+		case 2:	{
+			strcopy(buffer, maxlen, "Deadly Daffodil");
+			return true;
+		}
+		
+		/* Manndarin. */
+		case 3:	{
+			strcopy(buffer, maxlen, "Manndarin");
+			return true;
+		}
+		
+		/* Mean Green. */
+		case 4:	{
+			strcopy(buffer, maxlen, "Mean Green");
+			return true;
+		}
+		
+		/* Agonizing Emerald. */
+		case 5:	{
+			strcopy(buffer, maxlen, "Agonizing Emerald");
+			return true;
+		}
+		
+		/* Villainous Violet. */
+		case 6:	{
+			strcopy(buffer, maxlen, "Villainous Violet");
+			return true;
+		}
+		
+		/* Hot Rod. */
+		case 7:	{
+			strcopy(buffer, maxlen, "Hot Rod");
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+/**
+ *	Returns an attribute's value of an entity.
+ *	Requires TF2Attributes.
+ *
+ *	@param	entity		Entity index to get the attribute from. Must have m_AttributeList.
+ *	@param	defindex	Definition index of the attribute, as from the number on the attribute entry in items_game.
+ *
+ *	@return				True if the attribute was added successfully, false if entity does not have m_AttributeList.
+ *
+ *	@error				Invalid entity index or attribute name will return -1.0.
+ */
+stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) 	{
+	if(!IsValidEntityEx(entity))
+		return -1.0;
+	
+	int indice[16];
+	float value[16];
+	
+	for(int i = 0; i < TF2Attrib_GetSOCAttribs(entity, indice, value); i++) 	{
+		if(indice[i] == defindex) 
+			return value[i];
+	}
+	
+	return 0.0;
+}
 
 #endif
