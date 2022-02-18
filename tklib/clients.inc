@@ -599,8 +599,10 @@ stock bool Respawn(any client)	{
 		switch(GetEngineVersion())	{
 			case Engine_TF2:
 				TF2_RespawnPlayer(client);
+			#if defined _cstrike_included
 			case Engine_CSS, Engine_CSGO, Engine_SourceSDK2007:
 				CS_RespawnPlayer(client);
+			#endif
 		}
 		
 		return	true;

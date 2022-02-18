@@ -889,7 +889,6 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
 		SetEntityInitialized(item, true);
 		SetEntityLevel(item,level);
 		SetEntityQuality(item, quality);
-		SetEntProp(item, Prop_Send, "m_bValidatedAttachedEntity", 1);
 		SetEntityOwner(item, client);
 		SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
 		
@@ -944,7 +943,6 @@ stock int TF2_GiveWearable(int client, int defindex, int level, int quality)	{
 			SetEntityLevel(item, level);
 			SetEntityQuality(item, quality);
 			SetEntityInitialized(item, true);
-			SetEntProp(item, Prop_Send, "m_bValidatedAttachedEntity", 1);
 			SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
 			SetEntityOwner(item, client);
 			DispatchSpawn(item);
@@ -1165,6 +1163,150 @@ stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) 	{
 	}
 	
 	return 0.0;
+}
+
+/**
+ *	Returns wheter the warpaint definition index is valid.
+ *
+ *	@param	defindex	The warpaint definition index.
+ *
+ *	@return	If the warpaint is valid, this returns true. False otherwise.
+ */
+stock bool TF2_IsValidWarPaint(int defindex)	{
+	switch(defindex)	{
+		case 200,201,202,203,204,205,206,207,208,
+		209,210,211,212,213,214,215,217,218,
+		220,221,223,224,225,226,228,
+		230,232,234,235,236,237,238,
+		239,240,241,242,243,244,245,246,247,248,
+		249,250,251,252,253,254,255,256,257,258,
+		259,260,261,262,263,264,265,266,267,268,
+		269,270,271,272,273,275,276,277,278,
+		279,280,281,282,283,284,285,286,287,
+		289,290,291,292,293,294,295,296,297,300,
+		301,302,303,304,305,306,307,308,309,310,
+		390,391: return true;
+	}
+	
+	return false;
+}
+
+/**
+ *	Returns the warpaint name.
+ *
+ *	@param	defindex	The warpaint definition index.
+ *	@param	buffer		The warpaint name.
+ *	@param	maxlen		The warpaint name maximum length.
+ *
+ *	@noreturn.
+ */
+stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen)	{
+	switch(defindex)
+	{
+		case 200: strcopy(buffer, maxlen, "Bloom Buffed");
+		case 201: strcopy(buffer, maxlen, "Quack Canvassed");
+		case 202: strcopy(buffer, maxlen, "Bank Rolled");
+		case 203: strcopy(buffer, maxlen, "Merc Stained");
+		case 204: strcopy(buffer, maxlen, "Kill Covered");
+		case 205: strcopy(buffer, maxlen, "Fire Glazed");
+		case 206: strcopy(buffer, maxlen, "Pizza Polished");
+		case 207: strcopy(buffer, maxlen, "Bonk Varnished");
+		case 208: strcopy(buffer, maxlen, "Star Crossed");
+		case 209: strcopy(buffer, maxlen, "Clover Camo'd");
+		case 210: strcopy(buffer, maxlen, "Freedom Wrapped");
+		case 211: strcopy(buffer, maxlen, "Cardboard Boxed");
+		case 212: strcopy(buffer, maxlen, "Dream Piped");
+		case 213: strcopy(buffer, maxlen, "Miami Element");
+		case 214: strcopy(buffer, maxlen, "Neo Tokyo");
+		case 215: strcopy(buffer, maxlen, "Geometrical Teams");
+		case 217: strcopy(buffer, maxlen, "Bomber Soul");
+		case 218: strcopy(buffer, maxlen, "Uranium Scattergun");
+		case 220: strcopy(buffer, maxlen, "Cabin Fevered");
+		case 221: strcopy(buffer, maxlen, "Polar Surprise");
+		case 223: strcopy(buffer, maxlen, "Hana");
+		case 224: strcopy(buffer, maxlen, "Dovetailed");
+		case 225: strcopy(buffer, maxlen, "Cosmic Calamity");
+		case 226: strcopy(buffer, maxlen, "Hazard Warning");
+		case 228: strcopy(buffer, maxlen, "Mosaic");
+		case 230: strcopy(buffer, maxlen, "Jazzy");
+		case 232: strcopy(buffer, maxlen, "Alien Tech");
+		case 234: strcopy(buffer, maxlen, "Damascus and Mahogany");
+		case 235: strcopy(buffer, maxlen, "Skull Study");
+		case 236: strcopy(buffer, maxlen, "Haunted Ghosts");
+		case 237: strcopy(buffer, maxlen, "Spectral Shimmered");
+		case 238: strcopy(buffer, maxlen, "Spirit Of Halloween");
+		case 239: strcopy(buffer, maxlen, "Horror Holiday");
+		case 240: strcopy(buffer, maxlen, "Totally Boned");
+		case 241: strcopy(buffer, maxlen, "Electroshocked");
+		case 242: strcopy(buffer, maxlen, "Ghost Town");
+		case 243: strcopy(buffer, maxlen, "Tumor Toasted");
+		case 244: strcopy(buffer, maxlen, "Calavera Canvas");
+		case 245: strcopy(buffer, maxlen, "Snow Covered");
+		case 246: strcopy(buffer, maxlen, "Frost Ornamented");
+		case 247: strcopy(buffer, maxlen, "Smissmass Village");
+		case 248: strcopy(buffer, maxlen, "Igloo");
+		case 249: strcopy(buffer, maxlen, "Seriously Snowed");
+		case 250: strcopy(buffer, maxlen, "Smissmas Camo");
+		case 251: strcopy(buffer, maxlen, "Sleighin' Style");
+		case 252: strcopy(buffer, maxlen, "Alpine");
+		case 253: strcopy(buffer, maxlen, "Gift Wrapped");
+		case 254: strcopy(buffer, maxlen, "Winterland Wrapped");
+		case 255: strcopy(buffer, maxlen, "Helldriver");
+		case 256: strcopy(buffer, maxlen, "Organ-ically Hellraised");
+		case 257: strcopy(buffer, maxlen, "Spectrum Splattered");
+		case 258: strcopy(buffer, maxlen, "Candy Coated");
+		case 259: strcopy(buffer, maxlen, "Pumpkin Pied");
+		case 260: strcopy(buffer, maxlen, "Sweet Toothed");
+		case 261: strcopy(buffer, maxlen, "Crawlspace Critters");
+		case 262: strcopy(buffer, maxlen, "Portal Plastered");
+		case 263: strcopy(buffer, maxlen, "Death Deluxe");
+		case 264: strcopy(buffer, maxlen, "Raving Dead");
+		case 265: strcopy(buffer, maxlen, "Eyestalker");
+		case 266: strcopy(buffer, maxlen, "Spider's Cluster");
+		case 267: strcopy(buffer, maxlen, "Gourdy Green");
+		case 268: strcopy(buffer, maxlen, "Mummified Mimic");
+		case 269: strcopy(buffer, maxlen, "Spider Season");
+		case 270: strcopy(buffer, maxlen, "Gingerbread Winner");
+		case 271: strcopy(buffer, maxlen, "Saccharine Striped");
+		case 272: strcopy(buffer, maxlen, "Elfin Enamel");
+		case 273: strcopy(buffer, maxlen, "Peppermint Swirl");
+		case 275: strcopy(buffer, maxlen, "Snow Globalization");
+		case 276: strcopy(buffer, maxlen, "Gifting Mann's Wrapping Paper");
+		case 277: strcopy(buffer, maxlen, "Snowflake Swirled");
+		case 278: strcopy(buffer, maxlen, "Smissmass Spycrabs");
+		case 279: strcopy(buffer, maxlen, "Frozen Aurora");
+		case 280: strcopy(buffer, maxlen, "Starlight Serenity");
+		case 281: strcopy(buffer, maxlen, "Frosty Delivery");
+		case 282: strcopy(buffer, maxlen, "Glacial Glazed");
+		case 283: strcopy(buffer, maxlen, "Cookie Fortress");
+		case 284: strcopy(buffer, maxlen, "Sarsaparilla Sprayed");
+		case 285: strcopy(buffer, maxlen, "Swashbuckled");
+		case 286: strcopy(buffer, maxlen, "Skull Cracked");
+		case 287: strcopy(buffer, maxlen, "Missfortunate");
+		case 289: strcopy(buffer, maxlen, "Neon-Ween");
+		case 290: strcopy(buffer, maxlen, "Simple Spirits");
+		case 291: strcopy(buffer, maxlen, "Broken Bones");
+		case 292: strcopy(buffer, maxlen, "Potent Poison");
+		case 293: strcopy(buffer, maxlen, "Searing Souls");
+		case 294: strcopy(buffer, maxlen, "Party Phantoms");
+		case 295: strcopy(buffer, maxlen, "Polster-Guised");
+		case 296: strcopy(buffer, maxlen, "Kiln and conquer");
+		case 297: strcopy(buffer, maxlen, "Necromanced");
+		case 300: strcopy(buffer, maxlen, "Yeti Coated");
+		case 301: strcopy(buffer, maxlen, "Dark Pigmented");
+		case 302: strcopy(buffer, maxlen, "Mannana");
+		case 303: strcopy(buffer, maxlen, "Macaw Masked");
+		case 304: strcopy(buffer, maxlen, "Sax Waxed");
+		case 305: strcopy(buffer, maxlen, "Anodized Aloha");
+		case 306: strcopy(buffer, maxlen, "Bamboo Brushed");
+		case 307: strcopy(buffer, maxlen, "Tiger Buffed");
+		case 308: strcopy(buffer, maxlen, "Croc Dusted");
+		case 309: strcopy(buffer, maxlen, "Piña Polished");
+		case 310: strcopy(buffer, maxlen, "Leopard Printed");
+		case 390: strcopy(buffer, maxlen, "Dragon Slayer");
+		case 391: strcopy(buffer, maxlen, "Smissmass Sweater");
+		default: Format(buffer, maxlen, "Unknown warpaint (%i)", defindex);
+	}
 }
 
 #endif
