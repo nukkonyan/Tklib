@@ -963,8 +963,10 @@ stock int TF2_GiveWearable(int client, int defindex, int level, int quality)	{
  */
 stock bool TF2_IsValidAustralium(int defindex)	{
 	switch(defindex)	{
-		case 4, 7, 13, 14, 15, 16, 18, 19, 20, 21, 29, 36, 38, 45, 61, 132,
-		141, 194, 197, 200, 201, 202, 203, 205, 206, 207, 208, 211, 228, 264, 424: return true;
+		case 4,7,13,14,15,16,18,19,20,
+		21,29,36,38,45,61,132,141,194,
+		197,200,201,202,203,205,206,207,
+		208,211,228,264,424: return true;
 	}
 	
 	return false;
@@ -1219,7 +1221,7 @@ stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen)	{
 		case 214: strcopy(buffer, maxlen, "Neo Tokyo");
 		case 215: strcopy(buffer, maxlen, "Geometrical Teams");
 		case 217: strcopy(buffer, maxlen, "Bomber Soul");
-		case 218: strcopy(buffer, maxlen, "Uranium Scattergun");
+		case 218: strcopy(buffer, maxlen, "Uranium");
 		case 220: strcopy(buffer, maxlen, "Cabin Fevered");
 		case 221: strcopy(buffer, maxlen, "Polar Surprise");
 		case 223: strcopy(buffer, maxlen, "Hana");
