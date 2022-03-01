@@ -95,8 +95,22 @@ enum TFBuilding	{
 }
 
 enum TFQuality	{
-	TFQuality_SelfMade	=	9,
-	TFQuality_Strange	=	11
+	TFQuality_Normal	= 0,
+	TFQuality_Genuine	= 1,
+	TFQuality_Rarity2	= 2,
+	TFQuality_Vintage	= 3,
+	TFQuality_Rarity4	= 4,
+	TFQuality_Unusual	= 5,
+	TFQuality_Unique	= 6,
+	TFQuality_Community	= 7,
+	TFQuality_Valve		= 8,
+	TFQuality_SelfMade	= 9,
+	TFQuality_Rarity10	= 10,
+	TFQuality_Strange	= 11,
+	TFQuality_Completed	= 12,
+	TFQuality_Haunted	= 13,
+	TFQuality_Collectors= 14,
+	TFQuality_Skins		= 15
 }
 
 /* Look up "item_found" event */
@@ -876,46 +890,50 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
  *
  *	@return	Returns the weapon entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
-	int item = -1;
+stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)	{
+	static int weapon;
 	
 	char classname[256];
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
-	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
+	//TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(IsValidEntityEx((item = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true))	{
-		SetEntityDefinitionIndex(item, defindex);
-		SetEntityInitialized(item, true);
-		SetEntityLevel(item,level);
-		SetEntityQuality(item, quality);
-		SetEntityOwner(item, client);
-		SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true))	{
+		char netclass[64];
+		GetEntityNetClass(weapon, netclass, sizeof(netclass));
+		
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_bInitialized"), true);
+		SetEntPropEnt(weapon, Prop_Send, "m_hOwnerEntity", client);
+		SetEntProp(weapon, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+		SetEntProp(weapon, Prop_Send, "m_bValidatedAttachedEntity", 1);
 		
 		switch(defindex)	{
 			case 735,736,810,831,933,1080,1102:	{
-				SetEntProp(item, Prop_Send, "m_iObjectType", 3);
-				SetEntProp(item, Prop_Data, "m_iSubType", 3);
-				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 0, _, 0);
-				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 0, _, 1);
-				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
-				SetEntProp(item, Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
+				SetEntProp(weapon, Prop_Send, "m_iObjectType", 3);
+				SetEntProp(weapon, Prop_Data, "m_iSubType", 3);
+				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 0);
+				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 1);
+				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
+				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
 			}
-			case 998: SetEntProp(item, Prop_Send, "m_nChargeResistType", GetRandomInt(0,2));
+			case 998: SetEntData(weapon, FindSendPropInfo(netclass, "m_nChargeResistType"), GetRandomInt(0,2));
 			#if defined _tf2attributes_included
 			case 1071:	{
-				TF2Attrib_SetByName(item, "item style override", 0.0);
-				TF2Attrib_SetByName(item, "loot rarity", 1.0);
-				TF2Attrib_SetByName(item, "turn to gold", 1.0);
+				TF2Attrib_SetByName(weapon, "item style override", 0.0);
+				TF2Attrib_SetByName(weapon, "loot rarity", 1.0);
+				TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
 			}
 			#endif
 		}
 		
-		DispatchSpawn(item);
-		EquipPlayerWeapon(client, item);
+		DispatchSpawn(weapon);
+		EquipPlayerWeapon(client, weapon);
 	}
 	
-	return item;
+	return weapon;
 }
 
 /**
@@ -923,37 +941,36 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, int quality)	{
  *
  *	@param	client		The users index.
  *	@param	defindex	The wearable definition index.
- *	@param	quality		The wearable quality index.
+ *	@param	quality		The wearable TFQuality index.
  *	@param	level		The wearable level.
  *
  *	@return	Returns the wearable entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveWearable(int client, int defindex, int level, int quality)	{
-	int item = -1;
-	Handle EquipWearable;
+stock int TF2_GiveWearable(int client, int defindex, int level, TFQuality quality)	{
+	static int wearable;
+	static Handle EquipWearable;
+	static GameData data;
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetVirtual((data = new GameData("sm-tf2.games")).GetOffset("RemoveWearable")-1);
+	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
+	EquipWearable = EndPrepSDKCall();
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(IsValidEntityEx((item = CreateEntityByName("tf_wearable"))) && Tklib_IsValidClient(client, _, true))	{
-		GameData data = new GameData("sm-tf2.games");
-		StartPrepSDKCall(SDKCall_Player);
-		PrepSDKCall_SetVirtual(data.GetOffset("RemoveWearable")-1);
-		PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
-		if((EquipWearable = EndPrepSDKCall()) != null)	{
-			SetEntityDefinitionIndex(item, defindex);
-			SetEntityLevel(item, level);
-			SetEntityQuality(item, quality);
-			SetEntityInitialized(item, true);
-			SetEntProp(item, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
-			SetEntityOwner(item, client);
-			DispatchSpawn(item);
-			SDKCall(EquipWearable, client, item);
-		}
-			
-		delete EquipWearable;
-		delete data;
+	if(EquipWearable != null && IsValidEntityEx((wearable = CreateEntityByName("tf_wearable"))) && Tklib_IsValidClient(client, _, true))	{
+		SetEntData(wearable, FindSendPropInfo("CTFWearable", "m_iItemDefinitionIndex"), defindex);
+		SetEntData(wearable, FindSendPropInfo("CTFWearable", "m_iEntityLevel"), level);
+		SetEntData(wearable, FindSendPropInfo("CTFWearable", "m_iEntityQuality"), quality);
+		SetEntData(wearable, FindSendPropInfo("CTFWearable", "m_bInitialized"), true);
+		SetEntPropEnt(wearable, Prop_Send, "m_hOwnerEntity", client);
+		SetEntProp(wearable, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+		SetEntProp(wearable, Prop_Send, "m_bValidatedAttachedEntity", 1);
+		DispatchSpawn(wearable);
+		SDKCall(EquipWearable, client, wearable);
 	}
 	
-	return item;
+	delete EquipWearable;
+	delete data;
+	return wearable;
 }
 
 /**
@@ -983,34 +1000,37 @@ stock bool TF2_IsValidAustralium(int defindex)	{
 stock void TF2_TurnAustralium(any weapon)	{
 	if(!IsValidEntityEx(weapon))
 		return;
-	
-	int defindex = GetEntityDefinitionIndex(weapon);
+
+	char netclass[64];
+	GetEntityNetClass(weapon, netclass, sizeof(netclass));
+
+	int defindex = GetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"));
 	
 	if(!TF2_IsValidAustralium(defindex))
 		return;
 	
 	/* Force the stock weapons to be 'upgradable' version. */
 	switch(defindex)	{
-		case 7: SetEntityDefinitionIndex(weapon, 197);
-		case 13: SetEntityDefinitionIndex(weapon, 200);
-		case 14: SetEntityDefinitionIndex(weapon, 201);
-		case 15: SetEntityDefinitionIndex(weapon, 202);
-		case 16: SetEntityDefinitionIndex(weapon, 203);
-		case 18: SetEntityDefinitionIndex(weapon, 205);
-		case 19: SetEntityDefinitionIndex(weapon, 206);
-		case 20: SetEntityDefinitionIndex(weapon, 207);
-		case 21: SetEntityDefinitionIndex(weapon, 208);
-		case 29: SetEntityDefinitionIndex(weapon, 211);
+		case 7: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 197);
+		case 13: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 200);
+		case 14: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 201);
+		case 15: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 202);
+		case 16: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 203);
+		case 18: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 205);
+		case 19: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 206);
+		case 20: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 207);
+		case 21: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 208);
+		case 29: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 211);
 	}
 	
 	/* Turn the weapon to strange quality and random level. */
-	SetEntityQuality(weapon, 11); /* Strange. */
-	SetEntityLevel(weapon, GetRandomInt(0, 100)); /* Random level between 0 and 100. */
+	SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), TFQuality_Strange); /* Strange. */
+	SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), GetRandomInt(0, 100)); /* Random level between 0 and 100. */
 	
 	/* Frying Pan. */
 	switch(defindex == 264)	{
 		case true:	{
-			SetEntityDefinitionIndex(weapon, 1071); /* Turn to golden frying pan. */
+			SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 1071); /* Turn to golden frying pan. */
 			TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
 			TF2Attrib_SetByName(weapon, "killstreak tier", 1.0);
 			TF2Attrib_SetByName(weapon, "killstreak effect", view_as<float>(GetRandomInt(2002, 2008)));
@@ -1202,8 +1222,7 @@ stock bool TF2_IsValidWarPaint(int defindex)	{
  *	@noreturn.
  */
 stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen)	{
-	switch(defindex)
-	{
+	switch(defindex)	{
 		case 200: strcopy(buffer, maxlen, "Bloom Buffed");
 		case 201: strcopy(buffer, maxlen, "Quack Canvassed");
 		case 202: strcopy(buffer, maxlen, "Bank Rolled");
@@ -1307,6 +1326,60 @@ stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen)	{
 		case 390: strcopy(buffer, maxlen, "Dragon Slayer");
 		case 391: strcopy(buffer, maxlen, "Smissmass Sweater");
 		default: Format(buffer, maxlen, "Unknown warpaint (%i)", defindex);
+	}
+}
+
+/**
+ *	Returns the users active taunt definition index.
+ *
+ *	@param	client	The users index.
+ *
+ *	@return	Returns the taunt definition index. -1 if invalid user or 0 if no taunt.
+ */
+stock int TF2_GetClientActiveTauntDefinitionIndex(int client)	{
+	return GetEntPropEx(client, Prop_Send, "m_iTauntItemDefIndex");
+}
+
+/**
+ *	Returns the paintcan name.
+ *
+ *	@param	defindex	The paint definition index.
+ *	@param	buffer		The buffer to store the paint name.
+ *	@param	maxlen		The maximum length of the buffer name.
+ *
+ *	@noreturn.
+ */
+stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen)	{
+	switch(defindex)	{
+		case 2960676: strcopy(buffer, maxlen, "After Eight");
+		case 3100495: strcopy(buffer, maxlen, "A Colour Similiar To Slate");
+		case 3329330: strcopy(buffer, maxlen, "A Bitter Taste Of Defeat And Lime");
+		case 3874595: strcopy(buffer, maxlen, "Balaclavas Are Forever");
+		case 4345659: strcopy(buffer, maxlen, "Zepheniahs Greed");
+		case 4732984: strcopy(buffer, maxlen, "Operators Overalls");
+		case 5322826: strcopy(buffer, maxlen, "Noble Hatters Violet");
+		case 6637376: strcopy(buffer, maxlen, "An Air Of Debonair");
+		case 6901050: strcopy(buffer, maxlen, "Radigan Conagher Brown");
+		case 7511618: strcopy(buffer, maxlen, "Indubitably Green");
+		case 8154199: strcopy(buffer, maxlen, "Ye Olde Rustic Colour");
+		case 8208497: strcopy(buffer, maxlen, "A Deep Commitment To Purple");
+		case 8289918: strcopy(buffer, maxlen, "Aged Moustache Grey");
+		case 8400928: strcopy(buffer, maxlen, "The Value Of Teamwork");
+		case 8421376: strcopy(buffer, maxlen, "Drably Olive");		
+		case 10843461: strcopy(buffer, maxlen, "Muskelmannbraun");
+		case 11049612: strcopy(buffer, maxlen, "Waterlogged Lab Coat");
+		case 12073019: strcopy(buffer, maxlen, "Team Spirit");
+		case 12807213: strcopy(buffer, maxlen, "Cream Spirit");
+		case 1315860: strcopy(buffer, maxlen, "A Distinctive Lack Of Blue");
+		case 13595446: strcopy(buffer, maxlen, "Mann Co. Orange");
+		case 14204632: strcopy(buffer, maxlen, "Colour No 216-190-216");
+		case 15132390: strcopy(buffer, maxlen, "An Extraordinary Abudance Of Tinge");
+		case 15185211: strcopy(buffer, maxlen, "Australium Gold");
+		case 15308410: strcopy(buffer, maxlen, "Dark Salmon Injustice");
+		case 12377523: strcopy(buffer, maxlen, "A Mann's Mint");
+		case 12955537: strcopy(buffer, maxlen, "Peculiarly Drab Tincture");
+		case 15787660: strcopy(buffer, maxlen, "The Colour Of A Gentlemanns Business Pants");
+		case 16738740: strcopy(buffer, maxlen, "Pink As Hell");
 	}
 }
 
