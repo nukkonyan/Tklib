@@ -9,6 +9,10 @@ This was renamed from Tk Include to Tk Libraries when 1.2.0 was released. Possib
 Pro tip: using `stock` makes only those that are being used out of the include to be compiled with and the rest will be ignored/not compiled.
 Using `public` will only make it be part of the compilation even if not used. (Compiler will see it as a forward if not used inside plugin).
 
+### Tklib is inside ``Main``
+
+### Other extra includes are inside ``Other``
+
 
 # Available Pre-Include Definitions
 
