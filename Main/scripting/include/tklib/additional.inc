@@ -541,29 +541,15 @@ stock Address GetNativeAddress(int param)	{
 	return view_as<Address>(GetNativeCell(param));
 }
 
-/**
- *	Returns if the database connection is valid.
- *
- *	@param	database	The database Handle.
- *
- *	@return	If the database connection is valid, this is true. False otherwise.
- */
-stock bool IsValidDatabase(Database database)	{
-	return (database != null);
-}
-
 
 /**
  *	Returns if SourceBans is loaded.
  *
  *	@param	comms	If true, this checks if SourceComms of SourceBans is loaded instead.
  */
-stock bool IsSourceBansLoaded(bool comms = false)
-{
-	switch(comms)
-	{
-		case true:
-		{
+stock bool IsSourceBansLoaded(bool comms = false)	{
+	switch(comms)	{
+		case true:	{
 			if(GetFeatureStatus(FeatureType_Native, "SourceComms_SetClientMute") == FeatureStatus_Available)
 				return true;
 			
@@ -577,8 +563,7 @@ stock bool IsSourceBansLoaded(bool comms = false)
 				return true;
 		}
 		
-		case false:
-		{
+		case false:	{
 			if(GetFeatureStatus(FeatureType_Native, "SBBanPlayer") == FeatureStatus_Available)
 				return true;
 			
@@ -660,6 +645,77 @@ stock void GetNameFromColourTag(const char[] source, char[] colour, int maxlen)
 	
 	if(StrEqual(source, "{lightred2}", false))
 		strcopy(colour, maxlen, "Light Red 2");
+}
+
+/**
+ *	Converts an integer into a floating point.
+ *
+ *	@param	value	The integer to convert.
+ */
+stock float IntToFloat(int value)	{
+	char format[128];
+	Format(format, sizeof(format), "%i", value);
+	return StringToFloat(format);
+}
+
+/**
+ *	Returns the servers ip.
+ *
+ *	@param	ip		The servers ip address.
+ *	@param	maxlen	The servers ip address string max length.
+ *
+ *	@error	If the ip address cvar wasn't found, this returns false.
+ */
+stock bool GetServerIP(char[] ip, int maxlen)	{
+	ConVar cvar = FindConVar("hostip");
+	bool valid = false;
+	if(cvar != null)	{
+		cvar.GetString(ip, maxlen);
+		valid = true;
+	}
+	
+	delete cvar;
+	return valid;
+} 
+
+/**
+ *	Returns the servers port.
+ *
+ *	@param	port	The servers port.
+ *	@param	maxlen	The servers port string max length.
+ *
+ *	@error	If the port cvar wasn't found, this returns false.
+ */
+stock bool GetServerPort(char[] port, int maxlen)	{
+	ConVar cvar = FindConVar("hostport");
+	bool valid = false;
+	if(cvar != null)	{
+		cvar.GetString(port, maxlen);	
+		valid = true;
+	}
+	
+	delete cvar;
+	return valid;
+}
+
+/**
+ *	Returns the servers hostname.
+ *
+ *	@param	hostname	The servers hostname.
+ *	@param	maxlen		The servers nostname max length.
+ *
+ *	@error	If the hostname cvar wasn't found, this returns false.
+ */
+stock bool GetServerHostname(char[] hostname, int maxlen)	{
+	ConVar cvar = FindConVar("hostname");
+	bool valid = false;
+	if(cvar != null)	{
+		cvar.GetString(hostname, maxlen);
+		valid = true;
+	}
+	
+	delete cvar;
+	return valid;
 }
 
 #endif

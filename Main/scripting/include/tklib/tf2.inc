@@ -53,7 +53,7 @@ stock char TF2_GetTeamStringName[][] = {
 };
 
 //TF2 Flag Event
-enum TFFlag	{
+enum TFFlag {
 	TFFlag_None		=	0,
 	TFFlag_PickedUp	=	1,
 	TFFlag_Captured	=	2,
@@ -63,38 +63,38 @@ enum TFFlag	{
 }
 
 //TF Slots
-enum TFSlot	{
-	TFSlot_Invalid	=	-1,
-	TFSlot_Primary	=	0,
-	TFSlot_Secondary=	1,
-	TFSlot_Melee	=	2,
-	TFSlot_PDA		=	3,
-	TFSlot_PDA2		=	4,
-	TFSlot_Slot6	=	5,
-	TFSlot_Slot7	=	6,
-	TFSlot_Slot8	=	7,
-	TFSlot_Slot9	=	8,
-	TFSlot_Slot10	=	9,
-	TFSlot_Slot11	=	10
+enum TFSlot {
+	TFSlot_Invalid	= -1,
+	TFSlot_Primary	= 0,
+	TFSlot_Secondary= 1,
+	TFSlot_Melee	= 2,
+	TFSlot_PDA		= 3,
+	TFSlot_PDA2		= 4,
+	TFSlot_Slot6	= 5,
+	TFSlot_Slot7	= 6,
+	TFSlot_Slot8	= 7,
+	TFSlot_Slot9	= 8,
+	TFSlot_Slot10	= 9,
+	TFSlot_Slot11	= 10
 }
 
-enum TFCritType	{
-	TFCritType_None		=	0,
-	TFCritType_Minicrit	=	1,
-	TFCritType_Crit		=	2
+enum TFCritType {
+	TFCritType_None		= 0,
+	TFCritType_Minicrit	= 1,
+	TFCritType_Crit		= 2
 }
 
 enum TFBuilding	{
-	TFBuilding_Invalid				=	-1,
-	TFBuilding_Sentrygun			=	0,
-	TFBuilding_Dispenser			=	1,
-	TFBuilding_Teleporter_Entrance	=	2,
-	TFBuilding_Teleporter_Exit		=	3,
-	TFBuilding_MiniSentry			=	4,
-	TFBuilding_Sapper				=	5
+	TFBuilding_Invalid				= -1,
+	TFBuilding_Sentrygun			= 0,
+	TFBuilding_Dispenser			= 1,
+	TFBuilding_Teleporter_Entrance	= 2,
+	TFBuilding_Teleporter_Exit		= 3,
+	TFBuilding_MiniSentry			= 4,
+	TFBuilding_Sapper				= 5
 }
 
-enum TFQuality	{
+enum TFQuality {
 	TFQuality_Normal	= 0,
 	TFQuality_Genuine	= 1,
 	TFQuality_Rarity2	= 2,
@@ -114,36 +114,36 @@ enum TFQuality	{
 }
 
 /* Look up "item_found" event */
-enum TFMethod	{
-	TFFound_Achieved	=	-1,
-	TFFound_Found		=	0,
-	TFFound_Crafted		=	1,
-	TFFound_Traded		=	2,
-	TFFound_Unboxed		=	4,
-	TFFound_Gifted		=	5,
-	TFFound_Earned		=	8,
-	TFFound_Refunded	=	9,
-	TFFound_WrappedGift	=	10
+enum TFMethod {
+	TFFound_Achieved	= -1,
+	TFFound_Found		= 0,
+	TFFound_Crafted		= 1,
+	TFFound_Traded		= 2,
+	TFFound_Unboxed		= 4,
+	TFFound_Gifted		= 5,
+	TFFound_Earned		= 8,
+	TFFound_Refunded	= 9,
+	TFFound_WrappedGift	= 10
 }
 
 enum TFGameType	{
-	TFGameType_Unknown	=	0,
-	TFGameType_CTF		=	1,
-	TFGameType_CP		=	2,
-	TFGameType_PL		=	3,
-	TFGameType_Arena	=	4,
-	TFGameType_PassBall	=	7
+	TFGameType_Unknown	= 0,
+	TFGameType_CTF		= 1,
+	TFGameType_CP		= 2,
+	TFGameType_PL		= 3,
+	TFGameType_Arena	= 4,
+	TFGameType_PassBall	= 7
 }
 
 /* See event "halloween_boss_killed" for more info */
-enum	{
+enum {
 	TFBoss_Killed_HHH = 1,
 	TFBoss_Killed_Monoculus = 2,
 	TFBoss_Killed_Merasmus = 3
 }
 
-/* Achievement id's
-enum	{
+// Achievement id's
+enum {
 	TF2AchID_SentryGunner = 127,
 	TF2AchID_Nemesis = 128,
 	TF2AchID_HardToKill = 129,
@@ -234,8 +234,8 @@ enum	{
 	TF2AchID_AustralianRules = 1112,
 	TF2AchID_KookTheSpook = 1112,
 	TF2AchID_SocketToHim = 1113,
+	//More to be added.
 }
-*/
 
 #define	TFTeam(%1)		view_as<TFTeam>(%1)
 #define	TFFlag(%1)		view_as<TFFlag>(%1)
@@ -464,7 +464,7 @@ stock bool TF2_SetClientDecapitations(int client, int value=10)	{
  *	@error	If the user or slot is invalid, this returns -1.
  */
 stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
-	return Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, int(slot)):-1;
+	return Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, view_as<int>(slot)):-1;
 }
 
 /**
@@ -895,7 +895,7 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)
 	
 	char classname[256];
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
-	//TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
+	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
 	
 	/* Credits to PC Gamer for most of the code. */
 	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true))	{
@@ -1003,7 +1003,7 @@ stock void TF2_TurnAustralium(any weapon)	{
 
 	char netclass[64];
 	GetEntityNetClass(weapon, netclass, sizeof(netclass));
-
+	
 	int defindex = GetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"));
 	
 	if(!TF2_IsValidAustralium(defindex))
@@ -1184,7 +1184,55 @@ stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) 	{
 			return value[i];
 	}
 	
-	return 0.0;
+	return -1.0;
+}
+
+/**
+ *	Forces the default weapon definition index
+ *	to be turned into the 'upgraded' one.
+ *
+ *	@param	weapon	The weapon entity index.
+ *
+ *	@noreturn.
+ */
+stock void TF2_TurnDefaultDefIndexToUpgraded(int weapon)	{
+	// Fix the default weapons to be forced as an 'upgraded' variant so they can be festivized variant, be australium, have war paint, etc.
+	if(!IsValidEntityEx(weapon))
+		return;
+	
+	char netclass[64];
+	GetEntityNetClass(weapon, netclass, sizeof(netclass));
+	int defindex = GetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"));
+	
+	switch(defindex)	{
+		case 0: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 190);
+		case 1: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 191);
+		case 2: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 192);
+		case 3: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 193);
+		case 4: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 194);
+		case 5: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 195);
+		case 6: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 196);
+		case 7: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 197);
+		case 8: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 198);
+		case 9: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 199);
+		case 10: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 199);
+		case 11: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 199);
+		case 12: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 199);
+		case 13: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 200);
+		case 14: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 201);
+		case 15: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 202);
+		case 16: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 203);
+		case 17: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 204);
+		case 18: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 205);
+		case 19: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 206);
+		case 20: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 207);
+		case 21: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 208);
+		case 22: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 209);
+		case 23: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 209);
+		case 24: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 210);
+		case 25: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 737);
+		case 29: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 211);
+	}
 }
 
 /**
@@ -1196,17 +1244,23 @@ stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) 	{
  */
 stock bool TF2_IsValidWarPaint(int defindex)	{
 	switch(defindex)	{
-		case 200,201,202,203,204,205,206,207,208,
-		209,210,211,212,213,214,215,217,218,220,
-		221,223,224,225,226,228,230,232,234,235,
-		236,237,238,239,240,241,242,243,244,245,
-		246,247,248,249,250,251,252,253,254,255,
-		256,257,258,259,260,261,262,263,264,265,
-		266,267,268,269,270,271,272,273,275,276,
-		277,278,279,280,281,282,283,284,285,286,
-		287,289,290,291,292,293,294,295,296,297,
-		300,301,302,303,304,305,306,307,308,309,
-		310,390,391: return true;
+		case 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,
+		15,16,17,18,19,20,21,22,23,24,25,26,27,
+		28,29,30,31,32,33,34,35,36,37,38,39,40,
+		41,42,43,44,45,46,47,48,49,50,51,52,53,
+		54,55,56,57,58,59,60,61,62,63,64,65,66,
+		67,68,69,70,71,72,73,74,75,76,77,78,79,
+		80,81,82,83,84,85,86,200,201,202,203,204,
+		205,206,207,208,209,210,211,212,213,214,
+		215,217,218,220,221,223,224,225,226,228,
+		230,232,234,235,236,237,238,239,240,241,
+		242,243,244,245,246,247,248,249,250,251,
+		252,253,254,255,256,257,258,259,260,261,
+		262,263,264,265,266,267,268,269,270,271,
+		272,273,275,276,277,278,279,280,281,282,
+		283,284,285,286,287,289,290,291,292,293,
+		294,295,296,297,300,301,302,303,304,305,
+		306,307,308,309,310,390,391: return true;
 	}
 	
 	return false;
@@ -1223,6 +1277,119 @@ stock bool TF2_IsValidWarPaint(int defindex)	{
  */
 stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen)	{
 	switch(defindex)	{
+		//First wave of warpaints, by default weapon-locked.
+		//================================================//
+		// Concealed Killer Collection.
+		//================================================//
+		case 0: strcopy(buffer, maxlen, "Redrock Roscoe");
+		case 1: strcopy(buffer, maxlen, "Sand Cannon");
+		case 2: strcopy(buffer, maxlen, "Wrapped Reviver");
+		case 3: strcopy(buffer, maxlen, "Psychedelic Slugger");
+		case 4: strcopy(buffer, maxlen, "Carpet Bomber");
+		case 5: strcopy(buffer, maxlen, "Masked Mender");
+		case 6: strcopy(buffer, maxlen, "Woodland Warrior");
+		case 7: strcopy(buffer, maxlen, "Purple Range");
+		case 8: strcopy(buffer, maxlen, "Sudden Flurry");
+		case 9: strcopy(buffer, maxlen, "Forest Fire");
+		case 10: strcopy(buffer, maxlen, "King Of The Jungle");
+		case 11: strcopy(buffer, maxlen, "Night Terror");
+		case 12: strcopy(buffer, maxlen, "Backwoods Boomstick");
+		case 13: strcopy(buffer, maxlen, "Woodsy Widowmaker");
+		case 14: strcopy(buffer, maxlen, "Night Owl");
+		//================================================//
+		// Craftsmann Collection.
+		//================================================//
+		case 15: strcopy(buffer, maxlen, "Tartan Torpedo");
+		case 16: strcopy(buffer, maxlen, "Rustic Ruiner");
+		case 17: strcopy(buffer, maxlen, "Barn Burner"); //Fun fact: "barn" means "kid" or "kids" in swedish.
+		case 18: strcopy(buffer, maxlen, "Homemade Heater");
+		case 19: strcopy(buffer, maxlen, "Lumber From Down Under");
+		case 20: strcopy(buffer, maxlen, "Iron Wood");
+		case 21: strcopy(buffer, maxlen, "Country Crusher");
+		case 22: strcopy(buffer, maxlen, "Plaid Potshotter");
+		case 23: strcopy(buffer, maxlen, "Shot In The Dark");
+		case 24: strcopy(buffer, maxlen, "Blasted Bombardier");
+		case 25: strcopy(buffer, maxlen, "Reclaimed Reanimator");
+		case 26: strcopy(buffer, maxlen, "Antique Annihilator");
+		case 27: strcopy(buffer, maxlen, "Old Country");
+		case 28: strcopy(buffer, maxlen, "American Pastoral");
+		case 29: strcopy(buffer, maxlen, "Backcountry Blaster");
+		//================================================//
+		// Teufort Collection.
+		//================================================//
+		case 30: strcopy(buffer, maxlen, "Bovine Blazemaker");
+		case 31: strcopy(buffer, maxlen, "War Room");
+		case 32: strcopy(buffer, maxlen, "Treadplate Tormenter");
+		case 33: strcopy(buffer, maxlen, "Bogtrotter");
+		case 34: strcopy(buffer, maxlen, "Earth, Sky and Fire");
+		case 35: strcopy(buffer, maxlen, "Hickory Hole Puncher");
+		case 36: strcopy(buffer, maxlen, "Spruced Duce");
+		case 37: strcopy(buffer, maxlen, "Team Sprayer");
+		case 38: strcopy(buffer, maxlen, "Rooftop Wrangler");
+		case 39: strcopy(buffer, maxlen, "Civil Servant");
+		case 40: strcopy(buffer, maxlen, "Citizen Pain");
+		case 41: strcopy(buffer, maxlen, "Local Hero");
+		case 42: strcopy(buffer, maxlen, "Mayor");
+		case 43: strcopy(buffer, maxlen, "Smalltown Bringdown");
+		case 44: strcopy(buffer, maxlen, "Civic Duty");
+		//================================================//
+		// Powerhouse Collection.
+		//================================================//
+		case 45: strcopy(buffer, maxlen, "Liquid Asset");
+		case 46: strcopy(buffer, maxlen, "Black Dahlia");
+		case 47: strcopy(buffer, maxlen, "Lightning Rod");
+		case 48: strcopy(buffer, maxlen, "Pink Elephant");
+		case 49: strcopy(buffer, maxlen, "Flash Dryer");
+		case 50: strcopy(buffer, maxlen, "Spark Of Life");
+		case 51: strcopy(buffer, maxlen, "Dead Reckoner");
+		case 52: strcopy(buffer, maxlen, "Shell Shocker");
+		case 53: strcopy(buffer, maxlen, "Current Event");
+		case 54: strcopy(buffer, maxlen, "Turbine Torcher");
+		case 55: strcopy(buffer, maxlen, "Brick House");
+		case 56: strcopy(buffer, maxlen, "Sandstone Special");
+		case 57: strcopy(buffer, maxlen, "Aquamarine");
+		case 58: strcopy(buffer, maxlen, "Low Profile");
+		case 59: strcopy(buffer, maxlen, "Thunderbolt");
+		//================================================//
+		// Harvest Collection.
+		//================================================//
+		case 60: strcopy(buffer, maxlen, "Autumn");
+		case 61: strcopy(buffer, maxlen, "Nut Cracker");
+		case 62: strcopy(buffer, maxlen, "Pumpkin Patch");
+		case 63: strcopy(buffer, maxlen, "Macabre Web");
+		case 64: strcopy(buffer, maxlen, "Boneyard");
+		case 65: strcopy(buffer, maxlen, "Wildwood");
+		//================================================//
+		// Pyroland Collection.
+		//================================================//
+		case 66: strcopy(buffer, maxlen, "Balloonicorn");
+		case 67: strcopy(buffer, maxlen, "Rainbow");
+		case 68: strcopy(buffer, maxlen, "Sweetdreams");
+		case 69: strcopy(buffer, maxlen, "Blue Mew");
+		case 70: strcopy(buffer, maxlen, "Brain Candy");
+		case 71: strcopy(buffer, maxlen, "Stabbed To Hell");
+		case 72: strcopy(buffer, maxlen, "Flower Power");
+		case 73: strcopy(buffer, maxlen, "Mister Cuddles");
+		case 74: strcopy(buffer, maxlen, "Shot To Hell");
+		case 75: strcopy(buffer, maxlen, "Torqued To Hell");
+		//================================================//
+		// Gentlemanne Collection.
+		//================================================//
+		case 76: strcopy(buffer, maxlen, "Coffin Nail");
+		case 77: strcopy(buffer, maxlen, "Top Shelf");
+		case 78: strcopy(buffer, maxlen, "Dressed To Kill");
+		case 79: strcopy(buffer, maxlen, "High Rollers");
+		//================================================//
+		// Warbird Collection.
+		//================================================//
+		case 80: strcopy(buffer, maxlen, "War Hawk");
+		case 81: strcopy(buffer, maxlen, "Blitzkrieg");
+		case 82: strcopy(buffer, maxlen, "Air Wolf");
+		case 83: strcopy(buffer, maxlen, "Corsair");
+		case 84: strcopy(buffer, maxlen, "Butcher Bird");
+		case 85: strcopy(buffer, maxlen, "Killer Bee");
+		case 86: strcopy(buffer, maxlen, "Red Bear");
+		//Second wave of warpaints, unlocked for all weapons. (That supports warpaints ofcourse :p)
 		case 200: strcopy(buffer, maxlen, "Bloom Buffed");
 		case 201: strcopy(buffer, maxlen, "Quack Canvassed");
 		case 202: strcopy(buffer, maxlen, "Bank Rolled");
@@ -1341,7 +1508,7 @@ stock int TF2_GetClientActiveTauntDefinitionIndex(int client)	{
 }
 
 /**
- *	Returns the paintcan name.
+ *	Returns the paint colour name.
  *
  *	@param	defindex	The paint definition index.
  *	@param	buffer		The buffer to store the paint name.
@@ -1351,6 +1518,7 @@ stock int TF2_GetClientActiveTauntDefinitionIndex(int client)	{
  */
 stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen)	{
 	switch(defindex)	{
+		case 1315860: strcopy(buffer, maxlen, "A Distinctive Lack Of Blue");
 		case 2960676: strcopy(buffer, maxlen, "After Eight");
 		case 3100495: strcopy(buffer, maxlen, "A Colour Similiar To Slate");
 		case 3329330: strcopy(buffer, maxlen, "A Bitter Taste Of Defeat And Lime");
@@ -1370,7 +1538,6 @@ stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen)	{
 		case 11049612: strcopy(buffer, maxlen, "Waterlogged Lab Coat");
 		case 12073019: strcopy(buffer, maxlen, "Team Spirit");
 		case 12807213: strcopy(buffer, maxlen, "Cream Spirit");
-		case 1315860: strcopy(buffer, maxlen, "A Distinctive Lack Of Blue");
 		case 13595446: strcopy(buffer, maxlen, "Mann Co. Orange");
 		case 14204632: strcopy(buffer, maxlen, "Colour No 216-190-216");
 		case 15132390: strcopy(buffer, maxlen, "An Extraordinary Abudance Of Tinge");
@@ -1381,6 +1548,100 @@ stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen)	{
 		case 15787660: strcopy(buffer, maxlen, "The Colour Of A Gentlemanns Business Pants");
 		case 16738740: strcopy(buffer, maxlen, "Pink As Hell");
 	}
+}
+
+/**
+ *	Returns the spell variant paint colour name.
+ *
+ *	@param	defindex	The spell paint definition index.
+ *	@param	buffer		The buffer to store the paint name.
+ *	@param	maxlen		The maximum length of the buffer name.
+ *
+ *	@noreturn.
+ */
+stock void TF2_GetSpellPaintName(int defindex, char[] buffer, int maxlen)	{
+	switch(defindex)	{
+		case 0: strcopy(buffer, maxlen, "Die Job");
+		case 1: strcopy(buffer, maxlen, "Chromatic Corruption");
+		case 2: strcopy(buffer, maxlen, "Putrescent Pigmentation");
+		case 3: strcopy(buffer, maxlen, "Spectral Spectrum");
+		case 4: strcopy(buffer, maxlen, "Sinister Staining");
+		case 5: strcopy(buffer, maxlen, "Unnamed Unused");
+	}
+}
+
+/**
+ *	Replaces the voicelines with the robot variant.
+ *
+ *	@param	client	The users index.
+ *	@param	sound	The sound string of the soundhook to replace the voiceline.
+ *	@param	giant	If true, giant robot versions is used.
+ *
+ *	@error	If the user is invalid or has invalid class, this returns false.
+ */
+stock bool TF2_ReplaceClientRobotVoicelines(int client, char[] sound, bool giant=false)	{
+	if(!Tklib_IsValidClient(client, _, true))
+		return false;
+	
+	if(TF2_GetPlayerClass(client) < TFClass_Scout)
+		return false;
+	
+	TFClassType class = TF2_GetPlayerClass(client);
+	
+	char vc[3][64];
+	Format(vc[0], sizeof(vc[]), "vo/%s_", TF2_GetClassTypeName[class]);
+	switch(giant)	{
+		case true:	{
+			Format(vc[1], sizeof(vc[]), "vo/mvm/mght/%s_", TF2_GetClassTypeName[class]);
+			Format(vc[2], sizeof(vc[]), "%s_mvm_m", TF2_GetClassTypeName[class]);
+		}
+		case false:	{
+			Format(vc[1], sizeof(vc[]), "vo/mvm/norm/%s_", TF2_GetClassTypeName[class]);
+			Format(vc[2], sizeof(vc[]), "%s_mvm", TF2_GetClassTypeName[class]);
+		}
+	}
+	
+	ReplaceString(sound, 256, vc[0], vc[1], false);
+	ReplaceString(sound, 256, TF2_GetClassTypeName[class], vc[2], false);
+	PrecacheSound(sound);
+	return true;
+}
+
+/**
+ *	Find weapon by definition index and its owner.
+ *
+ *	@param	defindex	The item definition index.
+ *	@param	client		The item owner user index.
+ *
+ *	@return	Returns the entity's owner.
+ */
+stock int TF2_FindWeaponByDefinitionIndex(int client, int defindex)	{
+	for(TFSlot slot = TFSlot_Primary; slot < TFSlot_PDA2; slot++)	{
+		int weapon = TF2_GetPlayerWeaponSlot(client, slot);
+		if(IsValidEntityEx(weapon) && GetEntityDefinitionIndex(weapon) == defindex && GetEntityOwner(weapon) == client)
+			return weapon;
+	}
+	
+	return -1;
+}
+
+/**
+ *	Find wearable by definition index and its owner.
+ *
+ *	@param	defindex	The item definition index.
+ *	@param	client		The item owner user index.
+ *
+ *	@return	Returns the entity's owner.
+ */
+stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex)	{
+	int wearable = 0;
+	
+	while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1)	{
+		if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client)
+			return wearable;
+	}
+	
+	return -1;
 }
 
 #endif

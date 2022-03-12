@@ -40,12 +40,15 @@ stock int GetClientActiveWeapon(int client)	{
  *	Forces the users current active weapon.
  *
  *	@param	client		The users index.
- *	@param	slot		The users weapon slot #. (starts from 0)
+ *	@param	weapon		The users weapon entity index.
  *
  *	@error	If the user is invalid or has no active weapon, this returns false.
  */
-stock bool SetClientActiveWeapon(int client, int slot)	{
-	return SetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon", slot);
+stock bool SetClientActiveWeapon(int client, any weapon)	{
+	bool valid = false;
+	if((valid = SetEntPropEntEx(client, Prop_Send, "m_hActiveWeapon", weapon)))
+		ChangeEdictState(client, FindDataMapInfo(client, "m_hActiveWeapon"));
+	return valid;		
 }
 
 /**
@@ -99,21 +102,24 @@ stock bool SetWeaponAmmo(any weapon, int value)	{
  *
  *	@noreturn
  *
- *	@error	If the user is invalid, nothing will happen.
+ *	@error	If the weapon is invalid, this returns false.
  */
-stock void SetWeaponAmmoEx(any weapon, int primary=0, int secondary=0)	{
-	if(IsValidEntityEx(weapon))	{
-		if(primary != 0)
-			SetWeaponAmmo(weapon, primary);
-		if(secondary != 0)
-			SetWeaponReserveAmmo(weapon, secondary);
-	}
+stock bool SetWeaponAmmoEx(any weapon, int primary=0, int secondary=0)	{
+	if(!IsValidEntityEx(weapon))
+		return false;
+	
+	if(primary > 0)
+		SetWeaponAmmo(weapon, primary);
+	if(secondary > 0)
+		SetWeaponReserveAmmo(weapon, secondary);
+	
+	return true;
 }
 
 /**
  *	Returns the weapons primary ammo
  *
- *	@param	weapon		Weapon entity.
+ *	@param	weapon	Weapon entity.
  *
  *	@error	If the weapon is invalid, it returns -1.
  */
@@ -140,7 +146,7 @@ stock int GetClientActiveWeaponAmmo(int client)	{
  *
  *	@error	If the user is invalid or has no active weapon, this returns false.
  */
-stock bool SetClientWeaponReserveAmmo(int client, int value)	{
+stock bool SetClientActiveWeaponReserveAmmo(int client, int value)	{
 	return SetWeaponAmmo(GetClientActiveWeapon(client), value);
 }
 
@@ -244,37 +250,35 @@ stock bool IsValidWeapon(any weapon)	{
  *	@error	If the user is invalid or weapon is invalid, this returns false.
  */
 stock bool EquipPlayerWeaponEx(int client, any weapon)	{
-	if(Tklib_IsValidClient(client, _, true) && IsValidEntityEx(weapon))	{
-		//Credits to Bacardi for part of the code.
-		
-		float origin[3];
-		GetClientAbsOrigin(client, origin);
-		//origin[2] += 100.0;
-		
-		TeleportEntity(weapon, origin, NULL_VECTOR, NULL_VECTOR);
-		SetEntPropVector(weapon, Prop_Send, "m_vecOrigin", origin);
-		
-		//Lets force the weapon to never respawn.
-		int SF_NORESPAWN = (1 << 30);
-		int flags = GetEntProp(weapon, Prop_Data, "m_spawnflags");
-		flags |= SF_NORESPAWN;
-		
-		SetEntProp(weapon, Prop_Data, "m_spawnflags", flags);
-		DispatchSpawn(weapon);
-		return true;
-	}
+	if(!(Tklib_IsValidClient(client, _, true) && IsValidEntityEx(weapon)))
+		return false;
 	
-	return false;
+	//Credits to Bacardi for part of the code.
+	
+	float origin[3];
+	GetClientAbsOrigin(client, origin);
+	//origin[2] += 100.0;
+	
+	TeleportEntity(weapon, origin, NULL_VECTOR, NULL_VECTOR);
+	SetEntPropVector(weapon, Prop_Send, "m_vecOrigin", origin);
+	
+	//Lets force the weapon to never respawn.
+	int SF_NORESPAWN = (1 << 30);
+	int flags = GetEntProp(weapon, Prop_Data, "m_spawnflags");
+	flags |= SF_NORESPAWN;
+	
+	SetEntProp(weapon, Prop_Data, "m_spawnflags", flags);
+	DispatchSpawn(weapon);
+	return true;
 }
 
 /**
- *	Returns the weapon of the players weapon array.
+ *	Returns the weapon of the users weapon array.
  *
  *	@param	client		The users index.
  *	@param	array		The slot array index to get weapon entity from.
  */
-stock int GetClientActiveWeaponSlot(any client, int array)
-{
+stock int GetClientActiveWeaponSlot(any client, int array)	{
 	return GetEntPropEntEx(client, Prop_Send, "m_hMyWeapons", array);
 }
 
