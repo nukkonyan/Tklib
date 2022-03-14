@@ -606,14 +606,12 @@ stock Action SetRespawnTime(Handle timer, int client)	{
  */
 stock bool Respawn(int client)	{
 	if(Tklib_IsValidClient(client))	{
-		switch(GetEngineVersion())	{
+		switch(IdentifyGame())	{
 			#if defined _tf2_included
-			case Engine_TF2:
-				TF2_RespawnPlayer(client);
+			case Game_TF2, Game_TF2V, Game_TF2C, Game_TF2OP: TF2_RespawnPlayer(client);
 			#endif
 			#if defined _cstrike_included
-			case Engine_CSS, Engine_CSGO, Engine_SourceSDK2007:
-				CS_RespawnPlayer(client);
+			case Game_CSS, Game_CSGO, Game_CSPromod: CS_RespawnPlayer(client);
 			#endif
 		}
 		
@@ -779,7 +777,7 @@ stock int GetClientCountEx(bool nobots=true)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool SetClientModel(int client, const char[] model)	{
-	if(!Tklib_IsValidClient(client))
+	if(!Tklib_IsValidClient(client, _, true))
 		return false;
 	
 	SetEntityModel(client, model);
@@ -832,7 +830,7 @@ stock bool SetClientPendingTeam(int client, int team)	{
  *	@error	If the user or is not supported in the current mod, this returns 0.
  */
 stock int GetClientPendingTeam(int client)	{
-	return GetEntPropEx(client, Prop_Send, "m_iPendingTeamNum"):0;
+	return GetEntPropEx(client, Prop_Send, "m_iPendingTeamNum");
 }
 
 /**
@@ -908,10 +906,10 @@ stock void GetClientTeamString(int client, char[] buffer, int maxlen)	{
 	};
 	
 	switch(IdentifyGame())	{
-		case	Game_TF2C: Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2C[team], client);
-		case	Game_CSGO: Format(buffer, maxlen, "%s%N{default}", TeamColour_CSGO[team], client);
-		case	Game_L4D1: Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team], client);
-		case	Game_L4D2: Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team], client);
+		case Game_TF2C: Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2C[team], client);
+		case Game_CSGO: Format(buffer, maxlen, "%s%N{default}", TeamColour_CSGO[team], client);
+		case Game_L4D1: Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team], client);
+		case Game_L4D2: Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team], client);
 		default: Format(buffer, maxlen, "%s%N{default}", TeamColour_Default[team], client);
 	}
 }
@@ -1034,12 +1032,16 @@ stock bool SetClientHideHud(int client, int flags)	{
  */
 stock ArrayList FindClientsByPlayername(const char[] playername, bool nobots=false)	{
 	ArrayList list = new ArrayList(64);
+	char name[64];
 	
 	int found = 0;
 	for(int client = 1; client < MaxClients; client++)	{
 		if(Tklib_IsValidClient(client, nobots, false, false))	{
-			found++;
-			list.Push(client);
+			GetClientInfo(client, "name", name, sizeof(name));
+			if(StrContains(name, playername, false) != -1)	{
+				found++;
+				list.Push(client);
+			}
 		}
 	}
 	

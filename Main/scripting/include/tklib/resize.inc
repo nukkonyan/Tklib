@@ -3,7 +3,7 @@
 //==========================================//
 #if !defined _tklib_disable_resize
 
-enum	TF2ResizeType	{
+enum TF2ResizeType {
 	TF2ResizeType_Head = 0,
 	TF2ResizeType_Torso = 1,
 	TF2ResizeType_Hand = 2,
@@ -23,14 +23,12 @@ enum	TF2ResizeType	{
 stock bool TF2_SetClientSize(int client, TF2ResizeType type, float value)	{
 	if(Tklib_IsValidClient(client, _, true))	{
 		switch(type)	{
-			case	TF2ResizeType_Head:		TF2_SetClientHeadScale(client, value);
-			case	TF2ResizeType_Torso:	TF2_SetClientTorsoScale(client, value);
-			case	TF2ResizeType_Hand:		TF2_SetClientHandScale(client, value);
-			case	TF2ResizeType_Model:	SetEntityModelScale(client, value);
-			case	TF2ResizeType_Steps:	SetClientStepSize(client, value);
+			case TF2ResizeType_Head: return TF2_SetClientHeadScale(client, value);
+			case TF2ResizeType_Torso: return TF2_SetClientTorsoScale(client, value);
+			case TF2ResizeType_Hand: return TF2_SetClientHandScale(client, value);
+			case TF2ResizeType_Model: return SetEntityModelScale(client, value);
+			case TF2ResizeType_Steps: return SetClientStepSize(client, value);
 		}
-		
-		return	true;
 	}
 	
 	return	false;
@@ -47,11 +45,11 @@ stock bool TF2_SetClientSize(int client, TF2ResizeType type, float value)	{
 stock float TF2_GetClientSize(int client, TF2ResizeType type)	{
 	if(Tklib_IsValidClient(client, _, true))	{
 		switch(type)	{
-			case	TF2ResizeType_Head:		return TF2_GetClientHeadScale(client);
-			case	TF2ResizeType_Torso:	return TF2_GetClientTorsoScale(client);
-			case	TF2ResizeType_Hand:		return TF2_GetClientHandScale(client);
-			case	TF2ResizeType_Model:	return GetEntityModelScale(client);
-			case	TF2ResizeType_Steps:	return GetClientStepSize(client);
+			case TF2ResizeType_Head: return TF2_GetClientHeadScale(client);
+			case TF2ResizeType_Torso: return TF2_GetClientTorsoScale(client);
+			case TF2ResizeType_Hand: return TF2_GetClientHandScale(client);
+			case TF2ResizeType_Model: return GetEntityModelScale(client);
+			case TF2ResizeType_Steps: return GetClientStepSize(client);
 		}
 	}
 	
@@ -67,12 +65,7 @@ stock float TF2_GetClientSize(int client, TF2ResizeType type)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool TF2_SetClientHeadScale(int client, float scale)	{
-	if(Tklib_IsValidClient(client, _, true))	{
-		SetEntPropFloat(client, Prop_Send, "m_flHeadScale", scale);
-		return	true;
-	}
-	
-	return	false;
+	return SetEntPropFloatEx(client, Prop_Send, "m_flHeadScale", scale);
 }
 
 /**
@@ -83,7 +76,7 @@ stock bool TF2_SetClientHeadScale(int client, float scale)	{
  *	@error	If the user is invalid, this return -1.0.
  */
 stock float TF2_GetClientHeadScale(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flHeadScale"):-1.0;
+	return GetEntPropFloatEx(client, Prop_Send, "m_flHeadScale");
 }
 
 /**
@@ -95,12 +88,7 @@ stock float TF2_GetClientHeadScale(int client)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock float TF2_SetClientTorsoScale(int client, float scale)	{
-	if(Tklib_IsValidClient(client, _, true))	{
-		SetEntPropFloat(client, Prop_Send, "m_flTorsoScale", scale);
-		return	true;
-	}
-	
-	return	false;
+	return SetEntPropFloatEx(client, Prop_Send, "m_flTorsoScale", scale);
 }
 
 /**
@@ -111,7 +99,7 @@ stock float TF2_SetClientTorsoScale(int client, float scale)	{
  *	@param	If the user is invalid, this returns 0.0.
  */
 stock float TF2_GetClientTorsoScale(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flTorsoScale"):-1.0;
+	return GetEntPropFloatEx(client, Prop_Send, "m_flTorsoScale");
 }
 
 /**
@@ -123,12 +111,7 @@ stock float TF2_GetClientTorsoScale(int client)	{
  *	@error	If the client is invalid, this returns false.
  */
 stock float TF2_SetClientHandScale(int client, float scale)	{
-	if(Tklib_IsValidClient(client, _, true))	{
-		SetEntPropFloat(client, Prop_Send, "m_flHandScale", scale);
-		return	true;
-	}
-	
-	return	false;
+	return SetEntPropFloatEx(client, Prop_Send, "m_flHandScale", scale);
 }
 
 /**
@@ -139,7 +122,7 @@ stock float TF2_SetClientHandScale(int client, float scale)	{
  *	@error	If the client is invalid, this returns -1.0
  */
 stock float TF2_GetClientHandScale(int client)	{
-	return Tklib_IsValidClient(client, _, true) ? GetEntPropFloat(client, Prop_Send, "m_flHandScale"):-1.0;
+	return GetEntPropFloatEx(client, Prop_Send, "m_flHandScale");
 }
 
 /**
@@ -150,13 +133,8 @@ stock float TF2_GetClientHandScale(int client)	{
  *
  *	@error	If the entity or user is invalid, this returns false.
  */
-stock float SetEntityModelScale(int entity, float scale)	{
-	if(Tklib_IsValidClient(entity, _, true) || IsValidEntityEx(entity))	{
-		SetEntPropFloat(entity, Prop_Send, "m_flModelScale", scale);
-		return	true;
-	}
-	
-	return	false;
+stock bool SetEntityModelScale(int entity, float scale)	{
+	return SetEntPropFloatEx(entity, Prop_Send, "m_flModelScale", scale);
 }
 
 /**
@@ -167,7 +145,7 @@ stock float SetEntityModelScale(int entity, float scale)	{
  *	@error	If the entity or user is invalid, this returns -1.0
  */
 stock float GetEntityModelScale(int entity)	{
-	return	bool(Tklib_IsValidClient(entity, _, true) || IsValidEntityEx(entity)) ? GetEntPropFloat(entity, Prop_Send, "m_flModelScale"):-1.0;
+	return GetEntPropFloatEx(entity, Prop_Send, "m_flModelScale");
 }
 
 /**

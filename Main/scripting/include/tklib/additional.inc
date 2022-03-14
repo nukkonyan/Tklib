@@ -718,4 +718,15 @@ stock bool GetServerHostname(char[] hostname, int maxlen)	{
 	return valid;
 }
 
+/**
+ *	Returns ITEMDRAW_DISABLED or ITEMDRAW_DEFAULT as a boolean.
+ *
+ *	@param	value	The boolean to return true/false in terms of ITEMDRAW flag.
+ *
+ *	@return	If false, returns ITEMDRAW_DEFAULT. Else if true, returns ITEMDRAW_DISABLED.
+ */
+stock int ItemDrawBool(bool value)	{
+	return value ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT;
+}
+
 #endif

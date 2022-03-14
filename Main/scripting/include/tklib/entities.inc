@@ -19,7 +19,7 @@ enum Entity	{
  *
  *	@error	If entity is invalid, this returns false.
  */
-stock bool GetEntityAbsOrigin(any entity, float vec[3])	{
+stock bool GetEntityAbsOrigin(int entity, float vec[3])	{
 	return GetEntPropVectorEx(entity, Prop_Send, "m_vecOrigin", vec);
 }
 
@@ -31,7 +31,7 @@ stock bool GetEntityAbsOrigin(any entity, float vec[3])	{
  *
  *	@error	If entity is invalid, this returns false.
  */
-stock bool SetEntityAbsOrigin(any entity, const float vec[3])	{
+stock bool SetEntityAbsOrigin(int entity, const float vec[3])	{
 	return SetEntPropVectorEx(entity, Prop_Send, "m_vecOrigin", vec);
 }
 
@@ -44,7 +44,7 @@ stock bool SetEntityAbsOrigin(any entity, const float vec[3])	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool GetEntityName(any entity, char[] buffer, int maxlen)	{
+stock bool GetEntityName(int entity, char[] buffer, int maxlen)	{
 	return GetEntPropStringEx(entity, Prop_Data, "m_iName", buffer, maxlen);
 }
 
@@ -56,7 +56,7 @@ stock bool GetEntityName(any entity, char[] buffer, int maxlen)	{
  *
  *	@error	If entity is invalid, it will returns false.
  */
-stock bool SetEntityName(any entity, const char[] name)	{
+stock bool SetEntityName(int entity, const char[] name)	{
 	return SetEntPropStringEx(entity, Prop_Data, "m_iName", name);
 }
 
@@ -100,7 +100,7 @@ stock int CreateEntityByNameEx(const char[] classname, const char[] name="", int
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityDisabled(any entity, bool disabled)	{
+stock bool SetEntityDisabled(int entity, bool disabled)	{
 	return IsValidEntityEx(entity) ? DispatchKeyValue(entity, "StartDisabled", disabled ? "true":"false"):false;
 }
 
@@ -172,7 +172,7 @@ stock int GetEntityOwner(int entity)	{
  *
  *	@error	If entity is invalid, this returns false.
  */
-stock bool KillEntity(any entity, int activator=-1, int caller=-1, int outputid=0)	{
+stock bool KillEntity(int entity, int activator=-1, int caller=-1, int outputid=0)	{
 	return IsValidEntityEx(entity) ? AcceptEntityInput(entity, "Kill", activator, caller, outputid):false;
 }
 
@@ -184,7 +184,7 @@ stock bool KillEntity(any entity, int activator=-1, int caller=-1, int outputid=
  *
  *	@error	If the entity is invalid, nothing will happen.
  */
-stock bool SetEntitySkin(any entity, int skin)	{
+stock bool SetEntitySkin(int entity, int skin)	{
 	return SetEntPropEx(entity, Prop_Send, "m_nSkin", skin);
 }
 
@@ -194,7 +194,7 @@ stock bool SetEntitySkin(any entity, int skin)	{
  *	@param	entity	Entity index.
  *	@error	If entity is invalid, this will return -1.
 */
-stock int GetEntitySkin(any entity)	{
+stock int GetEntitySkin(int entity)	{
 	return GetEntPropEx(entity, Prop_Send, "m_nSkin");
 }
 
@@ -209,7 +209,7 @@ stock int GetEntitySkin(any entity)	{
  *
  *	@error	If the entity has no valid classname, this returns false.
  */
-stock bool SetEntityClassname(any entity, const char[] clsname)	{
+stock bool SetEntityClassname(int entity, const char[] clsname)	{
 	return SetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname);
 }
 
@@ -223,7 +223,7 @@ stock bool SetEntityClassname(any entity, const char[] clsname)	{
  *	@param	maxlength	Maximum length of the buffer.
  *	@return				True on success, false if there is no classname set or has no valid classname/invalid entity.
  */
-stock bool GetEntityClassnameEx(any entity, char[] clsname, int maxlength)	{
+stock bool GetEntityClassnameEx(int entity, char[] clsname, int maxlength)	{
 	return GetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname, maxlength);
 }
 
@@ -235,7 +235,7 @@ stock bool GetEntityClassnameEx(any entity, char[] clsname, int maxlength)	{
  *
  *	@error	If the entities is invalid, this returns false.
  */
-stock bool SetEntityParentEntity(any entity, any parent)	{
+stock bool SetEntityParentEntity(int entity, any parent)	{
 	return SetEntPropEx(entity, Prop_Send, "m_iParentAttachment", parent);
 }
 
@@ -246,7 +246,7 @@ stock bool SetEntityParentEntity(any entity, any parent)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntityParentEntity(any entity)	{
+stock int GetEntityParentEntity(int entity)	{
 	return GetEntPropEx(entity, Prop_Send, "m_iParentAttachment");
 }
 
@@ -258,7 +258,7 @@ stock int GetEntityParentEntity(any entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityMoveParent(any entity, any parent)	{
+stock bool SetEntityMoveParent(int entity, any parent)	{
 	return SetEntPropEntEx(entity, Prop_Data, "m_hMoveParent", parent);
 }
 
@@ -269,7 +269,7 @@ stock bool SetEntityMoveParent(any entity, any parent)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntityMoveParent(any entity)	{
+stock int GetEntityMoveParent(int entity)	{
 	return GetEntPropEntEx(entity, Prop_Data, "m_hMoveParent");
 }
 
@@ -281,7 +281,7 @@ stock int GetEntityMoveParent(any entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityInitialized(any entity, bool initialized)	 {
+stock bool SetEntityInitialized(int entity, bool initialized)	 {
 	return SetEntPropEx(entity, Prop_Send, "m_bInitialized", initialized);
 }
 
@@ -292,7 +292,7 @@ stock bool SetEntityInitialized(any entity, bool initialized)	 {
  *
  *	@error	If the entity is invalid, this will return false.
  */
-stock bool IsEntityInitialized(any entity)	{
+stock bool IsEntityInitialized(int entity)	{
 	return GetEntPropBool(entity, Prop_Send, "m_bInitialized");
 }
 
@@ -300,12 +300,18 @@ stock bool IsEntityInitialized(any entity)	{
  *	Set the entity's definition index value
  *
  *	@param	entity		Entity index.
- *	@param	value		Definition index value.
+ *	@param	defindex	Definition index value.
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityDefinitionIndex(any entity, int value)	{
-	return SetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex", value);
+stock bool SetEntityDefinitionIndex(int entity, int defindex)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex"))
+		return false;
+	
+	char netclass[64];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	SetEntData(entity, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
+	return true;
 }
 
 /**
@@ -315,8 +321,13 @@ stock bool SetEntityDefinitionIndex(any entity, int value)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntityDefinitionIndex(any entity)	{
-	return GetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex");
+stock int GetEntityDefinitionIndex(int entity)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex"))
+		return -1;
+	
+	char netclass[64];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	return GetEntData(entity, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"));
 }
 
 /**
@@ -330,7 +341,7 @@ stock int GetEntityDefinitionIndex(any entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool IsEntityClassnameMatching(any entity, const char[] classname, bool partialMatch=false)	{
+stock bool IsEntityClassnameMatching(int entity, const char[] classname, bool partialMatch=false)	{
 	if(!IsValidEntityEx(entity))
 		return	false;
 	
@@ -353,7 +364,7 @@ stock bool IsEntityClassnameMatching(any entity, const char[] classname, bool pa
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntityTeamNum(any entity)	{
+stock int GetEntityTeamNum(int entity)	{
 	return GetEntPropEx(entity, Prop_Send, "m_iTeamNum");
 }
 
@@ -366,7 +377,7 @@ stock int GetEntityTeamNum(any entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityTeamNum(any entity, int team)	{
+stock bool SetEntityTeamNum(int entity, int team)	{
 	return SetEntPropEx(entity, Prop_Send, "m_iTeamNum", team);
 }
 
@@ -378,7 +389,7 @@ stock bool SetEntityTeamNum(any entity, int team)	{
  *
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
-stock bool SetEntityEffect(any entity, int value)	{
+stock bool SetEntityEffect(int entity, int value)	{
 	return SetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity", value);
 }
 
@@ -389,7 +400,7 @@ stock bool SetEntityEffect(any entity, int value)	{
  *
  *	@error	If the index of the entity owner is invalid, it will return -1.
  */
-stock int GetEntityEffect(any entity)	{
+stock int GetEntityEffect(int entity)	{
 	return GetEntPropEntEx(entity, Prop_Data, "m_hEffectEntity");
 }
 
@@ -404,7 +415,7 @@ stock int GetEntityEffect(any entity)	{
  *
  *	@error	If the entity we use or the one we compare with is invalid, this returns -1.0.
  */
-stock float GetEntityDistance(any entity, any target)	{
+stock float GetEntityDistance(int entity, any target)	{
 	if(IsValidEntityEx(entity) && IsValidEntityEx(target))	{
 		float pos[2][3];
 		GetEntPropVectorEx(entity, Prop_Send, "m_vecOrigin", pos[0]);
@@ -425,7 +436,7 @@ stock float GetEntityDistance(any entity, any target)	{
  *
  *	@error	If the entity is invalid or has no absolute velocity, this returns -1.0.
  */
-stock bool GetEntityAbsVelocity(any entity, float velocity[3])	{
+stock bool GetEntityAbsVelocity(int entity, float velocity[3])	{
 	return GetEntPropVectorEx(entity, Prop_Data, "m_vecAbsVelocity", velocity);
 }
 
@@ -437,7 +448,7 @@ stock bool GetEntityAbsVelocity(any entity, float velocity[3])	{
  *
  *	@error	If the entity is invalid or has no absolute velocity, this returns -1.0.
  */
-stock bool SetEntityAbsVelocity(any entity, const float velocity[3])	{
+stock bool SetEntityAbsVelocity(int entity, const float velocity[3])	{
 	return SetEntPropVectorEx(entity, Prop_Data, "m_vecAbsVelocity", velocity);
 }
 
@@ -449,7 +460,7 @@ stock bool SetEntityAbsVelocity(any entity, const float velocity[3])	{
  *
  *	@error	If the entity is invalid or has no base velocity, this returns -1.0.
  */
-stock bool GetEntityBaseVelocity(any entity, float velocity[3])	{
+stock bool GetEntityBaseVelocity(int entity, float velocity[3])	{
 	return GetEntPropVectorEx(entity, Prop_Data, "m_vecBaseVelocity", velocity);
 }
 
@@ -461,7 +472,7 @@ stock bool GetEntityBaseVelocity(any entity, float velocity[3])	{
  *
  *	@error	If the entity is invalid or has no base velocity, this returns -1.0.
  */
-stock bool SetEntityBaseOrigin(any entity, const float velocity[3])	{
+stock bool SetEntityBaseOrigin(int entity, const float velocity[3])	{
 	return SetEntPropVectorEx(entity, Prop_Data, "m_vecBaseVelocity", velocity);
 }
 
@@ -473,7 +484,7 @@ stock bool SetEntityBaseOrigin(any entity, const float velocity[3])	{
  *
  *	@error	If the entity is invalid or has no velocity, this returns -1.0.
  */
-stock bool GetEntityVelocity(any entity, float velocity[3])	{
+stock bool GetEntityVelocity(int entity, float velocity[3])	{
 	return GetEntPropVectorEx(entity, Prop_Data, "m_vecVelocity", velocity);
 }
 
@@ -485,54 +496,54 @@ stock bool GetEntityVelocity(any entity, float velocity[3])	{
  *
  *	@error	If the entity is invalid or has no velocity, this returns -1.0.
  */
-stock bool SetEntityVelocity(any entity, const float velocity[3])	{
+stock bool SetEntityVelocity(int entity, const float velocity[3])	{
 	return SetEntPropVectorEx(entity, Prop_Data, "m_vecVelocity", velocity);
 }
 
 /**
- *	Set the entity's quality.
+ *	Set the entity spawn flags.
  *
- *	@param	entity		Entity index.
- *	@param	quality		The quality.
+ *	@param	entity		The entity index.
+ *	@param	spawnflags	The spawn flags to set.
  *
- *	@error	If the entity is invalid or has no quality property, this returns false.
+ *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityQuality(any entity, int quality)	{
-	return SetEntPropEx(entity, Prop_Send, "m_iEntityQuality", quality);
+stock bool SetEntitySpawnFlags(int entity, int spawnflags)	{
+	return SetEntPropEx(entity, Prop_Data, "m_spawnflags", spawnflags);
 }
 
 /**
- *	Returns the entity's quality.
+ *	Returns the entity spawn flags.
  *
- *	@param	entity		Entity index.
+ *	@param	entity	The entity index.
  *
- *	@error	If the entity is invalid or has no quality property, this returns -1.
+ *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntityQuality(any entity)	{
-	return GetEntPropEx(entity, Prop_Send, "m_iEntityQuality");
+stock int GetEntitySpawnFlags(int entity)	{
+	return GetEntPropEx(entity, Prop_Send, "m_spawnflags");
 }
 
 /**
- *	Set the entity's level.
+ *	Returns the Account ID of the entity index.
  *
- *	@param	entity		Entity index.
+ *	@param	entity	The entity index.
  *
- *	@error	If the entity is invalid or has no level property, this returns -1.
+ *	@error	If the entity is invalid, this returns -1.
  */
-stock int SetEntityLevel(any entity, int level)	{
-	return SetEntPropEx(entity, Prop_Send, "m_iEntityLevel", level);
+stock int GetEntitySteamAccountID(int entity)	{
+	return GetEntPropEx(entity, Prop_Send, "m_iAccountID");
 }
 
 /**
- *	Returns the entity's level.
+ *	Set the entity's Steam Account ID.
  *
- *	@param	entity		Entity index.
- *	@param	level		The level.
+ *	@param	entity		The entity index.
+ *	@param	accountid	The Steam Account ID to set.
  *
- *	@error	If the entity is invalid or has no level property, this returns false.
+ *	@error	If the entity is invalid, this returns false.
  */
-stock int GetEntityLevel(any entity)	{
-	return GetEntPropEx(entity, Prop_Send, "m_iEntityLevel");
+stock bool SetEntitySteamAccountID(int entity, int accountid)	{
+	return SetEntPropEx(entity, Prop_Send, "m_iAccountID", accountid);
 }
 
 //Methodmap
@@ -787,11 +798,11 @@ methodmap Entity __nullable__	{
 	{
 		public set(Entity parent)
 		{
-			SetEntityParentEntity(view_as<Entity>(this), parent);
+			SetEntityParentEntity(view_as<int>(this), parent);
 		}
 		public get()
 		{
-			return view_as<Entity>(GetEntityParentEntity(view_as<Entity>(this)));
+			return view_as<Entity>(GetEntityParentEntity(view_as<int>(this)));
 		}
 	}
 	
@@ -1208,42 +1219,38 @@ methodmap Entity __nullable__	{
 	}
 	
 	/**
-	 *	The entity's quality.
+	 *	The entity's quality. [TF2]
 	 *
-	 *	@param	entity		Entity index.
-	 *	@param	level		The level.
-	 *
-	 *	@error	If the entity is invalid or has no quality property, this returns false.
+	 *	@param	entity	Entity index.
+	 *	@param	quality	The quality.
 	 */
-	property int Quality
+	property int TF2Quality //Broken, complains must be 'int' when 'TFQuality' actually can be used, pls fix this bug ._.
 	{
-		public set(int qualitylevel)
+		public set(int quality)
 		{
-			SetEntityQuality(view_as<int>(this), qualitylevel);
+			TF2_SetEntityQuality(view_as<int>(this), view_as<TFQuality>(quality));
 		}
 		public get()
 		{
-			return GetEntityQuality(view_as<int>(this));
+			return view_as<int>(TF2_GetEntityQuality(view_as<int>(this)));
 		}
 	}
 	
 	/**
-	 *	The entity's level.
+	 *	The entity's level. [TF2]
 	 *
-	 *	@param	entity		Entity index.
-	 *	@param	level		The level.
-	 *
-	 *	@error	If the entity is invalid or has no level property, this returns false.
+	 *	@param	entity	Entity index.
+	 *	@param	level	The level.
 	 */
-	property int Level
+	property int TF2Level
 	{
 		public set(int level)
 		{
-			SetEntityLevel(view_as<int>(this), level);
+			TF2_SetEntityLevel(view_as<int>(this), level);
 		}
 		public get()
 		{
-			return GetEntityLevel(view_as<int>(this));
+			return TF2_GetEntityLevel(view_as<int>(this));
 		}
 	}
 }
@@ -1260,7 +1267,7 @@ methodmap Entity __nullable__	{
  *
  *	@error	If the entity/edict is invalid, this returns false.
  */
-stock bool IsValidEntityEx(any entity)	{
+stock bool IsValidEntityEx(int entity)	{
 	return (IsValidEdict(entity) || IsValidEntity(entity));
 }
 
@@ -1282,7 +1289,7 @@ stock bool IsValidEntityEx(any entity)	{
  *	@param	element		Element # (starting from 0) if property is an array.
  *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
  */
-stock bool SetEntPropEx(any entity, PropType type, const char[] prop, any value, int size=4, int element=0)	{
+stock bool SetEntPropEx(int entity, PropType type, const char[] prop, any value, int size=4, int element=0)	{
 	if(HasEntProp(entity, type, prop))	{
 		SetEntProp(entity, type, prop, value, size, element);
 		return true;
@@ -1305,7 +1312,7 @@ stock bool SetEntPropEx(any entity, PropType type, const char[] prop, any value,
  *
  *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
  */
-stock bool SetEntPropEntEx(any entity, PropType type, const char[] prop, int other, int element=0)	{
+stock bool SetEntPropEntEx(int entity, PropType type, const char[] prop, int other, int element=0)	{
 	if(HasEntProp(entity, type, prop))	{
 		SetEntPropEnt(entity, type, prop, other, element);
 		return true;
@@ -1333,7 +1340,7 @@ stock bool SetEntPropEntEx(any entity, PropType type, const char[] prop, int oth
  *
  *	@error				If entity is invalid or property not found, this returns -1.
  */
-stock int GetEntPropEx(any entity, PropType type, const char[] prop, int size=4, int element=0)	{
+stock int GetEntPropEx(int entity, PropType type, const char[] prop, int size=4, int element=0)	{
 	return HasEntPropEx(entity, type, prop) ? GetEntProp(entity, type, prop, size, element):-1;
 }
 
@@ -1353,7 +1360,7 @@ stock int GetEntPropEx(any entity, PropType type, const char[] prop, int size=4,
  *
  *	@error				If entity is invalid or property not found, this returns -1.
  */
-stock int GetEntPropEntEx(any entity, PropType type, const char[] prop, int element=0)	{
+stock int GetEntPropEntEx(int entity, PropType type, const char[] prop, int element=0)	{
 	return HasEntPropEx(entity, type, prop) ? GetEntPropEnt(entity, type, prop, element):-1;
 }
 
@@ -1376,7 +1383,7 @@ stock int GetEntPropEntEx(any entity, PropType type, const char[] prop, int elem
  *
  * @error				If entity is invalid or property not found, this returns false.
  */
-stock bool GetEntPropBool(any entity, PropType type, const char[] prop, int size=4, int element=0)	{
+stock bool GetEntPropBool(int entity, PropType type, const char[] prop, int size=4, int element=0)	{
 	return HasEntPropEx(entity, type, prop) ? view_as<bool>(GetEntProp(entity, type, prop, size, element)):false;
 }
 
@@ -1394,7 +1401,7 @@ stock bool GetEntPropBool(any entity, PropType type, const char[] prop, int size
  *
  *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
  */
-stock bool GetEntPropStringEx(any entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)	{
+stock bool GetEntPropStringEx(int entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)	{
 	return HasEntPropEx(entity, type, prop) ? view_as<bool>(GetEntPropString(entity, type, prop, buffer, maxlen, element) != -1):false;
 }
 
@@ -1411,7 +1418,7 @@ stock bool GetEntPropStringEx(any entity, PropType type, const char[] prop, char
  *
  *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
  */
-stock bool SetEntPropStringEx(any entity, PropType type, const char[] prop, const char[] buffer, int element=0)	{
+stock bool SetEntPropStringEx(int entity, PropType type, const char[] prop, const char[] buffer, int element=0)	{
 	return HasEntPropEx(entity, type, prop) ? view_as<bool>(SetEntPropString(entity, type, prop, buffer, element) != -1):false;
 }
 
@@ -1424,7 +1431,7 @@ stock bool SetEntPropStringEx(any entity, PropType type, const char[] prop, cons
  *
  *	@error	If entity or property is invalid/not found, this returns false.
  */
-stock bool HasEntPropEx(any entity, PropType type, const char[] prop)	{
+stock bool HasEntPropEx(int entity, PropType type, const char[] prop)	{
 	return view_as<bool>(IsValidEntityEx(entity) && HasEntProp(entity, type, prop));
 }
 
@@ -1441,7 +1448,7 @@ stock bool HasEntPropEx(any entity, PropType type, const char[] prop)	{
  *
  *	@error				If entity, offset or property is not valid, this returns false. (if out of bounds, view_as<int>(this) spits out an error).
  */
-stock bool SetEntPropFloatEx(any entity, PropType type, const char[] prop, float value, int element=0)	{
+stock bool SetEntPropFloatEx(int entity, PropType type, const char[] prop, float value, int element=0)	{
 	if(HasEntPropEx(entity, type, prop))	{
 		SetEntPropFloat(entity, type, prop, value, element);
 		return true;
@@ -1465,7 +1472,7 @@ stock bool SetEntPropFloatEx(any entity, PropType type, const char[] prop, float
  *
  *	@error				If entity is invalid, offset out of reasonable bounds or invalid property, this returns -1.0.
  */
-stock float GetEntPropFloatEx(any entity, PropType type, const char[] prop, int element=0)	{
+stock float GetEntPropFloatEx(int entity, PropType type, const char[] prop, int element=0)	{
 	return HasEntPropEx(entity, type, prop) ? GetEntPropFloat(entity, type, prop, element):-1.0;
 }
 

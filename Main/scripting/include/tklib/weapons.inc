@@ -28,7 +28,7 @@ stock bool RemoveAllWeapons(int client)	{
 /**
  *	Returns the users current active weapon.
  *
- *	@param	client		The users index.
+ *	@param	client	The users index.
  *
  *	@error	If the user is invalid or has no active weapon, this returns -1.
  */
@@ -39,8 +39,8 @@ stock int GetClientActiveWeapon(int client)	{
 /**
  *	Forces the users current active weapon.
  *
- *	@param	client		The users index.
- *	@param	weapon		The users weapon entity index.
+ *	@param	client	The users index.
+ *	@param	weapon	The users weapon entity index.
  *
  *	@error	If the user is invalid or has no active weapon, this returns false.
  */
@@ -54,8 +54,8 @@ stock bool SetClientActiveWeapon(int client, any weapon)	{
 /**
  *	Set the users wielding weapon ammo.
  *
- *	@param	client		The users index.
- *	@param	ammo		Primary ammo amount.
+ *	@param	client	The users index.
+ *	@param	ammo	Primary ammo amount.
  *
  *	@error	If the user is invalid, nothing will happen.
  */

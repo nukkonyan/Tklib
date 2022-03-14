@@ -95,6 +95,7 @@ enum TFBuilding	{
 }
 
 enum TFQuality {
+	TFQuality_Invalid	= -1,
 	TFQuality_Normal	= 0,
 	TFQuality_Genuine	= 1,
 	TFQuality_Rarity2	= 2,
@@ -576,7 +577,7 @@ stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_IsEntityBuilding(int entity)	{
+stock bool TF2_IsEntityBuilding(int building)	{
 	return GetEntPropBool(entity, Prop_Send, "m_bBuilding");
 }
 
@@ -587,7 +588,7 @@ stock bool TF2_IsEntityBuilding(int entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_IsEntityMiniBuilding(int entity)	{
+stock bool TF2_IsEntityMiniBuilding(int building)	{
 	return GetEntPropBool(entity, Prop_Send, "m_bMiniBuilding");
 }
 
@@ -599,8 +600,8 @@ stock bool TF2_IsEntityMiniBuilding(int entity)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock bool TF2_SetBuildingOwner(any entity, int client)	{
-	return Tklib_IsValidClient(client) ? SetEntPropEntEx(entity, Prop_Send, "m_hBuilder", client):false;
+stock bool TF2_SetBuildingOwner(int building, int client)	{
+	return SetEntPropEntEx(building, Prop_Send, "m_hBuilder", client);
 }
 
 /**
@@ -611,8 +612,8 @@ stock bool TF2_SetBuildingOwner(any entity, int client)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int TF2_GetBuildingOwner(any entity)	{
-	return	GetEntPropEntEx(entity, Prop_Send, "m_hBuilder"):-1;
+stock int TF2_GetBuildingOwner(int building)	{
+	return GetEntPropEntEx(building, Prop_Send, "m_hBuilder"):-1;
 }
 
 /**
@@ -623,8 +624,8 @@ stock int TF2_GetBuildingOwner(any entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_SetBuildingLevel(any entity, int level=1)	{
-	return	SetEntPropEx(entity, Prop_Send, "m_iUpgradeLevel", level);
+stock bool TF2_SetBuildingLevel(int entity, int level=1)	{
+	return SetEntPropEx(entity, Prop_Send, "m_iUpgradeLevel", level);
 }
 
 /**
@@ -633,8 +634,8 @@ stock bool TF2_SetBuildingLevel(any entity, int level=1)	{
  *	@param	entity	The building entity index.
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int TF2_GetBuildingLevel(any entity)	{
-	return	HasEntPropEx(entity, Prop_Send, "m_iUpgradeLevel") ? GetEntProp(entity, Prop_Send, "m_iUpgradeLevel"):-1;
+stock int TF2_GetBuildingLevel(int entity)	{
+	return GetEntPropEx(entity, Prop_Send, "m_iUpgradeLevel");
 }
 
 /**
@@ -646,7 +647,7 @@ stock int TF2_GetBuildingLevel(any entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_SetBuildingMaxLevel(any entity, int level=3)	{
-	return	SetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel", level);
+	return SetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel", level);
 }
 
 /**
@@ -657,47 +658,370 @@ stock bool TF2_SetBuildingMaxLevel(any entity, int level=3)	{
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int TF2_GetBuildingMaxLevel(any entity)	{
-	return	GetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel");
+	return GetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel");
 }
 
 /**
  *	Set the buildings required metal to upgrade to next upgrade level.
  *
- *	@param	entity	The building entity index.
- *	@param	metal	The metal required.
+ *	@param	building	The building entity index.
+ *	@param	metal		The metal required.
  *
- *	@error	If the entity is invalid, this returns false.
+ *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingMetalRequired(any entity, int metal)	{
-	return	SetEntPropEx(entity, Prop_Send, "m_iUpgradeMetalRequired", metal);
+stock bool TF2_SetBuildingMetalRequired(any building, int metal)	{
+	return SetEntPropEx(building, Prop_Send, "m_iUpgradeMetalRequired", metal);
 }
 
 /**
  *	Returns the buildings required metal to upgrade to next upgrade level.
  *
- *	@param	entity	The building entity index.
+ *	@param	building	The building entity index.
  *
- *	@error	If the entity is invalid, this returns -1.
+ *	@error	If the building is invalid, this returns -1.
  */
-stock int TF2_GetBuildingMetalRequired(any entity)	{
-	return	GetEntPropEx(entity, Prop_Send, "m_iUpgradeMetalRequired");
+stock int TF2_GetBuildingMetalRequired(any building)	{
+	return GetEntPropEx(building, Prop_Send, "m_iUpgradeMetalRequired");
 }
 
 /**
  *	Destroys the building.
  *
- *	@param	entity	The building index.
+ *	@param	building The building entity index.
  *
- *	@error	If the entity is invalid, this returns false.
+ *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_DestroyBuilding(any entity)	{
-	if(HasEntPropEx(entity, Prop_Send, "m_hBuilder"))	{
+stock bool TF2_DestroyBuilding(any building)	{
+	if(HasEntPropEx(building, Prop_Send, "m_hBuilder"))	{
 		SetVariantInt(999999);
-		AcceptEntityInput(entity, "RemoveHealth");
+		AcceptEntityInput(building, "RemoveHealth");
 		return	true;
 	}
 	
 	return	false;
+}
+
+/**
+ *	Returns the percentage of the building constructed.
+ *
+ *	@param	building The building entity index.
+ *
+ *	@error	If the building is invalid, this returns -1.0.
+ */
+stock float TF2_GetBuildingConstructionPercentage(int building)	{
+	return GetEntPropFloatEx(building, Prop_Send, "m_flPercentageConstructed");
+}
+
+/**
+ *	Set the percentage of the building contructed.
+ *
+ *	@param	building	The building entity index.
+ *	@param	percentage	The percentage to set. 0-100.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingConstructionPercentage(int building, float percentage)	{
+	return SetEntPropFloatEx(building, Prop_Send, "m_flPercentageConstructed", percentage);
+}
+
+/**
+ *	Returns the entity the building was built on.
+ *
+ *	@param	building The building entity index.
+ *
+ *	@error	If the building is invalid, this returns -1.
+ */
+stock int TF2_GetBuildingEntityBuiltOn(int building)	{
+	return GetEntPropEntEx(building, Prop_Send, "m_hBuiltOnEntity");
+}
+
+/**
+ *	Set the entity building should be seen as built on.
+ *
+ *	@param	building	The building entity index.
+ *	@param	entity		The entity to be seen as built on.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingEntityBuiltOn(int building, int entity)	{
+	return SetEntPropEntEx(building, Prop_Send, "m_hBuiltOnEntity", entity);
+}
+
+/**
+ *	Returns the building object flags.
+ *
+ *	@param	building The building entity index.
+ *
+ *	@error	If the building is invalid, this returns -1.
+ */
+stock int TF2_GetBuildingObjectFlags(int building)	{
+	return GetEntPropEx(building, Prop_Send, "m_fObjectFlags");
+}
+
+/**
+ *	Set the building object flags.
+ *
+ *	@param	building	The building entity index.
+ *	@param	objectflags	The object flags to modify/set.
+ *
+ *	@error	If the building is invalid, this returns -1.
+ */
+stock bool TF2_SetBuildingObjectFlags(int building, int objectflags)	{
+	return SetEntPropEx(building, Prop_Send, "m_fObjectFlags", objectflags);
+}
+
+/**
+ *	Returns if the building is a mini building.
+ *
+ *	@param	building	The building entity index.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_IsMiniBuilding(int building)	{
+	return GetEntPropEx(building, Prop_Send, "m_bMiniBuilding");
+}
+
+/**
+ *	Set the building to be seen as mini variant.
+ *
+ *	@param	building	The building entity index.
+ *	@param	mini		If true, sets building as 'mini'. Else if false, it's set as 'normal'.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetMiniBuilding(int building, bool mini)	{
+	return SetEntPropEx(building, Prop_Send, "m_bMiniBuilding", mini);
+}
+
+/**
+ *	Set the building default upgrade value.
+ *
+ *	@param	building	The building entity index.
+ *	@param	upgrade		The upgrade value.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingDefaultUpgrade(int building, int upgrade=1)	{
+	if(!HasEntPropEx(building, Prop_Send, "m_iUpgradeLevel"))
+		return false;
+	
+	char[] val = new char[16];
+	Format(val, 16, "%i", upgrade);
+	DispatchKeyValue(building, "defaultupgrade", val);
+	return true;
+}
+
+/**
+ *	Returns if the builing has a sapper.
+ *
+ *	@param	building	The building entity index.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_BuildingHasSapper(int building)	{
+	return GetEntPropBool(building, Prop_Send, "m_bHasSapper");
+}
+
+/**
+ *	Set the building to have a sapper active.
+ *
+ *	@param	building	The building entity index.
+ *	@param	sapper		If true, building will be seen as having a sapper.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingSapper(int building, bool sapper)	{
+	return SetEntPropEx(building, Prop_Send, "m_bHasSapper", sapper);
+}
+
+/**
+ *	Set the building object mode.
+ *
+ *	@param	building	The building entity index.
+ *	@param	objectmode	The building TFObject mode.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetObjectMode(int building, TFObjectMode objectmode)	{
+	return view_as<bool>(SetEntPropEx(building, Prop_Send, "m_iObjectMode", objectmode) && SetEntPropEx(building, Prop_Send, "m_iTeleportType", objectmode));
+}
+
+/**
+ *	Returns the building entity by type.
+ *	Creates a building entity by type.
+ *
+ *	@param	type	The building type.
+ *
+ *	@error	If the entity is invalid, this returns -1.
+ */
+stock int TF2_CreateBuildingByType(TFBuilding type)	{
+	int building = -1;
+	
+	switch(type)	{
+		case TFBuilding_Invalid: return -1;
+		case TFBuilding_Sentrygun:	{
+			building = CreateEntityByName("obj_sentrygun");
+			SetEntPropVectorEx(building, Prop_Send, "m_vecMins", view_as<float>({-13.0, -13.0, 0.0}));
+			SetEntPropVectorEx(building, Prop_Send, "m_vecMaxs", view_as<float>({13.0, 13.0, 42.9}));
+		}
+		case TFBuilding_Dispenser: building = CreateEntityByName("obj_dispenser");
+		case TFBuilding_Teleporter_Entrance:	{
+			building = CreateEntityByName("obj_teleporter");
+			SetEntPropEx(building, Prop_Send, "m_iObjectMode", 0);
+		}
+		case TFBuilding_Teleporter_Exit:	{
+			building = CreateEntityByName("obj_teleporter");
+			SetEntPropEx(building, Prop_Send, "m_iObjectMode", 1);
+		}
+		case TFBuilding_MiniSentry:	{
+			building = CreateEntityByName("obj_sentrygun");
+			SetEntityModelScale(building, 0.75);
+			TF2_SetMiniBuilding(building, true);
+			SetEntPropVectorEx(building, Prop_Send, "m_vecMins", view_as<float>({-15.0, -15.0, 0.0}));
+			SetEntPropVectorEx(building, Prop_Send, "m_vecMaxs", view_as<float>({15.0, 15.0, 42.5}));
+		}
+	}
+	
+	TF2_SetBuildingActive(building, true);
+	return building;
+}
+
+/**
+ *	Returns if the building is disposable.
+ *
+ *	@param	building	The building entity index.
+ *
+ *	@error	If the building entity is invalid, returns false.
+ */
+stock bool TF2_IsBuildingDisposable(int building)	{
+	return GetEntPropEx(building, Prop_Send, "m_bDisposableBuilding");
+}
+
+/**
+ *	Set the builing to be disposable.
+ *
+ *	@param	building	The building entity index.
+ *	@param	disposable	If true, the building will be disposable.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingDisposable(int building, bool disposable)	{
+	return SetEntPropEx(building, Prop_Send, "m_bDisposableBuilding", disposable);
+}
+
+/**
+ *	Returns if the building was map placed.
+ *
+ *	@param	building	The building entity index.
+ *
+ *	@error	If the building entity is invalid, returns false.
+ */
+stock bool TF2_IsBuildingMapPlaced(int building)	{
+	return GetEntPropEx(building, Prop_Send, "m_bWasMapPlaced");
+}
+
+/**
+ *	Set the builing to be seen as map placed.
+ *
+ *	@param	building	The building entity index.
+ *	@param	map_placed	If true, the building will be seen as map placed.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingMapPlaced(int building, bool map_placed)	{
+	return SetEntPropEx(building, Prop_Send, "m_bWasMapPlaced", map_placed);
+}
+
+/**
+ *	Returns if the building is being placed.
+ *
+ *	@param	building	The building entity index.
+ *
+ *	@error	If the building entity is invalid, returns false.
+ */
+stock bool TF2_IsBuildingBeingPlaced(int building)	{
+	return GetEntPropEx(building, Prop_Send, "m_bPlacing");
+}
+
+/**
+ *	Set the builing to be seen as map placed.
+ *
+ *	@param	building	The building entity index.
+ *	@param	placing		If true, the building will be seen as being placed.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingBeingPlaced(int building, bool placing)	{
+	return SetEntPropEx(building, Prop_Send, "m_bPlacing", placing);
+}
+
+/**
+ *	Returns if the building is being carried.
+ *
+ *	@param	building	The building entity index.
+ *
+ *	@error	If the building entity is invalid, returns false.
+ */
+stock bool TF2_IsBuildingBeingCarried(int building)	{
+	return GetEntPropEx(building, Prop_Send, "m_bCarried");
+}
+
+/**
+ *	Set the builing to be seen as being carried.
+ *
+ *	@param	building	The building entity index.
+ *	@param	placing		If true, the building will be seen as being carried.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingBeingCarried(int building, bool carried)	{
+	return SetEntPropEx(building, Prop_Send, "m_bCarried", carried);
+}
+
+/**
+ *	Returns if the building is being carried and deployed.
+ *
+ *	@param	building	The building entity index.
+ *
+ *	@error	If the building entity is invalid, returns false.
+ */
+stock bool TF2_IsBuildingBeingCarriedDeploy(int building)	{
+	return GetEntPropEx(building, Prop_Send, "m_bCarryDeploy");
+}
+
+/**
+ *	Set the builing to be seen as being carried and deployed.
+ *
+ *	@param	building	The building entity index.
+ *	@param	deployed	If true, the building will be seen as being carried and deloyed.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_SetBuildingBeingCarriedDeploy(int building, bool deployed)	{
+	return SetEntPropEx(building, Prop_Send, "m_bCarryDeploy", deployed);
+}
+
+/**
+ *	Returns if the building is active.
+ *
+ *	@param	building	The building entity index.
+ *
+ *	@error	If the building is invalid, this returns false.
+ */
+stock bool TF2_IsBuildingActive(int building)	{
+	return GetEntPropEx(building, Prop_Send, "m_bBuilding");
+}
+
+/**
+ *	Set the building to be active.
+ *
+ *	@param	building	The building entity index.
+ *	@param	active		If true, the building will be active.
+ *
+ *	@error	If the building is invalid, this reutrns false.
+ */
+stock bool TF2_SetBuildingActive(int building, bool active)	{
+	return SetEntPropEx(building, Prop_Send, "m_bBuilding", active);
 }
 
 #if !defined _tklib_no_sdktools
@@ -819,6 +1143,13 @@ stock bool IsTF2AttributesLoaded()	{
 }
 
 /**
+ *	Returns if TF2Econ is available.
+ */
+stock bool IsTF2EconLoaded()	{
+	return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Econ_GetItemName") == FeatureStatus_Available);
+}
+
+/**
  *	Returns the Footprint name type.
  *
  *	@param	defindex	The definition index of the footprint.
@@ -860,19 +1191,20 @@ stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen)	{
  */
 stock int TF2_AttachParticle(any entity, const char[] particle_name, float offset=0.0)	{
 	int particle = CreateEntityByName("info_particle_system");
-	if(IsValidEntityEx(particle))	{
-		float pos[3];
-		GetEntityAbsOrigin(entity, pos);
-		pos[2] += offset;
-		
-		TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
-		DispatchKeyValue(particle, "effect_name", particle_name);
-		DispatchSpawn(particle);
-		SetVariantString("!activator");
-		AcceptEntityInput(particle, "SetParent", entity);
-		ActivateEntity(particle);
-		AcceptEntityInput(particle, "start");
-	}
+	if(!IsValidEntityEx(particle))
+		return -1;
+	
+	float pos[3];
+	GetEntityAbsOrigin(entity, pos);
+	pos[2] += offset;
+	
+	TeleportEntity(particle, pos, NULL_VECTOR, NULL_VECTOR);
+	DispatchKeyValue(particle, "effect_name", particle_name);
+	DispatchSpawn(particle);
+	SetVariantString("!activator");
+	AcceptEntityInput(particle, "SetParent", entity);
+	ActivateEntity(particle);
+	AcceptEntityInput(particle, "start");
 	
 	return particle;
 }
@@ -893,7 +1225,7 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
 stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)	{
 	static int weapon;
 	
-	char classname[256];
+	char classname[128];
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
 	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
 	
@@ -902,13 +1234,13 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)
 		char netclass[64];
 		GetEntityNetClass(weapon, netclass, sizeof(netclass));
 		
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_bInitialized"), true);
-		SetEntPropEnt(weapon, Prop_Send, "m_hOwnerEntity", client);
-		SetEntProp(weapon, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
-		SetEntProp(weapon, Prop_Send, "m_bValidatedAttachedEntity", 1);
+		SetEntityOwner(weapon, client);
+		SetEntitySteamAccountID(weapon, GetSteamAccountID(client));
+		SetEntityDefinitionIndex(weapon, defindex);
+		SetEntityInitialized(weapon, true);
+		TF2_SetEntityLevel(weapon, level);
+		TF2_SetEntityQuality(weapon, quality);
+		TF2_SetValidatedAttachedEntity(weapon, true);
 		
 		switch(defindex)	{
 			case 735,736,810,831,933,1080,1102:	{
@@ -937,16 +1269,17 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)
 }
 
 /**
- *	Give the wearable to the client.
+ *	Give the cosmetic to the client.
  *
  *	@param	client		The users index.
- *	@param	defindex	The wearable definition index.
- *	@param	quality		The wearable TFQuality index.
- *	@param	level		The wearable level.
+ *	@param	defindex	The cosmetic definition index.
+ *	@param	quality		The cosmetic TFQuality index.
+ *	@param	level		The cosmetic level.
+ *	@param	levelable	The cosmetic is levelable.
  *
  *	@return	Returns the wearable entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveWearable(int client, int defindex, int level, TFQuality quality)	{
+stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality quality, bool levelable=false)	{
 	static int wearable;
 	static Handle EquipWearable;
 	static GameData data;
@@ -956,14 +1289,14 @@ stock int TF2_GiveWearable(int client, int defindex, int level, TFQuality qualit
 	EquipWearable = EndPrepSDKCall();
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(EquipWearable != null && IsValidEntityEx((wearable = CreateEntityByName("tf_wearable"))) && Tklib_IsValidClient(client, _, true))	{
-		SetEntData(wearable, FindSendPropInfo("CTFWearable", "m_iItemDefinitionIndex"), defindex);
-		SetEntData(wearable, FindSendPropInfo("CTFWearable", "m_iEntityLevel"), level);
-		SetEntData(wearable, FindSendPropInfo("CTFWearable", "m_iEntityQuality"), quality);
-		SetEntData(wearable, FindSendPropInfo("CTFWearable", "m_bInitialized"), true);
-		SetEntPropEnt(wearable, Prop_Send, "m_hOwnerEntity", client);
-		SetEntProp(wearable, Prop_Send, "m_iAccountID", GetSteamAccountID(client));
-		SetEntProp(wearable, Prop_Send, "m_bValidatedAttachedEntity", 1);
+	if(EquipWearable != null && IsValidEntityEx((wearable = levelable?TF2_CreateCosmeticLevelable():TF2_CreateCosmetic())) && Tklib_IsValidClient(client, _, true))	{
+		SetEntityOwner(wearable, client);
+		SetEntitySteamAccountID(wearable, GetSteamAccountID(client));
+		SetEntityDefinitionIndex(wearable, defindex);
+		SetEntityInitialized(wearable, true);
+		TF2_SetValidatedAttachedEntity(wearable, true);
+		TF2_SetEntityLevel(wearable, level);
+		TF2_SetEntityQuality(wearable, quality);
 		DispatchSpawn(wearable);
 		SDKCall(EquipWearable, client, wearable);
 	}
@@ -971,6 +1304,42 @@ stock int TF2_GiveWearable(int client, int defindex, int level, TFQuality qualit
 	delete EquipWearable;
 	delete data;
 	return wearable;
+}
+
+/**
+ *	Strips all cosmetics from the user, including 'levelable' cosmetics.
+ *
+ *	@param	client		The users index.
+ *	@param	defindex	If greather than -1 and valid, only strips out
+ *						the cosmetics with matching definition index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool TF2_StripCosmetics(int client, int defindex=-1)	{
+	if(!Tklib_IsValidClient(client, _, true))
+		return false;
+	
+	static int cosmetic = -1;
+	
+	while(IsValidEntityEx((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable"))))	{
+		int cosmetic_defindex = GetEntityDefinitionIndex(cosmetic);
+		
+		switch(defindex > -1 && cosmetic_defindex > -1 && cosmetic_defindex == defindex)	{
+			case true: RemoveEdict(cosmetic);
+			case false: RemoveEdict(cosmetic);
+		}
+	}
+	
+	while(IsValidEntityEx((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable_levelable"))))	{
+		int cosmetic_defindex = GetEntityDefinitionIndex(cosmetic);
+		
+		switch(defindex > -1 && cosmetic_defindex > -1 && cosmetic_defindex == defindex)	{
+			case true: RemoveEdict(cosmetic);
+			case false: RemoveEdict(cosmetic);
+		}
+	}
+	
+	return true;
 }
 
 /**
@@ -991,7 +1360,7 @@ stock bool TF2_IsValidAustralium(int defindex)	{
 
 /**
  *	Turns the weapon into australium variant.
- *	Requires TF2Attributes.
+ *	Requires TF2Attributes to set the attributes.
  *
  *	@param	weapon	The weapon entity index.
  *
@@ -1000,47 +1369,40 @@ stock bool TF2_IsValidAustralium(int defindex)	{
 stock void TF2_TurnAustralium(any weapon)	{
 	if(!IsValidEntityEx(weapon))
 		return;
-
-	char netclass[64];
-	GetEntityNetClass(weapon, netclass, sizeof(netclass));
 	
-	int defindex = GetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"));
+	if(!IsTF2AttributesLoaded())
+		return;
+	
+	int defindex = GetEntityDefinitionIndex(weapon);
 	
 	if(!TF2_IsValidAustralium(defindex))
 		return;
 	
 	/* Force the stock weapons to be 'upgradable' version. */
-	switch(defindex)	{
-		case 7: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 197);
-		case 13: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 200);
-		case 14: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 201);
-		case 15: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 202);
-		case 16: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 203);
-		case 18: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 205);
-		case 19: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 206);
-		case 20: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 207);
-		case 21: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 208);
-		case 29: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 211);
-	}
+	TF2_TurnDefaultDefIndexToUpgraded(weapon);
 	
 	/* Turn the weapon to strange quality and random level. */
-	SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), TFQuality_Strange); /* Strange. */
-	SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), GetRandomInt(0, 100)); /* Random level between 0 and 100. */
+	TF2_SetEntityQuality(weapon, TFQuality_Strange); /* Strange. */
+	TF2_SetEntityLevel(weapon, GetRandomInt(0, 100)); /* Random level between 0 and 100. */
 	
 	/* Frying Pan. */
 	switch(defindex == 264)	{
 		case true:	{
-			SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 1071); /* Turn to golden frying pan. */
+			SetEntityDefinitionIndex(weapon, 1071); /* Turn to golden frying pan. */
+			#if defined _tf2attributes_included
 			TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
 			TF2Attrib_SetByName(weapon, "killstreak tier", 1.0);
 			TF2Attrib_SetByName(weapon, "killstreak effect", view_as<float>(GetRandomInt(2002, 2008)));
 			TF2Attrib_SetByName(weapon, "killstreak idleeffect", view_as<float>(GetRandomInt(1, 7)));
 			TF2Attrib_SetByName(weapon, "item style override", 0.0);
+			#endif
 		}
 		/* Turn the weapon to australium. */
 		case false:	{
+			#if defined _tf2attributes_included
 			TF2Attrib_SetByName(weapon, "is australium item", 1.0);
 			TF2Attrib_SetByName(weapon, "item style override", 1.0);
+			#endif
 		}
 	}
 	
@@ -1072,7 +1434,7 @@ stock bool TF2_GetKillstreakerEffectName(int defindex, char[] buffer, int maxlen
 		
 		/* Tornado. */
 		case 2004:	{
-			strcopy(buffer, maxlen, "Tornade");
+			strcopy(buffer, maxlen, "Tornado");
 			return true;
 		}
 		
@@ -1200,38 +1562,34 @@ stock void TF2_TurnDefaultDefIndexToUpgraded(int weapon)	{
 	if(!IsValidEntityEx(weapon))
 		return;
 	
-	char netclass[64];
-	GetEntityNetClass(weapon, netclass, sizeof(netclass));
-	int defindex = GetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"));
-	
-	switch(defindex)	{
-		case 0: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 190);
-		case 1: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 191);
-		case 2: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 192);
-		case 3: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 193);
-		case 4: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 194);
-		case 5: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 195);
-		case 6: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 196);
-		case 7: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 197);
-		case 8: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 198);
-		case 9: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 199);
-		case 10: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 199);
-		case 11: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 199);
-		case 12: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 199);
-		case 13: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 200);
-		case 14: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 201);
-		case 15: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 202);
-		case 16: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 203);
-		case 17: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 204);
-		case 18: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 205);
-		case 19: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 206);
-		case 20: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 207);
-		case 21: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 208);
-		case 22: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 209);
-		case 23: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 209);
-		case 24: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 210);
-		case 25: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 737);
-		case 29: SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 211);
+	switch(GetEntityDefinitionIndex(weapon))	{
+		case 0: SetEntityDefinitionIndex(weapon, 190);
+		case 1: SetEntityDefinitionIndex(weapon, 191);
+		case 2: SetEntityDefinitionIndex(weapon, 192);
+		case 3: SetEntityDefinitionIndex(weapon, 193);
+		case 4: SetEntityDefinitionIndex(weapon, 194);
+		case 5: SetEntityDefinitionIndex(weapon, 195);
+		case 6: SetEntityDefinitionIndex(weapon, 196);
+		case 7: SetEntityDefinitionIndex(weapon, 197);
+		case 8: SetEntityDefinitionIndex(weapon, 198);
+		case 9: SetEntityDefinitionIndex(weapon, 199);
+		case 10: SetEntityDefinitionIndex(weapon, 199);
+		case 11: SetEntityDefinitionIndex(weapon, 199);
+		case 12: SetEntityDefinitionIndex(weapon, 199);
+		case 13: SetEntityDefinitionIndex(weapon, 200);
+		case 14: SetEntityDefinitionIndex(weapon, 201);
+		case 15: SetEntityDefinitionIndex(weapon, 202);
+		case 16: SetEntityDefinitionIndex(weapon, 203);
+		case 17: SetEntityDefinitionIndex(weapon, 204);
+		case 18: SetEntityDefinitionIndex(weapon, 205);
+		case 19: SetEntityDefinitionIndex(weapon, 206);
+		case 20: SetEntityDefinitionIndex(weapon, 207);
+		case 21: SetEntityDefinitionIndex(weapon, 208);
+		case 22: SetEntityDefinitionIndex(weapon, 209);
+		case 23: SetEntityDefinitionIndex(weapon, 209);
+		case 24: SetEntityDefinitionIndex(weapon, 210);
+		case 25: SetEntityDefinitionIndex(weapon, 737);
+		case 29: SetEntityDefinitionIndex(weapon, 211);
 	}
 }
 
@@ -1642,6 +2000,217 @@ stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex)	{
 	}
 	
 	return -1;
+}
+
+/**
+ *	Returns if the weapon is an explosive type (Including Engineer's PDA).
+ *
+ *	@param	defindex	The weapon definition index.
+ *
+ *	@return	If valid, returns true. Else returns false.
+ */
+stock bool TF2_IsValidExplosiveWeaponDefindex(int defindex)	{
+	switch(defindex)	{
+		case 18,19,20,25,205,206,207,127,130,131,228,237,265,308,
+		405,406,414,441,513,608,658,661,730,737,797,800,806,
+		809,886,889,895,898,904,907,913,916,962,965,971,974,
+		996,1007,1085,1099,1104,1144,1150,1151,15006,15009,
+		15012,15014,15024,15028,15038,15043,15045,15048,
+		15052,15057,15077,15079,15081,15082,15083,15084,
+		15091,15092,15104,15105,15113,15116,15117,15129,
+		15130,15137,15138,15142,15150,15155,15158: return true;
+	}
+	
+	return false;
+}
+
+/**
+ *	Returns if the weapon is a flamethrower.
+ *
+ *	@param	defindex	The weapon definition index.
+ *
+ *	@return	If valid, returns true. Else returns false.
+ */
+stock bool TF2_IsValidFlamethrowerDefindex(int defindex)	{
+	switch(defindex)	{
+		case 21,40,208,215,594,659,741,798,807,887,
+		896,905,914,963,972,11146,1178,15005,15017,
+		15030,15034,15049,15054,15066,15067,15068,
+		15089,15090,15115,15141,30474: return true;
+	}
+	
+	return false;
+}
+
+/**
+ *	Set the entity's quality.
+ *
+ *	@param	entity		Entity index.
+ *	@param	quality		The TFQuality.
+ *
+ *	@error	If the entity is invalid or has no quality property, this returns false.
+ */
+stock bool TF2_SetEntityQuality(int entity, TFQuality quality)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityQuality"))
+		return false;
+	
+	char netclass[64];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	SetEntData(entity, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
+	return true;
+}
+
+/**
+ *	Returns the entity's quality.
+ *
+ *	@param	entity		Entity index.
+ *
+ *	@error	If the entity is invalid or has no quality property, this returns TFQuality_Invalid.
+ */
+stock TFQuality TF2_GetEntityQuality(int entity)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityQuality"))
+		return TFQuality_Invalid;
+	
+	char netclass[64];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	return view_as<TFQuality>(GetEntData(entity, FindSendPropInfo(netclass, "m_iEntityQuality")));
+}
+
+/**
+ *	Set the entity's level.
+ *
+ *	@param	entity		Entity index.
+ *
+ *	@error	If the entity is invalid or has no level property, this returns false.
+ */
+stock bool TF2_SetEntityLevel(int entity, int level)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityLevel"))
+		return false;
+	
+	char netclass[64];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	SetEntData(entity, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
+	return true;
+}
+
+/**
+ *	Returns the entity's level.
+ *
+ *	@param	entity		Entity index.
+ *	@param	level		The level.
+ *
+ *	@error	If the entity is invalid or has no level property, this returns false.
+ */
+stock int TF2_GetEntityLevel(int entity)	{
+	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityLevel"))
+		return -1;
+	
+	char netclass[64];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	
+	return GetEntData(entity, FindSendPropInfo(netclass, "m_iEntityLevel"));
+}
+
+/**
+ *	Returns if the entity is a validated attached entity.
+ *	Used for activating weapons & cosmetics (Make them visible for everyone).
+ *
+ *	@param	entity	The entity index.
+ *
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool TF2_IsValidatedAttachedEntity(int entity)	{
+	return GetEntPropBool(entity, Prop_Send, "m_bValidatedAttachedEntity");
+}
+
+/**
+ *	Set the entity to be a validated attached entity.
+ *	Used for activating weapons & cosmetics (Make them visible for everyone).
+ *
+ *	@param	entity		The entity index.
+ *	@param	validated	If true, the entity will be a validated attached entity. Else de-validates.
+ *
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool TF2_SetValidatedAttachedEntity(int entity, bool validated)	{
+	return SetEntPropEx(entity, Prop_Send, "m_bValidatedAttachedEntity", validated);
+}
+
+/**
+ *	Creates a cosmetic entity.
+ *
+ *	@return	Returns the entity index of the cosmetic entity.
+ */
+stock int TF2_CreateCosmetic()	{
+	return CreateEntityByName("tf_wearable");
+}
+
+/**
+ *	Creates a demoshield weapon entity.
+ *
+ *	@return	Returns the entity index of the demoshield weapon entity.
+ */
+stock int TF2_CreateCosmeticDemoShield()	{
+	return CreateEntityByName("tf_wearable_demoshield");
+}
+
+/**
+ *	Creates a razorback weapon entity.
+ *	Used for the 'Razorback' weapon.
+ *
+ *	@return	Returns the entity index of the demoshield weapon entity.
+ */
+stock int TF2_CreateCosmeticRazorback()	{
+	return CreateEntityByName("tf_wearable_razorback");
+}
+
+/**
+ *	Creates a videomaker entity.
+ *	Used for taunts.
+ *
+ *	@return	Returns the entity index of the viewmodel entity.
+ */
+stock int TF2_CreateCosmeticVideoMaker()	{
+	return CreateEntityByName("tf_wearable_vm");
+}
+
+/**
+ *	Creates a robot arm viewmodel.
+ *	Used for the 'Gunslinger' weapon.
+ *
+ *	@return	Returns the entity index of the robot arm viewmodel entity.
+ */
+stock int TF2_CreateRobotArm()	{
+	return CreateEntityByName("tf_wearable_robot_arm");
+}
+
+/**
+ *	Creates a levelable cosmetic item.
+ *	Used for cosmetics updating its model based on its owner's current killstreak.
+ *
+ *	@return	Returns the entity index of the levelable cosmetic entity.
+ */
+stock int TF2_CreateCosmeticLevelable()	{
+	return CreateEntityByName("tf_wearable_levelable_item");
+}
+
+/**
+ *	Creates a cosmetic campaign item.
+ *
+ *	@return	Returns the entity index of the cosmetic campaign item entity.
+ */
+stock int TF2_CreateCosmeticCampaignItem()	{
+	return CreateEntityByName("tf_wearable_campaign_item");
+}
+
+/**
+ *	Creates a viewmodel entity.
+ *	Used for showing your arms.
+ *
+ *	@return	Returns the entity index of the cosmetic viewmodel entity.
+ */
+stock int TF2_CreateViewmodel()	{
+	return CreateEntityByName("tf_viewmodel");
 }
 
 #endif
