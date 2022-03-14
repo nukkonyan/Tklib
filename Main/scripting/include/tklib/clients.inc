@@ -720,7 +720,7 @@ stock bool GetClientNameEx(int client, char[] buffer, int maxlen)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientNameEx(int client, char[] name)	{
+stock bool SetClientNameEx(int client, const char[] name)	{
 	if(!Tklib_IsValidClient(client, _, _, false))
 		return false;
 	
@@ -878,9 +878,9 @@ stock bool SetClientConnected(int client, bool connect)	{
  *
  *	@noreturn
  */
-stock void GetClientTeamString(int client, char[] buffer, int maxlen)	{
+stock void GetClientNameTeamString(int client, char[] buffer, int maxlen)	{
 	int team = Tklib_IsValidClient(client) ? GetClientTeam(client):0;
-		
+	
 	char TeamColour_Default[][] = {
 		"{grey}",
 		"{grey}",

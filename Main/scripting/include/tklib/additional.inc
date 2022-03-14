@@ -729,4 +729,22 @@ stock int ItemDrawBool(bool value)	{
 	return value ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT;
 }
 
+/**
+ *	Retrieves the string value via integer.
+ *	This value is passed through as a string ing the StringMap array handle.
+ *
+ *	@param	trie	The StringMap array handle.
+ *	@param	value	The value to retrieve value from.
+ *
+ *	@error	If the handle is invalid, this returns false.
+ */
+stock bool GetTrieStringInt(Handle map, int key, char[] value, int max_size, int &size=0)	{
+	if(map == null)
+		return false;
+	
+	char[] val = new char[64];
+	Format(val, 64, "%i", key);
+	return view_as<StringMap>(map).GetString(val, value, max_size, size);
+}
+
 #endif
