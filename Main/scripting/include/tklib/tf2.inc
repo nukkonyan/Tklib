@@ -21,6 +21,18 @@ TF2_GetPDATypeClassname[][] = {"","","","","","","","","tf_weapon_pda_spy","tf_w
 TF2_GetPDA2TypeClassname[][] = {"","","","","","","","","tf_weapon_invis","tf_weapon_pda_engineer_destroy"},
 TF2_GetPDA3TypeClassname[][] = {"","","","","","","","","","tf_weapon_builder"};
 
+//TF2 Offsets, will be updated as frequently as possible.
+enum {
+	TF2Offset_IsBaseCombatWeapon = 89,
+	TF2Offset_IsWearable = 90,
+	TF2Offset_GetMaxHealth = 120,
+	TF2Offset_GetMaxClip1 = 321,
+	TF2Offset_GetSlot = 330,
+	TF2Offset_GetWeaponID = 376,
+	TF2Offset_EquipWearable = 434,
+	TF2Offset_RemoveWearable = 435
+}
+
 //TF2 Flag Event
 enum TFFlag {
 	TFFlag_None = 0,
@@ -1251,9 +1263,8 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)
 stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality quality, bool levelable=false)	{
 	static int wearable;
 	static Handle EquipWearable;
-	static GameData data;
 	StartPrepSDKCall(SDKCall_Player);
-	PrepSDKCall_SetVirtual((data = new GameData("sm-tf2.games")).GetOffset("RemoveWearable")-1);
+	PrepSDKCall_SetVirtual(TF2Offset_EquipWearable);
 	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
 	EquipWearable = EndPrepSDKCall();
 	
@@ -1271,7 +1282,6 @@ stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality qualit
 	}
 	
 	delete EquipWearable;
-	delete data;
 	return wearable;
 }
 
@@ -1311,6 +1321,30 @@ stock bool TF2_StripCosmetics(int client, int defindex=-1)	{
 	}
 	
 	return true;
+}
+
+/**
+ *	Returns if the cosmetic is valid.
+ *
+ *	@param	cosmetic	The cosmetic entity index.
+ *
+ *	@error	If the cosmetic entity is invalid, this returns false.
+ */
+stock bool TF2_IsValidCosmetic(int cosmetic)	{
+	if(!IsValidEntityEx(cosmetic))
+		return false;
+	
+	static bool IsWearable;
+	
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
+	PrepSDKCall_SetFromConf(TF2Offset_IsWearable);
+	
+	if((IsWearable = EndPrepSDKCall()) != null)
+		SDKCall(IsWearable, cosmetic);
+	
+	delete IsWearable;
+	return false;
 }
 
 /**
@@ -1970,6 +2004,11 @@ stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex)	{
 			return wearable;
 	}
 	
+	while((wearable = FindEntityByClassname(wearable, "tf_wearable_levelable_item")) != -1)	{
+		if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client)
+			return wearable;
+	}
+	
 	return -1;
 }
 
@@ -2010,6 +2049,30 @@ stock bool TF2_IsValidFlamethrowerDefindex(int defindex)	{
 		15089,15090,15115,15141,30474: return true;
 	}
 	
+	return false;
+}
+
+/**
+ *	Returns if the weapon is valid.
+ *
+ *	@param	weapon	The weapon entity index.
+ *
+ *	@error	If the weapon is invalid, this returns false.
+ */
+stock bool TF2_IsValidWeapon(int weapon)	{
+	if(!IsValidEntityEx(weapon))
+		return false;
+	
+	static Handle IsBaseCombatWeapon;
+	
+	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
+	PrepSDKCall_SetFromConf(TF2Offset_IsBaseCombatWeapon);
+	
+	if((IsBaseCombatWeapon = EndPrepSDKCall()) != null)
+		SDKCall(IsBaseCombatWeapon, weapon);
+	
+	delete IsBaseCombatWeapon;
 	return false;
 }
 
@@ -2151,7 +2214,7 @@ stock int TF2_CreateCosmeticVideoMaker()	{
  *
  *	@return	Returns the entity index of the robot arm viewmodel entity.
  */
-stock int TF2_CreateRobotArm()	{
+stock int TF2_CreateCosmeticRobotArm()	{
 	return CreateEntityByName("tf_wearable_robot_arm");
 }
 
