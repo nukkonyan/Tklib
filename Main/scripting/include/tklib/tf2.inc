@@ -1258,35 +1258,39 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)
  *	@param	level		The cosmetic level.
  *	@param	levelable	The cosmetic is levelable.
  *
- *	@return	Returns the wearable entity index. If invalid user or entity is invalid returns -1.
+ *	@return	Returns the cosmetic entity index. If invalid user or entity is invalid returns -1.
  */
 stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality quality, bool levelable=false)	{
-	static int wearable;
-	static Handle EquipWearable;
+	if(!Tklib_IsValidClient(client, _, true))
+		return -1;
+	
+	int cosmetic = -1;
 	StartPrepSDKCall(SDKCall_Player);
 	PrepSDKCall_SetVirtual(TF2Offset_EquipWearable);
 	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
-	EquipWearable = EndPrepSDKCall();
+	Handle EquipWearable = EndPrepSDKCall();
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(EquipWearable != null && IsValidEntityEx((wearable = levelable?TF2_CreateCosmeticLevelable():TF2_CreateCosmetic())) && Tklib_IsValidClient(client, _, true))	{
-		SetEntityOwner(wearable, client);
-		SetEntitySteamAccountID(wearable, GetSteamAccountID(client));
-		SetEntityDefinitionIndex(wearable, defindex);
-		SetEntityInitialized(wearable, true);
-		TF2_SetValidatedAttachedEntity(wearable, true);
-		TF2_SetEntityLevel(wearable, level);
-		TF2_SetEntityQuality(wearable, quality);
-		DispatchSpawn(wearable);
-		SDKCall(EquipWearable, client, wearable);
+	if(EquipWearable != null && (cosmetic = levelable ? TF2_CreateCosmeticLevelable() : TF2_CreateCosmetic()) != -1)	{
+		if(IsValidEntityEx(cosmetic))	 {
+			SetEntityDefinitionIndex(cosmetic, defindex);
+			SetEntityInitialized(cosmetic, true);
+			TF2_SetEntityLevel(cosmetic, level);
+			TF2_SetEntityQuality(cosmetic, quality);
+			TF2_SetValidatedAttachedEntity(cosmetic, true);
+			SetEntityOwner(cosmetic, client);
+			SetEntitySteamAccountID(cosmetic, GetSteamAccountID(client));
+			DispatchSpawn(cosmetic);
+			SDKCall(EquipWearable, client, cosmetic);
+		}
 	}
 	
 	delete EquipWearable;
-	return wearable;
+	return cosmetic;
 }
 
 /**
- *	Strips all cosmetics from the user, including 'levelable' cosmetics.
+ *	Strips all cosmetics from the user.
  *
  *	@param	client		The users index.
  *	@param	defindex	If greather than -1 and valid, only strips out
@@ -1298,25 +1302,45 @@ stock bool TF2_StripCosmetics(int client, int defindex=-1)	{
 	if(!Tklib_IsValidClient(client, _, true))
 		return false;
 	
-	int cosmetic = -1;
-	
-	while(IsValidEntityEx((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable"))))	{
-		switch(defindex != -1)	{
-			case true:	{
-				if(GetEntityDefinitionIndex(cosmetic) == defindex)
-					AcceptEntityInput(cosmetic, "Kill");
+	int cosmetic = 0;
+		
+	while((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable")) != -1)	{
+		if(IsValidEntityEx(cosmetic))	{
+			if(GetEntityOwner(cosmetic) == client)	{
+				switch(GetEntityDefinitionIndex(cosmetic) == cosmetic)	{
+					case true: AcceptEntityInput(cosmetic, "Kill");
+					case false: AcceptEntityInput(cosmetic, "Kill");
+				}
 			}
-			case false: AcceptEntityInput(cosmetic, "Kill");
 		}
 	}
 	
-	while(IsValidEntityEx((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable_levelable_item"))))	{
-		switch(defindex != -1)	{
-			case true:	{
-				if(GetEntityDefinitionIndex(cosmetic) == defindex)
-					AcceptEntityInput(cosmetic, "Kill");
+	return true;
+}
+
+/**
+ *	Strips all levelable cosmetics from the user.
+ *
+ *	@param	client		The users index.
+ *	@param	defindex	If greather than -1 and valid, only strips out
+ *						the cosmetics with matching definition index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool TF2_StripCosmeticsLevelable(int client, int defindex=-1)	{
+	if(!Tklib_IsValidClient(client, _, true))
+		return false;
+	
+	int cosmetic = 0;
+		
+	while((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable_levelable_item")) != -1)	{
+		if(IsValidEntityEx(cosmetic))	{
+			if(GetEntityOwner(cosmetic) == client)	{
+				switch(GetEntityDefinitionIndex(cosmetic) == cosmetic)	{
+					case true: AcceptEntityInput(cosmetic, "Kill");
+					case false: AcceptEntityInput(cosmetic, "Kill");
+				}
 			}
-			case false: AcceptEntityInput(cosmetic, "Kill");
 		}
 	}
 	
@@ -1334,14 +1358,14 @@ stock bool TF2_IsValidCosmetic(int cosmetic)	{
 	if(!IsValidEntityEx(cosmetic))
 		return false;
 	
-	static bool IsWearable;
+	static Handle IsWearable;
 	
 	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetVirtual(TF2Offset_IsWearable);
 	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
-	PrepSDKCall_SetFromConf(TF2Offset_IsWearable);
 	
 	if((IsWearable = EndPrepSDKCall()) != null)
-		SDKCall(IsWearable, cosmetic);
+		return SDKCall(IsWearable, cosmetic);
 	
 	delete IsWearable;
 	return false;
@@ -1480,7 +1504,7 @@ stock bool TF2_GetKillstreakerEffectName(int defindex, char[] buffer, int maxlen
  *
  *	@return	Returns true if the definition index is valid, false otherwise.
  */
-stock bool TF2_GetKillstreakSheenName(int defindex, char[] buffer, int maxlen)	{
+stock bool TF2_GetKillstreakerSheenEffectName(int defindex, char[] buffer, int maxlen)	{
 	switch(defindex)	{
 		/* Team Shine. */
 		case 1:	{
@@ -2066,8 +2090,8 @@ stock bool TF2_IsValidWeapon(int weapon)	{
 	static Handle IsBaseCombatWeapon;
 	
 	StartPrepSDKCall(SDKCall_Entity);
+	PrepSDKCall_SetVirtual(TF2Offset_IsBaseCombatWeapon);
 	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
-	PrepSDKCall_SetFromConf(TF2Offset_IsBaseCombatWeapon);
 	
 	if((IsBaseCombatWeapon = EndPrepSDKCall()) != null)
 		SDKCall(IsBaseCombatWeapon, weapon);
@@ -2141,7 +2165,6 @@ stock int TF2_GetEntityLevel(int entity)	{
 	
 	char netclass[64];
 	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	
 	return GetEntData(entity, FindSendPropInfo(netclass, "m_iEntityLevel"));
 }
 
@@ -2154,7 +2177,12 @@ stock int TF2_GetEntityLevel(int entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_IsValidatedAttachedEntity(int entity)	{
-	return GetEntPropBool(entity, Prop_Send, "m_bValidatedAttachedEntity");
+	if(!HasEntPropEx(entity, Prop_Send, "m_bValidatedAttachedEntity"))
+		return false;
+	
+	char netclass[64];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	return view_as<bool<(GetEntData(entity, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity")));
 }
 
 /**
@@ -2167,7 +2195,13 @@ stock bool TF2_IsValidatedAttachedEntity(int entity)	{
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool TF2_SetValidatedAttachedEntity(int entity, bool validated)	{
-	return SetEntPropEx(entity, Prop_Send, "m_bValidatedAttachedEntity", validated);
+	if(!HasEntPropEx(entity, Prop_Send, "m_bValidatedAttachedEntity"))
+		return false;
+	
+	char netclass[64];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	SetEntData(entity, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), validated);
+	return true;
 }
 
 /**
@@ -2245,6 +2279,18 @@ stock int TF2_CreateCosmeticCampaignItem()	{
  */
 stock int TF2_CreateViewmodel()	{
 	return CreateEntityByName("tf_viewmodel");
+}
+
+/**
+ *	Returns if the client is in the class.
+ *
+ *	@param	client	The users index.
+ *	@param	class	The class to check.
+ *
+ *	@error	If the client is invalid, this returns false.
+ */
+stock bool TF2_IsClientClass(int client, TFClassType class) {
+	return Tklib_IsValidClient(client, _, true) ? (TF2_GetPlayerClass(client) == class) : false;
 }
 
 #endif

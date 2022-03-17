@@ -1028,7 +1028,7 @@ stock bool SetClientHideHud(int client, int flags)	{
  *
  *	@param	playername	The playername to search.
  *
- *	@error	If no valid users are found, this returns null.
+ *	@error	If no valid users are found, this returns empty.
  */
 stock ArrayList FindClientsByPlayername(const char[] playername, bool nobots=false)	{
 	ArrayList list = new ArrayList(64);
@@ -1045,9 +1045,6 @@ stock ArrayList FindClientsByPlayername(const char[] playername, bool nobots=fal
 		}
 	}
 	
-	if(found < 1)
-		delete list;
-	
 	return list;
 }
 
@@ -1057,7 +1054,7 @@ stock ArrayList FindClientsByPlayername(const char[] playername, bool nobots=fal
  *
  *	@param	team	The team index to search.
  *
- *	@error	If no valid users are found, this returns null.
+ *	@error	If no valid users are found, this returns empty.
  */
 stock ArrayList FindClientsByTeam(any team, bool nobots=false)	{
 	ArrayList list = new ArrayList(64);
@@ -1071,9 +1068,6 @@ stock ArrayList FindClientsByTeam(any team, bool nobots=false)	{
 			}
 		}
 	}
-	
-	if(found < 1)
-		delete list;
 	
 	return list;
 }

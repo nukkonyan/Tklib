@@ -103,8 +103,10 @@ stock int AdminFlaglagToAdmflag(AdminFlag adminflags)	{
  *	Retrieves a command as integer given its index, from the current console or server command.
  *
  *	@note Argument indexes start at 1; 0 retrieves the command name.
+ *
  *	@param	argnum		Argument number to retrieve.
- *	@return				Integer of the returned argument.
+ *
+ *	@return	Integer of the returned argument.
  */
 stock int GetCmdInt(int argnum)	{
 	char buffer[256];
@@ -116,14 +118,30 @@ stock int GetCmdInt(int argnum)	{
  *	Retrieves a command as boolean given its index, from the current console or server command.
  *
  *	@note Argument indexes start at 1; 0 retrieves the command name.
+ *
  *	@param	argnum		Argument number to retrieve.
  *
- *	@return				Integer of the returned argument.
+ *	@return	Integer of the returned argument.
  */
 stock bool GetCmdBool(int argnum)	{
 	char buffer[256];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
-	return view_as<bool>(StringToInt(buffer);
+	return view_as<bool>(StringToInt(buffer));
+}
+
+/**
+ *	Retrieves a command as a float point given its index, from the current console or server command.
+ *
+ *	@note Argument indexes start at 1; 0 retrieves the command name.
+ *
+ *	@param	argnum		Argument number to retrieve.
+ *
+ *	@return	Integer of the returned argument.
+ */
+stock float GetCmdFloat(int argnum)	{
+	char buffer[256];
+	GetCmdArg(argnum, buffer, sizeof(buffer));
+	return StringToFloat(buffer);
 }
 
 /**
@@ -731,7 +749,7 @@ stock int ItemDrawBool(bool value)	{
 
 /**
  *	Retrieves the string value via integer.
- *	This value is passed through as a string ing the StringMap array handle.
+ *	This value is passed through as a string to the StringMap array handle.
  *
  *	@param	trie	The StringMap array handle.
  *	@param	value	The value to retrieve value from.
