@@ -1030,15 +1030,23 @@ stock bool SetClientHideHud(int client, int flags)	{
  *
  *	@error	If no valid users are found, this returns empty.
  */
-stock ArrayList FindClientsByPlayername(const char[] playername, bool nobots=false)	{
+stock ArrayList FindClientsByPlayername(const char[] playername)	{
 	ArrayList list = new ArrayList(64);
 	char name[64];
 	
 	int found = 0;
-	for(int client = 1; client < MaxClients; client++)	{
-		if(Tklib_IsValidClient(client, nobots, false, false))	{
+	for(int client = 1; client <= MaxClients; client++)	{
+		if(Tklib_IsValidClient(client, _, _, false))	{
 			GetClientInfo(client, "name", name, sizeof(name));
-			if(StrContains(name, playername, false) != -1)	{
+			if(StrEqual(playername, "@bots", false) && IsFakeClient(client)) {
+				found++;
+				list.Push(client);
+			}
+			else if(StrEqual(playername, "@all", false)) {
+				found++;
+				list.Push(client);
+			}
+			else if(StrContains(name, playername, false) != -1)	{
 				found++;
 				list.Push(client);
 			}
@@ -1060,7 +1068,7 @@ stock ArrayList FindClientsByTeam(any team, bool nobots=false)	{
 	ArrayList list = new ArrayList(64);
 	
 	int found = 0;
-	for(int client = 1; client < MaxClients; client++)	{
+	for(int client = 1; client <= MaxClients; client++)	{
 		if(Tklib_IsValidClient(client, nobots, false, false))	{
 			if(GetClientTeam(client) == team)	{
 				found++;

@@ -2282,15 +2282,38 @@ stock int TF2_CreateViewmodel()	{
 }
 
 /**
- *	Returns if the client is in the class.
+ *	Returns if the user is in the class.
  *
  *	@param	client	The users index.
  *	@param	class	The class to check.
  *
- *	@error	If the client is invalid, this returns false.
+ *	@error	If the user is invalid, this returns false.
  */
 stock bool TF2_IsClientClass(int client, TFClassType class) {
 	return Tklib_IsValidClient(client, _, true) ? (TF2_GetPlayerClass(client) == class) : false;
+}
+
+/**
+ *	Returns the users current desired class.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns TFClass_Unknown.
+ */
+stock TFClassType TF2_GetClientDesiredClass(int client) {
+	int desired;
+	return((desired = GetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass") != -1) ? view_as<TFClassType>(desired) : TFClass_Unknown);
+}
+
+/**
+ *	Set the users current desired class.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool TF2_SetClientDesiredClass(int client, TFClassType class) {
+	return SetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass", class);
 }
 
 #endif
