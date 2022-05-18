@@ -11,6 +11,7 @@ TF2_GetFlagTypeName[][] = {"None","Picked up","Captured","Defended","Dropped","C
 TF2_GetGameTypeName[][] = {"Unknown","Capture-The-Flag","Capture Points","Payload / Payload Race","Arena","Unknown","Unknown","Passball"},
 TF2_GetCritTypeName[][] = {"None","Mini-Crit","Crit"},
 TF2_GetClassTypeName[][] = {"Unknown","Scout","Sniper","Soldier","Demoman","Medic","Heavy","Pyro","Spy","Engineer","Civilian"},
+TF2_GetClassTypeNameLC[][] = {"unknown","scout","sniper","soldier","demoman","medic","heavy","pyro","spy","engineer","civilian"},
 TF2_GetBuildingTypeName[][] = {"Unknown/Not a Building","Dispenser","Sentrygun","Teleporter Entrance","Teleporter Exit","Mini-Sentry","Sapper"},
 TF2_GetRobotPlayerModel[][] = {"","models/bots/scout/bot_scout.mdl","models/bots/sniper/bot_sniper.mdl","models/bots/soldier/bot_soldier.mdl","models/bots/demoman/bot_demoman.mdl","models/bots/medic/bot_medic.mdl","models/bots/heavy/bot_heavy.mdl","models/bots/pyro/bot_pyro.mdl","models/bots/spy/bot_spy.mdl","models/bots/engineer/bot_engineer.mdl"},
 TF2_GetDefaultPlayerModel[][] = {"","models/player/scout.mdl","models/player/sniper.mdl","models/player/soldier.mdl","models/player/demoman.mdl","models/player/medic.mdl","models/player/heavy.mdl","models/player/pyro.mdl","models/player/spy.mdl","models/player/engineer.mdl"},
@@ -19,7 +20,13 @@ TF2_GetStockWeaponTypeClassnameSecondary[][] = {"","tf_weapon_pistol_scout","tf_
 TF2_GetStockWeaponTypeClassnameMelee[][] = {"","tf_weapon_bat","tf_weapon_club","tf_weapon_shovel","tf_weapon_bottle","tf_weapon_bonesaw","tf_weapon_fists","tf_weapon_fireaxe","tf_weapon_knife","tf_weapon_wrench"},
 TF2_GetPDATypeClassname[][] = {"","","","","","","","","tf_weapon_pda_spy","tf_weapon_pda_engineer_build"},
 TF2_GetPDA2TypeClassname[][] = {"","","","","","","","","tf_weapon_invis","tf_weapon_pda_engineer_destroy"},
-TF2_GetPDA3TypeClassname[][] = {"","","","","","","","","","tf_weapon_builder"};
+TF2_GetPDA3TypeClassname[][] = {"","","","","","","","","","tf_weapon_builder"},
+TF2_GetSlotName[][] = {"Primary","Secondary","Melee","Construction PDA / Disguise Kit","Demolition PDA / Invis Watch","Slot5","Slot6","Slot7","Slot8","Slot9","Slot10"};
+
+const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
+const TFTeam TFTeam_Green = view_as<TFTeam>(4);
+const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
+const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
 
 //TF2 Offsets, will be updated as frequently as possible.
 enum {
@@ -109,12 +116,14 @@ enum TFMethod {
 }
 
 enum TFGameType	{
-	TFGameType_Unknown	= 0,
-	TFGameType_CTF		= 1,
-	TFGameType_CP		= 2,
-	TFGameType_PL		= 3,
-	TFGameType_Arena	= 4,
-	TFGameType_PassBall	= 7
+	TFGameType_Unknown = 0,
+	TFGameType_CTF = 1,
+	TFGameType_CP = 2,
+	TFGameType_PL = 3,
+	TFGameType_Arena = 4,
+	TFGameType_MvM = 5, /*?*/
+	TFGameType_RD = 6, /*?*/
+	TFGameType_PassBall = 7
 }
 
 /* See event "halloween_boss_killed" for more info */
@@ -1450,43 +1459,43 @@ stock void TF2_TurnAustralium(any weapon)	{
 stock bool TF2_GetKillstreakerEffectName(int defindex, char[] buffer, int maxlen)	{
 	switch(defindex)	{
 		/* Fire Horns. */
-		case 2002:	{
+		case 2002: {
 			strcopy(buffer, maxlen, "Fire Horns");
 			return true;
 		}
 		
 		/* Cerebral Discharge. */
-		case 2003:	{
+		case 2003: {
 			strcopy(buffer, maxlen, "Cerebral Discharge");
 			return true;
 		}
 		
 		/* Tornado. */
-		case 2004:	{
+		case 2004: {
 			strcopy(buffer, maxlen, "Tornado");
 			return true;
 		}
 		
 		/* Flames. */
-		case 2005:	{
+		case 2005: {
 			strcopy(buffer, maxlen, "Flames");
 			return true;
 		}
 		
 		/* Singularity. */
-		case 2006:	{
+		case 2006: {
 			strcopy(buffer, maxlen, "Singularity");
 			return true;
 		}
 		
 		/* Incinerator. */
-		case 2007:	{
+		case 2007: {
 			strcopy(buffer, maxlen, "Incinerator");
 			return true;
 		}
 		
 		/* Hypno-Beam. */
-		case 2008:	{
+		case 2008: {
 			strcopy(buffer, maxlen, "Hypno-Beam");
 			return true;
 		}
@@ -1563,14 +1572,14 @@ stock bool TF2_GetKillstreakerSheenEffectName(int defindex, char[] buffer, int m
  *
  *	@error				Invalid entity index or attribute name will return -1.0.
  */
-stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) 	{
+stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) {
 	if(!IsValidEntityEx(entity))
 		return -1.0;
 	
 	int indice[16];
 	float value[16];
 	
-	for(int i = 0; i < TF2Attrib_GetSOCAttribs(entity, indice, value); i++) 	{
+	for(int i = 0; i < TF2Attrib_GetSOCAttribs(entity, indice, value); i++) {
 		if(indice[i] == defindex) 
 			return value[i];
 	}
@@ -1586,12 +1595,12 @@ stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) 	{
  *
  *	@noreturn.
  */
-stock void TF2_TurnDefaultDefIndexToUpgraded(int weapon)	{
+stock void TF2_TurnDefaultDefIndexToUpgraded(int weapon) {
 	// Fix the default weapons to be forced as an 'upgraded' variant so they can be festivized variant, be australium, have war paint, etc.
 	if(!IsValidEntityEx(weapon))
 		return;
 	
-	switch(GetEntityDefinitionIndex(weapon))	{
+	switch(GetEntityDefinitionIndex(weapon)) {
 		case 0: SetEntityDefinitionIndex(weapon, 190);
 		case 1: SetEntityDefinitionIndex(weapon, 191);
 		case 2: SetEntityDefinitionIndex(weapon, 192);
@@ -1629,7 +1638,7 @@ stock void TF2_TurnDefaultDefIndexToUpgraded(int weapon)	{
  *
  *	@return	If the warpaint is valid, this returns true. False otherwise.
  */
-stock bool TF2_IsValidWarPaint(int defindex)	{
+stock bool TF2_IsValidWarPaint(int defindex) {
 	switch(defindex)	{
 		case 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,
 		15,16,17,18,19,20,21,22,23,24,25,26,27,
@@ -1662,8 +1671,8 @@ stock bool TF2_IsValidWarPaint(int defindex)	{
  *
  *	@noreturn.
  */
-stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen)	{
-	switch(defindex)	{
+stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen) {
+	switch(defindex) {
 		//First wave of warpaints, by default weapon-locked.
 		//================================================//
 		// Concealed Killer Collection.
@@ -1890,7 +1899,7 @@ stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen)	{
  *
  *	@return	Returns the taunt definition index. -1 if invalid user or 0 if no taunt.
  */
-stock int TF2_GetClientActiveTauntDefinitionIndex(int client)	{
+stock int TF2_GetClientActiveTauntDefinitionIndex(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_iTauntItemDefIndex");
 }
 
@@ -1903,8 +1912,8 @@ stock int TF2_GetClientActiveTauntDefinitionIndex(int client)	{
  *
  *	@noreturn.
  */
-stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen)	{
-	switch(defindex)	{
+stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen) {
+	switch(defindex) {
 		case 1315860: strcopy(buffer, maxlen, "A Distinctive Lack Of Blue");
 		case 2960676: strcopy(buffer, maxlen, "After Eight");
 		case 3100495: strcopy(buffer, maxlen, "A Colour Similiar To Slate");
@@ -2044,7 +2053,7 @@ stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex)	{
  *	@return	If valid, returns true. Else returns false.
  */
 stock bool TF2_IsValidExplosiveWeaponDefindex(int defindex)	{
-	switch(defindex)	{
+	switch(defindex) {
 		case 18,19,20,25,205,206,207,127,130,131,228,237,265,308,
 		405,406,414,441,513,608,658,661,730,737,797,800,806,
 		809,886,889,895,898,904,907,913,916,962,965,971,974,
@@ -2314,6 +2323,29 @@ stock TFClassType TF2_GetClientDesiredClass(int client) {
  */
 stock bool TF2_SetClientDesiredClass(int client, TFClassType class) {
 	return SetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass", class);
+}
+
+/**
+ *	Returns the default health for the TFClassType.
+ *
+ *	@error	If the class is invalid, this returns -1.
+ */
+stock int TF2_GetClassDefaultHealth(TFClassType class) {
+	int health = -1;
+	
+	switch(class) {
+		case TFClass_Scout: health = 125;
+		case TFClass_Soldier: health = 200;
+		case TFClass_Pyro: health = 175;
+		case TFClass_DemoMan: health = 175;
+		case TFClass_Heavy: health = 300;
+		case TFClass_Engineer: health = 125;
+		case TFClass_Medic: health = 150;
+		case TFClass_Sniper: health = 125;
+		case TFClass_Spy: health = 125;
+	}
+	
+	return health;
 }
 
 #endif

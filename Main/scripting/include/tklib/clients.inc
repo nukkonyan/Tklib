@@ -896,7 +896,7 @@ stock void GetClientNameTeamString(int client, char[] buffer, int maxlen)	{
 	}, TeamColour_CSGO[][] = {
 		"{grey}",
 		"{grey}",
-		"{orange}",
+		"{yellow}",
 		"{blue}"
 	}, TeamColour_L4D[][] = {
 		"{grey}",

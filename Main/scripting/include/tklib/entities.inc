@@ -228,6 +228,29 @@ stock bool GetEntityClassnameEx(int entity, char[] clsname, int maxlength)	{
 }
 
 /**
+ *	Returns the entity's parent attachment.
+ *
+ *	@param	entity	Entity index.
+ *	@param	parent	Entity index to parent.
+ *
+ *	@error	If the entities is invalid, this returns false.
+ */
+stock bool SetEntityParentAttachment(int entity, any parent)	{
+	return SetEntPropEx(entity, Prop_Send, "m_iParentAttachment", parent);
+}
+
+/**
+ *	Returns the entity's parent attachment.
+ *
+ *	@param	entity	Entity index.
+ *
+ *	@error	If the entity is invalid, this returns -1.
+ */
+stock int GetEntityParentAttachment(int entity)	{
+	return GetEntPropEx(entity, Prop_Send, "m_iParentAttachment");
+}
+
+/**
  *	Returns the entity's parent entity.
  *
  *	@param	entity	Entity index.
@@ -236,7 +259,7 @@ stock bool GetEntityClassnameEx(int entity, char[] clsname, int maxlength)	{
  *	@error	If the entities is invalid, this returns false.
  */
 stock bool SetEntityParentEntity(int entity, any parent)	{
-	return SetEntPropEx(entity, Prop_Send, "m_iParentAttachment", parent);
+	return SetEntPropEntEx(entity, Prop_Data, "m_hParent", parent);
 }
 
 /**
@@ -247,7 +270,7 @@ stock bool SetEntityParentEntity(int entity, any parent)	{
  *	@error	If the entity is invalid, this returns -1.
  */
 stock int GetEntityParentEntity(int entity)	{
-	return GetEntPropEx(entity, Prop_Send, "m_iParentAttachment");
+	return GetEntPropEntEx(entity, Prop_Data, "m_hParent");
 }
 
 /**
@@ -1218,6 +1241,7 @@ methodmap Entity __nullable__	{
 		return GetEntityDistance(view_as<int>(this), target);
 	}
 	
+	#if defined _tf2_included
 	/**
 	 *	The entity's quality. [TF2]
 	 *
@@ -1253,6 +1277,7 @@ methodmap Entity __nullable__	{
 			return TF2_GetEntityLevel(view_as<int>(this));
 		}
 	}
+	#endif
 }
 
 #endif

@@ -751,7 +751,7 @@ stock int ItemDrawBool(bool value)	{
  *	Retrieves the string value via integer.
  *	This value is passed through as a string to the StringMap array handle.
  *
- *	@param	trie	The StringMap array handle.
+ *	@param	map		The StringMap array handle.
  *	@param	value	The value to retrieve value from.
  *
  *	@error	If the handle is invalid, this returns false.
@@ -763,6 +763,138 @@ stock bool GetTrieStringInt(Handle map, int key, char[] value, int max_size, int
 	char[] val = new char[64];
 	Format(val, 64, "%i", key);
 	return view_as<StringMap>(map).GetString(val, value, max_size, size);
+}
+
+/**
+ *	Retrieves the integer value from a value passed as string via integer.
+ *	This value is passed through as a string to the StringMap array handle.
+ *
+ *	@param	map		The StringMap array handle.
+ *	@param	value	The value to retrieve value from.
+ *
+ *	@error	If the handle is invalid, this returns -1.
+ */
+stock int GetTrieStringIntEx(Handle map, int key, int &size=0)	{
+	if(map == null)
+		return -1;
+	
+	char[] buffer = new char[96];
+	char[] val = new char[64];
+	Format(val, 64, "%i", key);
+	view_as<StringMap>(map).GetString(val, buffer, 96, size);
+	return StringToInt(buffer);
+}
+
+/**
+ *	Set a string via integer in the map, either inserting a new entry or replacing and old one.
+ *	This value is passed through as a string to the StringMap array handle.
+ *
+ *	@param	map			The StringMap array handle.
+ *	@param	key			Key string via integer.
+ *	@param	value		String via integer to store.
+ *	@param	replace		If false, operation will fail if they key is already set.
+ *
+ *	@return	True on success, false on failure.
+ *
+ *	@error	If the handle is invalid, this returns false.
+ */
+stock bool SetTrieStringInt(Handle map, int key, int value, bool replace=true) {
+	if(map == null)
+		return false;
+	
+	char[] fmt = new char[64];
+	char[] val = new char[64];
+	Format(fmt, 64, "%i", key);
+	Format(val, 64, "%i", value);
+	return view_as<StringMap>(map).SetString(fmt, val, replace);
+}
+
+/**
+ *	Set a string in the map, either inserting a new entry or replacing and old one.
+ *
+ *	@param	map			The StringMap array handle.
+ *	@param	key			Key string.
+ *	@param	value		String to store.
+ *	@param	replace		If false, operation will fail if they key is already set.
+ *	@param	...			Additional key string parameters.
+ *	@param	...			Additional value string parameters.
+ *
+ *	@return	True on success, false on failure.
+ *
+ *	@error	If the handle is invalid, this returns false.
+ */
+stock bool SetTrieStringEx(Handle map, const char[] key, const char[] value, bool replace=true, any ..., any ...) {
+	if(map == null)
+		return false;
+	
+	char[] fmt = new char[128];
+	char[] val = new char[128];
+	VFormat(fmt, 128, key, 5);
+	VFormat(val, 128, value, 6);
+	return view_as<StringMap>(map).SetString(fmt, val, replace);
+}
+
+/**
+ *	Returns if the string contains an integer.
+ *
+ *	@param	str		The string.
+ *	@param	value	The integer to check.
+ */
+stock bool StrContainsInt(const char[] str, int value) {
+	char fmt[96];
+	Format(fmt, sizeof(fmt), "%i", value);
+	
+	return view_as<bool>(StrContains(str, fmt, false) != -1);
+}
+
+/**
+ *	Returns if the ArrayList handle is empty.
+ *
+ *	@params	array	The ArrayList handle.
+ *
+ *	@error	If the handle is invalid, this returns true.
+ */
+stock bool IsArrayEmpty(ArrayList array) {
+	if(array == null)
+		return true;
+	
+	return view_as<bool>(array.Length == 0);
+}
+
+/**
+ *	Returns if the entity is equal to the entity classname.
+ *
+ *	@param	entity	The entity index.
+ *	@param	clsname	The entity classname.
+ *
+ *	@return	If matched, returns true. False otherwise.
+ *
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool StrEqualEntity(int entity, const char[] clsname) {
+	if(!IsValidEntityEx(entity))
+		return false;
+	
+	char temp[64];
+	return view_as<bool>(GetEntPropStringEx(entity, Prop_Data, "m_iClassname", temp, sizeof(temp)) && StrEqual(temp, clsname));
+}
+
+/**
+ *	Returns if the entity contains the entity classname
+ *
+ *	@param	entity	The entity index.
+ *	@param	clsname	The entity classname.
+ *
+ *	@return	If containing, returns true. False otherwise.
+ *
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool StrContainsEntity(int entity, const char[] clsname) {
+	if(!IsValidEntityEx(entity))
+		return false;
+	
+	char temp[64];
+	return view_as<bool>(GetEntPropStringEx(entity, Prop_Data, "m_iClassname", temp, sizeof(temp) && StrContains(temp, clsname, false) != -1));
 }
 
 #endif

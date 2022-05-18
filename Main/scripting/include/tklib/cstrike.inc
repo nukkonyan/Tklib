@@ -3,94 +3,87 @@
 //==========================================//
 #if !defined _tklib_no_cstrike
 
-stock char CSS_GetTeamStringName[][] = {
-	"{grey}Unassigned{default}",
-	"{grey}Spectators{default}",
-	"{red}Terrorists{default}",
-	"{blue}Counter-Terrorists{default}"
-}, CSS_GetTeamColour[][] = {
-	"{grey}",
-	"{grey}",
-	"{red}",
-	"{blue}"
-};
+stock char
+CSS_GetTeamStringName[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{red}Terrorists{default}","{blue}Counter-Terrorists{default}"},
+CSS_GetTeamColour[][] = {"{grey}","{grey}","{red}","{blue}"},
+CS_TeamName[][] = {"Unassigned","Spectators","Terrorists","Counter-Terrorists"};
 
 //CS Slots
-enum	CSSlot	{
-	CSSlot_Primary	=	0,
-	CSSlot_Secondary=	1,
-	CSSlot_Knife	=	2,
-	CSSlot_Grenade	=	3,
-	CSSlot_C4		=	4,
-	CSSlot_Shield	=	11
+enum CSSlot {
+	CSSlot_Primary = 0,
+	CSSlot_Secondary = 1,
+	CSSlot_Knife = 2,
+	CSSlot_Grenade = 3,
+	CSSlot_C4 = 4,
+	CSSlot_Shield = 11
 }
 
-enum	CSWeaponType	{
-	CSWeaponType_Unknown	=	-1,
-	CSWeaponType_Knife		=	0,
-	CSWeaponType_Pistol		=	1,
-	CSWeaponType_SMG		=	2,
-	CSWeaponType_Rifle		=	3,
-	CSWeaponType_Shotgun	=	4,
-	CSWeaponType_Sniper		=	5,
-	CSWeaponType_MachineGun	=	6,
-	CSWeaponType_C4			=	7,
-	CSWeaponType_Taser		=	8,
-	CSWeaponType_Grenade	=	9,
-	CSWeaponType_Healthshot	=	11
+enum CSWeaponType {
+	CSWeaponType_Unknown =	-1,
+	CSWeaponType_Knife = 0,
+	CSWeaponType_Pistol = 1,
+	CSWeaponType_SMG = 2,
+	CSWeaponType_Rifle = 3,
+	CSWeaponType_Shotgun = 4,
+	CSWeaponType_Sniper = 5,
+	CSWeaponType_MachineGun = 6,
+	CSWeaponType_C4 = 7,
+	CSWeaponType_Taser = 8,
+	CSWeaponType_Grenade = 9,
+	CSWeaponType_Healthshot = 11
 }
 
 //Might be combined with the csgo enum struct into one later on.
-enum	{
-	CSS_Weapon_Deagle		=	1,
-	CSS_Weapon_Glock		=	2,
-	CSS_Weapon_Ak47			=	3,
-	CSS_Weapon_Aug			=	4,
-	CSS_Weapon_AWP			=	5,
-	CSS_Weapon_Famas		=	6,
-	CSS_Weapon_G3SG1		=	7,
-	CSS_Weapon_Galil		=	8,
-	CSS_Weapon_M249			=	9,
-	CSS_Weapon_M4A1			=	10,
-	CSS_Weapon_Mac10		=	11,
-	CSS_Weapon_P90			=	12,
-	CSS_Weapon_MP5			=	13,
-	CSS_Weapon_MP5Navy		=	13,
-	CSS_Weapon_UMP45		=	14,
-	CSS_Weapon_XM1014		=	15,
-	CSS_Weapon_M3			=	16,
-	CSS_Weapon_USP			=	17,
-	CSS_Weapon_P228			=	18,
-	CSS_Weapon_SG550		=	19,
-	CSS_Weapon_Scar20		=	19,
-	CSS_Weapon_SG552		=	20,
-	CSS_Weapon_Krieg		=	20,
-	CSS_Weapon_SSG08		=	21,
-	CSS_Weapon_Scout		=	21,
-	CSS_Weapon_Knife		=	22,
-	CSS_Grenade_Flashbang	=	23,
-	CSS_Grenade_HEGrenade	=	24,
-	CSS_Grenade_SmokeGrenade=	25,
-	CSS_Weapon_C4			=	26
+enum {
+	CSS_Weapon_Deagle =	1,
+	CSS_Weapon_Glock = 2,
+	CSS_Weapon_Ak47 = 3,
+	CSS_Weapon_Aug = 4,
+	CSS_Weapon_AWP = 5,
+	CSS_Weapon_Famas = 6,
+	CSS_Weapon_G3SG1 = 7,
+	CSS_Weapon_Galil = 8,
+	CSS_Weapon_M249 = 9,
+	CSS_Weapon_M4A1 = 10,
+	CSS_Weapon_Mac10 = 11,
+	CSS_Weapon_P90 = 12,
+	CSS_Weapon_MP5 = 13,
+	CSS_Weapon_MP5Navy = 13,
+	CSS_Weapon_UMP45 =	14,
+	CSS_Weapon_XM1014 =	15,
+	CSS_Weapon_M3 =	16,
+	CSS_Weapon_USP = 17,
+	CSS_Weapon_P228 = 18,
+	CSS_Weapon_SG550 = 19,
+	CSS_Weapon_Scar20 = 19,
+	CSS_Weapon_SG552 = 20,
+	CSS_Weapon_Krieg = 20,
+	CSS_Weapon_SSG08 = 21,
+	CSS_Weapon_Scout = 21,
+	CSS_Weapon_Knife = 22,
+	CSS_Grenade_Flashbang = 23,
+	CSS_Grenade_HEGrenade = 24,
+	CSS_Grenade_SmokeGrenade = 25,
+	CSS_Weapon_C4 =	26
 }
 
 //I made this because TFTeam enum exists and cs doesn't have it :)
-enum	CSTeam	{
-	CSTeam_Invalid		=	-1,
-	CSTeam_Unassigned	=	0,
-	CSTeam_Spectator	=	1,
-	CSTeam_Terrorist	=	2,
-	CSTeam_T			=	2,
-	CSTeam_CTerrorist	=	3,
-	CSTeam_CT			=	3
+enum CSTeam {
+	CSTeam_Invalid = -1,
+	CSTeam_Unassigned = 0,
+	CSTeam_Spectator = 1,
+	CSTeam_Terrorist = 2,
+	CSTeam_T = 2,
+	CSTeam_CTerrorist = 3,
+	CSTeam_CT = 3
 }
 
 //Bombsites
-enum	Bombsite	{
-	Bombsite_Invalid	=	-1,
-	Bombsite_A			=	1,
-	Bombsite_B			=	2,
-	Bombsite_C			=	3
+enum Bombsite {
+	Bombsite_Invalid = -1,
+	BombsiteA = 1,
+	BombsiteB = 2,
+	BombsiteC = 3
 }
 
 #define	CSSlot(%1) view_as<CSSlot>(%1)
@@ -163,7 +156,7 @@ stock CSTeam CS_GetClientPendingTeam(int client)	{
  *	Returns if the warmup is currently ongoing
  */
 stock bool CS_IsWarmupRound()	{
-	return (GameRules_GetProp("m_bWarmupPeriod") == 1);
+	return view_as<bool>(GameRules_GetProp("m_bWarmupPeriod"));
 }
 #else
 #error CS_IsWarmupRound() requires SDKTools
@@ -211,7 +204,7 @@ stock void CS_SetMatchPaused(bool pause)	{
  *	Returns if the bomb is planted. (CS:GO Only)
  */
 stock bool CS_IsBombPlanted()	{
-	return (GameRules_GetProp("m_bBombPlanted"));
+	return view_as<bool>(GameRules_GetProp("m_bBombPlanted"));
 }
 #else
 #error CS_IsWarmupRound() requires SDKTools
@@ -460,8 +453,8 @@ stock bool CS_RemovePlayerWeaponSlot(int client, CSSlot slot)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool CS_GiveClientWeapon(int client, char[] weapon, CSSlot slot)	{
-	if(IsClientInGame(client) && IsPlayerAlive(client))	{
+stock bool CS_GiveClientWeapon(int client, char[] weapon, CSSlot slot) {
+	if(Tklib_IsValidClient(client, _, true)) {
 		CS_ClientRemoveWeaponSlot(client, slot);
 		GivePlayerItem(client, weapon);
 		return true;
@@ -479,7 +472,7 @@ stock bool CS_GiveClientWeapon(int client, char[] weapon, CSSlot slot)	{
  *	@error	If the user is invalid, this returns -1.
  */
 stock int CS_GetPlayerWeaponSlot(int client, CSSlot slot)	{
-	return Tklib_IsValidClient(client, false, true) ? GetPlayerWeaponSlot(client, int(slot)):-1;
+	return Tklib_IsValidClient(client, false, true) ? GetPlayerWeaponSlot(client, view_as<int>(slot)):-1;
 } 
 
 /**
@@ -549,7 +542,7 @@ stock bool CS_IsWeaponInBurstMode(any weapon)	{
 stock void CS_GetWeaponName(const char[] weapon, char[] output, int maxlen)	{
 	//Rifles
 	if(StrEqual(weapon,	"weapon_ak47"))	//They talk about my 1taps, aiming is so easy
-		strcopy(output, maxlen, "AK-47");
+		strcopy(output, maxlen, "Ak-47");
 	if(StrEqual(weapon,	"weapon_m4a1_silencer"))
 		strcopy(output, maxlen, "M4A1 Silenced");
 	if(StrEqual(weapon,	"weapon_galilar"))
@@ -719,12 +712,12 @@ stock Bombsite CS_GetBombsite(int entity)	{
 		GetEntPropVector(site, Prop_Send, "m_vecMax", VecMax);
 		
 		if(VecMin[0] <= Site_A[0] <= VecMax[0] && VecMin[1] <= Site_A[1] <= VecMax[1] && VecMin[2] <= Site_A[2] <= VecMax[2])
-			return Bombsite_A;
+			return BombsiteA;
 		else if(VecMin[0] <= Site_B[0] <= VecMax[0] && VecMin[1] <= Site_B[1] <= VecMax[1] && VecMin[2] <= Site_B[2] <= VecMax[2])
-			return Bombsite_B;
+			return BombsiteB;
 	}
 	
-	return Bombsite_C;
+	return BombsiteC;
 }
 
 /**
@@ -893,11 +886,11 @@ stock int CS_GetPriceFromWeapon(const char[] weapon)	{
 	char folder[32];
 	GetGameFolderName(folder, sizeof(folder));
 	
-	switch(GetEngineVersion())	{
-		case	Engine_CSS:	{
+	switch(GetEngineVersion()) {
+		case Engine_CSS:	{
 			/* To be added */
 		}
-		case	Engine_CSGO:	{
+		case Engine_CSGO:	{
 			switch(StrEqual(folder, "csgo"))	{
 				/* CS:GO */
 				case	true:	{

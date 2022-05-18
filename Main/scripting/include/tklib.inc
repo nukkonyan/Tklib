@@ -264,3 +264,4 @@ enum boolean	{}
 #include <tklib/tf2>
 #include <tklib/usermessages>
 #include <tklib/weapons>
+#include <tklib/handles>

@@ -11,18 +11,18 @@
  *	@error	If the user is invalid, this returns false.
  */
 stock bool RemoveAllWeapons(int client)	{
-	if(Tklib_IsValidClient(client, _, true))	{
+	if(Tklib_IsValidClient(client, _, true)) {
 		for(int i = 0; i < 10; i++)	{
 			int wep = -1;
-			if((wep = GetPlayerWeaponSlot(client, i)) != -1)	{
+			if((wep = GetPlayerWeaponSlot(client, i)) != -1) {
 				RemovePlayerItem(client, wep);
 				RemoveEdict(wep);
 			}
 		}
-		return	true;
+		return true;
 	}
 	
-	return	false;
+	return false;
 }
 
 /**
