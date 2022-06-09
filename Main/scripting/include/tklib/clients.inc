@@ -1027,10 +1027,11 @@ stock bool SetClientHideHud(int client, int flags)	{
  *	The array needs to be manually destroyed.
  *
  *	@param	playername	The playername to search.
+ *	@param	caller		The calling user index, for '@me' targeting.
  *
  *	@error	If no valid users are found, this returns empty.
  */
-stock ArrayList FindClientsByPlayername(const char[] playername)	{
+stock ArrayList FindClientsByPlayername(const char[] playername, int caller=-1)	{
 	ArrayList list = new ArrayList(64);
 	char name[64];
 	
@@ -1041,6 +1042,10 @@ stock ArrayList FindClientsByPlayername(const char[] playername)	{
 			if(StrEqual(playername, "@bots", false) && IsFakeClient(client)) {
 				found++;
 				list.Push(client);
+			}
+			else if(caller != -1 && (StrEqual(playername, "@me", false) && Tklib_IsValidClient(caller, true))) {
+				found++;
+				list.Push(caller);
 			}
 			else if(StrEqual(playername, "@all", false)) {
 				found++;

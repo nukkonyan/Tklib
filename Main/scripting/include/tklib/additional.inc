@@ -32,7 +32,7 @@ OnOffEx[][] = {
 enum boolEx {
 	False = 0,
 	True = 1,
-	Mayne = 2
+	Maybe = 2
 }
 
 /**
@@ -40,7 +40,7 @@ enum boolEx {
  *
  *	@param adminflags	The adminflag integer.
  */
-stock AdminFlag AdmflagToAdminFlag(int adminflags)	{
+stock AdminFlag AdmflagToAdminFlag(int adminflags) {
 	AdminFlag adminflag;
 	
 	switch(adminflags)	{
@@ -75,7 +75,7 @@ stock AdminFlag AdmflagToAdminFlag(int adminflags)	{
  *
  *	@param adminflags	The AdminFlag flag.
  */
-stock int AdminFlaglagToAdmflag(AdminFlag adminflags)	{
+stock int AdminFlaglagToAdmflag(AdminFlag adminflags) {
 	int adminflag;
 	
 	switch(adminflags)	{
@@ -114,7 +114,7 @@ stock int AdminFlaglagToAdmflag(AdminFlag adminflags)	{
  *
  *	@return	Integer of the returned argument.
  */
-stock int GetCmdInt(int argnum)	{
+stock int GetCmdInt(int argnum) {
 	char buffer[256];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
 	return StringToInt(buffer);
@@ -129,7 +129,7 @@ stock int GetCmdInt(int argnum)	{
  *
  *	@return	Integer of the returned argument.
  */
-stock bool GetCmdBool(int argnum)	{
+stock bool GetCmdBool(int argnum) {
 	char buffer[256];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
 	return view_as<bool>(StringToInt(buffer));
@@ -144,7 +144,7 @@ stock bool GetCmdBool(int argnum)	{
  *
  *	@return	Integer of the returned argument.
  */
-stock float GetCmdFloat(int argnum)	{
+stock float GetCmdFloat(int argnum) {
 	char buffer[256];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
 	return StringToFloat(buffer);
@@ -156,7 +156,7 @@ stock float GetCmdFloat(int argnum)	{
  *	@param value	Float to convert.
  *	@return			Integer result, or 0 on error. 
  */
-stock int FloatToInt(float value)	{
+stock int FloatToInt(float value) {
 	char buffer[96];
 	FloatToString(value, buffer, sizeof(buffer));
 	return StringToInt(buffer);
@@ -170,7 +170,7 @@ stock int FloatToInt(float value)	{
  *	@param	substr			Substring to find inside the original string.
  *	@param	caseSensitive	if true (by default), search is case sensitive. If false, search is case insensitive.
  *	*/
-stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensitive=true)	{
+stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensitive=true) {
 	if(StrContains(str, substr, caseSensitive) > -1)
 		return true;
 	return false;
@@ -183,7 +183,7 @@ stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensiti
  *	@param		persistent		If true, it will try to use a previous persistent connection.
  *	@param		debug			If true, it will show message if the connection returned 'null' (Error) or if it succeeded.
  */
-stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool dbg=false)	{
+stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool dbg=false) {
 	char error[256];
 	Database database = SQL_Connect(confname, persistent, error, sizeof(error));
 	if(dbg)	{
@@ -199,7 +199,7 @@ stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool db
 /**
  *	Returns GetRandomInt(0, 1) in boolean.
  */
-stock bool GetRandomBool()	{
+stock bool GetRandomBool() {
 	return view_as<bool>(GetRandomInt(0, 1));
 }
 
@@ -212,7 +212,7 @@ stock bool GetRandomBool()	{
  *	@param	native2		Native 2.
  *	@param	func		Native callback.
  */
-stock void CreateNativeEx(const char[] native1, const char[] native2, NativeCall func)	{
+stock void CreateNativeEx(const char[] native1, const char[] native2, NativeCall func) {
 	CreateNative(native1, func);
 	CreateNative(native2, func);
 }
@@ -222,7 +222,7 @@ stock void CreateNativeEx(const char[] native1, const char[] native2, NativeCall
  *	Useful for cleaning up code and also for 2 natives that use same forward.
  *	Paired with CreateNativeEx.
  */
-stock void MarkNativeAsOptionalEx(const char[] native1, const char[] native2)	{
+stock void MarkNativeAsOptionalEx(const char[] native1, const char[] native2) {
 	MarkNativeAsOptional(native1);
 	MarkNativeAsOptional(native2);
 }
@@ -234,7 +234,7 @@ stock void MarkNativeAsOptionalEx(const char[] native1, const char[] native2)	{
  *	@param	name	The dynamic native name.
  *	@param	func	The dynamic native callback.
  */
-stock void CreateNativeEx2(const char[] name, NativeCall func)	{
+stock void CreateNativeEx2(const char[] name, NativeCall func) {
 	CreateNative(name, func);
 	MarkNativeAsOptional(name);
 }
@@ -249,7 +249,7 @@ stock void CreateNativeEx2(const char[] name, NativeCall func)	{
  *
  *	@return				Number of cells written.
  */
-stock int strcopyEx(char[] dest, int destLen, const char[] source, any...)	{
+stock int strcopyEx(char[] dest, int destLen, const char[] source, any...) {
 	char format[256];
 	strcopy(format, sizeof(format), source);
 	VFormat(format, sizeof(format), 4);
@@ -265,7 +265,7 @@ stock int strcopyEx(char[] dest, int destLen, const char[] source, any...)	{
  *	@param	value		The value to toggle.
  *	@return	Returns the new value.
  */
-stock bool AutoSwitch(bool value)	{
+stock bool AutoSwitch(bool value) {
 	switch(value)	{
 		case true: return false;
 		case false: return true;
@@ -565,13 +565,12 @@ stock Address GetNativeAddress(int param)	{
 	return view_as<Address>(GetNativeCell(param));
 }
 
-
 /**
  *	Returns if SourceBans is loaded.
  *
  *	@param	comms	If true, this checks if SourceComms of SourceBans is loaded instead.
  */
-stock bool IsSourceBansLoaded(bool comms = false)	{
+stock bool IsSourceBansLoaded(bool comms = false) {
 	switch(comms)	{
 		case true:	{
 			if(GetFeatureStatus(FeatureType_Native, "SourceComms_SetClientMute") == FeatureStatus_Available)
@@ -940,6 +939,18 @@ stock bool KillTimerEx(Handle timer, bool autoClose=false) {
  */
 stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[] description, int flags=0) {
 	return CreateConVar(name, defaultValue ? "1":"0", description, flags, true, 0.0, true, 1.0);
+}
+
+/**
+ *	Converts a string to any.
+ *
+ *	@param	str		String to convert.
+ *	@param	nBase	Numerical base to use.  10 is default.
+ *
+ *	@return			Any conversion of string, or 0 on failure.
+ */
+stock any StringToAny(const char[] str, int nBase=10) {
+	return view_as<any>(StringToInt(str, nBase));
 }
 
 #endif

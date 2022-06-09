@@ -31,6 +31,8 @@ const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
 #define MAX_TF2_WEAPON_DEFINITION_INDEX 30759
 #define MAX_TF2_CONDITION_ID 128
 
+stock char TFCond_Name[MAX_TF2_CONDITION_ID+1][192];
+
 //TF2 Offsets, will be updated as frequently as possible.
 enum {
 	TF2Offset_IsBaseCombatWeapon = 89,
@@ -2350,11 +2352,11 @@ stock int TF2_GetClassDefaultHealth(TFClassType class) {
 /**
  *	Returns the name of the TFCond.
  *
- *	@param	condition	TFCond number.
+ *	@param	condition	TFCond condition id.
  *	@param	buffer		Buffer to store in.
  *	@param	len			Max length of the buffer.
  */
-void TF2_GetConditionString(int condition, char[] buffer, int len)	{
+void TF2_GetConditionString(int condition, char[] buffer, int len) {
 	char description[192];
 	switch(condition) {
 		case 0: description = "Revving Minigun, Sniper Rifle. Gives zoomed/revved pose";
@@ -2488,7 +2490,17 @@ void TF2_GetConditionString(int condition, char[] buffer, int len)	{
 		case 128: description = "Used whenever a player gets teleported to Hell, does nothing applied but stops the gradual healing from the teleport when removed";
 	}
 	
-	FormatEx(buffer, sizeof(len), "%s", description);
+	strcopy(buffer, len, description);
+}
+
+/**
+ *	Prepares the string array TFCond_Name[] with its condition id name.
+ *
+ */
+stock void Tklib_PrepareTFCondName() {
+	for(int i = MAX_TF2_CONDITION_ID; i--;) {
+		TF2_GetConditionString(i, TFCond_Name[i], sizeof(TFCond_Name[]));
+	}
 }
 
 #endif
