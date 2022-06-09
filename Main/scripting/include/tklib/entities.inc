@@ -571,7 +571,7 @@ stock bool SetEntitySteamAccountID(int entity, int accountid)	{
 
 //Methodmap
 
-methodmap Entity __nullable__	{
+methodmap Entity __nullable__ {
 	/**
 	 *	Creates an entity by string name but does not spawn it (see DispatchSpawn).
 	 *	If ForceEdictIndex is not -1, then it will use an edict by that index. If the index is
@@ -1086,6 +1086,7 @@ methodmap Entity __nullable__	{
 		return GetEntityRenderMode(view_as<int>(this));
 	}
 	
+	#if !defined _tklib_no_sdktools
 	public bool AcceptInput(const char[] input, any activator=-1, any caller=-1, int outputid=0)
 	{
 		return AcceptEntityInput(view_as<int>(this), input, activator, caller, outputid);
@@ -1105,10 +1106,12 @@ methodmap Entity __nullable__	{
 	{
 		ActivateEntity(view_as<int>(this));
 	}
+	
 	public void Extinguish()
 	{
 		ExtinguishEntity(view_as<int>(this));
 	}
+	#endif
 	
 	//Put 'any' to support team enums.
 	property any Team
@@ -1128,24 +1131,29 @@ methodmap Entity __nullable__	{
 		return	IsEntityClassnameMatching(view_as<int>(this), classname, partialMatch);
 	}
 	
+	#if !defined _tklib_no_sdktools
 	public void Ignite(float time, bool npc=false, float size=0.0, bool level=false)
 	{
 		IgniteEntity(view_as<int>(this), time, npc, size, level);
 	}
+	
 	
 	public void Teleport(const float origin[3]=NULL_VECTOR, const float angles[3]=NULL_VECTOR, const float velocity[3]=NULL_VECTOR)
 	{
 		TeleportEntity(view_as<int>(this), origin, angles, velocity);
 	}
 	
+	
 	public void Kv(const char[] keyName, const char[] value)
 	{
 		DispatchKeyValue(view_as<int>(this), keyName, value);
 	}
+	
 	public void KvFloat(const char[] keyName, float value)
 	{
 		DispatchKeyValueFloat(view_as<int>(this), keyName, value);
 	}
+	
 	public void KvVec(const char[] keyName, const float vec[3])
 	{
 		DispatchKeyValueVector(view_as<int>(this), keyName, vec);
@@ -1155,6 +1163,7 @@ methodmap Entity __nullable__	{
 	{
 		return DispatchSpawn(view_as<int>(this));
 	}
+	#endif
 	
 	public bool IsNetworkable()
 	{
@@ -1217,6 +1226,7 @@ methodmap Entity __nullable__	{
 		}
 	}
 	
+	#if !defined _tklib_no_sdktools
 	public bool EquipWeapon(int client)
 	{
 		if(IsValidEntityEx(view_as<int>(this)))	{
@@ -1226,6 +1236,7 @@ methodmap Entity __nullable__	{
 		
 		return false;
 	}
+	#endif
 	
 	#if !defined _tklib_disable_weapons
 	public bool EquipWeaponEx(int client)

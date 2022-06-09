@@ -108,7 +108,7 @@ stock GameIdentifier IdentifyGame()	{
  *	@param	game_name	String buffer to store.
  *	@param	maxlen		The maximum length of the buffer.
  */
-stock void GetGameName(char[] game_name, int maxlen)	{
+stock void GetGameName(char[] game_name, int maxlen) {
 	switch(IdentifyGame())	{
 		case Game_Unknown: strcopy(game_name, maxlen, "Unknown Game");
 		case Game_SDK2006: strcopy(game_name, maxlen, "Source SDK Base 2006");
@@ -137,7 +137,7 @@ stock void GetGameName(char[] game_name, int maxlen)	{
 		case Game_TF2B: strcopy(game_name, maxlen, "Team Fortress 2: Beta");
 		case Game_TF2C: strcopy(game_name, maxlen, "Team Fortress 2: Classic");
 		case Game_TF2V: strcopy(game_name, maxlen, "Team Fortress 2: Vintage");
-		case Game_TF2OP: strcopy(game_name, maxlen, "Team Fortress 2: Open Fortress")
+		case Game_TF2OP: strcopy(game_name, maxlen, "Team Fortress 2: Open Fortress");
 		case Game_CSPromod: strcopy(game_name, maxlen, "Counter-Strike: Promod");
 	}
 }

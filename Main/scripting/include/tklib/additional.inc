@@ -29,6 +29,12 @@ OnOffEx[][] = {
 	"{green}On{default}"
 };
 
+enum boolEx {
+	False = 0,
+	True = 1,
+	Mayne = 2
+}
+
 /**
  *	Returns the AdminFlag from the ADMFLAG you specify.
  *
@@ -895,6 +901,45 @@ stock bool StrContainsEntity(int entity, const char[] clsname) {
 	
 	char temp[64];
 	return view_as<bool>(GetEntPropStringEx(entity, Prop_Data, "m_iClassname", temp, sizeof(temp) && StrContains(temp, clsname, false) != -1));
+}
+
+/**
+ *	Kills the timer handle.
+ *
+ *	@param	timer		Timer Handle to kill.
+ *	@param	autoClose	If autoClose is true, the data that was passed to CreateTimer() will
+ *						be closed as a handle if TIMER_DATA_HNDL_CLOSE was not specified.
+ *
+ *	@return	Returns wheter the procedure succeded.
+ *
+ *	@error	If invalid timer handle, returns false.
+ */
+stock bool KillTimerEx(Handle timer, bool autoClose=false) {
+	if(!timer)
+		return false;
+	
+	KillTimer(timer, autoClose);
+	return true;
+}
+
+/**
+ *	Creates a new console boolean variable.
+ *
+ *	@param	name			Name of new convar.
+ *	@param	defaultValue	The default boolean value of new convar.
+ *	@param	description		Optional description of the convar.
+ *	@param	flags			Optional bitstring of flags determining how the convar should be handled. See FCVAR_* constants for more details.
+ *	@param	hasMin			Optional boolean that determines if the convar has a minimum value.
+ *	@param	min				Minimum floating point value that the convar can have if hasMin is true.
+ *	@param	hasMax			Optional boolean that determines if the convar has a maximum value.
+ *	@param	max				Maximum floating point value that the convar can have if hasMax is true.
+ *
+ *	@return					A handle to the newly created convar. If the convar already exists, a handle to it will still be returned.
+ *
+ *	@error               Convar name is blank or is the same as an existing console command.
+ */
+stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[] description, int flags=0) {
+	return CreateConVar(name, defaultValue ? "1":"0", description, flags, true, 0.0, true, 1.0);
 }
 
 #endif

@@ -3,6 +3,8 @@
 //==========================================//
 #if !defined _tklib_no_csgo
 
+#define MAX_CSGO_WEP_LENGTH 16
+
 stock char
 CSGO_GetTeamStringName[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{orange}Terrorists{default}","{bluegrey}Counter-Terrorists{default}"},
 CSGO_GetTeamColour[][] = {"{grey}","{grey}","{orange}","{bluegrey}"};

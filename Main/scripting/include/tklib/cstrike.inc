@@ -158,11 +158,7 @@ stock CSTeam CS_GetClientPendingTeam(int client)	{
 stock bool CS_IsWarmupRound()	{
 	return view_as<bool>(GameRules_GetProp("m_bWarmupPeriod"));
 }
-#else
-#error CS_IsWarmupRound() requires SDKTools
-#endif
 
-#if !defined _tklib_no_sdktools
 /**
  *	If true, warmup will start, else will be ended. (CS:GO Only)
  *
@@ -171,22 +167,14 @@ stock bool CS_IsWarmupRound()	{
 stock void CS_SetWarmupRound(bool warmup)	{
 	GameRules_SetProp("m_bWarmupPeriod", warmup);
 }
-#else
-#error CS_IsWarmupRound() requires SDKTools
-#endif
 
-#if !defined _tklib_no_sdktools
 /**
  *	Returns if the match is currently paused/is in freezetime (CS:GO Only)
  */
 stock bool CS_IsMatchPaused()	{
 	return view_as<bool>(GameRules_GetProp("m_bMatchWaitingForResume") == 1);
 }
-#else
-#error CS_IsWarmupRound() requires SDKTools
-#endif
 
-#if !defined _tklib_no_sdktools
 /**
  *	Set if the match should be paused. (CS:GO Only)
  *
@@ -195,22 +183,14 @@ stock bool CS_IsMatchPaused()	{
 stock void CS_SetMatchPaused(bool pause)	{
 	GameRules_SetProp("m_bMatchWaitingForResume", pause);
 }
-#else
-#error CS_IsWarmupRound() requires SDKTools
-#endif
 
-#if !defined _tklib_no_sdktools
 /**
  *	Returns if the bomb is planted. (CS:GO Only)
  */
 stock bool CS_IsBombPlanted()	{
 	return view_as<bool>(GameRules_GetProp("m_bBombPlanted"));
 }
-#else
-#error CS_IsWarmupRound() requires SDKTools
-#endif
 
-#if !defined _tklib_no_sdktools
 /**
  *	Set if the bomb should be planted. (CS:GO Only)
  *
@@ -219,8 +199,6 @@ stock bool CS_IsBombPlanted()	{
 stock void CS_SetBombPlanted(bool planted)	{
 	GameRules_SetProp("m_bBombPlanted", planted);
 }
-#else
-#error CS_IsWarmupRound() requires SDKTools
 #endif
 
 /**
