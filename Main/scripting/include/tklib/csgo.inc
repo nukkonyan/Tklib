@@ -303,11 +303,11 @@ stock bool CSGO_SetWear(any entity, float wear) {
 /**
  *	Returns the wear.
  *
- *	@param	entity		Entity index.
+ *	@param	entity	Entity index.
  *
- *	@error	If the weapon is invalid or procedure failed, this returns false.
+ *	@error	If the entity is invalid or procedure failed, this returns false.
  */
-stock float CSGO_GetWeaponWear(any entity) {
+stock float CSGO_GetWear(any entity) {
 	return GetEntPropFloatEx(entity, Prop_Send, "m_flFallbackWear");
 }
 
@@ -321,11 +321,13 @@ stock int CSGO_GetCompetitive() {
 /**
  *	Set the matchmaking rank. [CS:GO]
  *
- *	@param	player_ent	The PlayerResource() entity. (OnThinkPost)
- *	@param	client	The target entity.
+ *	@param	player_ent			The PlayerResource() entity. (OnThinkPost)
+ *	@param	client				The target entity.
  *	@param	competitive_offset	The competitive ranking offset.
- *	@param	rank	The CSGORank rank.
- *	@param	ranktype	The CSGORankType rank type.
+ *	@param	rank				The CSGORank rank.
+ *	@param	ranktype			The CSGORankType rank type.
+ *
+ *	@noreturn
  */
 stock void CSGO_SetMatchmakingRank(int player_ent, int client, int competitive_offset, CSGORank rank, CSGORankType ranktype) {
 	SetEntData(player_ent, competitive_offset + client*4, view_as<int>(rank) + view_as<int>(ranktype));
@@ -364,196 +366,196 @@ stock bool CSGO_GetArmModel(int client, char[] buffer, int maxlen) {
  */
 stock int CSGO_GetWeaponDefindex(const char[] weapon) {
 	if(StrEqual(weapon, "weapon_ak47", false))
-		return	CSGO_Weapon_Ak47;
+		return CSGO_Weapon_Ak47;
 	
 	if(StrEqual(weapon, "weapon_m4a1", false))
-		return	CSGO_Weapon_M4A4;
+		return CSGO_Weapon_M4A4;
 	
 	if(StrEqual(weapon, "weapon_m4a1_silencer", false))
-		return	CSGO_Weapon_M4A1_S;
+		return CSGO_Weapon_M4A1_S;
 	
 	if(StrEqual(weapon, "weapon_galilar", false))
-		return	CSGO_Weapon_GalilAR;
+		return CSGO_Weapon_GalilAR;
 	
 	if(StrEqual(weapon, "weapon_famas", false))
-		return	CSGO_Weapon_Famas;
+		return CSGO_Weapon_Famas;
 	
 	if(StrEqual(weapon, "weapon_sg556", false))
-		return	CSGO_Weapon_SG556;
+		return CSGO_Weapon_SG556;
 	
 	if(StrEqual(weapon, "weapon_aug", false))
-		return	CSGO_Weapon_Aug;
+		return CSGO_Weapon_Aug;
 	
 	if(StrEqual(weapon, "weapon_ssg08", false))
-		return	CSGO_Weapon_SSG08;
+		return CSGO_Weapon_SSG08;
 	
 	if(StrEqual(weapon, "weapon_awp", false))
-		return	CSGO_Weapon_AWP;
+		return CSGO_Weapon_AWP;
 	
 	if(StrEqual(weapon, "weapon_scar20", false))
-		return	CSGO_Weapon_Scar20;
+		return CSGO_Weapon_Scar20;
 	
 	if(StrEqual(weapon, "weapon_g3sg1", false))
-		return	CSGO_Weapon_G3SG1;
+		return CSGO_Weapon_G3SG1;
 	
 	if(StrEqual(weapon, "weapon_nova", false))
-		return	CSGO_Weapon_Nova;
+		return CSGO_Weapon_Nova;
 	
 	if(StrEqual(weapon, "weapon_sawedoff", false))
-		return	CSGO_Weapon_SawedOff;
+		return CSGO_Weapon_SawedOff;
 	
 	if(StrEqual(weapon, "weapon_mag7", false))
-		return	CSGO_Weapon_MAG7;
+		return CSGO_Weapon_MAG7;
 	
 	if(StrEqual(weapon, "weapon_xm1014", false))
-		return	CSGO_Weapon_XM1014;
+		return CSGO_Weapon_XM1014;
 	
 	if(StrEqual(weapon, "weapon_m249", false))
-		return	CSGO_Weapon_M249;
+		return CSGO_Weapon_M249;
 	
 	if(StrEqual(weapon, "weapon_negev", false))
-		return	CSGO_Weapon_Negev;
+		return CSGO_Weapon_Negev;
 	
 	if(StrEqual(weapon, "weapon_taser", false))
-		return	CSGO_Weapon_Zeus;
+		return CSGO_Weapon_Zeus;
 	
 	if(StrEqual(weapon, "weapon_c4", false))
-		return	CSGO_Weapon_C4;
+		return CSGO_Weapon_C4;
 	
 	if(StrEqual(weapon, "weapon_hegrenade", false))
-		return	CSGO_Grenade_HEGrenade;
+		return CSGO_Grenade_HEGrenade;
 	
 	if(StrEqual(weapon, "weapon_flashbang", false))
-		return	CSGO_Grenade_Flashbang;
+		return CSGO_Grenade_Flashbang;
 	
 	if(StrEqual(weapon, "weapon_decoy", false))
-		return	CSGO_Grenade_Decoy;
+		return CSGO_Grenade_Decoy;
 	
 	if(StrEqual(weapon, "weapon_smokegrenade", false))
-		return	CSGO_Grenade_SmokeGrenade;
+		return CSGO_Grenade_SmokeGrenade;
 	
 	if(StrEqual(weapon, "weapon_incgrenade", false))
-		return	CSGO_Grenade_Incendiary;
+		return CSGO_Grenade_Incendiary;
 	
 	if(StrEqual(weapon, "weapon_molotov", false))
-		return	CSGO_Grenade_Molotov;
+		return CSGO_Grenade_Molotov;
 	
 	if(StrEqual(weapon, "weapon_tagrenade"))
-		return	CSGO_Grenade_TAGrenade;
+		return CSGO_Grenade_TAGrenade;
 	
 	if(StrEqual(weapon, "weapon_breachcharge"))
-		return	CSGO_Grenade_BreachCharge;
+		return CSGO_Grenade_BreachCharge;
 	
 	if(StrEqual(weapon, "weapon_glock", false))
-		return	CSGO_Weapon_Glock;
+		return CSGO_Weapon_Glock;
 	
 	if(StrEqual(weapon, "weapon_usp_silencer", false))
-		return	CSGO_Weapon_USP_S;
+		return CSGO_Weapon_USP_S;
 	
 	if(StrEqual(weapon, "weapon_hkp2000", false))
-		return	CSGO_Weapon_P2000;
+		return CSGO_Weapon_P2000;
 	
 	if(StrEqual(weapon, "weapon_p250", false))
-		return	CSGO_Weapon_P250;
+		return CSGO_Weapon_P250;
 	
 	if(StrEqual(weapon, "weapon_deagle", false))
-		return	CSGO_Weapon_Deagle;
+		return CSGO_Weapon_Deagle;
 	
 	if(StrEqual(weapon, "weapon_fiveseven", false))
-		return	CSGO_Weapon_FiveSeven;
+		return CSGO_Weapon_FiveSeven;
 	
 	if(StrEqual(weapon, "weapon_tec9", false))
-		return	CSGO_Weapon_Tec9;
+		return CSGO_Weapon_Tec9;
 	
 	if(StrEqual(weapon, "weapon_revolver", false))
-		return	CSGO_Weapon_Revolver;
+		return CSGO_Weapon_Revolver;
 	
 	if(StrEqual(weapon, "weapon_p90", false))
-		return	CSGO_Weapon_P90;
+		return CSGO_Weapon_P90;
 	
 	if(StrEqual(weapon, "weapon_ump45", false))
-		return	CSGO_Weapon_UMP45;
+		return CSGO_Weapon_UMP45;
 	
 	if(StrEqual(weapon, "weapon_mp7", false))
-		return	CSGO_Weapon_MP7;
+		return CSGO_Weapon_MP7;
 	
 	if(StrEqual(weapon, "weapon_mp9", false))
-		return	CSGO_Weapon_MP9;
+		return CSGO_Weapon_MP9;
 	
 	if(StrEqual(weapon, "weapon_mp5sd", false))
-		return	CSGO_Weapon_MP5SD;
+		return CSGO_Weapon_MP5SD;
 	
 	if(StrEqual(weapon, "weapon_bizon", false))
 		return CSGO_Weapon_Bizon;
 	
 	if(StrEqual(weapon, "weapon_knife_t", false))
-		return	CSGO_Knife_T;
+		return CSGO_Knife_T;
 	
 	if(StrEqual(weapon, "weapon_knife_ct", false))
-		return	CSGO_Knife_CT;
+		return CSGO_Knife_CT;
 	
 	if(StrEqual(weapon, "weapon_knife", false))
-		return	CSGO_Knife_CT;
+		return CSGO_Knife_CT;
 	
 	if(StrEqual(weapon, "weapon_knifegg", false))
-		return	CSGO_Knife_Gold;
+		return CSGO_Knife_Gold;
 	
 	if(StrEqual(weapon, "weapon_knife_css", false))
-		return	CSGO_Knife_Classic;
+		return CSGO_Knife_Classic;
 	
 	if(StrEqual(weapon, "weapon_bayonet", false))
-		return	CSGO_Knife_Bayonet;
+		return CSGO_Knife_Bayonet;
 	
 	if(StrEqual(weapon, "weapon_knife_flip", false))
-		return	CSGO_Knife_Flip;
+		return CSGO_Knife_Flip;
 	
 	if(StrEqual(weapon, "weapon_knife_gut", false))
-		return	CSGO_Knife_Gut;
+		return CSGO_Knife_Gut;
 	
 	if(StrEqual(weapon, "weapon_knife_karambit", false))
-		return	CSGO_Knife_Karambit;
+		return CSGO_Knife_Karambit;
 	
 	if(StrEqual(weapon, "weapon_knife_m9_bayonet", false))
 		return	CSGO_Knife_M9_Bayonet;
 	
 	if(StrEqual(weapon, "weapon_knife_tactical", false))
-		return	CSGO_Knife_Huntsman;
+		return CSGO_Knife_Huntsman;
 	
 	if(StrEqual(weapon, "weapon_knife_butterfly", false))
-		return	CSGO_Knife_Butterfly;
+		return CSGO_Knife_Butterfly;
 	
 	if(StrEqual(weapon, "weapon_knife_falchion", false))
-		return	CSGO_Knife_Falchion;
+		return CSGO_Knife_Falchion;
 	
 	if(StrEqual(weapon, "weapon_knife_push", false))
-		return	CSGO_Knife_ShadowDaggers;
+		return CSGO_Knife_ShadowDaggers;
 	
 	if(StrEqual(weapon, "weapon_knife_survival_bowie", false))
-		return	CSGO_Knife_Bowie;
+		return CSGO_Knife_Bowie;
 	
 	if(StrEqual(weapon, "weapon_knife_ursus", false))
-		return	CSGO_Knife_Ursus;
+		return CSGO_Knife_Ursus;
 	
 	if(StrEqual(weapon, "weapon_knife_gypsy_jackknife", false))
-		return	CSGO_Knife_Navaja;
+		return CSGO_Knife_Navaja;
 	
 	if(StrEqual(weapon, "weapon_knife_stiletto", false))
-		return	CSGO_Knife_Stiletto;
+		return CSGO_Knife_Stiletto;
 	
 	if(StrEqual(weapon, "weapon_knife_widowmaker", false))
-		return	CSGO_Knife_Talon;
+		return CSGO_Knife_Talon;
 	
 	if(StrEqual(weapon, "weapon_knife_canis", false))
-		return	CSGO_Knife_Survival;
+		return CSGO_Knife_Survival;
 	
 	if(StrEqual(weapon, "weapon_knife_cord", false))
-		return	CSGO_Knife_Paracord;
+		return CSGO_Knife_Paracord;
 	
 	if(StrEqual(weapon, "weapon_knife_skeleton", false))
-		return	CSGO_Knife_Skeleton;
+		return CSGO_Knife_Skeleton;
 	
 	if(StrEqual(weapon, "weapon_knife_outdoor", false))
-		return	CSGO_Knife_Nomad;
+		return CSGO_Knife_Nomad;
 	
 	return -1;
 }
@@ -567,7 +569,7 @@ stock int CSGO_GetWeaponDefindex(const char[] weapon) {
  *
  *	@noreturn
  */
-stock void CSGO_GetWeaponName(const char[] classname, char[] name, int maxlen)	{
+stock void CSGO_GetWeaponName(const char[] classname, char[] name, int maxlen) {
 	if(StrEqual(classname, "weapon_ak47", false))					strcopy(name, maxlen, "Ak-47");
 	if(StrEqual(classname, "weapon_m4a1", false))					strcopy(name, maxlen, "M4A4");
 	if(StrEqual(classname, "weapon_m4a1_silencer", false))			strcopy(name, maxlen, "M4A1-S");
@@ -643,7 +645,7 @@ stock void CSGO_GetWeaponName(const char[] classname, char[] name, int maxlen)	{
  *
  *	@noreturn
  */
-stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen)	{
+stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen) {
 	switch(defindex) {
 		case CSGO_Weapon_Ak47:			strcopy(name, maxlen, "Ak-47");
 		case CSGO_Weapon_M4A4:			strcopy(name, maxlen, "M4A4");
@@ -720,7 +722,7 @@ stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen)	{
  *
  *	@noreturn
  */
-stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen)	{
+stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen) {
 	switch(defindex) {
 		case CSGO_Weapon_Ak47:			strcopy(name, maxlen, "weapon_ak47");
 		case CSGO_Weapon_M4A4:			strcopy(name, maxlen, "weapon_m4a1");
@@ -795,6 +797,8 @@ stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen)	{
  *	@param	defindex		The definition index.
  *	@param	gloves_name		The name of the gloves.
  *	@param	maxlen			The maximum length of the gloves name.
+ *
+ *	@noreturn
  */
 stock void CSGO_GetGlovesName(int defindex, char[] gloves_name, int maxlen) {
 	switch(defindex) {
@@ -832,5 +836,30 @@ stock int CSGO_FindWeaponByDefindex(int client, int defindex) {
 	}
 	
 	return -1;
+}
+
+/**
+ *	Sends a win-round event panel with html code support.
+ *	If string parameter is left empty (by default), event is fired but panel will be removed
+ *	from the users perspective. Useful if sending text or for just removing panel.
+ *
+ *	@param	client	The users index.
+ *	@param	str		The string to pass through.
+ *
+ *	@error	If invalid use or event, this returns false.
+ */
+stock bool CSGO_HUDText(int client, const char[] str="") {
+	if(!Tklib_IsValidClient(client, true))
+		return false;
+	
+	Event event = null;
+	if((event = new Event("cs_win_panel_round")) != null) {
+		event.SetString("funfact_token", str);
+		event.FireToClient(client);
+		event.Cancel();
+		return true;
+	}
+	
+	return false;
 }
 #endif
