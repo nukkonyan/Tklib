@@ -146,11 +146,24 @@ stock void GetGameName(char[] game_name, int maxlen) {
  *	Returns if the game is the game you you specified.
  *	This can be quite useful for checking things and not take too much space.
  *
- *	@param gameversion	The GameIdentifier game you specify.
- *	@return				If true, game you specified is active, else false.
+ *	@param	gameversion		The GameIdentifier game you specify.
+ *
+ *	@return	If true, game you specified is active, else false.
  */
 stock bool IsCurrentGame(GameIdentifier gameversion)	{
 	return (IdentifyGame() == gameversion);
+}
+
+/**
+ *	Returns if the engine is the engine you you specified.
+ *	This can be quite useful for checking things and not take too much space.
+ *
+ *	@param	engineversion	The EngineVersion engine you specify.
+ *
+ *	@return				If true, game you specified is active, else false.
+ */
+stock bool IsCurrentEngine(EngineVersion engineversion)	{
+	return (GetEngineVersion() == engineversion);
 }
 
 #endif

@@ -27,6 +27,11 @@ OnOff[][] = {
 OnOffEx[][] = {
 	"{red}Off{default}",
 	"{green}On{default}"
+},
+PropTypeName[][] = {
+	"",
+	"Prop_Send",
+	"Prop_Data"
 };
 
 enum boolEx {
@@ -171,9 +176,7 @@ stock int FloatToInt(float value) {
  *	@param	caseSensitive	if true (by default), search is case sensitive. If false, search is case insensitive.
  *	*/
 stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensitive=true) {
-	if(StrContains(str, substr, caseSensitive) > -1)
-		return true;
-	return false;
+	return (StrContains(str, substr, caseSensitive) > -1);
 }
 
 /**
@@ -951,6 +954,24 @@ stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[]
  */
 stock any StringToAny(const char[] str, int nBase=10) {
 	return view_as<any>(StringToInt(str, nBase));
+}
+
+/**
+ *	Returns if the string contains a number.
+ *
+ *	@param	str	The string to check.
+ */
+stock bool StrHasNumbers(const char[] str) {
+	return (StrContainsEx(str, "1", false)
+	|| StrContainsEx(str, "2", false)
+	|| StrContainsEx(str, "3", false)
+	|| StrContainsEx(str, "4", false)
+	|| StrContainsEx(str, "5", false)
+	|| StrContainsEx(str, "6", false)
+	|| StrContainsEx(str, "7", false)
+	|| StrContainsEx(str, "8", false)
+	|| StrContainsEx(str, "9", false)
+	|| StrContainsEx(str, "0", false));
 }
 
 #endif

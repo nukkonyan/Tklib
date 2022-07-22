@@ -6,7 +6,8 @@
 stock char
 CSS_GetTeamStringName[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{red}Terrorists{default}","{blue}Counter-Terrorists{default}"},
 CSS_GetTeamColour[][] = {"{grey}","{grey}","{red}","{blue}"},
-CS_TeamName[][] = {"Unassigned","Spectators","Terrorists","Counter-Terrorists"};
+CS_TeamName[][] = {"Unassigned","Spectators","Terrorists","Counter-Terrorists"},
+CS_TeamNameEx[][] = {"Unassigned","Spec","T","CT"};
 
 //CS Slots
 enum CSSlot {

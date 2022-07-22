@@ -4,6 +4,7 @@
 #if !defined _tklib_no_csgo
 
 #define MAX_CSGO_WEP_LENGTH 16
+#define MAX_CSGO_ITEM_DEFINITION 526
 
 stock char
 CSGO_GetTeamStringName[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{orange}Terrorists{default}","{bluegrey}Counter-Terrorists{default}"},
@@ -122,7 +123,15 @@ enum {
 	CSGO_Knife_Nomad = 521,
 	CSGO_Knife_Stiletto = 522,
 	CSGO_Knife_Talon = 523,
-	CSGO_Knife_Skeleton = 525
+	CSGO_Knife_Skeleton = 525,
+	CSGO_Gloves_BrokenFang = 4725,
+	CSGO_Gloves_Bloodhound = 5027,
+	CSGO_Gloves_Sport = 5030,
+	CSGO_Gloves_Driver = 5031,
+	CSGO_Gloves_HandWraps = 5032,
+	CSGO_Gloves_Moto = 5033,
+	CSGO_Gloves_Specialist = 5034,
+	CSGO_Gloves_Hydra = 5035,
 }
 
 enum CSGORankType {
@@ -265,7 +274,7 @@ stock bool CSGO_SetNameTag(any entity, const char[] nametag) {
 	
 	char netclass[32];
 	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	SetEntDataString(entity, FindSendPropInfo(netclass, "m_szCustomName"), nametag, strlen(nametag));
+	SetEntDataString(entity, FindSendPropInfo(netclass, "m_szCustomName"), nametag, strlen(nametag)+1);
 	return true;
 }
 
@@ -341,7 +350,7 @@ stock void CSGO_SetMatchmakingRank(int player_ent, int client, int competitive_o
  *
  *	@return	Returns false on failure, true otherwise.
  */
-stock bool CSGO_SetArmModel(int client, const char[] arms) {
+stock bool CSGO_SetClientArmModel(int client, const char[] arms) {
 	return SetEntPropStringEx(client, Prop_Send, "m_szArmsModel", arms);
 }
 
@@ -353,7 +362,7 @@ stock bool CSGO_SetArmModel(int client, const char[] arms) {
  *
  *	@return				Returns false on failure, true otherwise.
  */
-stock bool CSGO_GetArmModel(int client, char[] buffer, int maxlen) {
+stock bool CSGO_GetClientArmModel(int client, char[] buffer, int maxlen) {
 	return GetEntPropStringEx(client, Prop_Send, "m_szArmsModel", buffer, maxlen);
 }
 
@@ -682,12 +691,14 @@ stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen) {
 		case CSGO_Weapon_FiveSeven:		strcopy(name, maxlen, "Five-SeveN");
 		case CSGO_Weapon_Tec9:			strcopy(name, maxlen, "Tec-9");
 		case CSGO_Weapon_Revolver:		strcopy(name, maxlen, "R8 Revolver");
+		case CSGO_Weapon_CZ75_A:		strcopy(name, maxlen, "CZ75-A");
 		case CSGO_Weapon_P90:			strcopy(name, maxlen, "P90");
 		case CSGO_Weapon_UMP45:			strcopy(name, maxlen, "UMP-45");
 		case CSGO_Weapon_MP7:			strcopy(name, maxlen, "MP7");
 		case CSGO_Weapon_MP9:			strcopy(name, maxlen, "MP9");
 		case CSGO_Weapon_MP5:			strcopy(name, maxlen, "MP5");
 		case CSGO_Weapon_Bizon:			strcopy(name, maxlen, "Bizon");
+		case CSGO_Weapon_Mac10:			strcopy(name, maxlen, "MAC-10");
 		case CSGO_Knife_T:				strcopy(name, maxlen, "T Knife");
 		case CSGO_Knife_CT:				strcopy(name, maxlen, "CT Knife");
 		case CSGO_Knife_Gold:			strcopy(name, maxlen, "Golden Knife");
@@ -695,8 +706,8 @@ stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen) {
 		case CSGO_Knife_Bayonet:		strcopy(name, maxlen, "Bayonet");
 		case CSGO_Knife_Flip:			strcopy(name, maxlen, "Flip Knife");
 		case CSGO_Knife_Gut:			strcopy(name, maxlen, "Gut Knife");
-		case CSGO_Knife_Karambit:		strcopy(name, maxlen, "Karambit Knife");
-		case CSGO_Knife_M9_Bayonet:		strcopy(name, maxlen, "M9 Bayonet Knife");
+		case CSGO_Knife_Karambit:		strcopy(name, maxlen, "Karambit");
+		case CSGO_Knife_M9_Bayonet:		strcopy(name, maxlen, "M9 Bayonet");
 		case CSGO_Knife_Huntsman:		strcopy(name, maxlen, "Huntsman Knife");
 		case CSGO_Knife_Butterfly:		strcopy(name, maxlen, "Butterfly Knife");
 		case CSGO_Knife_Falchion:		strcopy(name, maxlen, "Falchion Knife");
@@ -704,12 +715,13 @@ stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen) {
 		case CSGO_Knife_Bowie:			strcopy(name, maxlen, "Bowie Knife");
 		case CSGO_Knife_Ursus:			strcopy(name, maxlen, "Ursus Knife");
 		case CSGO_Knife_Navaja:			strcopy(name, maxlen, "Navaja Knife");
-		case CSGO_Knife_Stiletto:		strcopy(name, maxlen, "Stilleto");
+		case CSGO_Knife_Stiletto:		strcopy(name, maxlen, "Stilleto Knife");
 		case CSGO_Knife_Talon:			strcopy(name, maxlen, "Talon Knife");
 		case CSGO_Knife_Survival:		strcopy(name, maxlen, "Survival Knife");
 		case CSGO_Knife_Paracord:		strcopy(name, maxlen, "Paracord Knife");
-		case CSGO_Knife_Skeleton:		strcopy(name, maxlen, "Skeleton Knife");
+		case CSGO_Knife_Skeleton:		strcopy(name, maxlen, "Skeleton Shiv");
 		case CSGO_Knife_Nomad:			strcopy(name, maxlen, "Nomad Knife");
+		case CSGO_Knife_Spectral:		strcopy(name, maxlen, "Spectral Shiv");
 	}
 }
 
@@ -759,12 +771,14 @@ stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen) {
 		case CSGO_Weapon_FiveSeven:		strcopy(name, maxlen, "weapon_fiveseven");
 		case CSGO_Weapon_Tec9:			strcopy(name, maxlen, "weapon_ec9");
 		case CSGO_Weapon_Revolver:		strcopy(name, maxlen, "weapon_revolver");
+		case CSGO_Weapon_CZ75_A:		strcopy(name, maxlen, "weapon_cz75a");
 		case CSGO_Weapon_P90:			strcopy(name, maxlen, "weapon_p90");
 		case CSGO_Weapon_UMP45:			strcopy(name, maxlen, "weapon_ump45");
 		case CSGO_Weapon_MP7:			strcopy(name, maxlen, "weapon_mp7");
 		case CSGO_Weapon_MP9:			strcopy(name, maxlen, "weapon_mp9");
 		case CSGO_Weapon_MP5:			strcopy(name, maxlen, "weapon_mp5sd");
 		case CSGO_Weapon_Bizon:			strcopy(name, maxlen, "weapon_bizon");
+		case CSGO_Weapon_Mac10:			strcopy(name, maxlen, "weapon_mac10");
 		case CSGO_Knife_T:				strcopy(name, maxlen, "weapon_knife_t");
 		case CSGO_Knife_CT:				strcopy(name, maxlen, "weapon_knife_ct");
 		case CSGO_Knife_Gold:			strcopy(name, maxlen, "weapon_knifegg");
@@ -802,14 +816,14 @@ stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen) {
  */
 stock void CSGO_GetGlovesName(int defindex, char[] gloves_name, int maxlen) {
 	switch(defindex) {
-		case 4725: strcopy(gloves_name, maxlen, "Broken Fang Gloves");
-		case 5027: strcopy(gloves_name, maxlen, "Bloodhound Gloves");
-		case 5030: strcopy(gloves_name, maxlen, "Sport Gloves");
-		case 5031: strcopy(gloves_name, maxlen, "Driver Gloves");
-		case 5032: strcopy(gloves_name, maxlen, "Hand Wraps");
-		case 5033: strcopy(gloves_name, maxlen, "Moto Gloves");
-		case 5034: strcopy(gloves_name, maxlen, "Specialist Gloves");
-		case 5035: strcopy(gloves_name, maxlen, "Hydra Gloves");
+		case CSGO_Gloves_BrokenFang: strcopy(gloves_name, maxlen, "Broken Fang Gloves");
+		case CSGO_Gloves_Bloodhound: strcopy(gloves_name, maxlen, "Bloodhound Gloves");
+		case CSGO_Gloves_Sport: strcopy(gloves_name, maxlen, "Sport Gloves");
+		case CSGO_Gloves_Driver: strcopy(gloves_name, maxlen, "Driver Gloves");
+		case CSGO_Gloves_HandWraps: strcopy(gloves_name, maxlen, "Hand Wraps");
+		case CSGO_Gloves_Moto: strcopy(gloves_name, maxlen, "Moto Gloves");
+		case CSGO_Gloves_Specialist: strcopy(gloves_name, maxlen, "Specialist Gloves");
+		case CSGO_Gloves_Hydra: strcopy(gloves_name, maxlen, "Hydra Gloves");
 	}
 }
 
@@ -861,5 +875,136 @@ stock bool CSGO_HUDText(int client, const char[] str="") {
 	}
 	
 	return false;
+}
+
+/**
+ *	Returns if the definition index is valid.
+ *
+ *	@param	defindex	The item definition index.
+ */
+stock bool CSGO_IsValidItemDefinitionIndex(int defindex) {
+	return (
+	defindex == CSGO_Weapon_Deagle ||
+	defindex == CSGO_Weapon_FiveSeven ||
+	defindex == CSGO_Weapon_Glock ||
+	defindex == CSGO_Weapon_Ak47 ||
+	defindex == CSGO_Weapon_Aug ||
+	defindex == CSGO_Weapon_AWP ||
+	defindex == CSGO_Weapon_Famas ||
+	defindex == CSGO_Weapon_G3SG1 ||
+	defindex == CSGO_Weapon_GalilAR ||
+	defindex == CSGO_Weapon_M249 ||
+	defindex == CSGO_Weapon_M4A4 ||
+	defindex == CSGO_Weapon_Mac10 ||
+	defindex == CSGO_Weapon_P90 ||
+	defindex == CSGO_Weapon_MP5SD ||
+	defindex == CSGO_Weapon_UMP45 ||
+	defindex == CSGO_Weapon_XM1014 ||
+	defindex == CSGO_Weapon_Bizon ||
+	defindex == CSGO_Weapon_MAG7 ||
+	defindex == CSGO_Weapon_Negev ||
+	defindex == CSGO_Weapon_SawedOff ||
+	defindex == CSGO_Weapon_Tec9 ||
+	defindex == CSGO_Weapon_Zeus ||
+	defindex == CSGO_Weapon_P2000 ||
+	defindex == CSGO_Weapon_MP7 ||
+	defindex == CSGO_Weapon_MP9 ||
+	defindex == CSGO_Weapon_Nova ||
+	defindex == CSGO_Weapon_P250 ||
+	defindex == CSGO_Weapon_Scar20 ||
+	defindex == CSGO_Weapon_SG556 ||
+	defindex == CSGO_Weapon_SSG08 ||
+	defindex == CSGO_Knife_CT ||
+	defindex == CSGO_Knife_Gold ||
+	defindex == CSGO_Grenade_Flashbang ||
+	defindex == CSGO_Grenade_HEGrenade ||
+	defindex == CSGO_Grenade_SmokeGrenade ||
+	defindex == CSGO_Grenade_Molotov ||
+	defindex == CSGO_Grenade_Decoy ||
+	defindex == CSGO_Grenade_Incendiary ||
+	defindex == CSGO_Weapon_C4 ||
+	defindex == CSGO_Knife_T ||
+	defindex == CSGO_Weapon_M4A1_S ||
+	defindex == CSGO_Weapon_USP_S ||
+	defindex == CSGO_Weapon_CZ75_A ||
+	defindex == CSGO_Weapon_Revolver ||
+	defindex == CSGO_Grenade_TAGrenade ||
+	defindex == CSGO_Grenade_BreachCharge ||
+	defindex == CSGO_Knife_Spectral ||
+	defindex == CSGO_Knife_Bayonet ||
+	defindex == CSGO_Knife_Classic ||
+	defindex == CSGO_Knife_Flip ||
+	defindex == CSGO_Knife_Gut ||
+	defindex == CSGO_Knife_Karambit ||
+	defindex == CSGO_Knife_M9_Bayonet ||
+	defindex == CSGO_Knife_Huntsman ||
+	defindex == CSGO_Knife_Falchion ||
+	defindex == CSGO_Knife_Bowie ||
+	defindex == CSGO_Knife_Butterfly ||
+	defindex == CSGO_Knife_ShadowDaggers ||
+	defindex == CSGO_Knife_Paracord ||
+	defindex == CSGO_Knife_Survival ||
+	defindex == CSGO_Knife_Ursus ||
+	defindex == CSGO_Knife_Navaja ||
+	defindex == CSGO_Knife_Nomad ||
+	defindex == CSGO_Knife_Stiletto ||
+	defindex == CSGO_Knife_Talon ||
+	defindex == CSGO_Knife_Skeleton);
+}
+
+/**
+ *	Returns if the item definition index is a knife.
+ *
+ *	@param	defindex	The item definition index.
+ */
+stock bool CSGO_IsItemIndexKnife(int defindex) {
+	return (
+	defindex == CSGO_Knife_CT ||
+	defindex == CSGO_Knife_Gold ||
+	defindex == CSGO_Knife_T ||
+	defindex == CSGO_Knife_Spectral ||
+	defindex == CSGO_Knife_Bayonet ||
+	defindex == CSGO_Knife_Classic ||
+	defindex == CSGO_Knife_Flip ||
+	defindex == CSGO_Knife_Gut ||
+	defindex == CSGO_Knife_Karambit ||
+	defindex == CSGO_Knife_M9_Bayonet ||
+	defindex == CSGO_Knife_Huntsman ||
+	defindex == CSGO_Knife_Falchion ||
+	defindex == CSGO_Knife_Bowie ||
+	defindex == CSGO_Knife_Butterfly ||
+	defindex == CSGO_Knife_ShadowDaggers ||
+	defindex == CSGO_Knife_Paracord ||
+	defindex == CSGO_Knife_Survival ||
+	defindex == CSGO_Knife_Ursus ||
+	defindex == CSGO_Knife_Navaja ||
+	defindex == CSGO_Knife_Nomad ||
+	defindex == CSGO_Knife_Stiletto ||
+	defindex == CSGO_Knife_Talon ||
+	defindex == CSGO_Knife_Skeleton);
+}
+
+/**
+ *	Returns the condition name by the float.
+ *
+ *	@param	wear	The wear float.
+ *	@param	str		String buffer to store the condition name.
+ *	@param	maxlen	The maximum length of the string buffer.
+ *
+ *	@noreturn
+ */
+stock void CSGO_GetSkinCondition(float wear, char[] str, int maxlen) {
+	if(wear < 0.07)
+		strcopy(str, maxlen, "Factory New");
+	else if(wear >= 0.07 && wear < 0.15)
+		strcopy(str, maxlen, "Minimal Wear");
+	else if(wear >= 0.15 && wear < 0.38)
+		strcopy(str, maxlen, "Field Tested");
+	else if(wear >= 0.38 && wear < 0.45)
+		strcopy(str, maxlen, "Well Worn");
+	else if(wear >= 0.45 && wear < 1.00)
+		strcopy(str, maxlen, "Battle Scarred");
+	else if(wear >= 0.99)
+		strcopy(str, maxlen, "Worst Battle Scarred");
 }
 #endif
