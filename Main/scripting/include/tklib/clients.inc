@@ -905,7 +905,7 @@ stock void GetClientNameTeamString(int client, char[] buffer, int maxlen)	{
 		"{lightred}"
 	};
 	
-	switch(IdentifyGame())	{
+	switch(IdentifyGame()) {
 		case Game_TF2C: Format(buffer, maxlen, "%s%N{default}", TeamColour_TF2C[team], client);
 		case Game_CSGO: Format(buffer, maxlen, "%s%N{default}", TeamColour_CSGO[team], client);
 		case Game_L4D1: Format(buffer, maxlen, "%s%N{default}", TeamColour_L4D[team], client);
@@ -924,7 +924,7 @@ stock void GetClientNameTeamString(int client, char[] buffer, int maxlen)	{
  *
  *	@error	If the user is invalid or has no m_fFlags property, this returns -1.
  */
-stock int GetClientFlags(int client)	{
+stock int GetClientFlags(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_fFlags");
 }
 
@@ -935,7 +935,7 @@ stock int GetClientFlags(int client)	{
  *
  *	@error	If the user is invalid or has no m_bJumping property, this returns false.
  */
-stock bool IsClientJumping(int client)	{
+stock bool IsClientJumping(int client) {
 	return GetEntPropBool(client, Prop_Send, "m_bJumping");
 }
 
@@ -946,7 +946,7 @@ stock bool IsClientJumping(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientMidAir(int client)	{
+stock bool IsClientMidAir(int client) {
 	return	Tklib_IsValidClient(client, _, true) ? 
 	(GetClientFlags(client) == 256
 	|| GetClientFlags(client) == 258
@@ -960,7 +960,7 @@ stock bool IsClientMidAir(int client)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientWaterLevel(int client)	{
+stock int GetClientWaterLevel(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_nWaterLevel");
 }
 
@@ -972,7 +972,7 @@ stock int GetClientWaterLevel(int client)	{
  *
  *	@error	If the user is invalid or procedure failed , this returns false.
  */
-stock int SetClientWaterLevel(int client, int level)	{
+stock int SetClientWaterLevel(int client, int level) {
 	return SetEntPropEx(client, Prop_Send, "m_nWaterLevel", level);
 }
 
@@ -983,7 +983,7 @@ stock int SetClientWaterLevel(int client, int level)	{
  *
  *	@error	If the user is invalid, this returns -1.0.
  */
-stock float GetClientSprayCooldown(int client)	{
+stock float GetClientSprayCooldown(int client) {
 	return GetEntPropFloatEx(client, Prop_Send, "m_flNextDecalTime");
 }
 
@@ -995,7 +995,7 @@ stock float GetClientSprayCooldown(int client)	{
  *
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
-stock bool SetClientSprayCooldown(int client, float cooldown)	{
+stock bool SetClientSprayCooldown(int client, float cooldown) {
 	return SetEntPropFloatEx(client, Prop_Send, "m_flNextDecalTime", cooldown);
 }
 
@@ -1006,7 +1006,7 @@ stock bool SetClientSprayCooldown(int client, float cooldown)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientUsingLadder(int client)	{
+stock bool IsClientUsingLadder(int client) {
 	return Tklib_IsValidClient(client, _, true) ? (GetEntityMoveType(client) == MOVETYPE_LADDER) : false;
 }
 
@@ -1018,7 +1018,7 @@ stock bool IsClientUsingLadder(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientHideHud(int client, int flags)	{
+stock bool SetClientHideHud(int client, int flags) {
 	return SetEntPropEx(client, Prop_Send, "m_iHideHUD", flags);
 }
 
@@ -1026,35 +1026,60 @@ stock bool SetClientHideHud(int client, int flags)	{
  *	Returns the users found matching the playername search criteria in an array.
  *	The array needs to be manually destroyed.
  *
- *	@param	playername	The playername to search.
- *	@param	caller		The calling user index, for '@me' targeting.
+ *	@param	target		The playername or target to search.
+ *	@param	caller		The calling user index, for '@me' or '@sameteam' targeting.
  *
  *	@error	If no valid users are found, this returns empty.
  */
-stock ArrayList FindClientsByPlayername(const char[] playername, int caller=-1)	{
-	ArrayList list = new ArrayList(64);
-	char name[64];
+stock ArrayList FindClientsByTarget(const char[] target, int caller=-1)	{
+	ArrayList list = new ArrayList();
 	
-	int found = 0;
-	for(int client = 1; client <= MaxClients; client++)	{
-		if(Tklib_IsValidClient(client, _, _, false))	{
-			GetClientInfo(client, "name", name, sizeof(name));
-			if(StrEqual(playername, "@bots", false) && IsFakeClient(client)) {
-				found++;
+	bool All = (StrEqual(target, "@all", false)
+	|| StrEqual(target, "@everyone", false));
+	bool Self = (StrEqual(target, "@me", false)
+	|| StrEqual(target, "@myself", false));
+	bool Team_1 = (StrEqual(target, "@spec", false)
+	|| StrEqual(target, "@spectator", false)
+	|| StrEqual(target, "@spectators", false));
+	bool Team_2 = (StrEqual(target, "@red", false)
+	|| StrEqual(target, "@t")
+	|| StrEqual(target, "@terrorist", false)
+	|| StrEqual(target, "@terrorists", false));
+	bool Team_3 = (StrEqual(target, "@blu", false)
+	|| StrEqual(target, "@blue", false)
+	|| StrEqual(target, "@ct")
+	|| StrEqual(target, "@counterterrorist", false)
+	|| StrEqual(target, "@counterterrorists", false));
+	bool Bots = (StrEqual(target, "@bots", false)
+	|| StrEqual(target, "@bot"));
+	
+	if(caller != -1 && Self && Tklib_IsValidClient(caller, true)) {
+		list.Push(caller);
+		return list;
+	}
+	
+	for(int client = MaxClients; client >= 1; client--) {
+		if(!Tklib_IsValidClient(client, _, _, false))
+			continue;
+		
+		static char name[64];
+		GetClientInfo(client, "name", name, sizeof(name));
+		//Format(name, sizeof(name), "%N", client);
+		
+		//PrintToServer("Found target '%i' ['%s'] ['%s']", client, name, target);
+		
+		if((Team_1 && GetClientTeam(client) == 1)
+		|| (Team_2 && GetClientTeam(client) == 2)
+		|| (Team_3 && GetClientTeam(client) == 3)
+		|| Bots && IsFakeClient(client)
+		|| All
+		|| StrContainsEx(name, target, false))
+			list.Push(client);
+		else if(caller != -1 && Tklib_IsValidClient(caller, true)) {
+			if(StrEqual(target, "@sameteam", false) && IsSameTeam(client, caller)) //Spaghetti code.
 				list.Push(client);
-			}
-			else if(caller != -1 && (StrEqual(playername, "@me", false) && Tklib_IsValidClient(caller, true))) {
-				found++;
-				list.Push(caller);
-			}
-			else if(StrEqual(playername, "@all", false)) {
-				found++;
+			else if(StrEqual(target, "@aim", false) && GetClientAimTarget(caller, true) == client)
 				list.Push(client);
-			}
-			else if(StrContains(name, playername, false) != -1)	{
-				found++;
-				list.Push(client);
-			}
 		}
 	}
 	
@@ -1109,6 +1134,28 @@ stock bool SetClientSuitSprintPower(int client, float value)	{
  */
 stock float GetClientSuitSpritPower(int client)	{
 	return GetEntPropFloatEx(client, Prop_Send, "m_flSuitPower");
+}
+
+/**
+ *	Returns the user index by account id.
+ *
+ *	@param	accountid	The account id.
+ *
+ *	@return	If the user index is not found or account id is invalid, this returns -1.
+ */
+stock int GetClientOfAccountID(int accountid) {
+	if(accountid < 1)
+		return -1;
+	
+	for(int client = MaxClients; client >= 1; client--) {
+		if(!Tklib_IsValidClient(client, _, _, false))
+			continue;
+		
+		if(GetSteamAccountID(client) == accountid)
+			return client;
+	}
+	
+	return -1;
 }
 
 #endif

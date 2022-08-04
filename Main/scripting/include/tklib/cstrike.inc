@@ -233,7 +233,7 @@ stock int CS_GetClientMoney(int client)	{
  *
  *	@error	If the user is invalid, nothing will happen.
  */
-stock bool CS_SetClientFlashDuration(int client, float value)	{
+stock bool CS_SetClientFlashDuration(int client, float value) {
 	return SetEntPropFloatEx(client, Prop_Send, "m_flFlashDuration", value);
 }
 
@@ -244,7 +244,7 @@ stock bool CS_SetClientFlashDuration(int client, float value)	{
  *
  *	@error	If the user is invalid, this will return -1.0.
  */
-stock float CS_GetClientFlashDuration(int client)	{
+stock float CS_GetClientFlashDuration(int client) {
 	return GetEntPropFloatEx(client, Prop_Send, "m_flFlashDuration");
 }
 
@@ -280,7 +280,7 @@ stock int CS_GetClientArmor(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool CS_SetClientHelmet(int client, int value)	{
+stock bool CS_SetClientHelmet(int client, int value) {
 	return SetEntPropEx(client, Prop_Send, "m_bHasHelmet", value);
 }
 
@@ -291,7 +291,7 @@ stock bool CS_SetClientHelmet(int client, int value)	{
  *	@param value	The value you specify.
  *	@error			If the user is invalid, this will return false.
  */
-stock bool CS_ClientHasHelmet(int client)	{
+stock bool CS_ClientHasHelmet(int client) {
 	return GetEntPropBool(client, Prop_Send, "m_bHasHelmet");
 }
 
@@ -303,7 +303,7 @@ stock bool CS_ClientHasHelmet(int client)	{
  *
  *	@error	If the user is invalid, returns false.
  */
-stock bool CS_SetClientHeavyArmor(int client, int value)	{
+stock bool CS_SetClientHeavyArmor(int client, int value) {
 	return SetEntPropEx(client, Prop_Send, "m_bHasHeavyArmor", value);
 }
 
@@ -314,7 +314,7 @@ stock bool CS_SetClientHeavyArmor(int client, int value)	{
  *	@param value	The value you specify.
  *	@error			If client is invalid, it will return false.
  */
-stock bool CS_ClientHasHeavyArmor(int client)	{
+stock bool CS_ClientHasHeavyArmor(int client) {
 	return GetEntPropBool(client, Prop_Send, "m_bHasHeavyArmor");
 }
 
@@ -326,7 +326,7 @@ stock bool CS_ClientHasHeavyArmor(int client)	{
  *
  *	@param	If the user is invalid, this returns false.
  */
-stock bool CS_SetClientDefuserKit(int client, bool defusekit)	{
+stock bool CS_SetClientDefuserKit(int client, bool defusekit) {
 	return SetEntPropEx(client, Prop_Send, "m_bHasDefuser", defusekit);
 }
 
@@ -337,7 +337,7 @@ stock bool CS_SetClientDefuserKit(int client, bool defusekit)	{
  *
  *	@param	If the user is invalid, this returns false.
  */
-stock bool CS_ClientHasDefuserKit(int client)	{
+stock bool CS_ClientHasDefuserKit(int client) {
 	return GetEntPropBool(client, Prop_Send, "m_bHasDefuser");
 }
 
@@ -351,7 +351,7 @@ stock bool CS_ClientHasDefuserKit(int client)	{
  
  *	@error	If the user or users active weapon is invalid, this returns false.
  */
-stock bool CS_GetPlayerWeaponSlotName(int client, CSSlot slot, char[] output, int maxlen)	{
+stock bool CS_GetPlayerWeaponSlotName(int client, CSSlot slot, char[] output, int maxlen) {
 	if(!(Tklib_IsValidClient(client, false, true) && IsValidEntityEx(CS_GetPlayerWeaponSlot(client, slot))))
 		return false;
 	
@@ -627,9 +627,9 @@ stock void CS_GetWeaponName(const char[] weapon, char[] output, int maxlen)	{
 stock bool CS_GetTeamName(CSTeam team, char[] buffer, int maxlen)	{
 	int index = -1;
 	while((index = FindEntityByClassname(index, "cs_team_manager")) != -1)	{
-		if(view_as<CSTeam>(GetEntPropEx(Prop_Send, "m_iTeamNum")) == team)	{
+		if(view_as<CSTeam>(GetEntPropEx(index, Prop_Send, "m_iTeamNum")) == team)	{
 			char checkname[96];
-			bool success = GetEntPropStringEx(Prop_Send, "m_szClanTeamname", buffer, maxlen);
+			bool success = GetEntPropStringEx(index, Prop_Send, "m_szClanTeamname", buffer, maxlen);
 			
 			if(StrEqual(checkname, ""))	{
 				switch(team)	{
@@ -718,7 +718,7 @@ stock bool CS_IsClientInBuyZone(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool CS_SetClientInBuyZone(int client, bool buyzone)	{
+stock bool CS_SetClientInBuyZone(int client, bool buyzone) {
 	return SetEntPropEx(client, Prop_Send, "m_bInBuyZone", buyzone);
 }
 
@@ -729,7 +729,7 @@ stock bool CS_SetClientInBuyZone(int client, bool buyzone)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool CS_IsClientDefusing(int client)	{
+stock bool CS_IsClientDefusing(int client) {
 	return GetEntPropBool(client, Prop_Send, "m_bIsDefusing");
 }
 
@@ -741,7 +741,7 @@ stock bool CS_IsClientDefusing(int client)	{
  *
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
-stock bool CS_SetClientDefusing(int client, bool status)	{
+stock bool CS_SetClientDefusing(int client, bool status) {
 	return SetEntPropEx(client, Prop_Send, "m_bDefusing", status);
 }
 
@@ -750,7 +750,7 @@ stock bool CS_SetClientDefusing(int client, bool status)	{
  *
  *	@return	Returns a CSTeam team.
  */
-stock CSTeam CS_GetRandomTeam()	{
+stock CSTeam CS_GetRandomTeam() {
 	return view_as<CSTeam>(GetRandomInt(2, 3));
 }
 
@@ -759,7 +759,7 @@ stock CSTeam CS_GetRandomTeam()	{
  *
  *	@param	weapon	The weapon entity.
  */
-stock bool CS_IsWeaponZoomedIn(any weapon)	{
+stock bool CS_IsWeaponZoomedIn(any weapon) {
 	return GetEntPropBool(weapon, Prop_Send, "m_weaponMode");
 }
 
@@ -770,7 +770,7 @@ stock bool CS_IsWeaponZoomedIn(any weapon)	{
  *
  *	@returns	CSS_* enum (integer). 0 if invalid entity.
  */
-stock int CSS_GetWeaponDefindex(const char[] weapon)	{
+stock int CSS_GetWeaponDefindex(const char[] weapon) {
 	if(StrEqual(weapon, "weapon_ak47", false))
 		return	CSS_Weapon_Ak47;
 	
@@ -858,7 +858,7 @@ stock int CSS_GetWeaponDefindex(const char[] weapon)	{
  *
  *	@return	Returns the price of the specified weapon ("weapon_"-type). 0 if not found.
  */
-stock int CS_GetPriceFromWeapon(const char[] weapon)	{
+stock int CS_GetPriceFromWeapon(const char[] weapon) {
 	int price = 0;
 	
 	/* Incase GameIdentifier wasn't included */
@@ -866,11 +866,11 @@ stock int CS_GetPriceFromWeapon(const char[] weapon)	{
 	GetGameFolderName(folder, sizeof(folder));
 	
 	switch(GetEngineVersion()) {
-		case Engine_CSS:	{
+		case Engine_CSS: {
 			/* To be added */
 		}
-		case Engine_CSGO:	{
-			switch(StrEqual(folder, "csgo"))	{
+		case Engine_CSGO: {
+			switch(StrEqual(folder, "csgo")) {
 				/* CS:GO */
 				case	true:	{
 					if(StrEqual(weapon, "weapon_ak47", false))
@@ -994,13 +994,13 @@ stock int CS_GetPriceFromWeapon(const char[] weapon)	{
 						price = 1100;
 				}
 				/* CS:CO */
-				case false:	{
+				case false: {
 					/* To be added */
 				}
 			}
 		}
-		case	Engine_SourceSDK2007:	{
-			if(StrEqual(folder, "cspromod"))	{
+		case Engine_SourceSDK2007: {
+			if(StrEqual(folder, "cspromod")) {
 				
 			}
 		}

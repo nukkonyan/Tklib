@@ -97,21 +97,19 @@ stock bool SetWeaponAmmo(any weapon, int value)	{
  *	Set the weapon primary and secondary ammo.
  *
  *	@param	weapon		Weapon entity.
- *	@param	primary		Primary ammo amount. Zero amount input will do nothing.
- *	@param	secondary	Secondary ammo amount. Zero amount input will do nothing.
+ *	@param	primary		Primary ammo amount.
+ *	@param	secondary	Secondary ammo amount.
  *
  *	@noreturn
  *
  *	@error	If the weapon is invalid, this returns false.
  */
-stock bool SetWeaponAmmoEx(any weapon, int primary=0, int secondary=0)	{
+stock bool SetWeaponAmmoEx(any weapon, int primary, int secondary) {
 	if(!IsValidEntityEx(weapon))
 		return false;
 	
-	if(primary > 0)
-		SetWeaponAmmo(weapon, primary);
-	if(secondary > 0)
-		SetWeaponReserveAmmo(weapon, secondary);
+	SetWeaponAmmo(weapon, primary);
+	SetWeaponReserveAmmo(weapon, secondary);
 	
 	return true;
 }

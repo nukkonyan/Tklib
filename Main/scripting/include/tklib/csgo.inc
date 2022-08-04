@@ -94,6 +94,7 @@ enum {
 	CSGO_Grenade_Decoy = 47,
 	CSGO_Grenade_Incendiary = 48,
 	CSGO_Weapon_C4 = 49,
+	CSGO_Item_DefuserKit = 55,
 	CSGO_Knife_T = 59,
 	CSGO_Weapon_M4A1_S = 60,
 	CSGO_Weapon_USP_S = 61,
@@ -675,6 +676,7 @@ stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen) {
 		case CSGO_Weapon_Negev:			strcopy(name, maxlen, "Negev");
 		case CSGO_Weapon_Taser:			strcopy(name, maxlen, "Taser");
 		case CSGO_Weapon_C4:			strcopy(name, maxlen, "C4 Bomb");
+		case CSGO_Item_DefuserKit:		strcopy(name, maxlen, "Defuser Kit");
 		case CSGO_Grenade_HEGrenade:	strcopy(name, maxlen, "HE Grenade");
 		case CSGO_Grenade_Flashbang:	strcopy(name, maxlen, "Flashbang");
 		case CSGO_Grenade_Decoy:		strcopy(name, maxlen, "Decoy");
@@ -755,6 +757,7 @@ stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen) {
 		case CSGO_Weapon_Negev:			strcopy(name, maxlen, "weapon_negev");
 		case CSGO_Weapon_Taser:			strcopy(name, maxlen, "weapon_taser");
 		case CSGO_Weapon_C4:			strcopy(name, maxlen, "weapon_c4");
+		case CSGO_Item_DefuserKit:		strcopy(name, maxlen, "item_defuser");
 		case CSGO_Grenade_HEGrenade:	strcopy(name, maxlen, "weapon_hegrenade");
 		case CSGO_Grenade_Flashbang:	strcopy(name, maxlen, "weapon_flashbang");
 		case CSGO_Grenade_Decoy:		strcopy(name, maxlen, "weapon_decoy");
@@ -923,6 +926,7 @@ stock bool CSGO_IsValidItemDefinitionIndex(int defindex) {
 	defindex == CSGO_Grenade_Decoy ||
 	defindex == CSGO_Grenade_Incendiary ||
 	defindex == CSGO_Weapon_C4 ||
+	defindex == CSGO_Item_DefuserKit ||
 	defindex == CSGO_Knife_T ||
 	defindex == CSGO_Weapon_M4A1_S ||
 	defindex == CSGO_Weapon_USP_S ||

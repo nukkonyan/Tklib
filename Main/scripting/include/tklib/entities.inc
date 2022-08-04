@@ -878,11 +878,11 @@ methodmap Entity __nullable__ {
 	{
 		return	SetEntPropEx(view_as<int>(this), type, prop, value, size, element);
 	}
-	public void SetPropEnt(PropType type, const char[] prop, int other, int element=0)
+	public void SetPropEnt(PropType type, const char[] prop, any other, int element=0)
 	{
 		SetEntPropEnt(view_as<int>(this), type, prop, other, element);
 	}
-	public bool SetPropEntEx(PropType type, const char[] prop, int other, int element=0)
+	public bool SetPropEntEx(PropType type, const char[] prop, any other, int element=0)
 	{
 		return	SetEntPropEntEx(view_as<int>(this), type, prop, other, element);
 	}
