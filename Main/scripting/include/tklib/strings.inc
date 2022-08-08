@@ -244,4 +244,17 @@ stock int StrLen(const char[] str) {
 	return strlen(str)+1;
 }
 
+/**
+ * Converts an integer to a string.
+ *
+ *	@param num           Boolean to convert.
+ *	@param str           Buffer to store string in.
+ *	@param maxlength     Maximum length of string buffer.
+ *
+ *	@return              Number of cells written to buffer.
+ */
+stock int BoolToString(bool num, char[] str, int maxlength) {
+	return IntToString(view_as<int>(num), str, maxlength);
+}
+
 #endif

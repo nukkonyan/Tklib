@@ -1303,7 +1303,7 @@ methodmap Entity __nullable__ {
  *
  *	@error	If the entity/edict is invalid, this returns false.
  */
-stock bool IsValidEntityEx(int entity)	{
+stock bool IsValidEntityEx(int entity) {
 	return (IsValidEdict(entity) || IsValidEntity(entity));
 }
 
@@ -1325,8 +1325,8 @@ stock bool IsValidEntityEx(int entity)	{
  *	@param	element		Element # (starting from 0) if property is an array.
  *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
  */
-stock bool SetEntPropEx(int entity, PropType type, const char[] prop, any value, int size=4, int element=0)	{
-	if(HasEntProp(entity, type, prop))	{
+stock bool SetEntPropEx(int entity, PropType type, const char[] prop, any value, int size=4, int element=0) {
+	if(HasEntProp(entity, type, prop)) {
 		SetEntProp(entity, type, prop, value, size, element);
 		return true;
 	}
@@ -1348,8 +1348,8 @@ stock bool SetEntPropEx(int entity, PropType type, const char[] prop, any value,
  *
  *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
  */
-stock bool SetEntPropEntEx(int entity, PropType type, const char[] prop, int other, int element=0)	{
-	if(HasEntProp(entity, type, prop))	{
+stock bool SetEntPropEntEx(int entity, PropType type, const char[] prop, int other, int element=0) {
+	if(HasEntProp(entity, type, prop)) {
 		SetEntPropEnt(entity, type, prop, other, element);
 		return true;
 	}
@@ -1376,7 +1376,7 @@ stock bool SetEntPropEntEx(int entity, PropType type, const char[] prop, int oth
  *
  *	@error				If entity is invalid or property not found, this returns -1.
  */
-stock int GetEntPropEx(int entity, PropType type, const char[] prop, int size=4, int element=0)	{
+stock int GetEntPropEx(int entity, PropType type, const char[] prop, int size=4, int element=0) {
 	return HasEntPropEx(entity, type, prop) ? GetEntProp(entity, type, prop, size, element):-1;
 }
 
@@ -1396,7 +1396,7 @@ stock int GetEntPropEx(int entity, PropType type, const char[] prop, int size=4,
  *
  *	@error				If entity is invalid or property not found, this returns -1.
  */
-stock int GetEntPropEntEx(int entity, PropType type, const char[] prop, int element=0)	{
+stock int GetEntPropEntEx(int entity, PropType type, const char[] prop, int element=0) {
 	return HasEntPropEx(entity, type, prop) ? GetEntPropEnt(entity, type, prop, element):-1;
 }
 
@@ -1419,7 +1419,7 @@ stock int GetEntPropEntEx(int entity, PropType type, const char[] prop, int elem
  *
  * @error				If entity is invalid or property not found, this returns false.
  */
-stock bool GetEntPropBool(int entity, PropType type, const char[] prop, int size=4, int element=0)	{
+stock bool GetEntPropBool(int entity, PropType type, const char[] prop, int size=4, int element=0) {
 	return HasEntPropEx(entity, type, prop) ? view_as<bool>(GetEntProp(entity, type, prop, size, element)):false;
 }
 
@@ -1437,7 +1437,7 @@ stock bool GetEntPropBool(int entity, PropType type, const char[] prop, int size
  *
  *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
  */
-stock bool GetEntPropStringEx(int entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)	{
+stock bool GetEntPropStringEx(int entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0) {
 	return HasEntPropEx(entity, type, prop) ? view_as<bool>(GetEntPropString(entity, type, prop, buffer, maxlen, element) != -1):false;
 }
 
@@ -1454,7 +1454,7 @@ stock bool GetEntPropStringEx(int entity, PropType type, const char[] prop, char
  *
  *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
  */
-stock bool SetEntPropStringEx(int entity, PropType type, const char[] prop, const char[] buffer, int element=0)	{
+stock bool SetEntPropStringEx(int entity, PropType type, const char[] prop, const char[] buffer, int element=0) {
 	return HasEntPropEx(entity, type, prop) ? view_as<bool>(SetEntPropString(entity, type, prop, buffer, element) != -1):false;
 }
 
@@ -1467,7 +1467,7 @@ stock bool SetEntPropStringEx(int entity, PropType type, const char[] prop, cons
  *
  *	@error	If entity or property is invalid/not found, this returns false.
  */
-stock bool HasEntPropEx(int entity, PropType type, const char[] prop)	{
+stock bool HasEntPropEx(int entity, PropType type, const char[] prop) {
 	return view_as<bool>(IsValidEntityEx(entity) && HasEntProp(entity, type, prop));
 }
 
@@ -1484,7 +1484,7 @@ stock bool HasEntPropEx(int entity, PropType type, const char[] prop)	{
  *
  *	@error				If entity, offset or property is not valid, this returns false. (if out of bounds, view_as<int>(this) spits out an error).
  */
-stock bool SetEntPropFloatEx(int entity, PropType type, const char[] prop, float value, int element=0)	{
+stock bool SetEntPropFloatEx(int entity, PropType type, const char[] prop, float value, int element=0) {
 	if(HasEntPropEx(entity, type, prop))	{
 		SetEntPropFloat(entity, type, prop, value, element);
 		return true;
@@ -1508,7 +1508,7 @@ stock bool SetEntPropFloatEx(int entity, PropType type, const char[] prop, float
  *
  *	@error				If entity is invalid, offset out of reasonable bounds or invalid property, this returns -1.0.
  */
-stock float GetEntPropFloatEx(int entity, PropType type, const char[] prop, int element=0)	{
+stock float GetEntPropFloatEx(int entity, PropType type, const char[] prop, int element=0) {
 	return HasEntPropEx(entity, type, prop) ? GetEntPropFloat(entity, type, prop, element):-1.0;
 }
 
@@ -1527,8 +1527,8 @@ stock float GetEntPropFloatEx(int entity, PropType type, const char[] prop, int 
  *	@error				If entity is invalid, property not found, or property not
  *						actually a vector data type, this returns false.
  */
-stock bool GetEntPropVectorEx(int entity, PropType type, const char[] prop, float vec[3], int element=0)	{
-	if(HasEntPropEx(entity, type, prop))	{
+stock bool GetEntPropVectorEx(int entity, PropType type, const char[] prop, float vec[3], int element=0) {
+	if(HasEntPropEx(entity, type, prop)) {
 		GetEntPropVector(entity, type, prop, vec, element);
 		return true;
 	}
@@ -1551,8 +1551,8 @@ stock bool GetEntPropVectorEx(int entity, PropType type, const char[] prop, floa
  *	@error				If entity is invalid, property not found, or property not
  *						actually a vector data type, this returns false.
  */
-stock bool SetEntPropVectorEx(int entity, PropType type, const char[] prop, const float vec[3], int element=0)	{
-	if(HasEntPropEx(entity, type, prop))	{
+stock bool SetEntPropVectorEx(int entity, PropType type, const char[] prop, const float vec[3], int element=0) {
+	if(HasEntPropEx(entity, type, prop)) {
 		SetEntPropVector(entity, type, prop, vec, element);
 		return true;
 	}
@@ -1571,6 +1571,6 @@ stock bool SetEntPropVectorEx(int entity, PropType type, const char[] prop, cons
  *
  *	@error				If invalid entity or property not found, this returns -1.
  */
-stock int GetEntPropArraySizeEx(int entity, PropType type, const char[] prop)	{
+stock int GetEntPropArraySizeEx(int entity, PropType type, const char[] prop) {
 	return HasEntPropEx(entity, type, prop) ? GetEntPropArraySize(entity, type, prop):-1;
 }

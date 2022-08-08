@@ -8,9 +8,12 @@
 
 stock char
 CSGO_GetTeamStringName[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{orange}Terrorists{default}","{bluegrey}Counter-Terrorists{default}"},
-CSGO_GetTeamColour[][] = {"{grey}","{grey}","{orange}","{bluegrey}"};
+CSGO_GetTeamColour[][] = {"{grey}","{grey}","{orange}","{bluegrey}"},
+CSGO_GetRankName[][] = {"Unranked","Silver I","Silver II","Silver III","Silver IV","Silver Elite","Silver Elite Master","Gold Nova I","Gold Nova II","Gold Nova III","Gold Nova Master","Master Guardian I","Master Guardian II","Master Guardian Elite","Distinguished Master Guardian","Legendary Eagle","Legendary Eagle Master","Supreme Master First Class","The Global Elite"};
 
 enum CSGORank {
+	CSGORank_Recalibrated = -2,
+	CSGORank_Expired = -1,
 	CSGORank_None = 0,
 	CSGORank_Silver1 = 1,
 	CSGORank_S1 = 1,
@@ -331,16 +334,17 @@ stock int CSGO_GetCompetitive() {
 /**
  *	Set the matchmaking rank. [CS:GO]
  *
- *	@param	player_ent			The PlayerResource() entity. (OnThinkPost)
- *	@param	client				The target entity.
+ *	@param	player_ent			The GetPlayerResource() entity. (OnThinkPost)
+ *	@param	client				The users index.
  *	@param	competitive_offset	The competitive ranking offset.
  *	@param	rank				The CSGORank rank.
  *	@param	ranktype			The CSGORankType rank type.
  *
  *	@noreturn
  */
-stock void CSGO_SetMatchmakingRank(int player_ent, int client, int competitive_offset, CSGORank rank, CSGORankType ranktype) {
-	SetEntData(player_ent, competitive_offset + client*4, view_as<int>(rank) + view_as<int>(ranktype));
+stock void CSGO_SetMatchmakingRank(int player_ent, int client, CSGORank rank, CSGORankType ranktype)
+{
+	SetEntData(player_ent, FindSendPropInfo("CCSPlayerResource", "m_iCompetitiveRanking") + client*4, view_as<int>(rank) + view_as<int>(ranktype));
 }
 
 /**

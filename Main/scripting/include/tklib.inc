@@ -250,7 +250,7 @@
 #if !defined _tklib_no_tf2
 	#undef REQUIRE_EXTENSIONS
 	#undef REQUIRE_PLUGIN
-	#include <tf2_stocks>
+	#include <tf2>
 #endif
 
 #if !defined _tklib_no_definitions
