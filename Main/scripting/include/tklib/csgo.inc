@@ -342,8 +342,7 @@ stock int CSGO_GetCompetitive() {
  *
  *	@noreturn
  */
-stock void CSGO_SetMatchmakingRank(int player_ent, int client, CSGORank rank, CSGORankType ranktype)
-{
+stock void CSGO_SetMatchmakingRank(int player_ent, int client, CSGORank rank, CSGORankType ranktype) {
 	SetEntData(player_ent, FindSendPropInfo("CCSPlayerResource", "m_iCompetitiveRanking") + client*4, view_as<int>(rank) + view_as<int>(ranktype));
 }
 

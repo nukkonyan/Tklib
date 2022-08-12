@@ -194,7 +194,7 @@ stock bool SetClientHealthEx(int client, int health, int maxhealth)	{
 	if(!Tklib_IsValidClient(client, _, true))
 		return false;
 	
-	SetClientMaxHealth(client, newmaxhealth);
+	SetClientMaxHealth(client, maxhealth);
 	SetClientHealth(client, health);
 	return true;
 }
@@ -418,7 +418,7 @@ stock bool SetClientCollision(int client, bool collision)	{
 	if(!Tklib_IsValidClient(client))
 		return false;
 	
-	SetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), collision ? 2 : 5, 4):
+	SetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), collision ? 2 : 5, 4);
 	return true;
 }
 
@@ -491,7 +491,7 @@ stock float GetClientMaxSpeed(int client)	{
  *	@error	If the user is invalid, this returns false.
  */
 stock bool IsClientMutedEx(int client)	{
-	return GetClientListeningFlags(client) == VOICE_MUTED);
+	return view_as<bool>(GetClientListeningFlags(client) == VOICE_MUTED);
 }
 
 /**
@@ -518,7 +518,7 @@ stock bool SetClientMute(int client, bool mute)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock void SlayClient(int client, bool RandomDeath=false)	{
+stock bool SlayClient(int client, bool RandomDeath=false)	{
 	if(!Tklib_IsValidClient(client, _, true))
 		return false;
 		
@@ -591,6 +591,7 @@ stock bool RespawnTime(int client, float value)	{
 //forwards the action to the respawn event
 stock Action SetRespawnTime(Handle timer, int client)	{
 	Respawn(client);
+	return Plugin_Handled;
 }
 #else
 #error SetRespawnTime() requires GameIdentifier Include (for correct respawn actions)

@@ -74,11 +74,8 @@ stock bool SetClientActiveWeaponAmmo(int client, int ammo)	{
  *
  *	@error	If the user is invalid, nothing will happen.
  */
-stock void SetClientActiveWeaponAmmoEx(int client, int primary=0, int secondary=0)	{
-	if(primary > 0)
-		SetClientWeaponAmmo(client, primary);
-	if(secondary > 0)
-		SetClientWeaponReserveAmmo(client, secondary);
+stock void SetClientActiveWeaponAmmoEx(int client, int primary, int secondary) {
+	SetWeaponAmmoEx(GetClientActiveWeapon(client), primary, secondary);
 }
 
 /**

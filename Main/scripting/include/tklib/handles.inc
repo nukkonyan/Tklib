@@ -229,3 +229,23 @@ methodmap PanelEx < Panel {
 		}
 	}
 }
+
+/**
+ *	Creates a new console boolean variable.
+ *
+ *	@param	name			Name of new convar.
+ *	@param	defaultValue	The default boolean value of new convar.
+ *	@param	description		Optional description of the convar.
+ *	@param	flags			Optional bitstring of flags determining how the convar should be handled. See FCVAR_* constants for more details.
+ *	@param	hasMin			Optional boolean that determines if the convar has a minimum value.
+ *	@param	min				Minimum floating point value that the convar can have if hasMin is true.
+ *	@param	hasMax			Optional boolean that determines if the convar has a maximum value.
+ *	@param	max				Maximum floating point value that the convar can have if hasMax is true.
+ *
+ *	@return					A handle to the newly created convar. If the convar already exists, a handle to it will still be returned.
+ *
+ *	@error               Convar name is blank or is the same as an existing console command.
+ */
+stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[] description, int flags=0) {
+	return CreateConVar(name, defaultValue ? "1":"0", description, flags, true, 0.0, true, 1.0);
+}

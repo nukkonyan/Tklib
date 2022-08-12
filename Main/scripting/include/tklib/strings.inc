@@ -26,10 +26,7 @@ stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensiti
  *	@return				Number of cells written.
  */
 stock int strcopyEx(char[] dest, int destLen, const char[] source, any...) {
-	char format[256];
-	strcopy(format, sizeof(format), source);
-	VFormat(format, sizeof(format), 4);
-	strcopy(dest, destLen, format);
+	return VFormat(dest, destLen, source, 4);
 }
 
 /**
@@ -114,31 +111,6 @@ stock bool SetTrieStringInt(Handle map, int key, int value, bool replace=true) {
 	char[] val = new char[64];
 	Format(fmt, 64, "%i", key);
 	Format(val, 64, "%i", value);
-	return view_as<StringMap>(map).SetString(fmt, val, replace);
-}
-
-/**
- *	Set a string in the map, either inserting a new entry or replacing and old one.
- *
- *	@param	map			The StringMap array handle.
- *	@param	key			Key string.
- *	@param	value		String to store.
- *	@param	replace		If false, operation will fail if they key is already set.
- *	@param	...			Additional key string parameters.
- *	@param	...			Additional value string parameters.
- *
- *	@return	True on success, false on failure.
- *
- *	@error	If the handle is invalid, this returns false.
- */
-stock bool SetTrieStringEx(Handle map, const char[] key, const char[] value, bool replace=true, any ..., any ...) {
-	if(!map)
-		return false;
-	
-	char[] fmt = new char[128];
-	char[] val = new char[128];
-	VFormat(fmt, 128, key, 5);
-	VFormat(val, 128, value, 6);
 	return view_as<StringMap>(map).SetString(fmt, val, replace);
 }
 

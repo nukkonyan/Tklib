@@ -87,7 +87,7 @@ stock float TF2_GetClientHeadScale(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock float TF2_SetClientTorsoScale(int client, float scale)	{
+stock bool TF2_SetClientTorsoScale(int client, float scale)	{
 	return SetEntPropFloatEx(client, Prop_Send, "m_flTorsoScale", scale);
 }
 
@@ -110,7 +110,7 @@ stock float TF2_GetClientTorsoScale(int client)	{
  *
  *	@error	If the client is invalid, this returns false.
  */
-stock float TF2_SetClientHandScale(int client, float scale)	{
+stock bool TF2_SetClientHandScale(int client, float scale)	{
 	return SetEntPropFloatEx(client, Prop_Send, "m_flHandScale", scale);
 }
 

@@ -227,7 +227,7 @@ stock void MarkNativeAsOptionalEx(const char[] native1, const char[] native2) {
  *	@param	name	The dynamic native name.
  *	@param	func	The dynamic native callback.
  */
-stock void CreateNativeEx2(const char[] name, NativeCall func) {
+stock void CreateOptionalNative(const char[] name, NativeCall func) {
 	CreateNative(name, func);
 	MarkNativeAsOptional(name);
 }
@@ -242,10 +242,8 @@ stock void CreateNativeEx2(const char[] name, NativeCall func) {
  *	@return	Returns the new value.
  */
 stock bool AutoSwitch(bool value) {
-	switch(value)	{
-		case true: return false;
-		case false: return true;
-	}
+	value = value ? false : true;
+	return value;
 }
 
 /**
@@ -329,9 +327,7 @@ stock bool AddConVarFlags(ConVar cvar, int flags)	{
 	if(cvar == null)
 		return	false;
 	
-	int flag = cvar.Flags;
-	flag |= flags;
-	cvar.Flags = flags;
+	cvar.Flags |= flags;
 	return true;
 }
 
@@ -350,9 +346,7 @@ stock bool AddConVarFlagsEx(const char[] convar, int flags)	{
 		return	false;
 	}
 	
-	int flag = cvar.Flags;
-	flag |= flags;
-	cvar.Flags = flags;
+	cvar.Flags |= flags;
 	delete cvar;
 	return true;
 }
@@ -408,11 +402,11 @@ stock bool RemoveConVarFlagsEx(const char[] convar, int flags)	{
  */
 stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
 	if(!Tklib_IsValidClient(client))
-		return	false;
+		return false;
 	
 	if(index != -1)	{
 		if(!Tklib_IsValidClient(index))
-			return	false;
+			return false;
 	}
 	
 	if(GetFeatureStatus(FeatureType_Native, "GetUserMessageType") == FeatureStatus_Unavailable
@@ -496,7 +490,7 @@ stock bool GetNativeBool(int param)	{
  *	@error		If database is invalid, this returns null.
  */
 stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...)	{
-	if(database != null)	{
+	if(database != null) {
 		char format[8192];
 		VFormat(format, sizeof(format), query, 3);
 		return SQL_Query(database, format, -1);
@@ -510,11 +504,11 @@ stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...)	{
  *
  *	@param	param	Parameter number, starting from 1.
  *
- *	@return			Address value from cell at the parameter number.
+ *	@return	Address value from cell at the parameter number.
  *
- *	@error			Invalid paramteter number or calling from non-native function.
+ *	@error	Invalid paramteter number or calling from non-native function.
  */
-stock Address GetNativeAddress(int param)	{
+stock Address GetNativeAddress(int param) {
 	return view_as<Address>(GetNativeCell(param));
 }
 
@@ -735,26 +729,6 @@ stock bool KillTimerEx(Handle timer, bool autoClose=false) {
 	
 	KillTimer(timer, autoClose);
 	return true;
-}
-
-/**
- *	Creates a new console boolean variable.
- *
- *	@param	name			Name of new convar.
- *	@param	defaultValue	The default boolean value of new convar.
- *	@param	description		Optional description of the convar.
- *	@param	flags			Optional bitstring of flags determining how the convar should be handled. See FCVAR_* constants for more details.
- *	@param	hasMin			Optional boolean that determines if the convar has a minimum value.
- *	@param	min				Minimum floating point value that the convar can have if hasMin is true.
- *	@param	hasMax			Optional boolean that determines if the convar has a maximum value.
- *	@param	max				Maximum floating point value that the convar can have if hasMax is true.
- *
- *	@return					A handle to the newly created convar. If the convar already exists, a handle to it will still be returned.
- *
- *	@error               Convar name is blank or is the same as an existing console command.
- */
-stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[] description, int flags=0) {
-	return CreateConVar(name, defaultValue ? "1":"0", description, flags, true, 0.0, true, 1.0);
 }
 
 /**

@@ -157,7 +157,7 @@ const TFTeam TFTeam_Green = view_as<TFTeam>(4);
 const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
 const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
 
-#define MAX_TF2_WEAPON_DEFINITION_INDEX 30759
+#define MAX_TF2_DEFINITION_INDEX 30759
 #define MAX_TF2_CONDITION_ID 128
 
 //TF2 Offsets, will be updated as frequently as possible.
@@ -529,7 +529,7 @@ stock float TF2_GetClientChargeMeter(int client)	{
  *	@error	If the user is invalid or has no charge-weapon, this returns -1.0.
 */
 stock bool TF2_SetClientChargeMeter(int client, float value=1.0)	{
-	return SetEntPropFloatEx(Exclient, Prop_Send, "m_flChargeMeter", value);
+	return SetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter", value);
 }
 
 /**
@@ -575,7 +575,7 @@ stock int TF2_GetClientDecapitations(int client)	{
  *	@error	If the user is invalid or has no decapitation-property, this returns false.
 */
 stock bool TF2_SetClientDecapitations(int client, int value=10)	{
-	return SetEntPropEx(client, Prop_Send, "m_iDecapitations");
+	return SetEntPropEx(client, Prop_Send, "m_iDecapitations", value);
 }
 
 /**
@@ -625,7 +625,7 @@ stock TFBuilding TF2_GetBuildingType(any entity)	{
 	if(StrEqual(classname, "obj_sentrygun"))
 		return TFBuilding_Sentrygun;
 	if(StrEqual(classname, "obj_teleporter"))	{
-		switch(TF2_GetObjectMode(entity))	{
+		switch(TF2_GetObjectMode(entity)) {
 			case TFObjectMode_Entrance: return TFBuilding_Teleporter_Entrance;
 			case TFObjectMode_Exit: return TFBuilding_Teleporter_Exit;
 		}
@@ -734,8 +734,8 @@ stock bool TF2_SetBuildingOwner(int building, int client)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int TF2_GetBuildingOwner(int building)	{
-	return GetEntPropEntEx(building, Prop_Send, "m_hBuilder"):-1;
+stock int TF2_GetBuildingOwner(int building) {
+	return GetEntPropEntEx(building, Prop_Send, "m_hBuilder");
 }
 
 /**
@@ -900,7 +900,7 @@ stock bool TF2_SetBuildingObjectFlags(int building, int objectflags)	{
  *	@error	If the building is invalid, this returns false.
  */
 stock bool TF2_IsMiniBuilding(int building)	{
-	return GetEntPropEx(building, Prop_Send, "m_bMiniBuilding");
+	return GetEntPropBool(building, Prop_Send, "m_bMiniBuilding");
 }
 
 /**
@@ -1016,7 +1016,7 @@ stock int TF2_CreateBuildingByType(TFBuilding type)	{
  *	@error	If the building entity is invalid, returns false.
  */
 stock bool TF2_IsBuildingDisposable(int building)	{
-	return GetEntPropEx(building, Prop_Send, "m_bDisposableBuilding");
+	return GetEntPropBool(building, Prop_Send, "m_bDisposableBuilding");
 }
 
 /**
@@ -1039,7 +1039,7 @@ stock bool TF2_SetBuildingDisposable(int building, bool disposable)	{
  *	@error	If the building entity is invalid, returns false.
  */
 stock bool TF2_IsBuildingMapPlaced(int building)	{
-	return GetEntPropEx(building, Prop_Send, "m_bWasMapPlaced");
+	return GetEntPropBool(building, Prop_Send, "m_bWasMapPlaced");
 }
 
 /**
@@ -1062,7 +1062,7 @@ stock bool TF2_SetBuildingMapPlaced(int building, bool map_placed)	{
  *	@error	If the building entity is invalid, returns false.
  */
 stock bool TF2_IsBuildingBeingPlaced(int building)	{
-	return GetEntPropEx(building, Prop_Send, "m_bPlacing");
+	return GetEntPropBool(building, Prop_Send, "m_bPlacing");
 }
 
 /**
@@ -1085,7 +1085,7 @@ stock bool TF2_SetBuildingBeingPlaced(int building, bool placing)	{
  *	@error	If the building entity is invalid, returns false.
  */
 stock bool TF2_IsBuildingBeingCarried(int building)	{
-	return GetEntPropEx(building, Prop_Send, "m_bCarried");
+	return GetEntPropBool(building, Prop_Send, "m_bCarried");
 }
 
 /**
@@ -1108,7 +1108,7 @@ stock bool TF2_SetBuildingBeingCarried(int building, bool carried)	{
  *	@error	If the building entity is invalid, returns false.
  */
 stock bool TF2_IsBuildingBeingCarriedDeploy(int building)	{
-	return GetEntPropEx(building, Prop_Send, "m_bCarryDeploy");
+	return GetEntPropBool(building, Prop_Send, "m_bCarryDeploy");
 }
 
 /**
@@ -1131,7 +1131,7 @@ stock bool TF2_SetBuildingBeingCarriedDeploy(int building, bool deployed)	{
  *	@error	If the building is invalid, this returns false.
  */
 stock bool TF2_IsBuildingActive(int building)	{
-	return GetEntPropEx(building, Prop_Send, "m_bBuilding");
+	return GetEntPropBool(building, Prop_Send, "m_bBuilding");
 }
 
 /**
@@ -1327,6 +1327,7 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
 	return particle;
 }
 
+#if defined __tf_econ_data_included
 /**
  *	Spawns a weapon entity.
  *	The weapons spawned are visible to everyone.
@@ -1348,7 +1349,7 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)
 	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true))	{
+	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true)) {
 		char netclass[64];
 		GetEntityNetClass(weapon, netclass, sizeof(netclass));
 		
@@ -1400,6 +1401,7 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)
 	
 	return weapon;
 }
+#endif
 
 /**
  *	Give the cosmetic to the client.
@@ -2334,7 +2336,7 @@ stock bool TF2_IsValidatedAttachedEntity(int entity)	{
 	
 	char netclass[64];
 	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	return view_as<bool<(GetEntData(entity, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity")));
+	return view_as<bool>(GetEntData(entity, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity")));
 }
 
 /**

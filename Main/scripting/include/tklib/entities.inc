@@ -140,17 +140,19 @@ stock bool GetEntityModel(int entity, char[] buffer, int maxlen)	{
 	return GetEntPropStringEx(entity, Prop_Data, "m_ModelName", buffer, maxlen);
 }
 
-/**
+/* Finally added to SDKTools - SM 1.12
+**
  *	Set the entity owner.
  *
  *	@param	entity		The entity index.
  *	@param	client		The users index.
  *
  *	@error	If the index of the entity owner is invalid, it will return -1.
- */
-stock bool SetEntityOwner(int entity, int client)	{
+ *
+stock bool SetEntityOwner(int entity, int client) {
 	return SetEntPropEntEx(entity, Prop_Data, "m_hOwnerEntity", client);
 }
+*/
 
 /**
  *	Returns an index of the entity owner.
