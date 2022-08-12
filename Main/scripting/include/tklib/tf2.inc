@@ -158,316 +158,317 @@ stock int
 TF2_GetClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175},
 TF2_Australiums[] = {4,7,13,14,15,16,18,19,20,21,29,36,38,45,61,132,141,194,197,200,201,202,203,205,206,207,208,211,228,264,424},
 TF2_Conditions[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129},
+TF2_Paints[] = {1315860,2960676,3100495,3329330,3874595,4345659,4732984,5322826,6637376,6901050,7511618,8154199,8208497,8289918,8400928,8421376,10843461,11049612,12073019,12807213,13595446,14204632,15132390,15185211,15308410,12377523,12955537,15787660,16738740},
 TF2_UnusualEffects[] = {
-	1, //Particle 1
-	2, //Flying Bits.
-	3, //Nemesis Burst.
-	4, //Community Sparkle.
-	5, //Holy Glow.
-	6, //Green Confetti.
-	7, //Purple Confetti.
-	8, //Haunted Ghosts.
-	9, //Green Energy.
-	10, //Purple Energy.
-	11, //Circling TF Logo.
-	12, //Massed Flies.
-	13, //Burning Flames.
-	14, //Scorching Flames
-	15, //Searing Plasma.
-	16, //Vidid Plasma.
-	17, //Sunbeams.
-	18, //Circling Peace Sign.
-	19, //Circling Heart.
-	20, //Map Stamps.
-	28, //Genteel Smoke.
-	29, //Stormy Storm.
-	30, //Blizzardy Storm.
-	31, //Nuts n' Bolts.
-	32, //Orbiting Planets.
-	33, //Orbiting Fire.
-	34, //Bubbling.
-	35, //Smoking.
-	36, //Steaming.
-	37, //Flaming Lantern.
-	38, //Cloudy Moon.
-	39, //Cauldron Bubbles.
-	40, //Eerie Orbiting Fire.
-	43, //Knifestorm.
-	44, //Misty Skull.
-	45, //Harvest Moon.
-	46, //It's A Secret To Everybody.
-	47, //Stormy 13th Hour.
-	55, //Attrib_Particle55.
-	56, //Kill-A-Watt.
-	57, //Terror-Watt.
-	58, //Cloud 9.
-	59, //Aces High.
-	60, //Dead Presidents.
-	61, //Miami Nights.
-	62, //Disco Beat Down.
-	63, //Phosphorous.
-	64, //Sulphurous.
-	65, //Memory Leak.
-	66, //Overclocked.
-	67, //Electrostatic.
-	68, //Power Surge.
-	69, //Anti-Freeze. nice.
-	70, //Time Warp.
-	71, //Green Black Hole.
-	72, //Roboactive.
-	73, //Arcana.
-	74, //Spellbound.
-	75, //Chiroptera Venenata.
-	76, //Poisoned Shadows.
-	77, //Something Burning This Way Comes.
-	78, //Hellfire.
-	79, //Darkblaze.
-	80, //Demonflame.
-	81, //Bonzo THe All-Gnawing.
-	82, //Amaranthine.
-	83, //Stare From Beyond.
-	84, //The Ooze.
-	85, //Ghastly Ghosts Jr.
-	86, //Haunted Phantasm Jr.
-	87, //Frostbite.
-	88, //Molten Mallard.
-	89, //Morning Glory.
-	90, //Death at Dusk.
-	91, //Abduction.
-	92, //Atomic.
-	93, //Subatomic.
-	94, //Electric Hat Protector.
-	95, //Magnetic Hat Protector.
-	96, //Voltaic Hat Protector.
-	97, //Galactic Codex.
-	98, //Ancient Codex.
-	99, //Nebula.
-	100, //Death by Disco.
-	101, //It's A Mystery To Everyone.
-	102, //It's A Puzzle To Me.
-	103, //Ether Trail.
-	104, //Nether Trail.
-	105, //Ancient Eldritch.
-	106, //Eldritch Flame.
-	107, //Neutron Star.
-	108, //Tesla Coil.
-	109, //Starstorm Insomnia.
-	110, //Starstorm Slumber.
-	111, //Brain Drain.
-	112, //Open Mind.
-	113, //Head of Steam.
-	114, //Galactic Gateway.
-	115, //The Eldritch Opening.
-	116, //The Dark Doorway.
-	117, //Ring Of Fire.
-	118, //Vicious Circle.
-	119, //White Lightning.
-	120, //Omniscient Orb.
-	121, //Clairvoyance.
-	122, //Fifth Dimension.
-	123, //Vicious Vortex.
-	124, //Menacing Miasma.
-	125, //Abyssal Aura.
-	126, //Wicked Wood.
-	127, //Ghastly Grove.
-	128, //Mystical Medley.
-	129, //Ethereal Essence.
-	130, //Twisted Radiance.
-	131, //Violet Vortex.
-	132, //Verdant Vortex.
-	133, //Valiant Vortex.
-	134, //Sparkling Lights.
-	135, //Frozen Icefall.
-	136, //Fragmented Gluons.
-	137, //Fragmented Quarks.
-	138, //Fragmented Photons.
-	139, //Defragmenting Reality.
-	141, //Fragmenting Reality.
-	142, //Refragmenting Reality.
-	143, //Snowfallen.
-	144, //Snowblinded.
-	145, //Pyroland Daydream.
-	147, //Verdatica.
-	148, //Aromatica.
-	149, //Chromatica.
-	150, //Prismatica.
-	151, //Bee Swarm.
-	152, //Frisky Fireflies
-	153, //Smoldering Spirits.
-	154, //Wandering Wisps.
-	155, //Kaleidoscope.
-	156, //Green Giggler.
-	157, //Laugh-O-Lantern.
-	158, //Plum Prankster.
-	159, //Pyroland Nightmare.
-	160, //Gravelly Ghoul.
-	161, //Vexed Volcanics.
-	162, //Gourdian Angel.
-	163, //Pumpkin Party.
-	164, //Frozen Fractals.
-	165, //Lavender Landfall.
-	166, //Special Snowfall.
-	167, //Divine Desire.
-	168, //Distant Dream.
-	169, //Violent Wintertide.
-	170, //Blighted Snowstorm.
-	171, //Pale Nimbus.
-	172, //Genus Plasmos.
-	173, //Serenus Lumen.
-	174, //Ventum Maris.
-	175, //Mirthful Mistletoe.
-	177, //Resonation.
-	178, //Aggradation.
-	179, //Lucidation.
-	180, //Stunning.
-	181, //Ardentum Saturnalis.
-	182, //Fragrancium Elementalis.
-	183, //Reverium Irregularius.
-	185, //Perennial Petals.
-	186, //Flavorsome Sunset.
-	187, //Raspberry Bloom.
-	188, //Iridesensce.
-	189, //Tempered Thorns.
-	190, //Devilish Diablo.
-	191, //Severed Serration.
-	192, //Shrieking Shades.
-	193, //Restless Wraiths.
-	195, //Infernal Wraith.
-	196, //Phantom Crown.
-	197, //Ancient Specter.
-	198, //Viridescent Peeper.
-	199, //Eyes of Molten.
-	200, //Ominous Stars.
-	201, //Pumpkin Moon.
-	202, //Frantic Spooker.
-	203, //Frightened Poltergeist.
-	204, //Energetic Haunter.
-	205, //Smissmass Tree.
-	206, //Hospitable Festivity.
-	207, //Condescending Embrace.
-	209, //Sparkling Spruce.
-	210, //Glittering Juniper.
-	211, //Prismatic Pine.
-	212, //Spiraling Lights.
-	213, //Twisting Lights.
-	214, //Stardust Pathway.
-	215, //Flurry Rush.
-	216, //Spark of Smissmass.
-	218, //Polar Forecast.
-	219, //Shining Stag.
-	220, //Holiday Horns.
-	221, //Ardent Antlers.
-	223, //Festive Lights.
-	224, //Crustacean Sensation.
-	226, //Frosted Decadence.
-	228, //Sprinkled Delights.
-	229, //Terrestrial Favor.
-	230, //Tropical Thrill.
-	231, //Flourishing Passion.
-	232, //Dazzling Fireworks.
-	233, //Blazing Fireworks.
-	234, //Shimmering Fireworks.
-	235, //Twinkling Fireworks.
-	236, //Sparkling Fireworks.
-	237, //Glowing Fireworks.
-	238, //Glimmering Fireworks.
-	239, //Flying Lights.
-	241, //Limelight.
-	242, //Shining Star.
-	243, //Cold Cosmos.
-	244, //Refracting Fractals.
-	245, //Startrance.
-	247, //Starlush.
-	248, //Starfire.
-	249, //Stardust.
-	250, //Contagious Eruption.
-	251, //Daydream Eruption.
-	252, //Volcanic Eruption.
-	253, //Divine Sunlight.
-	254, //Audiophile.
-	255, //Soundwave.
-	256, //Synesthesia.
-	701, //Hot.
-	702, //Isotope.
-	703, //Cool
-	704, //Energy Orb.
-	3001, //Showstopper.
-	3003, //Holy Grail.
-	3004, //'72.
-	3005, //Fountain of Delight.
-	3006, //Screaming Tiger.
-	3007, //Skill Gotten Gains.
-	3008, //Midnight Whirlwind.
-	3009, //Silver Cyclone.
-	3010, //Mega Strike.
-	3011, //Haunted Phantasm.
-	3012, //Ghastly Ghosts.
-	3013, //Hellish Inferno.
-	3014, //Spectral Swirl.
-	3015, //Infernal Flames.
-	3016, //Infernal Smoke.
-	3017, //Acidic Bubbles of Envy.
-	3018, //Flammable Bubbles of Attraction.
-	3019, //Poisonous Bubbles of Regret.
-	3020, //Roaring Rockets.
-	3021, //Spooky Night.
-	3022, //Ominous Night.
-	3023, //Bewitched.
-	3024, //Accursed.
-	3025, //Enchanted.
-	3026, //Static Mist.
-	3027, //Eerie Lightning.
-	3028, //Terrifying Thunder.
-	3029, //Jarate Shock.
-	3030, //Nether Void.
-	3031, //Good-Hearted Goodies.
-	3032, //Wintery Wisp.
-	3033, //Arctic Aurora.
-	3034, //Winter Spirit.
-	3035, //Festive Spirit.
-	3036, //Magic Spirit.
-	3037, //Spectral Escort.
-	3038, //Astral Presence.
-	3039, //Arcane Assistance.
-	3041, //Emerald Allurement.
-	3042, //Pyrophoric Pesonality.
-	3043, //Spellbound Aspect.
-	3044, //Static Shock.
-	3045, //Veno Shock.
-	3046, //Toxic Terrors.
-	3047, //Arachnid Assault.
-	3048, //Creepy Crawlies.
-	3049, //Delightful Star.
-	3050, //Frosted Star.
-	3051, //Apotheosis.
-	3052, //Ascension.
-	3053, //Reindoonicorn Rancher.
-	3055, //Twinkling Lights.
-	3056, //Shimmering Lights.
-	3059, //Spectral Shackles.
-	3060, //Cursed Confinement.
-	3061, //Cavalier de Carte.
-	3063, //Hollow Flourish.
-	3064, //Magic Shuffle.
-	3065, //Vigorous Pulse.
-	3066, //Thundering Spirit.
-	3067, //Galvanic Defiance.
-	3068, //Wispy Halos.
-	3069, //Nether Wisps.
-	3070, //Aurora Borealis.
-	3071, //Aurora Australis.
-	3072, //Aurora Polaris.
-	3073, //Amethyst Winds.
-	3074, //Golden Gusts.
-	3075, //Smissmass Swirls.
-	3077, //Minty Cypress.
-	3078, //Pristine Pine.
-	3079, //Sparkly Spruce.
-	3081, //Festive Fever.
-	3083, //Golden Glimmer.
-	3084, //Frosty Silver.
-	3085, //Glamorous Dazzle.
-	3087, //Sublime Snowstorm.
+1 //Particle 1
+,2 //Flying Bits.
+,3 //Nemesis Burst.
+,4 //Community Sparkle.
+,5 //Holy Glow.
+,6 //Green Confetti.
+,7 //Purple Confetti.
+,8 //Haunted Ghosts.
+,9 //Green Energy.
+,10 //Purple Energy.
+,11 //Circling TF Logo.
+,12 //Massed Flies.
+,13 //Burning Flames.
+,14 //Scorching Flames
+,15 //Searing Plasma.
+,16 //Vidid Plasma.
+,17 //Sunbeams.
+,18 //Circling Peace Sign.
+,19 //Circling Heart.
+,20 //Map Stamps.
+,28 //Genteel Smoke.
+,29 //Stormy Storm.
+,30 //Blizzardy Storm.
+,31 //Nuts n' Bolts.
+,32 //Orbiting Planets.
+,33 //Orbiting Fire.
+,34 //Bubbling.
+,35 //Smoking.
+,36 //Steaming.
+,37 //Flaming Lantern.
+,38 //Cloudy Moon.
+,39 //Cauldron Bubbles.
+,40 //Eerie Orbiting Fire.
+,43 //Knifestorm.
+,44 //Misty Skull.
+,45 //Harvest Moon.
+,46 //It's A Secret To Everybody.
+,47 //Stormy 13th Hour.
+,55 //Attrib_Particle55.
+,56 //Kill-A-Watt.
+,57 //Terror-Watt.
+,58 //Cloud 9.
+,59 //Aces High.
+,60 //Dead Presidents.
+,61 //Miami Nights.
+,62 //Disco Beat Down.
+,63 //Phosphorous.
+,64 //Sulphurous.
+,65 //Memory Leak.
+,66 //Overclocked.
+,67 //Electrostatic.
+,68 //Power Surge.
+,69 //Anti-Freeze. nice.
+,70 //Time Warp.
+,71 //Green Black Hole.
+,72 //Roboactive.
+,73 //Arcana.
+,74 //Spellbound.
+,75 //Chiroptera Venenata.
+,76 //Poisoned Shadows.
+,77 //Something Burning This Way Comes.
+,78 //Hellfire.
+,79 //Darkblaze.
+,80 //Demonflame.
+,81 //Bonzo THe All-Gnawing.
+,82 //Amaranthine.
+,83 //Stare From Beyond.
+,84 //The Ooze.
+,85 //Ghastly Ghosts Jr.
+,86 //Haunted Phantasm Jr.
+,87 //Frostbite.
+,88 //Molten Mallard.
+,89 //Morning Glory.
+,90 //Death at Dusk.
+,91 //Abduction.
+,92 //Atomic.
+,93 //Subatomic.
+,94 //Electric Hat Protector.
+,95 //Magnetic Hat Protector.
+,96 //Voltaic Hat Protector.
+,97 //Galactic Codex.
+,98 //Ancient Codex.
+,99 //Nebula.
+,100 //Death by Disco.
+,101 //It's A Mystery To Everyone.
+,102 //It's A Puzzle To Me.
+,103 //Ether Trail.
+,104 //Nether Trail.
+,105 //Ancient Eldritch.
+,106 //Eldritch Flame.
+,107 //Neutron Star.
+,108 //Tesla Coil.
+,109 //Starstorm Insomnia.
+,110 //Starstorm Slumber.
+,111 //Brain Drain.
+,112 //Open Mind.
+,113 //Head of Steam.
+,114 //Galactic Gateway.
+,115 //The Eldritch Opening.
+,116 //The Dark Doorway.
+,117 //Ring Of Fire.
+,118 //Vicious Circle.
+,119 //White Lightning.
+,120 //Omniscient Orb.
+,121 //Clairvoyance.
+,122 //Fifth Dimension.
+,123 //Vicious Vortex.
+,124 //Menacing Miasma.
+,125 //Abyssal Aura.
+,126 //Wicked Wood.
+,127 //Ghastly Grove.
+,128 //Mystical Medley.
+,129 //Ethereal Essence.
+,130 //Twisted Radiance.
+,131 //Violet Vortex.
+,132 //Verdant Vortex.
+,133 //Valiant Vortex.
+,134 //Sparkling Lights.
+,135 //Frozen Icefall.
+,136 //Fragmented Gluons.
+,137 //Fragmented Quarks.
+,138 //Fragmented Photons.
+,139 //Defragmenting Reality.
+,141 //Fragmenting Reality.
+,142 //Refragmenting Reality.
+,143 //Snowfallen.
+,144 //Snowblinded.
+,145 //Pyroland Daydream.
+,147 //Verdatica.
+,148 //Aromatica.
+,149 //Chromatica.
+,150 //Prismatica.
+,151 //Bee Swarm.
+,152 //Frisky Fireflies
+,153 //Smoldering Spirits.
+,154 //Wandering Wisps.
+,155 //Kaleidoscope.
+,156 //Green Giggler.
+,157 //Laugh-O-Lantern.
+,158 //Plum Prankster.
+,159 //Pyroland Nightmare.
+,160 //Gravelly Ghoul.
+,161 //Vexed Volcanics.
+,162 //Gourdian Angel.
+,163 //Pumpkin Party.
+,164 //Frozen Fractals.
+,165 //Lavender Landfall.
+,166 //Special Snowfall.
+,167 //Divine Desire.
+,168 //Distant Dream.
+,169 //Violent Wintertide.
+,170 //Blighted Snowstorm.
+,171 //Pale Nimbus.
+,172 //Genus Plasmos.
+,173 //Serenus Lumen.
+,174 //Ventum Maris.
+,175 //Mirthful Mistletoe.
+,177 //Resonation.
+,178 //Aggradation.
+,179 //Lucidation.
+,180 //Stunning.
+,181 //Ardentum Saturnalis.
+,182 //Fragrancium Elementalis.
+,183 //Reverium Irregularius.
+,185 //Perennial Petals.
+,186 //Flavorsome Sunset.
+,187 //Raspberry Bloom.
+,188 //Iridesensce.
+,189 //Tempered Thorns.
+,190 //Devilish Diablo.
+,191 //Severed Serration.
+,192 //Shrieking Shades.
+,193 //Restless Wraiths.
+,195 //Infernal Wraith.
+,196 //Phantom Crown.
+,197 //Ancient Specter.
+,198 //Viridescent Peeper.
+,199 //Eyes of Molten.
+,200 //Ominous Stars.
+,201 //Pumpkin Moon.
+,202 //Frantic Spooker.
+,203 //Frightened Poltergeist.
+,204 //Energetic Haunter.
+,205 //Smissmass Tree.
+,206 //Hospitable Festivity.
+,207 //Condescending Embrace.
+,209 //Sparkling Spruce.
+,210 //Glittering Juniper.
+,211 //Prismatic Pine.
+,212 //Spiraling Lights.
+,213 //Twisting Lights.
+,214 //Stardust Pathway.
+,215 //Flurry Rush.
+,216 //Spark of Smissmass.
+,218 //Polar Forecast.
+,219 //Shining Stag.
+,220 //Holiday Horns.
+,221 //Ardent Antlers.
+,223 //Festive Lights.
+,224 //Crustacean Sensation.
+,226 //Frosted Decadence.
+,228 //Sprinkled Delights.
+,229 //Terrestrial Favor.
+,230 //Tropical Thrill.
+,231 //Flourishing Passion.
+,232 //Dazzling Fireworks.
+,233 //Blazing Fireworks.
+,234 //Shimmering Fireworks.
+,235 //Twinkling Fireworks.
+,236 //Sparkling Fireworks.
+,237 //Glowing Fireworks.
+,238 //Glimmering Fireworks.
+,239 //Flying Lights.
+,241 //Limelight.
+,242 //Shining Star.
+,243 //Cold Cosmos.
+,244 //Refracting Fractals.
+,245 //Startrance.
+,247 //Starlush.
+,248 //Starfire.
+,249 //Stardust.
+,250 //Contagious Eruption.
+,251 //Daydream Eruption.
+,252 //Volcanic Eruption.
+,253 //Divine Sunlight.
+,254 //Audiophile.
+,255 //Soundwave.
+,256 //Synesthesia.
+,701 //Hot.
+,702 //Isotope.
+,703 //Cool
+,704 //Energy Orb.
+,3001 //Showstopper.
+,3003 //Holy Grail.
+,3004 //'72.
+,3005 //Fountain of Delight.
+,3006 //Screaming Tiger.
+,3007 //Skill Gotten Gains.
+,3008 //Midnight Whirlwind.
+,3009 //Silver Cyclone.
+,3010 //Mega Strike.
+,3011 //Haunted Phantasm.
+,3012 //Ghastly Ghosts.
+,3013 //Hellish Inferno.
+,3014 //Spectral Swirl.
+,3015 //Infernal Flames.
+,3016 //Infernal Smoke.
+,3017 //Acidic Bubbles of Envy.
+,3018 //Flammable Bubbles of Attraction.
+,3019 //Poisonous Bubbles of Regret.
+,3020 //Roaring Rockets.
+,3021 //Spooky Night.
+,3022 //Ominous Night.
+,3023 //Bewitched.
+,3024 //Accursed.
+,3025 //Enchanted.
+,3026 //Static Mist.
+,3027 //Eerie Lightning.
+,3028 //Terrifying Thunder.
+,3029 //Jarate Shock.
+,3030 //Nether Void.
+,3031 //Good-Hearted Goodies.
+,3032 //Wintery Wisp.
+,3033 //Arctic Aurora.
+,3034 //Winter Spirit.
+,3035 //Festive Spirit.
+,3036 //Magic Spirit.
+,3037 //Spectral Escort.
+,3038 //Astral Presence.
+,3039 //Arcane Assistance.
+,3041 //Emerald Allurement.
+,3042 //Pyrophoric Pesonality.
+,3043 //Spellbound Aspect.
+,3044 //Static Shock.
+,3045 //Veno Shock.
+,3046 //Toxic Terrors.
+,3047 //Arachnid Assault.
+,3048 //Creepy Crawlies.
+,3049 //Delightful Star.
+,3050 //Frosted Star.
+,3051 //Apotheosis.
+,3052 //Ascension.
+,3053 //Reindoonicorn Rancher.
+,3055 //Twinkling Lights.
+,3056 //Shimmering Lights.
+,3059 //Spectral Shackles.
+,3060 //Cursed Confinement.
+,3061 //Cavalier de Carte.
+,3063 //Hollow Flourish.
+,3064 //Magic Shuffle.
+,3065 //Vigorous Pulse.
+,3066 //Thundering Spirit.
+,3067 //Galvanic Defiance.
+,3068 //Wispy Halos.
+,3069 //Nether Wisps.
+,3070 //Aurora Borealis.
+,3071 //Aurora Australis.
+,3072 //Aurora Polaris.
+,3073 //Amethyst Winds.
+,3074 //Golden Gusts.
+,3075 //Smissmass Swirls.
+,3077 //Minty Cypress.
+,3078 //Pristine Pine.
+,3079 //Sparkly Spruce.
+,3081 //Festive Fever.
+,3083 //Golden Glimmer.
+,3084 //Frosty Silver.
+,3085 //Glamorous Dazzle.
+,3087 //Sublime Snowstorm.
 };
 
 //May seem useless, but for just incase.
@@ -495,6 +496,7 @@ const TFTeam TFTeam_Blue = view_as<TFTeam>3);
 
 #define MAX_TF2_DEFINITION_INDEX 30759
 #define MAX_TF2_CONDITIONS sizeof(TF2_Conditions)
+#define MAX_TF2_PAINTS sizeof(TF2_Paints)
 #define MAX_TF2_UNUSUALS sizeof(TF2_UnusualEffects)
 
 //TF2 Offsets, will be updated as frequently as possible.
@@ -715,7 +717,7 @@ enum {
  *
  *	@error	If the user is invalid or has no currency property, this returns false.
  */
-stock bool TF2_SetClientMvMCash(int client, int value)	{
+stock bool TF2_SetClientMvMCurrency(int client, int value) {
 	return SetEntPropEx(client, Prop_Send, "m_nCurrency", value);
 }
 
@@ -726,7 +728,7 @@ stock bool TF2_SetClientMvMCash(int client, int value)	{
  *
  *	@error	If the user is invalid or has no currency property, this returns -1.
  */
-stock int TF2_GetClientMvMCash(int client)	{
+stock int TF2_GetClientMvMCurrency(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_nCurrency"); 
 }
 
@@ -738,7 +740,7 @@ stock int TF2_GetClientMvMCash(int client)	{
  *
  *	@error	If the user is invalid or has no taunt cam property, this returns false.
  */
-stock bool TF2_SetClientTauntCam(int client, bool value)	{
+stock bool TF2_SetClientTauntCam(int client, bool value) {
 	return SetEntPropEx(client, Prop_Send, "m_nForceTauntCam", value);
 }
 
@@ -749,7 +751,7 @@ stock bool TF2_SetClientTauntCam(int client, bool value)	{
  *
  *	@error	If the user is invalid or has no taunt cam property, this returns false.
  */
-stock bool TF2_GetClientTauntCam(int client)	{
+stock bool TF2_GetClientTauntCam(int client) {
 	return GetEntPropBool(client, Prop_Send, "m_nForceTauntCam");
 }
 
@@ -762,7 +764,7 @@ stock bool TF2_GetClientTauntCam(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool TF2_SetClientKillstreak(int client, int value=5)	{
+stock bool TF2_SetClientKillstreak(int client, int value=5) {
 	return SetEntPropEx(client, Prop_Send, "m_nStreaks", value);
 }
 
@@ -773,7 +775,7 @@ stock bool TF2_SetClientKillstreak(int client, int value=5)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int TF2_GetClientKillstreak(int client)	{
+stock int TF2_GetClientKillstreak(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_nStreaks");
 }
 
@@ -784,7 +786,7 @@ stock int TF2_GetClientKillstreak(int client)	{
  *
  *	@error	If the user is invalid or has no cloak, this returns -1.0.
  */
-stock float TF2_GetClientCloakMeter(int client)	{
+stock float TF2_GetClientCloakMeter(int client) {
 	return GetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter");
 }
 
@@ -796,7 +798,7 @@ stock float TF2_GetClientCloakMeter(int client)	{
  *
  *	@error	If the user is invalid or has no cloak, this returns false.
  */
-stock bool TF2_SetClientCloakMeter(int client, float value=1.0)	{
+stock bool TF2_SetClientCloakMeter(int client, float value=1.0) {
 	return SetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter", value);
 }
 
@@ -807,7 +809,7 @@ stock bool TF2_SetClientCloakMeter(int client, float value=1.0)	{
  *
  *	@error	If the user is invalid, this returns false.
 */
-stock bool TF2_GetClientGlow(int client)	{
+stock bool TF2_GetClientGlow(int client) {
 	return GetEntPropBool(client, Prop_Send, "m_bGlowEnabled");
 }
 
@@ -819,7 +821,7 @@ stock bool TF2_GetClientGlow(int client)	{
  *
  *	@error	If the user is invalid, this returns.
  */
-stock bool TF2_SetClientGlow(int client, bool value)	{
+stock bool TF2_SetClientGlow(int client, bool value) {
 	return SetEntPropEx(client, Prop_Send, "m_bGlowEnabled", value);
 }
 
@@ -837,8 +839,8 @@ stock float TF2_GetClientUbercharge(int client)	{
 /**
  *	Set the users ubercharge value,
  *
- *	@param	client		The users index.
- *	@param	value		Ubercharge value, Defaulted to 1.0.
+ *	@param	client	The users index.
+ *	@param	value	Ubercharge value, Defaulted to 1.0.
  *
  *	@error	If the user is invalid or has no medigun, this returns false.
 */
@@ -849,46 +851,46 @@ stock bool TF2_SetClientUbercharge(int client, float value=1.0)	{
 /**
  *	Returns the users charge value,
  *
- *	@param	client		The users index.
+ *	@param	client	The users index.
  *
  *	@error	If the user is invalid, this returns -1.0.
 */
-stock float TF2_GetClientChargeMeter(int client)	{
+stock float TF2_GetClientChargeMeter(int client) {
 	return GetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter");
 }
 
 /**
  *	Set the users charge value,
  *
- *	@param client		The users index.
- *	@param value		Charge value.
+ *	@param client	The users index.
+ *	@param value	Charge value.
  *
  *	@error	If the user is invalid or has no charge-weapon, this returns -1.0.
 */
-stock bool TF2_SetClientChargeMeter(int client, float value=1.0)	{
+stock bool TF2_SetClientChargeMeter(int client, float value=1.0) {
 	return SetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter", value);
 }
 
 /**
  *	Returns the users metal value,
  *
- *	@param	client		The users index.
+ *	@param	client	The users index.
  *
  *	@error	If the user is invalid or has no metal-property, this returns -1.
 */
-stock int TF2_GetClientMetal(int client)	{
+stock int TF2_GetClientMetal(int client) {
 	return GetEntPropEx(client, Prop_Data, "m_iAmmo", 4, 3);
 }
 
 /**
  *	Set the users metal value,
  *
- *	@param	client		The users index.
- *	@param	metal		Metal amount.
+ *	@param	client	The users index.
+ *	@param	metal	Metal amount.
  *
  *	@error	If the user is invalid or has no metal-property, this returns false.
 */
-stock bool TF2_SetClientMetal(int client, int metal=200)	{
+stock bool TF2_SetClientMetal(int client, int metal=200) {
 	return SetEntPropEx(client, Prop_Data, "m_iAmmo", metal, 4, 3);
 }
 
@@ -899,7 +901,7 @@ stock bool TF2_SetClientMetal(int client, int metal=200)	{
  *
  *	@error	If the client is invalid or has no decapitation-property, this returns -1.
 */
-stock int TF2_GetClientDecapitations(int client)	{
+stock int TF2_GetClientDecapitations(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_iDecapitations");
 }
 
@@ -923,7 +925,7 @@ stock bool TF2_SetClientDecapitations(int client, int value=10)	{
  *
  *	@error	If the user or slot is invalid, this returns -1.
  */
-stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
+stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot) {
 	return Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, view_as<int>(slot)):-1;
 }
 
@@ -936,7 +938,7 @@ stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot)	{
  *	@param	maxlen			Maximum length of the string.
  */
 stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int maxlen)	{
-	switch(building)	{
+	switch(building) {
 		case TFBuilding_Dispenser: strcopy(buildingname, maxlen, "Dispenser");
 		case TFBuilding_Sentrygun: strcopy(buildingname, maxlen, "Sentrygun");
 		case TFBuilding_Teleporter_Entrance: strcopy(buildingname, maxlen, "Teleporter Entrance");
@@ -2806,12 +2808,26 @@ stock bool TF2_SetClientDesiredClass(int client, TFClassType class) {
 }
 
 /**
+ *	Returns if the paint kit index is valid.
+ *
+ *	@param	index	The paint kit index.
+ */
+stock bool TF2_IsValidPaintKit(int index) {
+	for(int i =  MAX_TF2_PAINTS; i--;) {
+		if(TF2_Paints[i] == index)
+			return true;
+	}
+	
+	return false;
+}
+
+/**
  *	Returns if the unusual effect index is valid.
  *
  *	@param	index	The unusual particle index.
  */
 stock bool TF2_IsValidUnusual(int index) {
-	for(int i = 0; i < MAX_TF2_UNUSUALS; i++) {
+	for(int i = MAX_TF2_UNUSUALS; i--;) {
 		if(TF2_UnusualEffects[i] == index)
 			return true;
 	}
