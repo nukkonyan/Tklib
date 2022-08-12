@@ -684,7 +684,7 @@ stock bool TF2_SetClientModel(int client, const char[] model, bool UseClassAnima
  */
 stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
 	int weapon = -1;
-	if((weapon = GetPlayerWeaponSlot(client, int(slot))) != -1)	{
+	if((weapon = GetPlayerWeaponSlot(client, view_as<int>(slot))) != -1)	{
 		RemovePlayerItem(client, weapon);
 		RemoveEdict(weapon);
 		return true;
@@ -1187,7 +1187,7 @@ stock void TF2_SetGameType(TFGameType gametype)	{
  *	Returns if Waiting For Players phase is active.
  */
 stock bool TF2_IsWaitingForPlayers()	{
-	return	bool(GameRules_GetProp("m_bInWaitingForPlayers"));
+	return view_as<bool>(GameRules_GetProp("m_bInWaitingForPlayers"));
 }
 
 /**
@@ -1203,7 +1203,7 @@ stock void TF2_SetWarmupForPlayers(bool value)	{
  *	Returns if Powerup Mode is active.
  */
 stock bool TF2_IsPowerupMode()	{
-	return	bool(GameRules_GetProp("m_bPowerupMode"));
+	return view_as<bool>(GameRules_GetProp("m_bPowerupMode"));
 }
 
 /**
@@ -1219,7 +1219,7 @@ stock void TF2_SetPowerupMode(bool value)	{
  *	Returns if Truce is active.
  */
 stock bool TF2_IsTruceActive()	{
-	return	bool(GameRules_GetProp("m_bTruceActive"));
+	return view_as<bool>(GameRules_GetProp("m_bTruceActive"));
 }
 
 /**

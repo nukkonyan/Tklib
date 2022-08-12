@@ -253,7 +253,7 @@
 	#include <tf2_stocks>
 #endif
 
-#if !defined _tklib_no_definitions
+#if defined _tklib_definitions
 //Extra things that should be part of SourceMod, making it easier.
 #define	int(%1) view_as<int>(%1)
 #define	any(%1) view_as<any>(%1)
