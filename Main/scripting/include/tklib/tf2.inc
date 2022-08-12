@@ -473,6 +473,8 @@ TF2_UnusualEffects[] = {
 
 //May seem useless, but for just incase.
 const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
+const TFTeam TFTeam_Green = view_as<TFTeam>(4);
+const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
 const TFClassType TFClass_Invalid = view_as<TFClassType>(-1);
 const TFClassType TFClass_Demoman = view_as<TFClassType>(4);
 const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
