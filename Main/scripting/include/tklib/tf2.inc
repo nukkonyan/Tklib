@@ -152,7 +152,9 @@ TF2_ConditionName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pos
 ,"Less ground friction"
 ,"Reduced air control and friction"
 ,"Used whenever a player gets teleported to Hell, does nothing applied but stops the gradual healing from the teleport when removed"
-,"Used in Mannpowerr when a player has a high kill count compared to the rest of the players in the game. Reduces the strength of the currently equipped powerup"};
+,"Used in Mannpower when a player has a high kill count compared to the rest of the players in the game. Reduces the strength of the currently equipped powerup"},
+TF2_SpellPaintName[][] = {"Die Job","Chromatic Corruption","Putrescent Pigmentation","Spectral Spectrum","Sinister Staining","Unnamed Unused"},
+TF2_KillstreakerSheenName[][] = {"","Team Shine","Deadly Daffodil","Manndarin","Mean Green","Agonizing Emerald","Villainous Violet","Hot Rod"};
 
 stock int
 TF2_GetClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175},
@@ -469,7 +471,8 @@ TF2_UnusualEffects[] = {
 ,3084 //Frosty Silver.
 ,3085 //Glamorous Dazzle.
 ,3087 //Sublime Snowstorm.
-};
+},
+TF2_Weapons[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,35,36,37,38,39,40,41,42,43,44,45,46,56,57,58,59,60,61,127,128,129,130,131,132,133,140,141,142,153,154,155,160,161,169,171,172,173,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,212,214,215,220,221,222,224,225,228,230,231,232,237,239,264,265,266,294,297,298,304,305,307,308,310,312,317,325,326,327,329,331,348,349,351,355,356,357,401,402,404,406,411,412,413,414,415,416,423,424,425,426,441,442,444,447,448,449,450,452,457,460,461,466,474,482,513,525,526,527,528,572,574,587,588,589,593,594,595,609,638,642,648,649,654,656,658,659,660,661,662,663,664,665,669,727,737,739,740,741,751,752,772,773,775,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,808,808,809,811,812,813,832,833,834,850,851,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,939,947,954,957,958,959,960,961,962,963,964,965,966,967,968,969,971,972,973,974,996,997,999,1000,1003,1004,1005,1006,1007,1013,1071,1078,1079,1081,1082,1083,1084,1085,1092,1098,1099,1100,1101,1102,1103,1104,1105,1121,1123,1127,1141,1142,1143,1144,1145,1146,1149,1150,1151,1153,1178,1179,1180,1181,1184,15000,15001,15002,15003,15004,15005,15006,15007,15008,15009,15110,15011,15012,15013,15014,15015,15016,15017,15018,15019,15020,15021,15022,15023,15024,15125,15026,15027,15028,15029,15030,15031,15032,15033,15034,15035,15036,15037,15038,15139,15040,15041,15042,15043,15044,15045,15046,15047,15048,15049,15050,15051,15052,15053,15054,15055,15056,15057,15058,15059,15060,15061,15062,15063,15064,15065,15066,15067,15068,15069,15070,15071,15072,15073,15074,15075,15076,15077,15078,15079,15080,15081,15082,15083,15084,15085,15086,15087,15088,15089,15090,15091,15092,15093,15094,15095,15096,15097,15098,15099,15100,15101,15102,15103,15104,15105,15106,15107,15108,15109,15110,15111,15112,15113,15114,15115,15116,15117,15118,15119,15120,15121,15122,15123,15124,15125,15126,15127,15128,15129,15130,15131,15132,15133,15134,15135,15136,15137,15138,15139,15140,15141,15142,15143,15144,15145,15146,15147,15148,15149,15150,15151,15152,15153,15154,15155,15156,15157,15158,30474,30665,30666,30667,30668,30758};
 
 //May seem useless, but for just incase.
 const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
@@ -496,10 +499,10 @@ const TFTeam TFTeam_Red = view_as<TFTeam>(2);
 const TFTeam TFTeam_Blue = view_as<TFTeam>3);
 #endif
 
-#define MAX_TF2_DEFINITION_INDEX 30759
 #define MAX_TF2_CONDITIONS sizeof(TF2_Conditions)
 #define MAX_TF2_PAINTS sizeof(TF2_Paints)
 #define MAX_TF2_UNUSUALS sizeof(TF2_UnusualEffects)
+#define MAX_TF2_WEAPONS sizeof(TF2_Weapons)
 
 //TF2 Offsets, will be updated as frequently as possible.
 enum {
@@ -2439,8 +2442,8 @@ stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen) {
  *
  *	@noreturn.
  */
-stock void TF2_GetSpellPaintName(int defindex, char[] buffer, int maxlen)	{
-	switch(defindex)	{
+stock void TF2_GetSpellPaintName(int defindex, char[] buffer, int maxlen) {
+	switch(defindex) {
 		case 0: strcopy(buffer, maxlen, "Die Job");
 		case 1: strcopy(buffer, maxlen, "Chromatic Corruption");
 		case 2: strcopy(buffer, maxlen, "Putrescent Pigmentation");
@@ -2469,20 +2472,20 @@ stock bool TF2_ReplaceClientRobotVoicelines(int client, char[] sound, bool giant
 	TFClassType class = TF2_GetPlayerClass(client);
 	
 	char vc[3][64];
-	Format(vc[0], sizeof(vc[]), "vo/%s_", TF2_GetClassTypeName[class]);
-	switch(giant)	{
+	Format(vc[0], sizeof(vc[]), "vo/%s_", TF2_GetClassTypeNameLC[class]);
+	switch(giant) {
 		case true: {
-			Format(vc[1], sizeof(vc[]), "vo/mvm/mght/%s_", TF2_GetClassTypeName[class]);
-			Format(vc[2], sizeof(vc[]), "%s_mvm_m", TF2_GetClassTypeName[class]);
+			Format(vc[1], sizeof(vc[]), "vo/mvm/mght/%s_", TF2_GetClassTypeNameLC[class]);
+			Format(vc[2], sizeof(vc[]), "%s_mvm_m", TF2_GetClassTypeNameLC[class]);
 		}
 		case false: {
-			Format(vc[1], sizeof(vc[]), "vo/mvm/norm/%s_", TF2_GetClassTypeName[class]);
-			Format(vc[2], sizeof(vc[]), "%s_mvm", TF2_GetClassTypeName[class]);
+			Format(vc[1], sizeof(vc[]), "vo/mvm/norm/%s_", TF2_GetClassTypeNameLC[class]);
+			Format(vc[2], sizeof(vc[]), "%s_mvm", TF2_GetClassTypeNameLC[class]);
 		}
 	}
 	
-	ReplaceString(sound, 256, vc[0], vc[1], false);
-	ReplaceString(sound, 256, TF2_GetClassTypeName[class], vc[2], false);
+	ReplaceString(sound, 128, vc[0], vc[1], false);
+	ReplaceString(sound, 128, TF2_GetClassTypeName[class], vc[2], false);
 	PrecacheSound(sound);
 	return true;
 }
@@ -2495,8 +2498,8 @@ stock bool TF2_ReplaceClientRobotVoicelines(int client, char[] sound, bool giant
  *
  *	@return	Returns the entity's owner.
  */
-stock int TF2_FindWeaponByDefinitionIndex(int client, int defindex)	{
-	for(TFSlot slot = TFSlot_Primary; slot < TFSlot_PDA2; slot++)	{
+stock int TF2_FindWeaponByDefinitionIndex(int client, int defindex) {
+	for(TFSlot slot = TFSlot_Primary; slot < TFSlot_PDA2; slot++) {
 		int weapon = TF2_GetPlayerWeaponSlot(client, slot);
 		if(IsValidEntityEx(weapon) && GetEntityDefinitionIndex(weapon) == defindex && GetEntityOwner(weapon) == client)
 			return weapon;
@@ -2513,15 +2516,15 @@ stock int TF2_FindWeaponByDefinitionIndex(int client, int defindex)	{
  *
  *	@return	Returns the entity's owner.
  */
-stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex)	{
+stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex) {
 	int wearable = 0;
 	
-	while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1)	{
+	while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1) {
 		if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client)
 			return wearable;
 	}
 	
-	while((wearable = FindEntityByClassname(wearable, "tf_wearable_levelable_item")) != -1)	{
+	while((wearable = FindEntityByClassname(wearable, "tf_wearable_levelable_item")) != -1) {
 		if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client)
 			return wearable;
 	}
@@ -2530,7 +2533,7 @@ stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex)	{
 }
 
 /**
- *	Returns if the weapon is an explosive type (Including Engineer's PDA).
+ *	Returns if the weapon is an explosive type (Including Engineer's PDA because of LVL 3 Sentry Gun Rockets).
  *
  *	@param	defindex	The weapon definition index.
  *
@@ -2815,7 +2818,7 @@ stock bool TF2_SetClientDesiredClass(int client, TFClassType class) {
  *	@param	index	The paint kit index.
  */
 stock bool TF2_IsValidPaintKit(int index) {
-	for(int i =  MAX_TF2_PAINTS; i--;) {
+	for(int i = MAX_TF2_PAINTS; i--;) {
 		if(TF2_Paints[i] == index)
 			return true;
 	}
