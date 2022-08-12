@@ -249,3 +249,14 @@ methodmap PanelEx < Panel {
 stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[] description, int flags=0) {
 	return CreateConVar(name, defaultValue ? "1":"0", description, flags, true, 0.0, true, 1.0);
 }
+
+/**
+ *	Returns if the address handle is valid.
+ *
+ *	@param	address		The address handle.
+ *
+ *	@return	If handle is valid, this returns true. Returns false otherwise.
+ */
+stock bool IsValidAddress(Address address) {
+	return view_as<bool>(address != Address_Null);
+}

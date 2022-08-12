@@ -3,9 +3,10 @@
 //==========================================//
 #if !defined _tklib_no_tf2
 
-//Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringName[GetClientTeam(client)] will return the correct team name)
+//Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringNameEx[GetClientTeam(client)] will return the correct team name)
 stock char
-TF2_GetTeamStringName[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{red}RED{default}","{blue}BLU{default}","{lightgreen}GRN{default}","{orange}YLW{default}"},
+TF2_GetTeamStringName[][] = {"Unassigned","Spectators","RED","BLU","GRN","YLW"},
+TF2_GetTeamStringNameEx[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{red}RED{default}","{blue}BLU{default}","{lightgreen}GRN{default}","{orange}YLW{default}"},
 TF2_GetTeamColour[][] = {"{grey}","{grey}","{red}","{blue}","{lightgreen}","{orange}"},
 TF2_GetFlagTypeName[][] = {"None","Picked up","Captured","Defended","Dropped","Carrier"},
 TF2_GetGameTypeName[][] = {"Unknown","Capture-The-Flag","Capture Points","Payload / Payload Race","Arena","Unknown","Unknown","Passball"},

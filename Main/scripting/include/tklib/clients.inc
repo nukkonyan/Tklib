@@ -1029,16 +1029,20 @@ stock bool SetClientHideHud(int client, int flags) {
  *
  *	@param	target		The playername or target to search.
  *	@param	caller		The calling user index, for '@me' or '@sameteam' targeting.
+ *	@param	target_name	The string buffer to store the target name.
+ *	@param	maxlen		The maximum length of the buffer.
  *
  *	@error	If no valid users are found, this returns empty.
  */
-stock ArrayList FindClientsByTarget(const char[] target, int caller=-1)	{
+stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] target_name, int maxlen)	{
 	ArrayList list = new ArrayList();
 	
 	bool All = (StrEqual(target, "@all", false)
 	|| StrEqual(target, "@everyone", false));
-	bool Self = (StrEqual(target, "@me", false)
-	|| StrEqual(target, "@myself", false));
+	bool Self = (StrEqual(target, "@me", false) || StrEqual(target_name, "@myself"));
+	bool SameTeam = (StrEqual(target, "@sameteam", false));
+	bool Aim = (StrEqual(target, "@aim", false));
+	bool Team_0 = (StrEqual(target, "@unassigned", false));
 	bool Team_1 = (StrEqual(target, "@spec", false)
 	|| StrEqual(target, "@spectator", false)
 	|| StrEqual(target, "@spectators", false));
@@ -1051,11 +1055,16 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1)	{
 	|| StrEqual(target, "@ct")
 	|| StrEqual(target, "@counterterrorist", false)
 	|| StrEqual(target, "@counterterrorists", false));
+	bool Team_4 = (StrEqual(target, "@grn", false)
+	|| StrEqual(target, "@green", false)); //TF2C
+	bool Team_5 = (StrEqual(target, "@ylw", false)
+	|| StrEqual(target, "@yellow", false)); //TF2C
 	bool Bots = (StrEqual(target, "@bots", false)
 	|| StrEqual(target, "@bot"));
 	
 	if(caller != -1 && Self && Tklib_IsValidClient(caller, true)) {
 		list.Push(caller);
+		strcopy(target_name, maxlen, "Yourself");
 		return list;
 	}
 	
@@ -1069,20 +1078,46 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1)	{
 		
 		//PrintToServer("Found target '%i' ['%s'] ['%s']", client, name, target);
 		
-		if((Team_1 && GetClientTeam(client) == 1)
+		if((Team_0 && GetClientTeam(client) == 0)
+		|| (Team_1 && GetClientTeam(client) == 1)
 		|| (Team_2 && GetClientTeam(client) == 2)
 		|| (Team_3 && GetClientTeam(client) == 3)
+		|| (Team_4 && GetClientTeam(client) == 4)
+		|| (Team_5 && GetClientTeam(client) == 5)
 		|| Bots && IsFakeClient(client)
-		|| All
-		|| StrContainsEx(name, target, false))
+		|| All)
 			list.Push(client);
+		else if(StrContainsEx(name, target, false)) {
+			list.Push(client);
+			strcopy(target_name, maxlen, name);
+		}
 		else if(caller != -1 && Tklib_IsValidClient(caller, true)) {
-			if(StrEqual(target, "@sameteam", false) && IsSameTeam(client, caller)) //Spaghetti code.
+			if(SameTeam && IsSameTeam(client, caller)) //Spaghetti code.
 				list.Push(client);
-			else if(StrEqual(target, "@aim", false) && GetClientAimTarget(caller, true) == client)
+			else if(Aim && GetClientAimTarget(caller, true) == client)
 				list.Push(client);
 		}
 	}
+	
+	if(All) strcopy(target_name, maxlen, "Everybody");
+	else if(Team_1) strcopy(target_name, maxlen, "Spectators");
+	else if(Team_2) {
+		switch(IdentifyGame()) {
+			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(target_name, maxlen, "Red Team");
+			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(target_name, maxlen, "T");
+		}
+	}
+	else if(Team_3) {
+		switch(IdentifyGame()) {
+			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(target_name, maxlen, "Blue Team");
+			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(target_name, maxlen, "CT");
+		}
+	}
+	else if(Team_4) strcopy(target_name, maxlen, "Green Team");
+	else if(Team_5) strcopy(target_name, maxlen, "Yellow Team");
+	else if(Bots) strcopy(target_name, maxlen, "All Bots");
+	else if(SameTeam) strcopy(target_name, maxlen, "Same Team");
+	else if(list.Length < 1) strcopy(target_name, maxlen, "Nobody");
 	
 	return list;
 }
