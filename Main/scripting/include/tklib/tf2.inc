@@ -2842,6 +2842,8 @@ stock bool TF2_IsValidUnusual(int index) {
 
 /**
  *	Returns if the definition index is a valid weapon.
+ *
+ *	@param	defindex	The definition index.
  */
 stock bool TF2_IsValidWeaponDefindex(int defindex) {
 	for(int i = MAX_TF2_WEAPONS; i--;) {
@@ -2849,7 +2851,7 @@ stock bool TF2_IsValidWeaponDefindex(int defindex) {
 			return true;
 	}
 	
-	 return false;
+	return false;
 }
 
 #endif
