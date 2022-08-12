@@ -2805,4 +2805,18 @@ stock bool TF2_SetClientDesiredClass(int client, TFClassType class) {
 	return SetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass", class);
 }
 
+/**
+ *	Returns if the unusual effect index is valid.
+ *
+ *	@param	index	The unusual particle index.
+ */
+stock bool TF2_IsValidUnusual(int index) {
+	for(int i = 0; i < MAX_TF2_UNUSUALS; i++) {
+		if(TF2_UnusualEffects[i] == index)
+			return true;
+	}
+	
+	return false;
+}
+
 #endif
