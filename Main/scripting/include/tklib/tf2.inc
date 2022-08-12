@@ -23,7 +23,7 @@ TF2_GetPDATypeClassname[][] = {"","","","","","","","","tf_weapon_pda_spy","tf_w
 TF2_GetPDA2TypeClassname[][] = {"","","","","","","","","tf_weapon_invis","tf_weapon_pda_engineer_destroy"},
 TF2_GetPDA3TypeClassname[][] = {"","","","","","","","","","tf_weapon_builder"},
 TF2_GetSlotName[][] = {"Primary","Secondary","Melee","Construction PDA / Disguise Kit","Demolition PDA / Invis Watch","Slot5","Slot6","Slot7","Slot8","Slot9","Slot10"},
-TF2_AddCondName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pose"
+TF2_ConditionName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pose"
 ,"Sniper Rifle zooming"
 ,"Disguise smoke"
 ,"Disguise"
@@ -151,10 +151,13 @@ TF2_AddCondName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pose"
 ,"Thermal Thruster launched effects, prevents reusing"
 ,"Less ground friction"
 ,"Reduced air control and friction"
-,"Used whenever a player gets teleported to Hell, does nothing applied but stops the gradual healing from the teleport when removed"};
+,"Used whenever a player gets teleported to Hell, does nothing applied but stops the gradual healing from the teleport when removed"
+,"Used in Mannpowerr when a player has a high kill count compared to the rest of the players in the game. Reduces the strength of the currently equipped powerup"};
 
 stock int
 TF2_GetClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175},
+TF2_Australiums[] = {4,7,13,14,15,16,18,19,20,21,29,36,38,45,61,132,141,194,197,200,201,202,203,205,206,207,208,211,228,264,424},
+TF2_Conditions[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129},
 TF2_UnusualEffects[] = {
 	1, //Particle 1
 	2, //Flying Bits.
@@ -467,13 +470,32 @@ TF2_UnusualEffects[] = {
 	3087, //Sublime Snowstorm.
 };
 
+//May seem useless, but for just incase.
 const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
-const TFTeam TFTeam_Green = view_as<TFTeam>(4);
-const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
+const TFClassType TFClass_Invalid = view_as<TFClassType>(-1);
+const TFClassType TFClass_Demoman = view_as<TFClassType>(4);
 const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
 
+#if !defined _tf2_included
+const TFClassType TFClass_Unknown = view_as<TFClassType>(0);
+const TFClassType TFClass_Scout = view_as<TFClassType>(1);
+const TFClassType TFClass_Sniper = view_as<TFClassType>(2);
+const TFClassType TFClass_Soldier = view_as<TFClassType>(3);
+const TFClassType TFClass_DemoMan = view_as<TFClassType>(4);
+const TFClassType TFClass_Medic = view_as<TFClassType>(5);
+const TFClassType TFClass_Heavy = view_as<TFClassType>(6);
+const TFClassType TFClass_Pyro = view_as<TFClassType>(7);
+const TFClassType TFClass_Spy = view_as<TFClassType>(8);
+const TFClassType TFClass_Engineer = view_as<TFClassType>(9);
+const TFTeam TFTeam_Unassigned = view_as<TFTeam>(0);
+const TFTeam TFTeam_Spectator = view_as<TFTeam>(1);
+const TFTeam TFTeam_Red = view_as<TFTeam>(2);
+const TFTeam TFTeam_Blue = view_as<TFTeam>3);
+#endif
+
 #define MAX_TF2_DEFINITION_INDEX 30759
-#define MAX_TF2_CONDITION_ID 128
+#define MAX_TF2_CONDITIONS sizeof(TF2_Conditions)
+#define MAX_TF2_UNUSUALS sizeof(TF2_UnusualEffects)
 
 //TF2 Offsets, will be updated as frequently as possible.
 enum {
@@ -1845,12 +1867,10 @@ stock bool TF2_IsValidCosmetic(int cosmetic)	{
  *
  *	@param	defindex	The weapon definition index.
  */
-stock bool TF2_IsValidAustralium(int defindex)	{
-	switch(defindex)	{
-		case 4,7,13,14,15,16,18,19,20,
-		21,29,36,38,45,61,132,141,194,
-		197,200,201,202,203,205,206,207,
-		208,211,228,264,424: return true;
+stock bool TF2_IsValidAustralium(int defindex) {
+	for(int i = 0; i < sizeof(TF2_Australiums); i++) {
+		if(TF2_Australiums[i] == defindex)
+			return true;
 	}
 	
 	return false;
