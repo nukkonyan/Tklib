@@ -153,6 +153,9 @@ TF2_AddCondName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pose"
 ,"Reduced air control and friction"
 ,"Used whenever a player gets teleported to Hell, does nothing applied but stops the gradual healing from the teleport when removed"};
 
+stock int
+TF2_GetClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175};
+
 const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
 const TFTeam TFTeam_Green = view_as<TFTeam>(4);
 const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
@@ -2469,29 +2472,6 @@ stock TFClassType TF2_GetClientDesiredClass(int client) {
  */
 stock bool TF2_SetClientDesiredClass(int client, TFClassType class) {
 	return SetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass", class);
-}
-
-/**
- *	Returns the default health for the TFClassType.
- *
- *	@error	If the class is invalid, this returns -1.
- */
-stock int TF2_GetClassDefaultHealth(TFClassType class) {
-	int health = -1;
-	
-	switch(class) {
-		case TFClass_Scout: health = 125;
-		case TFClass_Soldier: health = 200;
-		case TFClass_Pyro: health = 175;
-		case TFClass_DemoMan: health = 175;
-		case TFClass_Heavy: health = 300;
-		case TFClass_Engineer: health = 125;
-		case TFClass_Medic: health = 150;
-		case TFClass_Sniper: health = 125;
-		case TFClass_Spy: health = 125;
-	}
-	
-	return health;
 }
 
 #endif
