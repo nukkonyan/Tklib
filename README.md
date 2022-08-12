@@ -70,4 +70,4 @@ Using `public` will only make it be part of the compilation even if not used. (C
 
 `_tklib_no_sdkhooks` Disable loading SDKHooks Include.
 
-`_tklib_no_definitions` Disable integrated definitions such as int(value) which is simplified from view_as < int > (value).
+`_tklib_definitions` Enable integrated definitions such as int(value) which is simplified from view_as < int > (value).
