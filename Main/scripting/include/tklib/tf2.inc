@@ -154,7 +154,7 @@ TF2_ConditionName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pos
 ,"Used whenever a player gets teleported to Hell, does nothing applied but stops the gradual healing from the teleport when removed"
 ,"Used in Mannpower when a player has a high kill count compared to the rest of the players in the game. Reduces the strength of the currently equipped powerup"},
 TF2_SpellPaintName[][] = {"Die Job","Chromatic Corruption","Putrescent Pigmentation","Spectral Spectrum","Sinister Staining","Unnamed Unused"},
-TF2_KillstreakerSheenName[][] = {"","Team Shine","Deadly Daffodil","Manndarin","Mean Green","Agonizing Emerald","Villainous Violet","Hot Rod"};
+TF2_KillstreakerSheenName[][] = {"None","Team Shine","Deadly Daffodil","Manndarin","Mean Green","Agonizing Emerald","Villainous Violet","Hot Rod"};
 
 stock int
 TF2_GetClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175},
@@ -1686,17 +1686,18 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
  *	@param	defindex	The item definition index.
  *	@param	level		The item level.
  *	@param	quality		The item quality.
+ *	@param	debug		If true, prints a debug message in server console.
  *
  *	@return	Returns the weapon entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)	{
+stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality, bool dbg=false)	{
 	static int weapon;
 	
 	char classname[128];
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
 	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
 	
-	PrintToServer("TF2_GiveWeapon (client %i, defindex %i, level %i, quality %i, classname '%s')", client, defindex, level, quality, classname);
+	if(dbg) PrintToServer("TF2_GiveWeapon (client %i, defindex %i, level %i, quality %i, classname '%s')", client, defindex, level, quality, classname);
 	
 	/* Credits to PC Gamer for most of the code. */
 	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true)) {
