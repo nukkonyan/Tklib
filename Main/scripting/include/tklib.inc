@@ -16,6 +16,7 @@
 #define _tklib_included
 #define _tklib_author "Tk /id/Teamkiller324"
 #define _tklib_author_url "https://steamcommunity.com/id/Teamkiller324"
+#define SetPluginInfo(%1,%2,%3,%4,%5) public Plugin myinfo = {name = %1, author = %2, description = %3, version = %4, url = %5}
 
 #if defined _tklib_no_includes
 	#define _tklib_no_core_includes

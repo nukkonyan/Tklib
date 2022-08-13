@@ -160,6 +160,7 @@ stock int
 TF2_GetClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175},
 TF2_Australiums[] = {4,7,13,14,15,16,18,19,20,21,29,36,38,45,61,132,141,194,197,200,201,202,203,205,206,207,208,211,228,264,424},
 TF2_Conditions[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129},
+TF2_Warpaints[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,217,218,220,221,223,224,225,226,228,230,232,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,275,276,277,278,279,280,281,282,283,284,285,286,287,289,290,291,292,293,294,295,296,297,300,301,302,303,304,305,306,307,308,309,310,390,391},
 TF2_Paints[] = {1315860,2960676,3100495,3329330,3874595,4345659,4732984,5322826,6637376,6901050,7511618,8154199,8208497,8289918,8400928,8421376,10843461,11049612,12073019,12807213,13595446,14204632,15132390,15185211,15308410,12377523,12955537,15787660,16738740},
 TF2_UnusualEffects[] = {
 1 //Particle 1
@@ -500,6 +501,7 @@ const TFTeam TFTeam_Blue = view_as<TFTeam>3);
 #endif
 
 #define MAX_TF2_CONDITIONS sizeof(TF2_Conditions)
+#define MAX_TF2_WARPAINTS sizeof(TF2_Warpaints)
 #define MAX_TF2_PAINTS sizeof(TF2_Paints)
 #define MAX_TF2_UNUSUALS sizeof(TF2_UnusualEffects)
 #define MAX_TF2_WEAPONS sizeof(TF2_Weapons)
@@ -1692,6 +1694,8 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality)
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
 	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
 	
+	PrintToServer("TF2_GiveWeapon (client %i, defindex %i, level %i, quality %i, classname '%s')", client, defindex, level, quality, classname);
+	
 	/* Credits to PC Gamer for most of the code. */
 	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true)) {
 		char netclass[64];
@@ -1992,63 +1996,6 @@ stock bool TF2_GetKillstreakerName(int index, char[] buffer, int maxlen)	{
 }
 
 /**
- *	Returns the killstreaker sheen name.
- *
- *	@param	index	The sheen effect index.
- *	@param	buffer	The sheen name buffer string.
- *	@param	maxlen	The maximum length of the sheen name.
- *
- *	@return	Returns true if the definition index is valid, false otherwise.
- */
-stock bool TF2_GetKillstreakerSheenName(int index, char[] buffer, int maxlen)	{
-	switch(index) {
-		/* Team Shine. */
-		case 1: {
-			strcopy(buffer, maxlen, "Team Shine");
-			return true;
-		}
-		
-		/* Deadly Daffodil. */
-		case 2: {
-			strcopy(buffer, maxlen, "Deadly Daffodil");
-			return true;
-		}
-		
-		/* Manndarin. */
-		case 3: {
-			strcopy(buffer, maxlen, "Manndarin");
-			return true;
-		}
-		
-		/* Mean Green. */
-		case 4: {
-			strcopy(buffer, maxlen, "Mean Green");
-			return true;
-		}
-		
-		/* Agonizing Emerald. */
-		case 5: {
-			strcopy(buffer, maxlen, "Agonizing Emerald");
-			return true;
-		}
-		
-		/* Villainous Violet. */
-		case 6: {
-			strcopy(buffer, maxlen, "Villainous Violet");
-			return true;
-		}
-		
-		/* Hot Rod. */
-		case 7: {
-			strcopy(buffer, maxlen, "Hot Rod");
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-/**
  *	Returns an attribute's value of an entity.
  *	Requires TF2Attributes.
  *
@@ -2126,24 +2073,9 @@ stock void TF2_TurnDefaultDefIndexToUpgraded(int weapon) {
  *	@return	If the warpaint is valid, this returns true. False otherwise.
  */
 stock bool TF2_IsValidWarPaint(int defindex) {
-	switch(defindex)	{
-		case 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,
-		15,16,17,18,19,20,21,22,23,24,25,26,27,
-		28,29,30,31,32,33,34,35,36,37,38,39,40,
-		41,42,43,44,45,46,47,48,49,50,51,52,53,
-		54,55,56,57,58,59,60,61,62,63,64,65,66,
-		67,68,69,70,71,72,73,74,75,76,77,78,79,
-		80,81,82,83,84,85,86,200,201,202,203,204,
-		205,206,207,208,209,210,211,212,213,214,
-		215,217,218,220,221,223,224,225,226,228,
-		230,232,234,235,236,237,238,239,240,241,
-		242,243,244,245,246,247,248,249,250,251,
-		252,253,254,255,256,257,258,259,260,261,
-		262,263,264,265,266,267,268,269,270,271,
-		272,273,275,276,277,278,279,280,281,282,
-		283,284,285,286,287,289,290,291,292,293,
-		294,295,296,297,300,301,302,303,304,305,
-		306,307,308,309,310,390,391: return true;
+	for(int i = MAX_TF2_WARPAINTS; i--;) {
+		if(TF2_Warpaints[i] == defindex)
+			return true;
 	}
 	
 	return false;
@@ -2434,26 +2366,6 @@ stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen) {
 }
 
 /**
- *	Returns the spell variant paint colour name.
- *
- *	@param	defindex	The spell paint definition index.
- *	@param	buffer		The buffer to store the paint name.
- *	@param	maxlen		The maximum length of the buffer name.
- *
- *	@noreturn.
- */
-stock void TF2_GetSpellPaintName(int defindex, char[] buffer, int maxlen) {
-	switch(defindex) {
-		case 0: strcopy(buffer, maxlen, "Die Job");
-		case 1: strcopy(buffer, maxlen, "Chromatic Corruption");
-		case 2: strcopy(buffer, maxlen, "Putrescent Pigmentation");
-		case 3: strcopy(buffer, maxlen, "Spectral Spectrum");
-		case 4: strcopy(buffer, maxlen, "Sinister Staining");
-		case 5: strcopy(buffer, maxlen, "Unnamed Unused");
-	}
-}
-
-/**
  *	Replaces the voicelines with the robot variant.
  *
  *	@param	client	The users index.
@@ -2539,7 +2451,7 @@ stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex) {
  *
  *	@return	If valid, returns true. Else returns false.
  */
-stock bool TF2_IsValidExplosiveWeaponDefindex(int defindex)	{
+stock bool TF2_IsValidExplosiveWeaponDefindex(int defindex) {
 	switch(defindex) {
 		case 18,19,20,25,205,206,207,127,130,131,228,237,265,308,
 		405,406,414,441,513,608,658,661,730,737,797,800,806,
@@ -2561,7 +2473,7 @@ stock bool TF2_IsValidExplosiveWeaponDefindex(int defindex)	{
  *
  *	@return	If valid, returns true. Else returns false.
  */
-stock bool TF2_IsValidFlamethrowerDefindex(int defindex)	{
+stock bool TF2_IsValidFlamethrowerDefindex(int defindex) {
 	switch(defindex)	{
 		case 21,40,208,215,594,659,741,798,807,887,
 		896,905,914,963,972,11146,1178,15005,15017,
@@ -2579,7 +2491,7 @@ stock bool TF2_IsValidFlamethrowerDefindex(int defindex)	{
  *
  *	@error	If the weapon is invalid, this returns false.
  */
-stock bool TF2_IsValidWeapon(int weapon)	{
+stock bool TF2_IsValidWeapon(int weapon) {
 	if(!IsValidEntityEx(weapon))
 		return false;
 	
@@ -2712,7 +2624,7 @@ stock int TF2_CreateCosmetic() {
 /**
  *	Creates a demoshield weapon entity.
  *
- *	@return	Returns the entity index of the demoshield weapon entity.
+ *	@return	Returns the entity index of the demoshield entity.
  */
 stock int TF2_CreateCosmeticDemoShield() {
 	return CreateEntityByName("tf_wearable_demoshield");
@@ -2722,7 +2634,7 @@ stock int TF2_CreateCosmeticDemoShield() {
  *	Creates a razorback weapon entity.
  *	Used for the 'Razorback' weapon.
  *
- *	@return	Returns the entity index of the demoshield weapon entity.
+ *	@return	Returns the entity index of the razorback entity.
  */
 stock int TF2_CreateCosmeticRazorback() {
 	return CreateEntityByName("tf_wearable_razorback");

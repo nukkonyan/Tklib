@@ -3,13 +3,49 @@
 //==========================================//
 #if !defined _tklib_disable_clients
 
+enum ObserverMode {
+	ObsMode_Invalid = -1,
+	ObsMode_None = 0,
+	ObsMode_DeathCam = 1,
+	ObsMode_FreezeCam = 2,
+	ObsMode_Fixed = 3,
+	ObsMode_FirstPerson = 4,
+	ObsMode_ThirdPerson = 5,
+	ObsMode_Roaming = 6
+}
+
+enum WaterLevel {
+	WaterLevel_NotInwater = 0,
+	WaterLevel_FeetInwater = 1,
+	WaterLevel_WaistInWater = 2,
+	waterLevel_Underwater = 3
+}
+
+enum Team {
+	Team_Invalid = -1,
+	Team_Unassigned = 0,
+	Team_Spectator = 1,
+	Team_2,
+	Team_Red = 2,
+	Team_T,
+	Team_Terrorist,
+	Team_3,
+	Team_Blue = 3,
+	Team_CT,
+	Team_CounterTerrorist,
+	Team_4,
+	Team_Green = 4,
+	Team_5,
+	Team_Yellow = 5
+}
+
 //Player permissions
 /**
  *	Returns if the user is a Console
  *
  *	@param client	The users index.
  */
-stock bool IsClientConsole(int client)	{	
+stock bool IsClientConsole(int client) {	
 	return view_as<bool>(client == 0);
 }
 
@@ -20,7 +56,7 @@ stock bool IsClientConsole(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientOwner(int client)	{
+stock bool IsClientOwner(int client) {
 	return CheckCommandAccess(client, "", ADMFLAG_ROOT);
 }
 
@@ -31,7 +67,7 @@ stock bool IsClientOwner(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientAdmin(int client)	{
+stock bool IsClientAdmin(int client) {
 	return CheckCommandAccess(client, "", ADMFLAG_GENERIC);
 }
 
@@ -42,7 +78,7 @@ stock bool IsClientAdmin(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientModerator(int client)	{
+stock bool IsClientModerator(int client) {
 	return CheckCommandAccess(client, "", ADMFLAG_CUSTOM1);
 }
 
@@ -53,7 +89,7 @@ stock bool IsClientModerator(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientVip(int client)	{
+stock bool IsClientVip(int client) {
 	return CheckCommandAccess(client, "", ADMFLAG_RESERVATION);
 }
 
@@ -66,7 +102,7 @@ stock bool IsClientVip(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientFlag(int client, int adminflags, char[] command="")	{
+stock bool IsClientFlag(int client, int adminflags, char[] command="") {
 	return CheckCommandAccess(client, command, adminflags);
 }
 
@@ -78,7 +114,7 @@ stock bool IsClientFlag(int client, int adminflags, char[] command="")	{
  *
  *	@return	Returns true if it's the same player, false otherwise.
  */
-stock bool IsSamePlayers(int client, any target)	{
+stock bool IsSamePlayers(int client, any target) {
 	return view_as<bool>(client == target);
 }
 
@@ -90,7 +126,7 @@ stock bool IsSamePlayers(int client, any target)	{
  *
  *	@return	Returns true if it's they're on the same team, false otherwise.
  */
-stock bool IsSameTeam(int client, any target)	{
+stock bool IsSameTeam(int client, any target) {
 	return view_as<bool>(GetClientTeam(client) == GetClientTeam(target));
 }
 
@@ -127,7 +163,7 @@ stock int GetClientPing(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientDeaths(int client, int value)	{
+stock bool SetClientDeaths(int client, int value) {
 	return SetEntPropEx(client, Prop_Data, "m_iDeaths", value);
 }
 
@@ -139,7 +175,7 @@ stock bool SetClientDeaths(int client, int value)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientFrags(int client, int value)	{
+stock bool SetClientFrags(int client, int value) {
 	return SetEntPropEx(client, Prop_Data, "m_iFrags", value);
 }
 
@@ -152,7 +188,7 @@ stock bool SetClientFrags(int client, int value)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientHealth(int client, int value)	{
+stock bool SetClientHealth(int client, int value) {
 	return SetEntPropEx(client, Prop_Send, "m_iHealth", value);
 }
 
@@ -164,7 +200,7 @@ stock bool SetClientHealth(int client, int value)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientMaxHealth(int client, int value)	{
+stock bool SetClientMaxHealth(int client, int value) {
 	return SetEntPropEx(client, Prop_Send, "m_iMaxHealth", value);
 }
 
@@ -175,7 +211,7 @@ stock bool SetClientMaxHealth(int client, int value)	{
  *
  *	@error	If the client is not valid, this returns -1.
  */
-stock int GetClientMaxHealth(int client)	{
+stock int GetClientMaxHealth(int client) {
 	return GetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", client);
 }
 
@@ -207,7 +243,7 @@ stock bool SetClientHealthEx(int client, int health, int maxhealth)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientTeamNum(int client, any value)	{
+stock bool SetClientTeamNum(int client, any value) {
 	return SetEntPropEx(client, Prop_Send, "m_iTeamNum", value);
 }
 
@@ -218,7 +254,7 @@ stock bool SetClientTeamNum(int client, any value)	{
  *
  *	@error	If the user is not valid or mod not supported, this returns -1.
  */
-stock int GetClientTeamNum(int client)	{
+stock int GetClientTeamNum(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_iTeamNum");
 }
 
@@ -230,7 +266,7 @@ stock int GetClientTeamNum(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientFOV(int client, int value)	{
+stock bool SetClientFOV(int client, int value) {
 	return SetEntPropEx(client, Prop_Send, "m_iFOV", value);
 }
 
@@ -241,7 +277,7 @@ stock bool SetClientFOV(int client, int value)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientFOV(int client)	{
+stock int GetClientFOV(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_iFOV");
 }
 
@@ -253,7 +289,7 @@ stock int GetClientFOV(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientDefaultFOV(int client, int value)	{
+stock bool SetClientDefaultFOV(int client, int value) {
 	return SetEntPropEx(client, Prop_Send, "m_iDefaultFOV", value);
 }
 
@@ -264,7 +300,7 @@ stock bool SetClientDefaultFOV(int client, int value)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientDefaultFOV(int client)	{
+stock int GetClientDefaultFOV(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_iDefaultFOV");
 }
 
@@ -276,7 +312,7 @@ stock int GetClientDefaultFOV(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientObserverTarget(int client, int target)	{
+stock bool SetClientObserverTarget(int client, int target) {
 	return SetEntPropEntEx(client, Prop_Send, "m_iObserverTarget", target);
 }
 
@@ -287,20 +323,65 @@ stock bool SetClientObserverTarget(int client, int target)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientObserverTarget(int client)	{
+stock int GetClientObserverTarget(int client) {
 	return GetEntPropEntEx(client, Prop_Send, "m_iObserverTarget");
 }
 
+//Credits to SMLib.
 /**
  *	Set the users Observer mode.
  *
- *	@param	client		The users index.
- *	@param	value		Observer mode value.
+ *	@param	client	The users index.
+ *	@param	mode	Observer mode value.
+ *	@param	update	If true, this updates the movetype.
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientObserverMode(int client, int value)	{
-	return SetEntPropEx(client, Prop_Send, "m_iObserverMode", value);
+stock bool SetClientObserverMode(int client, ObserverMode mode, bool update=false) {
+	if(mode < ObsMode_None || mode >= ObsMode_Roaming)
+		return false;
+	
+	if(!Tklib_IsValidClient(client))
+		return false;
+	
+	if(mode > ObsMode_Fixed && GetClientTeam(client) > 1) {
+		ConVar mp_forcecamera = FindConVar("mp_forcecamera");
+		
+		if(mp_forcecamera != null) {
+			switch(mp_forcecamera.IntValue) {
+				case 1: mode = ObsMode_FirstPerson;
+				case 2: mode = ObsMode_Fixed;
+			}
+		}
+		
+		delete mp_forcecamera;
+	}
+	
+	ObserverMode current = GetClientObserverMode(client);
+	if(current > ObsMode_DeathCam)
+		SetClientLastObserverMode(client, current);
+	
+	bool rtrn = SetEntPropEx(client, Prop_Send, "m_iObserverMode", mode);
+	
+	switch(mode) {
+		case ObsMode_None, ObsMode_Fixed, ObsMode_DeathCam: {
+			SetClientFOV(client, 0);
+			if(update) SetEntityMoveType(client, MOVETYPE_NONE);
+		}
+		
+		case ObsMode_ThirdPerson, ObsMode_FirstPerson: {
+			SetEntPropVectorEx(client, Prop_Data, "m_vecViewOffset", NULL_VECTOR);
+			if(update) SetEntityMoveType(client, MOVETYPE_OBSERVER);
+		}
+		
+		case ObsMode_Roaming: {
+			SetClientFOV(client, 0);
+			SetEntPropVectorEx(client, Prop_Data, "m_vecViewOffset", NULL_VECTOR);
+			if(update) SetEntityMoveType(client, MOVETYPE_OBSERVER);
+		}
+	}
+	
+	return rtrn;
 }
 
 /**
@@ -310,20 +391,20 @@ stock bool SetClientObserverMode(int client, int value)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientObserverMode(int client)	{
-	return GetEntPropEx(client, Prop_Send, "m_iObserverMode");
+stock ObserverMode GetClientObserverMode(int client) {
+	return view_as<ObserverMode>(GetEntPropEx(client, Prop_Send, "m_iObserverMode"));
 }
 
 /**
  *	Set the users last observer mode.
  *
  *	@param	client	The users index.
- *	@param	value	The mode value to set.
+ *	@param	mode	The observer mode to set.
  *
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
-stock bool SetClientLastObserverMode(int client, int value)	{
-	return SetEntPropEx(client, Prop_Send, "m_iObserverLastMode", value);
+stock bool SetClientLastObserverMode(int client, ObserverMode mode)	{
+	return SetEntPropEx(client, Prop_Send, "m_iObserverLastMode", mode);
 }
 
 /**
@@ -333,8 +414,8 @@ stock bool SetClientLastObserverMode(int client, int value)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientLastObserverMode(int client)	{
-	return GetEntPropEx(client, Prop_Send, "m_iObserverLastMode");
+stock ObserverMode GetClientLastObserverMode(int client) {
+	return view_as<ObserverMode>(GetEntPropEx(client, Prop_Send, "m_iObserverLastMode"));
 }
 
 /**
@@ -1042,22 +1123,22 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] t
 	bool Self = (StrEqual(target, "@me", false) || StrEqual(target_name, "@myself"));
 	bool SameTeam = (StrEqual(target, "@sameteam", false));
 	bool Aim = (StrEqual(target, "@aim", false));
-	bool Team_0 = (StrEqual(target, "@unassigned", false));
-	bool Team_1 = (StrEqual(target, "@spec", false)
+	bool Team0 = (StrEqual(target, "@unassigned", false));
+	bool Team1 = (StrEqual(target, "@spec", false)
 	|| StrEqual(target, "@spectator", false)
 	|| StrEqual(target, "@spectators", false));
-	bool Team_2 = (StrEqual(target, "@red", false)
+	bool Team2 = (StrEqual(target, "@red", false)
 	|| StrEqual(target, "@t")
 	|| StrEqual(target, "@terrorist", false)
 	|| StrEqual(target, "@terrorists", false));
-	bool Team_3 = (StrEqual(target, "@blu", false)
+	bool Team3 = (StrEqual(target, "@blu", false)
 	|| StrEqual(target, "@blue", false)
 	|| StrEqual(target, "@ct")
 	|| StrEqual(target, "@counterterrorist", false)
 	|| StrEqual(target, "@counterterrorists", false));
-	bool Team_4 = (StrEqual(target, "@grn", false)
+	bool Team4 = (StrEqual(target, "@grn", false)
 	|| StrEqual(target, "@green", false)); //TF2C
-	bool Team_5 = (StrEqual(target, "@ylw", false)
+	bool Team5 = (StrEqual(target, "@ylw", false)
 	|| StrEqual(target, "@yellow", false)); //TF2C
 	bool Bots = (StrEqual(target, "@bots", false)
 	|| StrEqual(target, "@bot"));
@@ -1078,12 +1159,12 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] t
 		
 		//PrintToServer("Found target '%i' ['%s'] ['%s']", client, name, target);
 		
-		if((Team_0 && GetClientTeam(client) == 0)
-		|| (Team_1 && GetClientTeam(client) == 1)
-		|| (Team_2 && GetClientTeam(client) == 2)
-		|| (Team_3 && GetClientTeam(client) == 3)
-		|| (Team_4 && GetClientTeam(client) == 4)
-		|| (Team_5 && GetClientTeam(client) == 5)
+		if((Team0 && GetClientTeam(client) == 0)
+		|| (Team1 && GetClientTeam(client) == 1)
+		|| (Team2 && GetClientTeam(client) == 2)
+		|| (Team3 && GetClientTeam(client) == 3)
+		|| (Team4 && GetClientTeam(client) == 4)
+		|| (Team5 && GetClientTeam(client) == 5)
 		|| Bots && IsFakeClient(client)
 		|| All)
 			list.Push(client);
@@ -1100,21 +1181,21 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] t
 	}
 	
 	if(All) strcopy(target_name, maxlen, "Everybody");
-	else if(Team_1) strcopy(target_name, maxlen, "Spectators");
-	else if(Team_2) {
+	else if(Team1) strcopy(target_name, maxlen, "Spectators");
+	else if(Team2) {
 		switch(IdentifyGame()) {
 			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(target_name, maxlen, "Red Team");
 			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(target_name, maxlen, "T");
 		}
 	}
-	else if(Team_3) {
+	else if(Team3) {
 		switch(IdentifyGame()) {
 			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(target_name, maxlen, "Blue Team");
 			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(target_name, maxlen, "CT");
 		}
 	}
-	else if(Team_4) strcopy(target_name, maxlen, "Green Team");
-	else if(Team_5) strcopy(target_name, maxlen, "Yellow Team");
+	else if(Team4) strcopy(target_name, maxlen, "Green Team");
+	else if(Team5) strcopy(target_name, maxlen, "Yellow Team");
 	else if(Bots) strcopy(target_name, maxlen, "All Bots");
 	else if(SameTeam) strcopy(target_name, maxlen, "Same Team");
 	else if(list.Length < 1) strcopy(target_name, maxlen, "Nobody");
@@ -1194,6 +1275,73 @@ stock int GetClientOfAccountID(int accountid) {
 	return -1;
 }
 
+/**
+ *	Returns an array of users with same ip as the target's ip.
+ *
+ *	@param	client	The target to gain ip from.
+ *	@param	list	The array listing the users with the same ip.
+ *
+ *	@return	If the target is invalid, this returns -1. True otherwise.
+ */
+stock int GetClientIPClones(int client, int[] list) {
+	if(!Tklib_IsValidClient(client))
+		return -1;
+	
+	int i = 0;
+	char ip[2][24];
+	
+	GetClientIP(client, ip[0], sizeof(ip[]));
+	
+	for(int target = MaxClients; target >= 1; target--) {
+		if(!Tklib_IsValidClient(target))
+			continue;
+		
+		GetClientIP(target, ip[1], sizeof(ip[]));
+		if(StrEqual(ip[0], ip[1]))
+			list[i++] = target;
+	}
+	
+	return i;
+}
+
+/**
+ *	Returns the entity index of the weapon classname out of the users index.
+ *
+ *	@param	client	The users index.
+ *	@param	weapon	The weapon classname.
+ *
+ *	@return	If the user is invalid or weapon was not found, this returns -1.
+ */
+stock int GetClientWeaponClassname(int client, const char[] weapon) {
+	if(!Tklib_IsValidClient(client, _, true))
+		return INVALID_ENT_REFERENCE;
+	
+	int ent = INVALID_ENT_REFERENCE;
+	static char clsname[64];
+	
+	for(int slot = 6; slot--;) {
+		ent = GetPlayerWeaponSlot(client, slot);
+		GetEntityClassname(ent, clsname, sizeof(clsname));
+		
+		if(StrEqual(clsname, weapon, false))
+			return ent;
+	}
+	
+	return ent;
+}
+
+/**
+ *	Returns if the user has a specified weapon classname.
+ *
+ *	@param	client	The users index.
+ *	@param	weapon	The weapon classname.
+ *
+ *	@return	If the user or weapon was not foumd, this returns false.
+ */
+stock bool ClientHasWeapon(int client, const char[] weapon) {
+	return view_as<bool>(GetClientWeaponClassname(client, weapon) != INVALID_ENT_REFERENCE);
+}
+
 #endif
 
 //Important
@@ -1211,11 +1359,11 @@ stock int GetClientOfAccountID(int accountid) {
 stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true, bool IgnoreInvalidTeam=false)	{
 	if(client == -1 || client == 0 || client < 1 || client > MaxClients)
 		return false;
-	if(IgnoreNonConnected)	{
+	if(IgnoreNonConnected) {
 		if(!IsClientConnected(client))
 			return false;
 	}
-	if(IgnoreNonInGame)	{
+	if(IgnoreNonInGame) {
 		if(!IsClientInGame(client))
 			return false;
 	}
@@ -1223,15 +1371,15 @@ stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead
 		return false;
 	if(IsClientReplay(client))
 		return false;
-	if(IgnoreBot)	{
+	if(IgnoreBot) {
 		if(IsFakeClient(client))
 			return false;
 	}
-	if(IgnoreDead)	{
+	if(IgnoreDead) {
 		if(!IsPlayerAlive(client))
 			return false;
 	}
-	if(IgnoreInvalidTeam)	{
+	if(IgnoreInvalidTeam) {
 		if(GetClientTeam(client) < 1)
 			return false;
 	}

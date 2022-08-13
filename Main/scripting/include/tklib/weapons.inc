@@ -3,6 +3,8 @@
 //==========================================//
 #if !defined _tklib_disable_weapons
 
+#define MAX_WEAPONS 48
+
 /**
  *	Removes all weapons from the user.
  *

@@ -282,7 +282,7 @@ stock int CS_GetClientArmor(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool CS_SetClientHelmet(int client, int value) {
+stock bool CS_SetClientHelmet(int client, bool value) {
 	return SetEntPropEx(client, Prop_Send, "m_bHasHelmet", value);
 }
 
@@ -357,7 +357,7 @@ stock bool CS_GetPlayerWeaponSlotName(int client, CSSlot slot, char[] output, in
 	if(!(Tklib_IsValidClient(client, false, true) && IsValidEntityEx(CS_GetPlayerWeaponSlot(client, slot))))
 		return false;
 	
-	return GetEdictClassname(CS_GetPlayerWeaponSlot(client, slot), output, sizeof(maxlen));;
+	return GetEdictClassname(CS_GetPlayerWeaponSlot(client, slot), output, sizeof(maxlen));
 }
 
 /**
@@ -373,10 +373,9 @@ stock bool CS_GetPlayerWeaponSlotName(int client, CSSlot slot, char[] output, in
  */
 stock bool CS_GiveClientWeaponEx2(int client, const char[] weapon, CSSlot slot, int primary, int secondary)	{
 	if(Tklib_IsValidClient(client, false, true))	{
-		CS_ClientRemoveWeaponSlot(client, slot);
+		CS_RemovePlayerWeaponSlot(client, slot);
 		GivePlayerItem(client, weapon);
-		SetClientWeaponAmmo(client,	primary);
-		SetClientWeaponReserveAmmo(client,	secondary);
+		SetWeaponAmmoEx(GetClientActiveWeapon(client), primary, secondary);
 		return true;
 	}
 	
@@ -436,7 +435,7 @@ stock bool CS_RemovePlayerWeaponSlot(int client, CSSlot slot)	{
  */
 stock bool CS_GiveClientWeapon(int client, char[] weapon, CSSlot slot) {
 	if(Tklib_IsValidClient(client, _, true)) {
-		CS_ClientRemoveWeaponSlot(client, slot);
+		CS_RemovePlayerWeaponSlot(client, slot);
 		GivePlayerItem(client, weapon);
 		return true;
 	}
@@ -567,7 +566,7 @@ stock void CS_GetWeaponName(const char[] weapon, char[] output, int maxlen)	{
 	if(StrEqual(weapon,	"weapon_cz75a"))	//Used to be known as pocket-ak47 in 2016-2018
 		strcopy(output, maxlen, "CZ75-Auto");
 	if(StrEqual(weapon,	"weapon_glock"))	//Glawks (Reference to GoDaZeD if you remember him)
-		strcopy(output, maxlen "Glock");
+		strcopy(output, maxlen, "Glock");
 	if(StrEqual(weapon,	"weapon_hkp2000"))
 		strcopy(output, maxlen, "P2000");
 	if(StrEqual(weapon,	"weapon_usp_silencer"))
@@ -614,7 +613,7 @@ stock void CS_GetWeaponName(const char[] weapon, char[] output, int maxlen)	{
 		strcopy(output, maxlen, "Zeus-X21");
 	
 	if(StrEqual(weapon,	"weapon_m4a1"))
-		strcopy(output, len, ((GetEngineVersion() == Engine_CSS) || GetEngineVersion() == Engine_SourceSDK2007) ? "M4A1":"M4A4");
+		strcopy(output, maxlen, ((GetEngineVersion() == Engine_CSS) || GetEngineVersion() == Engine_SourceSDK2007) ? "M4A1":"M4A4");
 }
 
 /**
@@ -677,7 +676,7 @@ stock Bombsite CS_GetBombsite(int entity)	{
 	if(!IsValidEntityEx(entity))
 		return	Bombsite_Invalid;
 	
-	int index = view_as<int>(FindEntity("cs_player_manager")));
+	int index = view_as<int>(FindEntity("cs_player_manager"));
 	if(!FindEntity("cs_player_manager"))
 		return Bombsite_Invalid;
 	

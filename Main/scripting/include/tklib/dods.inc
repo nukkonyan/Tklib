@@ -3,7 +3,8 @@
 //==========================================//
 #if !defined _tklib_disable_dods
 
-stock char DOD_GetTeamStringName[][] = {
+stock char
+DOD_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
 	"{grey}Spectators{defualt}",
 	"{red}Wehrmacht{default}",
@@ -16,15 +17,15 @@ stock char DOD_GetTeamStringName[][] = {
 };
 
 //Day Of Defeat: Source enum
-enum DODTeam	{
-	DODTeam_Invalid		=	-1,
-	DODTeam_Unassigned	=	0,
-	DODTeam_Spectator	=	1,
-	DODTeam_Red			=	2,
-	DODTeam_Blue		=	3
+enum DODTeam {
+	DODTeam_Invalid = -1,
+	DODTeam_Unassigned = 0,
+	DODTeam_Spectator = 1,
+	DODTeam_Red = 2,
+	DODTeam_Blue = 3
 }
 
-enum DODSlot	{
+enum DODSlot {
 	DODSlot_Primary		= 0,
 	DODSlot_Secondary	= 1,
 	DODSlot_Slot3		= 2,
@@ -32,7 +33,7 @@ enum DODSlot	{
 	DOSSlot_Slot5		= 4
 }
 
-enum	{
+enum {
 	DOD_Weapon_K98K				= 1,
 	DOD_Weapon_Spade			= 2,
 	DOD_Weapon_RifleGrenade_Ger	= 3,
@@ -56,7 +57,7 @@ enum	{
  *	@error	If the user is not connected, this returns DODTeam_Unassigned.
  */
 stock DODTeam DOD_GetClientTeam(int client)	{
-	return IsClientConnected(client) ? DODTeam(GetClientTeam(client)):DODTeam_Unassigned;
+	return Tklib_IsValidClient(client) ? view_as<DODTeam>(GetClientTeam(client)):DODTeam_Unassigned;
 }
 
 /**
@@ -66,9 +67,9 @@ stock DODTeam DOD_GetClientTeam(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool DOD_ChangeClientTeam(int client, DODTeam team)	{
-	if(Tklib_IsValidClient(client, false, false, false))	{
-		ChangeClientTeam(client, int(team));
+stock bool DOD_ChangeClientTeam(int client, DODTeam team) {
+	if(Tklib_IsValidClient(client, _, _, false)) {
+		ChangeClientTeam(client, view_as<int>(team));
 		return true;
 	}
 	
@@ -80,7 +81,7 @@ stock bool DOD_ChangeClientTeam(int client, DODTeam team)	{
  *
  *	@return	Returns a DODTeam team.
  */
-stock DODTeam DOD_GetRandomTeam()	{
+stock DODTeam DOD_GetRandomTeam() {
 	return view_as<DODTeam>(GetRandomInt(2, 3));
 }
 
@@ -93,7 +94,7 @@ stock DODTeam DOD_GetRandomTeam()	{
  *
  *	@noreturn
  */
-stock void DOD_GetWeaponName(const char[] weapon, char[] buffer, int maxlen)	{
+stock void DOD_GetWeaponName(const char[] weapon, char[] buffer, int maxlen) {
 	if(StrContains(weapon, "k98", false) != -1)
 		strcopy(buffer, maxlen, "K98K");
 	

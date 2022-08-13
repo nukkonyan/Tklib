@@ -3,7 +3,8 @@
 //==========================================//
 #if !defined _tklib_disable_l4d
 
-stock char L4D_GetTeamStringName[][] = {
+stock char
+L4D_GetTeamStringName[][] = {
 	"{grey}Unassigned{default}",
 	"{grey}Spectators{default}",
 	"{orange}Survivors{default}",
@@ -16,12 +17,12 @@ stock char L4D_GetTeamStringName[][] = {
 };
 
 //Left 4 Dead enum
-enum	L4DTeam	{
-	L4DTeam_Invalid		=	-1,
-	L4DTeam_Unassigned	=	0,
-	L4DTeam_Spectator	=	1,
-	L4DTeam_Survivor	=	2,
-	L4DTeam_Infected	=	3
+enum L4DTeam {
+	L4DTeam_Invalid = -1,
+	L4DTeam_Unassigned = 0,
+	L4DTeam_Spectator = 1,
+	L4DTeam_Survivor = 2,
+	L4DTeam_Infected = 3
 }
 
 #define	L4DTeam(%1)		view_as<L4DTeam>(%1)
@@ -46,8 +47,8 @@ stock L4DTeam L4D_GetClientTeam(int client)	{
  */
 stock bool L4D_ChangeClientTeam(int client, L4DTeam team)	{
 	if(Tklib_IsValidClient(client))	{
-		ChangeClientTeam(client, int(team));
-		return	true;
+		ChangeClientTeam(client, view_as<int>(team));
+		return true;
 	}
 	
 	return	false;
@@ -58,8 +59,8 @@ stock bool L4D_ChangeClientTeam(int client, L4DTeam team)	{
  *
  *	@return	Returns a L4DTeam team.
  */
-stock L4DTeam L4D_GetRandomTeam()	{
-	return	L4DTeam(GetRandomInt(2, 3));
+stock L4DTeam L4D_GetRandomTeam() {
+	return L4DTeam(GetRandomInt(2, 3));
 }
 
 #endif

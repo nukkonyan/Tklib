@@ -292,12 +292,12 @@ stock bool CSGO_SetNameTag(any entity, const char[] nametag) {
  *	@return	Returns false on failure, true otherwise.
  */
 stock bool CSGO_GetNameTag(any entity, char[] buffer, int maxlen) {
-	if(!IsValidEntityEx(weapon))
+	if(!IsValidEntityEx(entity))
 		return false;
 	
 	char netclass[32];
 	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	GetEntDataString(entity, FindSendPropInfo(netclass, "m_szCustomName"), bufffer, maxlen);
+	GetEntDataString(entity, FindSendPropInfo(netclass, "m_szCustomName"), buffer, maxlen);
 	return true;
 }
 
@@ -858,7 +858,7 @@ stock int CSGO_FindWeaponByDefindex(int client, int defindex) {
 	return -1;
 }
 
-/**
+/*
  *	Sends a win-round event panel with html code support.
  *	If string parameter is left empty (by default), event is fired but panel will be removed
  *	from the users perspective. Useful if sending text or for just removing panel.
@@ -867,7 +867,7 @@ stock int CSGO_FindWeaponByDefindex(int client, int defindex) {
  *	@param	str		The string to pass through.
  *
  *	@error	If invalid use or event, this returns false.
- */
+ *
 stock bool CSGO_HUDText(int client, const char[] str="") {
 	if(!Tklib_IsValidClient(client, true))
 		return false;
@@ -882,6 +882,7 @@ stock bool CSGO_HUDText(int client, const char[] str="") {
 	
 	return false;
 }
+*/
 
 /**
  *	Returns if the definition index is valid.

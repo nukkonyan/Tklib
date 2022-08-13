@@ -6,40 +6,40 @@
 //Include originally by JonnyBoy0719, updated by Tk /id/Teamkiller324
 
 /**
-	Smlib fix
-**/
-#define	CE_MAX_WEAPONS				48	// Max number of weapons available
+ * Smlib fix
+ */
+#define CE_MAX_WEAPONS 48	// Max number of weapons available
 
 /**
  * Maximum length of a weapon name string
  */
-#define	CE_WEAPONS_MAX_LENGTH	32
+#define CE_WEAPONS_MAX_LENGTH 32
 
 /**
  * Number of weapon slots
  */
-#define	CE_WEAPONS_SLOTS_MAX	4
+#define CE_WEAPONS_SLOTS_MAX 4
 
 /**
  * Weapon slots.
  */
-enum	CE_WeaponsSlot	{
-	Slot_Invalid		=	-1,	/** Invalid weapon (slot). */
-	Slot_Primary		=	0,	/** Primary weapon slot. */
-	Slot_Secondary		=	1,	/** Secondary weapon slot. */
-	Slot_Third			=	2,	/** 3rd weapon slot. */
-	Slot_Forth			=	3,	/** 4th weapon slot. */
+enum CE_WeaponsSlot {
+	Slot_Invalid	= -1,	/** Invalid weapon (slot). */
+	Slot_Primary	= 0,	/** Primary weapon slot. */
+	Slot_Secondary	= 1,	/** Secondary weapon slot. */
+	Slot_Third		= 2,	/** 3rd weapon slot. */
+	Slot_Forth		= 3,	/** 4th weapon slot. */
 }
 
 /**
  * Team numbers.
  */
-enum	CETeam	{
-	CETeam_Invalid		=	-1,
-	CETeam_Unassigned	=	0,
-	CETeam_Spectator	=	1,
-	CETeam_Survivor		=	2,
-	CETeam_Zombie		=	3	
+enum CETeam {
+	CETeam_Invalid		= -1,
+	CETeam_Unassigned	= 0,
+	CETeam_Spectator	= 1,
+	CETeam_Survivor		= 2,
+	CETeam_Zombie		= 3	
 }
 
 /**
@@ -51,8 +51,8 @@ enum	CETeam	{
  *
  *	@error	If the user is invalid, this returns CETeam_Unassigned.
  */
-stock CETeam CE_GetClientTeam(int client)	{
-	return	Tklib_IsValidClient(client) ? CETeam(GetClientTeam(client):CETeam_Unassigned);
+stock CETeam CE_GetClientTeam(int client) {
+	return Tklib_IsValidClient(client) ? view_as<CETeam>(GetClientTeam(client)):CETeam_Unassigned;
 }
 
 /**
@@ -65,11 +65,11 @@ stock CETeam CE_GetClientTeam(int client)	{
  */
 stock bool CE_ChangeClientTeam(int client, CETeam team)	{
 	if(Tklib_IsValidClient(client))	{
-		ChangeClientTeam(client, int(team));
-		return	true;
+		ChangeClientTeam(client, view_as<int>(team));
+		return true;
 	}
 	
-	return	falsE;
+	return false;
 }
 
 /**
@@ -82,7 +82,7 @@ stock bool CE_ChangeClientTeam(int client, CETeam team)	{
  *	@error	If the user is invalid, this returns -1.0.
  */
 stock float CE_GetInfectionTime(int client)	{
-	return	GetEntPropFloatEx(client, Prop_Send, "m_TimeTillInfection");
+	return GetEntPropFloatEx(client, Prop_Send, "m_TimeTillInfection");
 }
 
 /**
@@ -95,7 +95,7 @@ stock float CE_GetInfectionTime(int client)	{
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
 stock bool CE_SetInfectionTime(int client, float infection)	{
-	return	SetEntPropFloatEx(client, Prop_Send, "m_TimeTillInfection", infection);
+	return SetEntPropFloatEx(client, Prop_Send, "m_TimeTillInfection", infection);
 }
 
 /**
@@ -108,7 +108,7 @@ stock bool CE_SetInfectionTime(int client, float infection)	{
  *	@error	If the user is invalid, this returns -1.0.
  */
 stock float CE_GetStamina(int client)	{
-	return	GetEntPropFloatEx(client, Prop_Send, "m_flStamina");
+	return GetEntPropFloatEx(client, Prop_Send, "m_flStamina");
 }
 
 /**
@@ -120,7 +120,7 @@ stock float CE_GetStamina(int client)	{
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
 stock bool CE_SetStamina(int client, float stamina)	{
-	return	SetEntPropFloatEx(client, Prop_Send, "m_flStamina", stamina);
+	return SetEntPropFloatEx(client, Prop_Send, "m_flStamina", stamina);
 }
 
 /**
@@ -133,7 +133,7 @@ stock bool CE_SetStamina(int client, float stamina)	{
  *	@error	If the weapon entity is invalid, this returns false.
  */
 stock int CE_SetExtraAmmo(any weapon, int ammo)	{
-	return	SetWeaponAmmo(weapon, GetWeaponAmmo(weapon) + ammo);
+	return SetWeaponAmmo(weapon, GetWeaponAmmo(weapon) + ammo);
 }
 
 /**
@@ -148,11 +148,11 @@ stock int CE_SetExtraAmmo(any weapon, int ammo)	{
  */
 stock bool CE_SetAmmo(int client, any weapon, int ammo)	{
 	if(Tklib_IsValidClient(client, _, true) && IsValidEntityEx(weapon))	{
-		int offset_ammo	= FindDataMapInfo(client, "m_iAmmo"),
-		int offset		= offset_ammo + (GetWeaponPrimaryAmmoType(weapon) * 4);
+		int offset_ammo	= FindDataMapInfo(client, "m_iAmmo");
+		int offset = offset_ammo + (GetWeaponAmmoType(weapon) * 4);
 		SetEntData(client, offset, ammo, 4, true);
 		
-		return	true;
+		return true;
 	}
 	
 	return	false;
@@ -167,8 +167,8 @@ stock bool CE_SetAmmo(int client, any weapon, int ammo)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int CE_GetSurvivorCharacter(int client)	{
-	return	GetEntPropEx(client, Prop_Send, "m_survivorCharacter");
+stock int CE_GetSurvivorCharacter(int client) {
+	return GetEntPropEx(client, Prop_Send, "m_survivorCharacter");
 }
 
 /**
@@ -178,8 +178,8 @@ stock int CE_GetSurvivorCharacter(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock int CE_SetSurvivorCharacter(int client, int index)	{
-	return	SetEntPropEx(client, Prop_Send, "m_survivorCharacter", index);
+stock int CE_SetSurvivorCharacter(int client, int index) {
+	return SetEntPropEx(client, Prop_Send, "m_survivorCharacter", index);
 }
 
 /**
@@ -192,7 +192,7 @@ stock int CE_SetSurvivorCharacter(int client, int index)	{
  */
 stock void CE_GiveClientWeapon(int client, const char[] weapon, int ammo=0)	{
 	GivePlayerItem(client, weapon);
-	int	GetWeapon = Client_GetWeapon(client, weapon);
+	int	GetWeapon = GetClientWeaponClassname(client, weapon);
 	if(ammo > 0)
 		CE_SetAmmo(client, GetWeapon, ammo);
 }
@@ -217,7 +217,7 @@ stock bool CE_ClientHasWeapon(int client, const char[] weapon)	{
 	char classname[64];
 	
 	// x = slot index
-	for(int x = 0; x < WEAPONS_SLOTS_MAX; x++)	{
+	for(int x = 0; x < CE_MAX_WEAPONS; x++) {
 		// If slot is empty, then stop.
 		if(weapons[x] == -1)
 			continue;
@@ -240,9 +240,9 @@ stock bool CE_ClientHasWeapon(int client, const char[] weapon)	{
  *
  *	@noreturn.
  */
-stock void CE_GetClientWeapons(int client, int weapons[4])	{
+stock void CE_GetClientWeapons(int client, int weapons[4]) {
 	// x = Weapon slot.
-	for(int x = 0; x < CE_WEAPONS_SLOTS_MAX; x++)	{
+	for(int x = 0; x < CE_WEAPONS_SLOTS_MAX; x++) {
 		weapons[x] = GetPlayerWeaponSlot(client, x);
 	}
 }
@@ -278,14 +278,14 @@ stock bool CE_RemoveWeaponSlot(int client, int slot)	{
  */
 stock bool CE_RemoveAllFirearms(int client)	{
 	if(!Tklib_IsValidClient(client, _, true))
-		return	false;
+		return false;
 	
 	int	weapons[4];
 	CE_GetClientWeapons(client, weapons);
 	
 	char classname[64];
 	
-	for(int x = 0; x < CE_WEAPONS_SLOTS_MAX; x++)	{
+	for(int x = 0; x < CE_WEAPONS_SLOTS_MAX; x++) {
 		if(weapons[x] == -1)
 			continue;
 		
@@ -297,9 +297,8 @@ stock bool CE_RemoveAllFirearms(int client)	{
 			|| StrEqual(classname, "weapon_key", false) || StrEqual(classname, "weapon_firstaid", false)
 			|| StrEqual(classname, "weapon_keycard", false) || StrEqual(classname, "weapon_nailgun", false)
 			|| StrEqual(classname, "weapon_plight", false) || StrEqual(classname, "weapon_zombie", false))
-			return; // Do nothing
-		else
-		{
+			return false; // Do nothing
+		else {
 	//		PrintToServer("[[ delete: %s ]]", classname);
 	//		PrintToServer("[[ delete: %d ]]", weapons[x]);
 			RemovePlayerItem(client, weapons[x]);
@@ -307,7 +306,7 @@ stock bool CE_RemoveAllFirearms(int client)	{
 		}
 	}
 	
-	return	true;
+	return true;
 }
 
 /**
@@ -350,11 +349,11 @@ stock int CE_GetClientWeapon(int client, const char[] classname)	{
 		if(!IsValidEntityEx(weapon))
 			continue;
 		
-		if(IsEntityClassnameMatching(weapon, className))
+		if(IsEntityClassnameMatching(weapon, classname))
 			return	weapon;
 	}
 	
-	return	INVALID_ENT_REFERENCE;
+	return INVALID_ENT_REFERENCE;
 }
 
 /**
@@ -363,7 +362,7 @@ stock int CE_GetClientWeapon(int client, const char[] classname)	{
  *	@return	Returns a CETeam team.
  */
 stock CETeam CE_GetRandomTeam()	{
-	return	CETeam(GetRandomInt(2, 3));
+	return view_as<CETeam>(GetRandomInt(2, 3));
 }
 
 #endif
