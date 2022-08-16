@@ -3,6 +3,33 @@
 //==========================================//
 #if !defined _tklib_no_tf2
 
+//May seem useless, but for just incase.
+const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
+const TFTeam TFTeam_Green = view_as<TFTeam>(4);
+const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
+const TFClassType TFClass_Invalid = view_as<TFClassType>(-1);
+const TFClassType TFClass_Demoman = view_as<TFClassType>(4);
+const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
+
+#if !defined _tf2_included
+const TFClassType TFClass_Unknown = view_as<TFClassType>(0);
+const TFClassType TFClass_Scout = view_as<TFClassType>(1);
+const TFClassType TFClass_Sniper = view_as<TFClassType>(2);
+const TFClassType TFClass_Soldier = view_as<TFClassType>(3);
+const TFClassType TFClass_DemoMan = view_as<TFClassType>(4);
+const TFClassType TFClass_Medic = view_as<TFClassType>(5);
+const TFClassType TFClass_Heavy = view_as<TFClassType>(6);
+const TFClassType TFClass_Pyro = view_as<TFClassType>(7);
+const TFClassType TFClass_Spy = view_as<TFClassType>(8);
+const TFClassType TFClass_Engineer = view_as<TFClassType>(9);
+const TFTeam TFTeam_Unassigned = view_as<TFTeam>(0);
+const TFTeam TFTeam_Spectator = view_as<TFTeam>(1);
+const TFTeam TFTeam_Red = view_as<TFTeam>(2);
+const TFTeam TFTeam_Blue = view_as<TFTeam>3);
+#endif
+
+const TFClassType TFClass_All = TFClass_Scout|TFClass_Soldier|TFClass_Pyro|TFClass_DemoMan|TFClass_Heavy|TFClass_Engineer|TFClass_Medic|TFClass_Sniper|TFClass_Spy|TFClass_Civilian;
+
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringNameEx[GetClientTeam(client)] will return the correct team name)
 stock char
 TF2_GetTeamStringName[][] = {"Unassigned","Spectators","RED","BLU","GRN","YLW"},
@@ -155,6 +182,8 @@ TF2_ConditionName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pos
 ,"Used in Mannpower when a player has a high kill count compared to the rest of the players in the game. Reduces the strength of the currently equipped powerup"},
 TF2_SpellPaintName[][] = {"Die Job","Chromatic Corruption","Putrescent Pigmentation","Spectral Spectrum","Sinister Staining","Unnamed Unused"},
 TF2_KillstreakerSheenName[][] = {"None","Team Shine","Deadly Daffodil","Manndarin","Mean Green","Agonizing Emerald","Villainous Violet","Hot Rod"};
+
+stock TFClassType TF2_TauntsClassType[] = {TFClass_All,TFClass_All,TFClass_All,TFClass_Medic,TFClass_All,TFClass_All,TFClass_All,TFClass_Spy,TFClass_Medic,TFClass_All,TFClass_All,TFClass_Pyro,TFClass_Soldier,TFClass_Demoman,TFClass_Engineer,TFClass_Sniper,TFClass_Scout,TFClass_All,TFClass_Scout,TFClass_Demoman,TFClass_All,TFClass_All,TFClass_All,TFClass_Heavy,TFClass_All,TFClass_All,TFClass_Soldier,TFClass_Scout,TFClass_Pyro,TFClass_Scout,TFClass_Sniper,TFClass_Sniper,TFClass_Spy,TFClass_Heavy,TFClass_Engineer,TFClass_All,TFClass_Demoman,TFClass_All,TFClass_Soldier,TFClass_Soldier,TFClass_Spy,TFClass_Pyro,TFClass_All,TFClass_Sniper,TFClass_Demoman,TFClass_Engineer,TFClass_Heavy,TFClass_Heavy,TFClass_Engineer,TFClass_Pyro,TFClass_Scout,TFClass_Medic,TFClass_Pyro,TFClass_Scout,TFClass_Scout,TFClass_Spy,TFClass_Demoman,TFClass_Medic,TFClass_Soldier,TFClass_Scout,TFClass_Pyro,TFClass_Engineer,TFClass_Scout,TFClass_All,TFClass_Demoman,TFClass_Soldier,TFClass_Medic,TFClass_Heavy,TFClass_Scout,TFClass_Medic,TFClass_Sniper,TFClass_Pyro};
 
 stock int
 TF2_GetClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175},
@@ -476,31 +505,6 @@ TF2_UnusualEffects[] = {
 },
 TF2_Weapons[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,35,36,37,38,39,40,41,42,43,44,45,46,56,57,58,59,60,61,127,128,129,130,131,132,133,140,141,142,153,154,155,160,161,169,171,172,173,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,212,214,215,220,221,222,224,225,228,230,231,232,237,239,264,265,266,294,297,298,304,305,307,308,310,312,317,325,326,327,329,331,348,349,351,355,356,357,401,402,404,406,411,412,413,414,415,416,423,424,425,426,441,442,444,447,448,449,450,452,457,460,461,466,474,482,513,525,526,527,528,572,574,587,588,589,593,594,595,609,638,642,648,649,654,656,658,659,660,661,662,663,664,665,669,727,737,739,740,741,751,752,772,773,775,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,808,808,809,811,812,813,832,833,834,850,851,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,939,947,954,957,958,959,960,961,962,963,964,965,966,967,968,969,971,972,973,974,996,997,999,1000,1003,1004,1005,1006,1007,1013,1071,1078,1079,1081,1082,1083,1084,1085,1092,1098,1099,1100,1101,1102,1103,1104,1105,1121,1123,1127,1141,1142,1143,1144,1145,1146,1149,1150,1151,1153,1178,1179,1180,1181,1184,15000,15001,15002,15003,15004,15005,15006,15007,15008,15009,15110,15011,15012,15013,15014,15015,15016,15017,15018,15019,15020,15021,15022,15023,15024,15125,15026,15027,15028,15029,15030,15031,15032,15033,15034,15035,15036,15037,15038,15139,15040,15041,15042,15043,15044,15045,15046,15047,15048,15049,15050,15051,15052,15053,15054,15055,15056,15057,15058,15059,15060,15061,15062,15063,15064,15065,15066,15067,15068,15069,15070,15071,15072,15073,15074,15075,15076,15077,15078,15079,15080,15081,15082,15083,15084,15085,15086,15087,15088,15089,15090,15091,15092,15094,15095,15096,15097,15098,15099,15100,15101,15102,15103,15104,15105,15106,15107,15108,15109,15110,15111,15112,15113,15114,15115,15116,15117,15118,15119,15120,15121,15122,15123,15124,15125,15126,15127,15128,15129,15130,15131,15132,15133,15134,15135,15136,15137,15138,15139,15140,15141,15142,15143,15144,15145,15146,15147,15148,15149,15150,15151,15152,15153,15154,15155,15156,15157,15158,30474,30665,30666,30667,30668,30758};
 
-//May seem useless, but for just incase.
-const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
-const TFTeam TFTeam_Green = view_as<TFTeam>(4);
-const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
-const TFClassType TFClass_Invalid = view_as<TFClassType>(-1);
-const TFClassType TFClass_Demoman = view_as<TFClassType>(4);
-const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
-
-#if !defined _tf2_included
-const TFClassType TFClass_Unknown = view_as<TFClassType>(0);
-const TFClassType TFClass_Scout = view_as<TFClassType>(1);
-const TFClassType TFClass_Sniper = view_as<TFClassType>(2);
-const TFClassType TFClass_Soldier = view_as<TFClassType>(3);
-const TFClassType TFClass_DemoMan = view_as<TFClassType>(4);
-const TFClassType TFClass_Medic = view_as<TFClassType>(5);
-const TFClassType TFClass_Heavy = view_as<TFClassType>(6);
-const TFClassType TFClass_Pyro = view_as<TFClassType>(7);
-const TFClassType TFClass_Spy = view_as<TFClassType>(8);
-const TFClassType TFClass_Engineer = view_as<TFClassType>(9);
-const TFTeam TFTeam_Unassigned = view_as<TFTeam>(0);
-const TFTeam TFTeam_Spectator = view_as<TFTeam>(1);
-const TFTeam TFTeam_Red = view_as<TFTeam>(2);
-const TFTeam TFTeam_Blue = view_as<TFTeam>3);
-#endif
-
 #define MAX_TF2_TAUNTS sizeof(TF2_Taunts)
 #define MAX_TF2_CONDITIONS sizeof(TF2_Conditions)
 #define MAX_TF2_WARPAINTS sizeof(TF2_Warpaints)
@@ -508,7 +512,7 @@ const TFTeam TFTeam_Blue = view_as<TFTeam>3);
 #define MAX_TF2_UNUSUALS sizeof(TF2_UnusualEffects)
 #define MAX_TF2_WEAPONS sizeof(TF2_Weapons)
 
-//TF2 Offsets, will be updated as frequently as possible.
+//TF2 Offsets, will be updated as frequently as possible. (Windows)
 enum {
 	TF2Offset_IsBaseCombatWeapon = 89,
 	TF2Offset_IsWearable = 90,
@@ -1691,7 +1695,7 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
  *	@return	Returns the weapon entity index. If invalid user or entity is invalid returns -1.
  */
 stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality, bool dbg=false)	{
-	static int weapon;
+	static int weapon = -1;
 	
 	char classname[128];
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
@@ -1765,7 +1769,7 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality,
  *
  *	@return	Returns the cosmetic entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality quality, bool levelable=false)	{
+stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality quality, bool levelable=false) {
 	if(!Tklib_IsValidClient(client, _, true))
 		return -1;
 	
@@ -1776,8 +1780,8 @@ stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality qualit
 	Handle EquipWearable = EndPrepSDKCall();
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(EquipWearable != null && (cosmetic = levelable ? TF2_CreateCosmeticLevelable() : TF2_CreateCosmetic()) != -1)	{
-		if(IsValidEntityEx(cosmetic))	 {
+	if(EquipWearable != null && (cosmetic = levelable ? TF2_CreateCosmeticLevelable() : TF2_CreateCosmetic()) != -1) {
+		if(IsValidEntityEx(cosmetic)) {
 			SetEntityDefinitionIndex(cosmetic, defindex);
 			SetEntityInitialized(cosmetic, true);
 			TF2_SetEntityLevel(cosmetic, level);
@@ -1811,12 +1815,8 @@ stock bool TF2_StripCosmetics(int client, int defindex=-1)	{
 		
 	while((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable")) != -1)	{
 		if(IsValidEntityEx(cosmetic))	{
-			if(GetEntityOwner(cosmetic) == client)	{
-				switch(GetEntityDefinitionIndex(cosmetic) == cosmetic)	{
-					case true: AcceptEntityInput(cosmetic, "Kill");
-					case false: AcceptEntityInput(cosmetic, "Kill");
-				}
-			}
+			if(GetEntityOwner(cosmetic) == client && GetEntityDefinitionIndex(cosmetic) == cosmetic)
+				AcceptEntityInput(cosmetic, "Kill");
 		}
 	}
 	
@@ -1832,20 +1832,16 @@ stock bool TF2_StripCosmetics(int client, int defindex=-1)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool TF2_StripCosmeticsLevelable(int client, int defindex=-1)	{
+stock bool TF2_StripCosmeticsLevelable(int client, int defindex=-1) {
 	if(!Tklib_IsValidClient(client, _, true))
 		return false;
 	
 	int cosmetic = 0;
 		
-	while((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable_levelable_item")) != -1)	{
-		if(IsValidEntityEx(cosmetic))	{
-			if(GetEntityOwner(cosmetic) == client)	{
-				switch(GetEntityDefinitionIndex(cosmetic) == cosmetic)	{
-					case true: AcceptEntityInput(cosmetic, "Kill");
-					case false: AcceptEntityInput(cosmetic, "Kill");
-				}
-			}
+	while((cosmetic = FindEntityByClassname(cosmetic, "tf_wearable_levelable_item")) != -1) {
+		if(IsValidEntityEx(cosmetic)) {
+			if(GetEntityOwner(cosmetic) == client && GetEntityDefinitionIndex(cosmetic) == cosmetic)
+				AcceptEntityInput(cosmetic, "Kill");
 		}
 	}
 	
@@ -1859,7 +1855,7 @@ stock bool TF2_StripCosmeticsLevelable(int client, int defindex=-1)	{
  *
  *	@error	If the cosmetic entity is invalid, this returns false.
  */
-stock bool TF2_IsValidCosmetic(int cosmetic)	{
+stock bool TF2_IsValidCosmetic(int cosmetic) {
 	if(!IsValidEntityEx(cosmetic))
 		return false;
 	
@@ -1898,7 +1894,7 @@ stock bool TF2_IsValidAustralium(int defindex) {
  *
  *	@noreturn.
  */
-stock void TF2_TurnAustralium(any weapon)	{
+stock void TF2_TurnAustralium(any weapon) {
 	if(!IsValidEntityEx(weapon))
 		return;
 	
@@ -1950,7 +1946,7 @@ stock void TF2_TurnAustralium(any weapon)	{
  *
  *	@return	Returns true if the definition index is valie, false otherwise. 
  */
-stock bool TF2_GetKillstreakerName(int index, char[] buffer, int maxlen)	{
+stock bool TF2_GetKillstreakerName(int index, char[] buffer, int maxlen) {
 	switch(index) {
 		/* Fire Horns. */
 		case 2002: {
@@ -2519,7 +2515,7 @@ stock bool TF2_IsValidWeapon(int weapon) {
  *
  *	@error	If the entity is invalid or has no quality property, this returns false.
  */
-stock bool TF2_SetEntityQuality(int entity, TFQuality quality)	{
+stock bool TF2_SetEntityQuality(int entity, TFQuality quality) {
 	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityQuality"))
 		return false;
 	
@@ -2536,7 +2532,7 @@ stock bool TF2_SetEntityQuality(int entity, TFQuality quality)	{
  *
  *	@error	If the entity is invalid or has no quality property, this returns TFQuality_Invalid.
  */
-stock TFQuality TF2_GetEntityQuality(int entity)	{
+stock TFQuality TF2_GetEntityQuality(int entity) {
 	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityQuality"))
 		return TFQuality_Invalid;
 	
@@ -2552,7 +2548,7 @@ stock TFQuality TF2_GetEntityQuality(int entity)	{
  *
  *	@error	If the entity is invalid or has no level property, this returns false.
  */
-stock bool TF2_SetEntityLevel(int entity, int level)	{
+stock bool TF2_SetEntityLevel(int entity, int level) {
 	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityLevel"))
 		return false;
 	
@@ -2570,7 +2566,7 @@ stock bool TF2_SetEntityLevel(int entity, int level)	{
  *
  *	@error	If the entity is invalid or has no level property, this returns false.
  */
-stock int TF2_GetEntityLevel(int entity)	{
+stock int TF2_GetEntityLevel(int entity) {
 	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityLevel"))
 		return -1;
 	
@@ -2587,7 +2583,7 @@ stock int TF2_GetEntityLevel(int entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_IsValidatedAttachedEntity(int entity)	{
+stock bool TF2_IsValidatedAttachedEntity(int entity) {
 	if(!HasEntPropEx(entity, Prop_Send, "m_bValidatedAttachedEntity"))
 		return false;
 	
@@ -2605,7 +2601,7 @@ stock bool TF2_IsValidatedAttachedEntity(int entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_SetValidatedAttachedEntity(int entity, bool validated)	{
+stock bool TF2_SetValidatedAttachedEntity(int entity, bool validated) {
 	if(!HasEntPropEx(entity, Prop_Send, "m_bValidatedAttachedEntity"))
 		return false;
 	
@@ -2627,7 +2623,7 @@ stock int TF2_CreateCosmetic() {
 /**
  *	Creates a demoshield weapon entity.
  *
- *	@return	Returns the entity index of the demoshield entity.
+ *	@return	Returns the entity index of the cosmetic demoshield entity.
  */
 stock int TF2_CreateCosmeticDemoShield() {
 	return CreateEntityByName("tf_wearable_demoshield");
@@ -2637,7 +2633,7 @@ stock int TF2_CreateCosmeticDemoShield() {
  *	Creates a razorback weapon entity.
  *	Used for the 'Razorback' weapon.
  *
- *	@return	Returns the entity index of the razorback entity.
+ *	@return	Returns the entity index of the cosmetic razorback entity.
  */
 stock int TF2_CreateCosmeticRazorback() {
 	return CreateEntityByName("tf_wearable_razorback");
@@ -2647,7 +2643,7 @@ stock int TF2_CreateCosmeticRazorback() {
  *	Creates a videomaker entity.
  *	Used for taunts.
  *
- *	@return	Returns the entity index of the viewmodel entity.
+ *	@return	Returns the entity index of the cosmetic videomaker entity.
  */
 stock int TF2_CreateCosmeticVideoMaker() {
 	return CreateEntityByName("tf_wearable_vm");
@@ -2758,11 +2754,25 @@ stock bool TF2_IsValidUnusual(int index) {
 /**
  *	Returns if the definition index is a valid weapon.
  *
- *	@param	defindex	The definition index.
+ *	@param	defindex	The weapon definition index.
  */
 stock bool TF2_IsValidWeaponDefindex(int defindex) {
 	for(int i = MAX_TF2_WEAPONS; i--;) {
 		if(TF2_Weapons[i] == defindex)
+			return true;
+	}
+	
+	return false;
+}
+
+/**
+ *	Returns if the definition index is a valid taunt.
+ *
+ *	@param	defindex	The taunt definition index.
+ */
+stock bool TF2_IsValidTaunt(int defindex) {
+	for(int i = MAX_TF2_TAUNTS; i--;) {
+		if(TF2_Taunts[i] == defindex)
 			return true;
 	}
 	

@@ -3,11 +3,46 @@ methodmap MenuEx < Menu {
 		return view_as<MenuEx>(new Menu(handler));
 	}
 	
+	/*
+	 *	Displays a menu to a user.
+	 *
+	 *	@param	client	The users index.
+	 *	@param	time	Maximum time to leave menu on the screen.
+	 *
+	 *	@return	True on success, false on failure.
+	 */
+	public bool Display(int client, int time = MENU_TIME_FOREVER) {
+		if(!Tklib_IsValidClient(client, true))
+			return false;
+		
+		return view_as<Menu>(this).Display(client, time);
+	}
+
+	/*
+	 *	Displays a menu to a user, starting from the given item.
+	 *
+	 *	@param	client		The users index.
+	 *	@param	first_item	First item to begin drawing from.
+	 *	@param	time		Maximum time to leave menu on the screen.
+	 *
+	 *	@return	True on success, false on failure.
+	 */
+	public bool DisplayAt(int client, int first_item, int time = MENU_TIME_FOREVER) {
+		if(!Tklib_IsValidClient(client, true))
+			return false;
+		
+		return view_as<Menu>(this).DisplayAt(client, first_item, time);
+	}
+	
 	public void SetTitle(const char[] fmt, any ...) {
 		char format[256];
 		VFormat(format, sizeof(format), fmt, 3);
 		
 		view_as<Menu>(this).SetTitle(format);
+	}
+	
+	public void GetTitle(char[] buffer, int maxlen) {
+		view_as<Menu>(this).GetTitle(buffer, maxlen);
 	}
 	
 	public bool AddItem(const char[] info, const char[] display, int style = ITEMDRAW_DEFAULT) {
@@ -28,6 +63,20 @@ methodmap MenuEx < Menu {
 	}
 	
 	public bool AddItemIntEx(int info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
+		char format1[256], format2[256];
+		Format(format1, sizeof(format1), "%i", info);
+		VFormat(format2, sizeof(format2), display, 5);
+		
+		return view_as<Menu>(this).AddItem(format1, format2, style);
+	}
+	
+	public bool AddItemAny(any info, const char[] display, int style = ITEMDRAW_DEFAULT) {
+		char format[256];
+		Format(format, sizeof(format), "%i", info);
+		return view_as<Menu>(this).AddItem(format, display, style);
+	}
+	
+	public bool AddItemAnyEx(any info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
 		char format1[256], format2[256];
 		Format(format1, sizeof(format1), "%i", info);
 		VFormat(format2, sizeof(format2), display, 5);
@@ -63,6 +112,12 @@ methodmap MenuEx < Menu {
 		char buffer[256];
 		view_as<Menu>(this).GetItem(position, buffer, sizeof(buffer), style, dispBuf, dispBufLen);
 		return StringToFloat(buffer);
+	}
+	
+	public any GetItemAny(int position, int &style=0, char[] dispBuf="", int dispBufLen=0) {
+		char buffer[256];
+		view_as<Menu>(this).GetItem(position, buffer, sizeof(buffer), style, dispBuf, dispBufLen);
+		return StringToAny(buffer);
 	}
 }
 
@@ -248,6 +303,82 @@ methodmap PanelEx < Panel {
  */
 stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[] description, int flags=0) {
 	return CreateConVar(name, defaultValue ? "1":"0", description, flags, true, 0.0, true, 1.0);
+}
+
+/**
+ *	Adds ConVar flag(s).
+ *
+ *	@param	cvar	The ConVar to change.
+ *	@param	flags	The flags to add.
+ *
+ *	@error	If the ConVar is invalid, this returns false.
+ */
+stock bool AddConVarFlags(ConVar cvar, int flags)	{
+	if(cvar == null)
+		return	false;
+	
+	cvar.Flags |= flags;
+	return true;
+}
+
+/**
+ *	Adds ConVar flag(s).
+ *
+ *	@param	cvar	The ConVar name to change.
+ *	@param	flags	The flags to add.
+ *
+ *	@error	If the ConVar is invalid, this returns false.
+ */
+stock bool AddConVarFlagsEx(const char[] convar, int flags)	{
+	ConVar cvar = FindConVar(convar);
+	if(cvar == null) {
+		delete cvar;
+		return false;
+	}
+	
+	cvar.Flags |= flags;
+	delete cvar;
+	return true;
+}
+
+/**
+ *	Removes ConVar flag(s).
+ *
+ *	@param	cvar	The ConVar to change.
+ *	@param	flags	The flags to remove.
+ *
+ *	@error	If the ConVar is invalid, this returns false.
+ */
+stock bool RemoveConVarFlags(ConVar cvar, int flags)	{
+	if(cvar == null)
+		return	false;
+	
+	int flag = cvar.Flags;
+	flag &= ~flags;
+	cvar.Flags = flag;
+	return true;
+}
+
+/**
+ *	Removes ConVar flag(s).
+ *
+ *	@param	cvar	The ConVar name to change.
+ *	@param	flags	The flags to remove.
+ *
+ *	@error	If the ConVar is invalid, this returns false.
+ */
+stock bool RemoveConVarFlagsEx(const char[] convar, int flags)	{
+	ConVar cvar = FindConVar(convar);
+	if(cvar == null) {
+		delete cvar;
+		return false;
+	}
+	
+	int flag = cvar.Flags;
+	flag &= ~flags;
+	cvar.Flags = flag;
+	delete cvar;
+	return true;
 }
 
 /**

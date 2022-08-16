@@ -1113,7 +1113,7 @@ stock bool SetClientHideHud(int client, int flags) {
  *	@param	target_name	The string buffer to store the target name.
  *	@param	maxlen		The maximum length of the buffer.
  *
- *	@error	If no valid users are found, this returns empty.
+ *	@error	If no valid users are found, this returns null.
  */
 stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] target_name, int maxlen)	{
 	ArrayList list = new ArrayList();
@@ -1145,7 +1145,7 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] t
 	
 	if(caller != -1 && Self && Tklib_IsValidClient(caller, true)) {
 		list.Push(caller);
-		strcopy(target_name, maxlen, "Yourself");
+		GetClientInfo(caller, "name", target_name, maxlen);
 		return list;
 	}
 	
@@ -1166,23 +1166,23 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] t
 		|| (Team4 && GetClientTeam(client) == 4)
 		|| (Team5 && GetClientTeam(client) == 5)
 		|| Bots && IsFakeClient(client)
-		|| All)
-			list.Push(client);
+		|| All) list.Push(client);
 		else if(StrContainsEx(name, target, false)) {
 			list.Push(client);
 			strcopy(target_name, maxlen, name);
 		}
 		else if(caller != -1 && Tklib_IsValidClient(caller, true)) {
-			if(SameTeam && IsSameTeam(client, caller)) //Spaghetti code.
-				list.Push(client);
-			else if(Aim && GetClientAimTarget(caller, true) == client)
+			if(SameTeam && IsSameTeam(client, caller)
+			|| Aim && GetClientAimTarget(caller, true) == client) //Spaghetti code.
 				list.Push(client);
 		}
 	}
 	
-	if(All) strcopy(target_name, maxlen, "Everybody");
+	if(!list.Length) {delete list; return null;}
+	
+	if(All) strcopy(target_name, maxlen, "Everyone");
 	else if(Team1) strcopy(target_name, maxlen, "Spectators");
-	else if(Team2) {
+	else if(Team2 || Team3 || Team4 || Team5) {
 		switch(IdentifyGame()) {
 			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(target_name, maxlen, "Red Team");
 			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(target_name, maxlen, "T");
@@ -1198,7 +1198,6 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] t
 	else if(Team5) strcopy(target_name, maxlen, "Yellow Team");
 	else if(Bots) strcopy(target_name, maxlen, "All Bots");
 	else if(SameTeam) strcopy(target_name, maxlen, "Same Team");
-	else if(list.Length < 1) strcopy(target_name, maxlen, "Nobody");
 	
 	return list;
 }
