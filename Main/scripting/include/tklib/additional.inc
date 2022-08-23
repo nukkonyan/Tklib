@@ -546,9 +546,9 @@ stock void GetNameFromColourTag(const char[] source, char[] colour, int maxlen) 
  *	@param	value	The integer to convert.
  */
 stock float IntToFloat(int value) {
-	char format[128];
-	Format(format, sizeof(format), "%i", value);
-	return StringToFloat(format);
+	char str[16];
+	IntToString(value, str, sizeof(str));
+	return StringToFloat(str);
 }
 
 /**

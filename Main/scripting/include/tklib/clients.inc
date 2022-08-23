@@ -39,6 +39,8 @@ enum Team {
 	Team_Yellow = 5
 }
 
+#define TargetLoop(%1) for(int %1 = MaxClients; %1 >= 1; %1--)
+
 //Player permissions
 /**
  *	Returns if the user is a Console
@@ -686,9 +688,9 @@ stock Action SetRespawnTime(Handle timer, int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool Respawn(int client)	{
-	if(Tklib_IsValidClient(client))	{
-		switch(IdentifyGame())	{
+stock bool Respawn(int client) {
+	if(Tklib_IsValidClient(client)) {
+		switch(IdentifyGame()) {
 			#if defined _tf2_included
 			case Game_TF2, Game_TF2V, Game_TF2C, Game_TF2OP: TF2_RespawnPlayer(client);
 			#endif
@@ -731,7 +733,7 @@ stock bool GetClientAuth(int client, char[] buffer, int maxlen)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientAuth3(int client, char[] buffer, int maxlen)	{
+stock bool GetClientAuth3(int client, char[] buffer, int maxlen) {
 	return Tklib_IsValidClient(client, _, _, false) ? GetClientAuthId(client, AuthId_Steam3, buffer, maxlen):false;
 }
 
@@ -744,11 +746,11 @@ stock bool GetClientAuth3(int client, char[] buffer, int maxlen)	{
  *
  *	@error	If the user is invalid, this returns 0.
  */
-stock any GetClientOfAuth(const char[] auth)	{
+stock any GetClientOfAuth(const char[] auth) {
 	int user = 0;
 	char tempauth[64];
 	
-	for(int client = 1; client < MaxClients; client++)	{
+	TargetLoop(client) {
 		GetClientAuth(client, tempauth, sizeof(tempauth));
 		
 		if(StrEqual(tempauth, auth, false))
@@ -767,11 +769,11 @@ stock any GetClientOfAuth(const char[] auth)	{
  *
  *	@error	If the user is invalid, this returns 0.
  */
-stock any GetClientOfAuth3(const char[] auth)	{
+stock any GetClientOfAuth3(const char[] auth) {
 	int user = 0;
 	char tempauth[64];
 	
-	for(int client = 1; client < MaxClients; client++)	{
+	TargetLoop(client) {
 		GetClientAuth3(client, tempauth, sizeof(tempauth));
 		
 		if(StrEqual(tempauth, auth, false))
@@ -790,7 +792,7 @@ stock any GetClientOfAuth3(const char[] auth)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientNameEx(int client, char[] buffer, int maxlen)	{
+stock bool GetClientNameEx(int client, char[] buffer, int maxlen) {
 	return Tklib_IsValidClient(client, _, _, false) ? GetClientInfo(client, "name", buffer, maxlen):false;
 }
 
@@ -802,7 +804,7 @@ stock bool GetClientNameEx(int client, char[] buffer, int maxlen)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientNameEx(int client, const char[] name)	{
+stock bool SetClientNameEx(int client, const char[] name) {
 	if(!Tklib_IsValidClient(client, _, _, false))
 		return false;
 	
@@ -819,7 +821,7 @@ stock bool SetClientNameEx(int client, const char[] name)	{
  *
  *	@error		If the index of the player was not found or is invalid, this returns -1.
  */
-stock int GetClientOfPlayername(int client, const char[] playername, int filter_flags=COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS)	{
+stock int GetClientOfPlayername(int client, const char[] playername, int filter_flags=COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS) {
 	char target_name[64];
 	int target_list[64];
 	bool tn_is_ml;
@@ -839,12 +841,14 @@ stock int GetClientOfPlayername(int client, const char[] playername, int filter_
  *	@param	nobots	If true, bots are ignored.
  *	@return	Returns the user count.
  */
-stock int GetClientCountEx(bool nobots=true)	{
+stock int GetClientCountEx(bool nobots=true) {
 	int count = 0;
-	for(int i = 1; i < MaxClients; i++)	{
+	
+	TargetLoop(client) {
 		if(Tklib_IsValidClient(i, nobots, false, false))
 			count++;
 	}
+	
 	return count;
 }
 
@@ -858,7 +862,7 @@ stock int GetClientCountEx(bool nobots=true)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientModel(int client, const char[] model)	{
+stock bool SetClientModel(int client, const char[] model) {
 	if(!Tklib_IsValidClient(client, _, true))
 		return false;
 	
@@ -874,7 +878,7 @@ stock bool SetClientModel(int client, const char[] model)	{
  *
  *	@error	If the used is invalid, this returns false.
  */
-stock bool GetClientViewAngles(int client, float view[3])	{
+stock bool GetClientViewAngles(int client, float view[3]) {
 	if(!Tklib_IsValidClient(client))
 		return false;
 	
@@ -888,7 +892,7 @@ stock bool GetClientViewAngles(int client, float view[3])	{
 	return	true;
 }
 
-stock bool GetClientViewAngles_TraceEntityFilterPlayer(int entity, int contentsMask)	{
+stock bool GetClientViewAngles_TraceEntityFilterPlayer(int entity, int contentsMask) {
 	return view_as<bool>(entity > MaxClients);
 }
 
@@ -900,7 +904,7 @@ stock bool GetClientViewAngles_TraceEntityFilterPlayer(int entity, int contentsM
  *
  *	@error	If the user or is not supported in the current mod, this returns false.
  */
-stock bool SetClientPendingTeam(int client, int team)	{
+stock bool SetClientPendingTeam(int client, int team) {
 	return SetEntPropEx(client, Prop_Send, "m_iPendingTeamNum", team);
 }
 
@@ -911,7 +915,7 @@ stock bool SetClientPendingTeam(int client, int team)	{
  *
  *	@error	If the user or is not supported in the current mod, this returns 0.
  */
-stock int GetClientPendingTeam(int client)	{
+stock int GetClientPendingTeam(int client) {
 	return GetEntPropEx(client, Prop_Send, "m_iPendingTeamNum");
 }
 
@@ -922,7 +926,7 @@ stock int GetClientPendingTeam(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientDucking(int client)	{
+stock bool IsClientDucking(int client) {
 	return GetEntPropBool(client, Prop_Data, "m_bDucking");
 }
 
@@ -934,7 +938,7 @@ stock bool IsClientDucking(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientDucking(int client, bool duck)	{
+stock bool SetClientDucking(int client, bool duck) {
 	return SetEntPropEx(client, Prop_Data, "m_bDucking", duck);
 }
 
@@ -946,7 +950,7 @@ stock bool SetClientDucking(int client, bool duck)	{
  *
  *	@error	If the user is invalid or has no connection property, this returns false.
  */
-stock bool SetClientConnected(int client, bool connect)	{
+stock bool SetClientConnected(int client, bool connect) {
 	return SetEntPropEx(client, Prop_Send, "m_bConnected", connect);
 }
 
@@ -960,7 +964,7 @@ stock bool SetClientConnected(int client, bool connect)	{
  *
  *	@noreturn
  */
-stock void GetClientNameTeamString(int client, char[] buffer, int maxlen)	{
+stock void GetClientNameTeamString(int client, char[] buffer, int maxlen) {
 	int team = Tklib_IsValidClient(client) ? GetClientTeam(client):0;
 	
 	char TeamColour_Default[][] = {
@@ -1105,22 +1109,24 @@ stock bool SetClientHideHud(int client, int flags) {
 }
 
 /**
- *	Returns the users found matching the playername search criteria in an array.
- *	The array needs to be manually destroyed.
+ *	Returns the targets found matching the playername search criteria in an integer array.
  *
  *	@param	target		The playername or target to search.
  *	@param	caller		The calling user index, for '@me' or '@sameteam' targeting.
- *	@param	target_name	The string buffer to store the target name.
+ *	@param	name		The string buffer to store the target name.
  *	@param	maxlen		The maximum length of the buffer.
+ *	@param	flags		Filter flags.
  *
- *	@error	If no valid users are found, this returns null.
+ *	@error	If no valid users are found, this returns 0.
+ *
+ *	@return	Returns the target count.
  */
-stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] target_name, int maxlen)	{
-	ArrayList list = new ArrayList();
+stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, int maxlen, int[] list, int flags=0) {
+	int found = 0;
 	
 	bool All = (StrEqual(target, "@all", false)
 	|| StrEqual(target, "@everyone", false));
-	bool Self = (StrEqual(target, "@me", false) || StrEqual(target_name, "@myself"));
+	bool Self = (StrEqual(target, "@me", false) || StrEqual(name, "@myself"));
 	bool SameTeam = (StrEqual(target, "@sameteam", false));
 	bool Aim = (StrEqual(target, "@aim", false));
 	bool Team0 = (StrEqual(target, "@unassigned", false));
@@ -1144,20 +1150,25 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] t
 	|| StrEqual(target, "@bot"));
 	
 	if(caller != -1 && Self && Tklib_IsValidClient(caller, true)) {
-		list.Push(caller);
-		GetClientInfo(caller, "name", target_name, maxlen);
-		return list;
+		list[found++] = caller;
+		GetClientInfo(caller, "name", name, maxlen);
+		return found;
 	}
 	
-	for(int client = MaxClients; client >= 1; client--) {
+	TargetLoop(client) {
 		if(!Tklib_IsValidClient(client, _, _, false))
 			continue;
 		
-		static char name[64];
-		GetClientInfo(client, "name", name, sizeof(name));
-		//Format(name, sizeof(name), "%N", client);
+		if((flags & COMMAND_FILTER_NO_BOTS) && IsFakeClient(client)
+		|| (flags & COMMAND_FILTER_ALIVE) && !IsPlayerAlive(client)
+		|| (flags & COMMAND_FILTER_DEAD) && IsPlayerAlive(client))
+			continue;
 		
-		//PrintToServer("Found target '%i' ['%s'] ['%s']", client, name, target);
+		static char client_name[MAX_TARGET_LENGTH];
+		GetClientInfo(client, "name", client_name, sizeof(client_name));
+		//Format(client_name, sizeof(client_name), "%N", client);
+		
+		//PrintToServer("Found target '%i' ['%s'] ['%s']", client, client_name, target);
 		
 		if((Team0 && GetClientTeam(client) == 0)
 		|| (Team1 && GetClientTeam(client) == 1)
@@ -1166,64 +1177,62 @@ stock ArrayList FindClientsByTarget(const char[] target, int caller=-1, char[] t
 		|| (Team4 && GetClientTeam(client) == 4)
 		|| (Team5 && GetClientTeam(client) == 5)
 		|| Bots && IsFakeClient(client)
-		|| All) list.Push(client);
-		else if(StrContainsEx(name, target, false)) {
-			list.Push(client);
-			strcopy(target_name, maxlen, name);
+		|| All) list[found++] = client;
+		else if(StrContainsEx(client_name, target, false)) {
+			list[found++] = client;
+			strcopy(name, maxlen, name);
 		}
 		else if(caller != -1 && Tklib_IsValidClient(caller, true)) {
 			if(SameTeam && IsSameTeam(client, caller)
 			|| Aim && GetClientAimTarget(caller, true) == client) //Spaghetti code.
-				list.Push(client);
+				list[found++] = client;
 		}
 	}
 	
-	if(!list.Length) {delete list; return null;}
-	
-	if(All) strcopy(target_name, maxlen, "Everyone");
-	else if(Team1) strcopy(target_name, maxlen, "Spectators");
-	else if(Team2 || Team3 || Team4 || Team5) {
+	if(All) strcopy(name, maxlen, "Everyone");
+	else if(Team1) strcopy(name, maxlen, "Spectators");
+	else if(Team2) {
 		switch(IdentifyGame()) {
-			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(target_name, maxlen, "Red Team");
-			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(target_name, maxlen, "T");
+			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(name, maxlen, "Red Team");
+			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(name, maxlen, "T");
 		}
 	}
 	else if(Team3) {
 		switch(IdentifyGame()) {
-			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(target_name, maxlen, "Blue Team");
-			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(target_name, maxlen, "CT");
+			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(name, maxlen, "Blue Team");
+			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(name, maxlen, "CT");
 		}
 	}
-	else if(Team4) strcopy(target_name, maxlen, "Green Team");
-	else if(Team5) strcopy(target_name, maxlen, "Yellow Team");
-	else if(Bots) strcopy(target_name, maxlen, "All Bots");
-	else if(SameTeam) strcopy(target_name, maxlen, "Same Team");
+	else if(Team4) strcopy(name, maxlen, "Green Team");
+	else if(Team5) strcopy(name, maxlen, "Yellow Team");
+	else if(Bots) strcopy(name, maxlen, "All Bots");
+	else if(SameTeam) strcopy(name, maxlen, "Same Team");
 	
-	return list;
+	return found;
 }
 
 /**
- *	Returns the users found matching the team search criteria in an array.
+ *	Returns the targets found matching the team search criteria in an array.
  *	The array needs to be manually destroyed.
  *
  *	@param	team	The team index to search.
+ *	@param	list	Array of the targets.
  *
- *	@error	If no valid users are found, this returns empty.
+ *	@error	If no valid users are found, this returns 0.
+ *
+ *	@return	Returns the target count.
  */
-stock ArrayList FindClientsByTeam(any team, bool nobots=false)	{
-	ArrayList list = new ArrayList(64);
-	
+stock int FindClientsByTeam(any team, bool nobots=false, int[] list) {
 	int found = 0;
-	for(int client = 1; client <= MaxClients; client++)	{
-		if(Tklib_IsValidClient(client, nobots, false, false))	{
-			if(GetClientTeam(client) == team)	{
-				found++;
-				list.Push(client);
-			}
+	
+	TargetLoop(client) {
+		if(Tklib_IsValidClient(client, nobots, false, false)) {
+			if(GetClientTeam(client) == team)
+				clients[found++] = client;
 		}
 	}
 	
-	return list;
+	return found;
 }
 
 /**
@@ -1234,7 +1243,7 @@ stock ArrayList FindClientsByTeam(any team, bool nobots=false)	{
  *
  *	@param	If the user is invalid, procedure failed or invalid value is set, this returns false.
  */
-stock bool SetClientSuitSprintPower(int client, float value)	{
+stock bool SetClientSuitSprintPower(int client, float value) {
 	if(value < 0 || value > 100)
 		return false;
 	
@@ -1263,7 +1272,7 @@ stock int GetClientOfAccountID(int accountid) {
 	if(accountid < 1)
 		return -1;
 	
-	for(int client = MaxClients; client >= 1; client--) {
+	TargetLoop(client) {
 		if(!Tklib_IsValidClient(client, _, _, false))
 			continue;
 		
@@ -1291,7 +1300,7 @@ stock int GetClientIPClones(int client, int[] list) {
 	
 	GetClientIP(client, ip[0], sizeof(ip[]));
 	
-	for(int target = MaxClients; target >= 1; target--) {
+	TargetLoop(target) {
 		if(!Tklib_IsValidClient(target))
 			continue;
 		
@@ -1355,8 +1364,8 @@ stock bool ClientHasWeapon(int client, const char[] weapon) {
  *	@param	IgnoreNonConnected	If true, the non-connected users are counted as 'invalid'	Defaulted to true.
  *	@param	IgnoreInvalidTeam	If true, the invalid team users are counted as 'invalid'	Defaulted to false.
  */
-stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true, bool IgnoreInvalidTeam=false)	{
-	if(client == -1 || client == 0 || client < 1 || client > MaxClients)
+stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true, bool IgnoreInvalidTeam=false) {
+	if(client < 1 || client > MaxClients)
 		return false;
 	if(IgnoreNonConnected) {
 		if(!IsClientConnected(client))
