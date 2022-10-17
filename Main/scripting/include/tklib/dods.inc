@@ -56,9 +56,7 @@ enum {
  *
  *	@error	If the user is not connected, this returns DODTeam_Unassigned.
  */
-stock DODTeam DOD_GetClientTeam(int client)	{
-	return Tklib_IsValidClient(client) ? view_as<DODTeam>(GetClientTeam(client)):DODTeam_Unassigned;
-}
+stock DODTeam DOD_GetClientTeam(int client)	{ return Tklib_IsValidClient(client) ? view_as<DODTeam>(GetClientTeam(client)):DODTeam_Unassigned; }
 
 /**
  *	Changes the users current team.
@@ -81,9 +79,7 @@ stock bool DOD_ChangeClientTeam(int client, DODTeam team) {
  *
  *	@return	Returns a DODTeam team.
  */
-stock DODTeam DOD_GetRandomTeam() {
-	return view_as<DODTeam>(GetRandomInt(2, 3));
-}
+stock DODTeam DOD_GetRandomTeam() { return view_as<DODTeam>(GetRandomInt(2, 3)); }
 
 /**
  *	Returns the weapon name from entity name.

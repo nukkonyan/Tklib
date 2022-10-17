@@ -11,7 +11,7 @@ const TFClassType TFClass_Invalid = view_as<TFClassType>(-1);
 const TFClassType TFClass_Demoman = view_as<TFClassType>(4);
 const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
 
-#if !defined _tf2_included
+#if !defined _tf2_included && defined _tklib_only_tf2
 const TFClassType TFClass_Unknown = view_as<TFClassType>(0);
 const TFClassType TFClass_Scout = view_as<TFClassType>(1);
 const TFClassType TFClass_Sniper = view_as<TFClassType>(2);
@@ -40,7 +40,7 @@ TF2_GetGameTypeName[][] = {"Unknown","Capture-The-Flag","Capture Points","Payloa
 TF2_GetCritTypeName[][] = {"None","Mini-Crit","Crit"},
 TF2_GetClassTypeName[][] = {"Unknown","Scout","Sniper","Soldier","Demoman","Medic","Heavy","Pyro","Spy","Engineer","Civilian"},
 TF2_GetClassTypeNameLC[][] = {"unknown","scout","sniper","soldier","demoman","medic","heavy","pyro","spy","engineer","civilian"},
-TF2_GetBuildingTypeName[][] = {"Unknown/Not a Building","Dispenser","Sentrygun","Teleporter Entrance","Teleporter Exit","Mini-Sentry","Sapper"},
+TF2_GetBuildingTypeName[][] = {"Sentrygun","Dispenser","Teleporter Entrance","Teleporter Exit","Mini-Sentry","Sapper"},
 TF2_GetRobotPlayerModel[][] = {"","models/bots/scout/bot_scout.mdl","models/bots/sniper/bot_sniper.mdl","models/bots/soldier/bot_soldier.mdl","models/bots/demoman/bot_demoman.mdl","models/bots/medic/bot_medic.mdl","models/bots/heavy/bot_heavy.mdl","models/bots/pyro/bot_pyro.mdl","models/bots/spy/bot_spy.mdl","models/bots/engineer/bot_engineer.mdl"},
 TF2_GetPlayerZombieModel[][] = {"","models/player/items/scout/scout_zombie.mdl","models/player/items/sniper/sniper_zombie.mdl","models/player/items/soldier/soldier_zombie.mdl","models/player/items/demo/demo_zombie.mdl","models/player/items/medic/medic_zombie.mdl","models/player/items/heavy/heavy_zombie.mdl","models/player/items/pyro/pyro_zombie.mdl","models/player/items/spy/spy_zombie.mdl","models/player/items/engineer/engineer_zombie.mdl"},
 TF2_GetDefaultPlayerModel[][] = {"","models/player/scout.mdl","models/player/sniper.mdl","models/player/soldier.mdl","models/player/demoman.mdl","models/player/medic.mdl","models/player/heavy.mdl","models/player/pyro.mdl","models/player/spy.mdl","models/player/engineer.mdl"},
@@ -182,7 +182,8 @@ TF2_ConditionName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pos
 ,"Used whenever a player gets teleported to Hell, does nothing applied but stops the gradual healing from the teleport when removed"
 ,"Used in Mannpower when a player has a high kill count compared to the rest of the players in the game. Reduces the strength of the currently equipped powerup"},
 TF2_SpellPaintName[][] = {"Die Job","Chromatic Corruption","Putrescent Pigmentation","Spectral Spectrum","Sinister Staining","Unnamed Unused"},
-TF2_KillstreakerSheenName[][] = {"None","Team Shine","Deadly Daffodil","Manndarin","Mean Green","Agonizing Emerald","Villainous Violet","Hot Rod"};
+TF2_KillstreakerSheenName[][] = {"None","Team Shine","Deadly Daffodil","Manndarin","Mean Green","Agonizing Emerald","Villainous Violet","Hot Rod"},
+TF2_KillstreakerEffectName[][] = {"Fire Horns","Cerebral Discharge","Tornado","Flames","Singularity","Incinerator","Hypno-Beam"};
 
 stock TFClassType TF2_TauntsClassType[] = {TFClass_All,TFClass_All,TFClass_All,TFClass_Medic,TFClass_All,TFClass_All,TFClass_All,TFClass_Spy,TFClass_Medic,TFClass_All,TFClass_All,TFClass_Pyro,TFClass_Soldier,TFClass_Demoman,TFClass_Engineer,TFClass_Sniper,TFClass_Scout,TFClass_All,TFClass_Scout,TFClass_Demoman,TFClass_All,TFClass_All,TFClass_All,TFClass_Heavy,TFClass_All,TFClass_All,TFClass_Soldier,TFClass_Scout,TFClass_Pyro,TFClass_Scout,TFClass_Sniper,TFClass_Sniper,TFClass_Spy,TFClass_Heavy,TFClass_Engineer,TFClass_All,TFClass_Demoman,TFClass_All,TFClass_Soldier,TFClass_Soldier,TFClass_Spy,TFClass_Pyro,TFClass_All,TFClass_Sniper,TFClass_Demoman,TFClass_Engineer,TFClass_Heavy,TFClass_Heavy,TFClass_Engineer,TFClass_Pyro,TFClass_Scout,TFClass_Medic,TFClass_Pyro,TFClass_Scout,TFClass_Scout,TFClass_Spy,TFClass_Demoman,TFClass_Medic,TFClass_Soldier,TFClass_Scout,TFClass_Pyro,TFClass_Engineer,TFClass_Scout,TFClass_All,TFClass_Demoman,TFClass_Soldier,TFClass_Medic,TFClass_Heavy,TFClass_Scout,TFClass_Medic,TFClass_Sniper,TFClass_Pyro};
 
@@ -504,7 +505,9 @@ TF2_UnusualEffects[] = {
 ,3085 //Glamorous Dazzle.
 ,3087 //Sublime Snowstorm.
 },
-TF2_Weapons[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,35,36,37,38,39,40,41,42,43,44,45,46,56,57,58,59,60,61,127,128,129,130,131,132,133,140,141,142,153,154,155,160,161,169,171,172,173,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,212,214,215,220,221,222,224,225,228,230,231,232,237,239,264,265,266,294,297,298,304,305,307,308,310,312,317,325,326,327,329,331,348,349,351,355,356,357,401,402,404,406,411,412,413,414,415,416,423,424,425,426,441,442,444,447,448,449,450,452,457,460,461,466,474,482,513,525,526,527,528,572,574,587,588,589,593,594,595,609,638,642,648,649,654,656,658,659,660,661,662,663,664,665,669,727,737,739,740,741,751,752,772,773,775,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,808,808,809,811,812,813,832,833,834,850,851,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,939,947,954,957,958,959,960,961,962,963,964,965,966,967,968,969,971,972,973,974,996,997,999,1000,1003,1004,1005,1006,1007,1013,1071,1078,1079,1081,1082,1083,1084,1085,1092,1098,1099,1100,1101,1102,1103,1104,1105,1121,1123,1127,1141,1142,1143,1144,1145,1146,1149,1150,1151,1153,1178,1179,1180,1181,1184,15000,15001,15002,15003,15004,15005,15006,15007,15008,15009,15110,15011,15012,15013,15014,15015,15016,15017,15018,15019,15020,15021,15022,15023,15024,15125,15026,15027,15028,15029,15030,15031,15032,15033,15034,15035,15036,15037,15038,15139,15040,15041,15042,15043,15044,15045,15046,15047,15048,15049,15050,15051,15052,15053,15054,15055,15056,15057,15058,15059,15060,15061,15062,15063,15064,15065,15066,15067,15068,15069,15070,15071,15072,15073,15074,15075,15076,15077,15078,15079,15080,15081,15082,15083,15084,15085,15086,15087,15088,15089,15090,15091,15092,15094,15095,15096,15097,15098,15099,15100,15101,15102,15103,15104,15105,15106,15107,15108,15109,15110,15111,15112,15113,15114,15115,15116,15117,15118,15119,15120,15121,15122,15123,15124,15125,15126,15127,15128,15129,15130,15131,15132,15133,15134,15135,15136,15137,15138,15139,15140,15141,15142,15143,15144,15145,15146,15147,15148,15149,15150,15151,15152,15153,15154,15155,15156,15157,15158,30474,30665,30666,30667,30668,30758};
+TF2_Weapons[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,35,36,37,38,39,40,41,42,43,44,45,46,56,57,58,59,60,61,127,128,129,130,131,132,133,140,141,142,153,154,155,160,161,169,171,172,173,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,212,214,215,220,221,222,224,225,228,230,231,232,237,239,264,265,266,294,297,298,304,305,307,308,310,312,317,325,326,327,329,331,348,349,351,355,356,357,401,402,404,406,411,412,413,414,415,416,423,424,425,426,441,442,444,447,448,449,450,452,457,460,461,466,474,482,513,525,526,527,528,572,574,587,588,589,593,594,595,609,638,642,648,649,654,656,658,659,660,661,662,663,664,665,669,727,737,739,740,741,751,752,772,773,775,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,808,808,809,811,812,813,832,833,834,850,851,880,881,882,883,884,885,886,887,888,889,890,891,892,893,894,895,896,897,898,899,900,901,902,903,904,905,906,907,908,909,910,911,912,913,914,915,916,939,947,954,957,958,959,960,961,962,963,964,965,966,967,968,969,971,972,973,974,996,997,999,1000,1003,1004,1005,1006,1007,1013,1071,1078,1079,1081,1082,1083,1084,1085,1092,1098,1099,1100,1101,1102,1103,1104,1105,1121,1123,1127,1141,1142,1143,1144,1145,1146,1149,1150,1151,1153,1178,1179,1180,1181,1184,15000,15001,15002,15003,15004,15005,15006,15007,15008,15009,15110,15011,15012,15013,15014,15015,15016,15017,15018,15019,15020,15021,15022,15023,15024,15125,15026,15027,15028,15029,15030,15031,15032,15033,15034,15035,15036,15037,15038,15139,15040,15041,15042,15043,15044,15045,15046,15047,15048,15049,15050,15051,15052,15053,15054,15055,15056,15057,15058,15059,15060,15061,15062,15063,15064,15065,15066,15067,15068,15069,15070,15071,15072,15073,15074,15075,15076,15077,15078,15079,15080,15081,15082,15083,15084,15085,15086,15087,15088,15089,15090,15091,15092,15094,15095,15096,15097,15098,15099,15100,15101,15102,15103,15104,15105,15106,15107,15108,15109,15110,15111,15112,15113,15114,15115,15116,15117,15118,15119,15120,15121,15122,15123,15124,15125,15126,15127,15128,15129,15130,15131,15132,15133,15134,15135,15136,15137,15138,15139,15140,15141,15142,15143,15144,15145,15146,15147,15148,15149,15150,15151,15152,15153,15154,15155,15156,15157,15158,30474,30665,30666,30667,30668,30758},
+TF2_KillstreakerEffect[] = {2002,2003,2004,2005,2006,2007,2008},
+TF2_KillstreakerSheen[] = {0,1,2,3,4,5,6,7};
 
 #define MAX_TF2_TAUNTS sizeof(TF2_Taunts)
 #define MAX_TF2_CONDITIONS sizeof(TF2_Conditions)
@@ -512,8 +515,10 @@ TF2_Weapons[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,2
 #define MAX_TF2_PAINTS sizeof(TF2_Paints)
 #define MAX_TF2_UNUSUALS sizeof(TF2_UnusualEffects)
 #define MAX_TF2_WEAPONS sizeof(TF2_Weapons)
+#define MAX_TF2_KILLSTREAKER_SHEENS sizeof(TF2_KillstreakerEffect)
+#define MAX_TF2_KILLSTREAKER_EFFECTS sizeof(TF2_KillstreakerSheen)
 
-//TF2 Offsets, will be updated as frequently as possible. (Windows)
+//TF2 Offsets, will be updated as frequently as possible. (Windows [?])
 enum {
 	TF2Offset_IsBaseCombatWeapon = 89,
 	TF2Offset_IsWearable = 90,
@@ -713,14 +718,14 @@ enum {
 	//More to be added.
 }
 
-#define	TFTeam(%1)		view_as<TFTeam>(%1)
-#define	TFFlag(%1)		view_as<TFFlag>(%1)
-#define	TFSlot(%1)		view_as<TFSlot>(%1)
-#define	TFCritType(%1)	view_as<TFCritType>(%1)
-#define	TFBuilding(%1)	view_as<TFBuilding>(%1)
-#define	TFQuality(%1)	view_as<TFQuality>(%1)
-#define	TFMethod(%1)	view_as<TFMethod>(%1)
-#define	TFGameType(%1)	view_as<TFGameType>(%1)
+#define	TFTeam(%1) view_as<TFTeam>(%1)
+#define	TFFlag(%1) view_as<TFFlag>(%1)
+#define	TFSlot(%1) view_as<TFSlot>(%1)
+#define	TFCritType(%1) view_as<TFCritType>(%1)
+#define	TFBuilding(%1) view_as<TFBuilding>(%1)
+#define	TFQuality(%1) view_as<TFQuality>(%1)
+#define	TFMethod(%1) view_as<TFMethod>(%1)
+#define	TFGameType(%1) view_as<TFGameType>(%1)
 
 
 /**
@@ -731,9 +736,7 @@ enum {
  *
  *	@error	If the user is invalid or has no currency property, this returns false.
  */
-stock bool TF2_SetClientMvMCurrency(int client, int value) {
-	return SetEntPropEx(client, Prop_Send, "m_nCurrency", value);
-}
+stock bool TF2_SetClientMvMCurrency(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_nCurrency", value); }
 
 /**
  *	Returns the users mvm currency/cash
@@ -742,9 +745,7 @@ stock bool TF2_SetClientMvMCurrency(int client, int value) {
  *
  *	@error	If the user is invalid or has no currency property, this returns -1.
  */
-stock int TF2_GetClientMvMCurrency(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_nCurrency"); 
-}
+stock int TF2_GetClientMvMCurrency(int client) { return GetEntPropEx(client, Prop_Send, "m_nCurrency"); }
 
 /**
  *	Set the users taunt cam on/off, useful for thirdperson plugin.
@@ -754,9 +755,7 @@ stock int TF2_GetClientMvMCurrency(int client) {
  *
  *	@error	If the user is invalid or has no taunt cam property, this returns false.
  */
-stock bool TF2_SetClientTauntCam(int client, bool value) {
-	return SetEntPropEx(client, Prop_Send, "m_nForceTauntCam", value);
-}
+stock bool TF2_SetClientTauntCam(int client, bool value) { return SetEntPropEx(client, Prop_Send, "m_nForceTauntCam", value); }
 
 /**
  *	Returns the users taunt cam.
@@ -765,9 +764,7 @@ stock bool TF2_SetClientTauntCam(int client, bool value) {
  *
  *	@error	If the user is invalid or has no taunt cam property, this returns false.
  */
-stock bool TF2_GetClientTauntCam(int client) {
-	return GetEntPropBool(client, Prop_Send, "m_nForceTauntCam");
-}
+stock bool TF2_GetClientTauntCam(int client) { return GetEntPropBool(client, Prop_Send, "m_nForceTauntCam"); }
 
 //Set or get the users killstreak count
 /**
@@ -778,9 +775,7 @@ stock bool TF2_GetClientTauntCam(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool TF2_SetClientKillstreak(int client, int value=5) {
-	return SetEntPropEx(client, Prop_Send, "m_nStreaks", value);
-}
+stock bool TF2_SetClientKillstreak(int client, int value=5) { return SetEntPropEx(client, Prop_Send, "m_nStreaks", value); }
 
 /**
  *	Returns the users killstreak count
@@ -789,9 +784,7 @@ stock bool TF2_SetClientKillstreak(int client, int value=5) {
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int TF2_GetClientKillstreak(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_nStreaks");
-}
+stock int TF2_GetClientKillstreak(int client) { return GetEntPropEx(client, Prop_Send, "m_nStreaks"); }
 
 /**
  *	Returns the users cloak meter.
@@ -800,9 +793,7 @@ stock int TF2_GetClientKillstreak(int client) {
  *
  *	@error	If the user is invalid or has no cloak, this returns -1.0.
  */
-stock float TF2_GetClientCloakMeter(int client) {
-	return GetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter");
-}
+stock float TF2_GetClientCloakMeter(int client) { return GetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter"); }
 
 /**
  *	Set the users cloak meter.
@@ -812,9 +803,7 @@ stock float TF2_GetClientCloakMeter(int client) {
  *
  *	@error	If the user is invalid or has no cloak, this returns false.
  */
-stock bool TF2_SetClientCloakMeter(int client, float value=1.0) {
-	return SetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter", value);
-}
+stock bool TF2_SetClientCloakMeter(int client, float value=1.0) { return SetEntPropFloatEx(client, Prop_Send, "m_flCloakMeter", value); }
 
 /**
  *	Returns the users glow value.
@@ -823,9 +812,7 @@ stock bool TF2_SetClientCloakMeter(int client, float value=1.0) {
  *
  *	@error	If the user is invalid, this returns false.
 */
-stock bool TF2_GetClientGlow(int client) {
-	return GetEntPropBool(client, Prop_Send, "m_bGlowEnabled");
-}
+stock bool TF2_GetClientGlow(int client) { return GetEntPropBool(client, Prop_Send, "m_bGlowEnabled"); }
 
 /**
  *	Toggle the users glow value.
@@ -835,9 +822,7 @@ stock bool TF2_GetClientGlow(int client) {
  *
  *	@error	If the user is invalid, this returns.
  */
-stock bool TF2_SetClientGlow(int client, bool value) {
-	return SetEntPropEx(client, Prop_Send, "m_bGlowEnabled", value);
-}
+stock bool TF2_SetClientGlow(int client, bool value) { return SetEntPropEx(client, Prop_Send, "m_bGlowEnabled", value); }
 
 /**
  *	Returns the users ubercharge value,
@@ -846,9 +831,7 @@ stock bool TF2_SetClientGlow(int client, bool value) {
  *
  *	@error	If the user is invalid or has no medigun, this will return -1.0.
 */
-stock float TF2_GetClientUbercharge(int client)	{
-	return GetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel");
-}
+stock float TF2_GetClientUbercharge(int client)	{ return GetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel"); }
 
 /**
  *	Set the users ubercharge value,
@@ -858,9 +841,7 @@ stock float TF2_GetClientUbercharge(int client)	{
  *
  *	@error	If the user is invalid or has no medigun, this returns false.
 */
-stock bool TF2_SetClientUbercharge(int client, float value=1.0)	{
-	return SetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel", value);
-}
+stock bool TF2_SetClientUbercharge(int client, float value=1.0)	{ return SetEntPropFloatEx(client, Prop_Send, "m_flChargeLevel", value); }
 
 /**
  *	Returns the users charge value,
@@ -869,9 +850,7 @@ stock bool TF2_SetClientUbercharge(int client, float value=1.0)	{
  *
  *	@error	If the user is invalid, this returns -1.0.
 */
-stock float TF2_GetClientChargeMeter(int client) {
-	return GetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter");
-}
+stock float TF2_GetClientChargeMeter(int client) { return GetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter"); }
 
 /**
  *	Set the users charge value,
@@ -881,9 +860,7 @@ stock float TF2_GetClientChargeMeter(int client) {
  *
  *	@error	If the user is invalid or has no charge-weapon, this returns -1.0.
 */
-stock bool TF2_SetClientChargeMeter(int client, float value=1.0) {
-	return SetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter", value);
-}
+stock bool TF2_SetClientChargeMeter(int client, float value=1.0) { return SetEntPropFloatEx(client, Prop_Send, "m_flChargeMeter", value); }
 
 /**
  *	Returns the users metal value,
@@ -892,9 +869,7 @@ stock bool TF2_SetClientChargeMeter(int client, float value=1.0) {
  *
  *	@error	If the user is invalid or has no metal-property, this returns -1.
 */
-stock int TF2_GetClientMetal(int client) {
-	return GetEntPropEx(client, Prop_Data, "m_iAmmo", 4, 3);
-}
+stock int TF2_GetClientMetal(int client) { return GetEntPropEx(client, Prop_Data, "m_iAmmo", 4, 3); }
 
 /**
  *	Set the users metal value,
@@ -904,9 +879,7 @@ stock int TF2_GetClientMetal(int client) {
  *
  *	@error	If the user is invalid or has no metal-property, this returns false.
 */
-stock bool TF2_SetClientMetal(int client, int metal=200) {
-	return SetEntPropEx(client, Prop_Data, "m_iAmmo", metal, 4, 3);
-}
+stock bool TF2_SetClientMetal(int client, int metal=200) { return SetEntPropEx(client, Prop_Data, "m_iAmmo", metal, 4, 3); }
 
 /**
  *	Returns the users decapitations value,
@@ -915,9 +888,7 @@ stock bool TF2_SetClientMetal(int client, int metal=200) {
  *
  *	@error	If the client is invalid or has no decapitation-property, this returns -1.
 */
-stock int TF2_GetClientDecapitations(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_iDecapitations");
-}
+stock int TF2_GetClientDecapitations(int client) { return GetEntPropEx(client, Prop_Send, "m_iDecapitations"); }
 
 /**
  *	Set the users decapitations value,
@@ -927,9 +898,7 @@ stock int TF2_GetClientDecapitations(int client) {
  *
  *	@error	If the user is invalid or has no decapitation-property, this returns false.
 */
-stock bool TF2_SetClientDecapitations(int client, int value=10)	{
-	return SetEntPropEx(client, Prop_Send, "m_iDecapitations", value);
-}
+stock bool TF2_SetClientDecapitations(int client, int value=10) { return SetEntPropEx(client, Prop_Send, "m_iDecapitations", value); }
 
 /**
  *	Returns the TF2 Weapon Slot
@@ -939,9 +908,7 @@ stock bool TF2_SetClientDecapitations(int client, int value=10)	{
  *
  *	@error	If the user or slot is invalid, this returns -1.
  */
-stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot) {
-	return Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, view_as<int>(slot)):-1;
-}
+stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot) { return Tklib_IsValidClient(client, _, true) ? GetPlayerWeaponSlot(client, view_as<int>(slot)):-1; }
 
 /**
  *	Returns the name of the building.
@@ -951,7 +918,7 @@ stock int TF2_GetPlayerWeaponSlot(int client, TFSlot slot) {
  *
  *	@param	maxlen			Maximum length of the string.
  */
-stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int maxlen)	{
+stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int maxlen) {
 	switch(building) {
 		case TFBuilding_Dispenser: strcopy(buildingname, maxlen, "Dispenser");
 		case TFBuilding_Sentrygun: strcopy(buildingname, maxlen, "Sentrygun");
@@ -969,24 +936,20 @@ stock void TF2_GetBuildingName(TFBuilding building, char[] buildingname, int max
  *
  *	@error	If the building is invalid, this returns TFBuilding_Invalid.
  */
-stock TFBuilding TF2_GetBuildingType(any entity)	{
+stock TFBuilding TF2_GetBuildingType(any entity) {
 	char classname[64];
 	GetEntityClassname(entity, classname, sizeof(classname));
 	
-	if(StrEqual(classname, "obj_dispenser"))
-		return TFBuilding_Dispenser;
-	if(StrEqual(classname, "obj_sentrygun"))
-		return TFBuilding_Sentrygun;
+	if(StrEqual(classname, "obj_dispenser")) return TFBuilding_Dispenser;
+	if(StrEqual(classname, "obj_sentrygun")) return TFBuilding_Sentrygun;
 	if(StrEqual(classname, "obj_teleporter"))	{
 		switch(TF2_GetObjectMode(entity)) {
 			case TFObjectMode_Entrance: return TFBuilding_Teleporter_Entrance;
 			case TFObjectMode_Exit: return TFBuilding_Teleporter_Exit;
 		}
 	}
-	if(StrEqual(classname, "obj_minisentry"))
-		return TFBuilding_MiniSentry;
-	if(StrContainsEx(classname, "sapper", false))
-		return TFBuilding_Sapper;
+	if(StrEqual(classname, "obj_minisentry")) return TFBuilding_MiniSentry;
+	if(StrContainsEx(classname, "sapper", false)) return TFBuilding_Sapper;
 	
 	return TFBuilding_Invalid;
 }
@@ -999,9 +962,7 @@ stock TFBuilding TF2_GetBuildingType(any entity)	{
  *
  *	@error	If the user is invalid or has no class animations, this returns false.
  */
-stock bool TF2_SetClassAnimations(int client, bool value)	{
-	return Tklib_IsValidClient(client, _, true) ? SetEntPropEx(client, Prop_Send, "m_bUseClassAnimations", value):false;
-}
+stock bool TF2_SetClassAnimations(int client, bool value) { return SetEntPropEx(client, Prop_Send, "m_bUseClassAnimations", value); }
 
 /**
  *	Sets the clients model.
@@ -1034,12 +995,14 @@ stock bool TF2_SetClientModel(int client, const char[] model, bool UseClassAnima
  *
  *	@error	If the procedure failed, this returns false.
  */
-stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
-	int weapon = -1;
-	if((weapon = GetPlayerWeaponSlot(client, view_as<int>(slot))) != -1)	{
-		RemovePlayerItem(client, weapon);
-		RemoveEdict(weapon);
-		return true;
+stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot) {
+	if(Tklib_IsValidClient(client, _, true)) {
+		int weapon = -1;
+		if((weapon = GetPlayerWeaponSlot(client, view_as<int>(slot))) != -1) {
+			RemovePlayerItem(client, weapon);
+			RemoveEdict(weapon);
+			return true;
+		}
 	}
 	
 	return false;
@@ -1052,9 +1015,7 @@ stock bool TF2_RemovePlayerWeaponSlot(int client, TFSlot slot)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_IsEntityBuilding(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bBuilding");
-}
+stock bool TF2_IsEntityBuilding(int building) { return GetEntPropBool(building, Prop_Send, "m_bBuilding"); }
 
 /**
  *	Returns if the entity is a mini-building.
@@ -1063,9 +1024,7 @@ stock bool TF2_IsEntityBuilding(int building)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_IsEntityMiniBuilding(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bMiniBuilding");
-}
+stock bool TF2_IsEntityMiniBuilding(int building) { return GetEntPropBool(building, Prop_Send, "m_bMiniBuilding"); }
 
 /**
  *	Returns the buildings builder.
@@ -1075,9 +1034,7 @@ stock bool TF2_IsEntityMiniBuilding(int building)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock bool TF2_SetBuildingOwner(int building, int client)	{
-	return SetEntPropEntEx(building, Prop_Send, "m_hBuilder", client);
-}
+stock bool TF2_SetBuildingOwner(int building, int client) { return SetEntPropEntEx(building, Prop_Send, "m_hBuilder", client); }
 
 /**
  *	Returns the buildings builder.
@@ -1087,9 +1044,7 @@ stock bool TF2_SetBuildingOwner(int building, int client)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int TF2_GetBuildingOwner(int building) {
-	return GetEntPropEntEx(building, Prop_Send, "m_hBuilder");
-}
+stock int TF2_GetBuildingOwner(int building) { return GetEntPropEntEx(building, Prop_Send, "m_hBuilder"); }
 
 /**
  *	Set the buildings upgrade level.
@@ -1099,9 +1054,7 @@ stock int TF2_GetBuildingOwner(int building) {
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_SetBuildingLevel(int entity, int level=1)	{
-	return SetEntPropEx(entity, Prop_Send, "m_iUpgradeLevel", level);
-}
+stock bool TF2_SetBuildingLevel(int entity, int level=1) { return SetEntPropEx(entity, Prop_Send, "m_iUpgradeLevel", level); }
 
 /**
  *	Returns the buildings upgrade level.
@@ -1109,9 +1062,7 @@ stock bool TF2_SetBuildingLevel(int entity, int level=1)	{
  *	@param	entity	The building entity index.
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int TF2_GetBuildingLevel(int entity)	{
-	return GetEntPropEx(entity, Prop_Send, "m_iUpgradeLevel");
-}
+stock int TF2_GetBuildingLevel(int entity) { return GetEntPropEx(entity, Prop_Send, "m_iUpgradeLevel"); }
 
 /**
  *	Set the buildings max upgrade level.
@@ -1121,9 +1072,7 @@ stock int TF2_GetBuildingLevel(int entity)	{
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_SetBuildingMaxLevel(any entity, int level=3)	{
-	return SetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel", level);
-}
+stock bool TF2_SetBuildingMaxLevel(any entity, int level=3)	{ return SetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel", level); }
 
 /**
  *	Returns the buildings max upgrade level.
@@ -1132,9 +1081,7 @@ stock bool TF2_SetBuildingMaxLevel(any entity, int level=3)	{
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int TF2_GetBuildingMaxLevel(any entity)	{
-	return GetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel");
-}
+stock int TF2_GetBuildingMaxLevel(any entity) { return GetEntPropEx(entity, Prop_Send, "m_iHighestUpgradeLevel"); }
 
 /**
  *	Set the buildings required metal to upgrade to next upgrade level.
@@ -1144,9 +1091,7 @@ stock int TF2_GetBuildingMaxLevel(any entity)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingMetalRequired(any building, int metal)	{
-	return SetEntPropEx(building, Prop_Send, "m_iUpgradeMetalRequired", metal);
-}
+stock bool TF2_SetBuildingMetalRequired(any building, int metal) { return SetEntPropEx(building, Prop_Send, "m_iUpgradeMetalRequired", metal); }
 
 /**
  *	Returns the buildings required metal to upgrade to next upgrade level.
@@ -1155,9 +1100,7 @@ stock bool TF2_SetBuildingMetalRequired(any building, int metal)	{
  *
  *	@error	If the building is invalid, this returns -1.
  */
-stock int TF2_GetBuildingMetalRequired(any building)	{
-	return GetEntPropEx(building, Prop_Send, "m_iUpgradeMetalRequired");
-}
+stock int TF2_GetBuildingMetalRequired(any building) { return GetEntPropEx(building, Prop_Send, "m_iUpgradeMetalRequired"); }
 
 /**
  *	Destroys the building.
@@ -1166,11 +1109,11 @@ stock int TF2_GetBuildingMetalRequired(any building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_DestroyBuilding(any building)	{
+stock bool TF2_DestroyBuilding(any building) {
 	if(HasEntPropEx(building, Prop_Send, "m_hBuilder"))	{
 		SetVariantInt(999999);
 		AcceptEntityInput(building, "RemoveHealth");
-		return	true;
+		return true;
 	}
 	
 	return	false;
@@ -1183,9 +1126,7 @@ stock bool TF2_DestroyBuilding(any building)	{
  *
  *	@error	If the building is invalid, this returns -1.0.
  */
-stock float TF2_GetBuildingConstructionPercentage(int building)	{
-	return GetEntPropFloatEx(building, Prop_Send, "m_flPercentageConstructed");
-}
+stock float TF2_GetBuildingConstructionPercentage(int building) { return GetEntPropFloatEx(building, Prop_Send, "m_flPercentageConstructed"); }
 
 /**
  *	Set the percentage of the building contructed.
@@ -1195,9 +1136,7 @@ stock float TF2_GetBuildingConstructionPercentage(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingConstructionPercentage(int building, float percentage)	{
-	return SetEntPropFloatEx(building, Prop_Send, "m_flPercentageConstructed", percentage);
-}
+stock bool TF2_SetBuildingConstructionPercentage(int building, float percentage) { return SetEntPropFloatEx(building, Prop_Send, "m_flPercentageConstructed", percentage); }
 
 /**
  *	Returns the entity the building was built on.
@@ -1206,9 +1145,7 @@ stock bool TF2_SetBuildingConstructionPercentage(int building, float percentage)
  *
  *	@error	If the building is invalid, this returns -1.
  */
-stock int TF2_GetBuildingEntityBuiltOn(int building)	{
-	return GetEntPropEntEx(building, Prop_Send, "m_hBuiltOnEntity");
-}
+stock int TF2_GetBuildingEntityBuiltOn(int building) { return GetEntPropEntEx(building, Prop_Send, "m_hBuiltOnEntity"); }
 
 /**
  *	Set the entity building should be seen as built on.
@@ -1218,9 +1155,7 @@ stock int TF2_GetBuildingEntityBuiltOn(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingEntityBuiltOn(int building, int entity)	{
-	return SetEntPropEntEx(building, Prop_Send, "m_hBuiltOnEntity", entity);
-}
+stock bool TF2_SetBuildingEntityBuiltOn(int building, int entity) { return SetEntPropEntEx(building, Prop_Send, "m_hBuiltOnEntity", entity); }
 
 /**
  *	Returns the building object flags.
@@ -1229,9 +1164,7 @@ stock bool TF2_SetBuildingEntityBuiltOn(int building, int entity)	{
  *
  *	@error	If the building is invalid, this returns -1.
  */
-stock int TF2_GetBuildingObjectFlags(int building)	{
-	return GetEntPropEx(building, Prop_Send, "m_fObjectFlags");
-}
+stock int TF2_GetBuildingObjectFlags(int building) { return GetEntPropEx(building, Prop_Send, "m_fObjectFlags"); }
 
 /**
  *	Set the building object flags.
@@ -1241,9 +1174,7 @@ stock int TF2_GetBuildingObjectFlags(int building)	{
  *
  *	@error	If the building is invalid, this returns -1.
  */
-stock bool TF2_SetBuildingObjectFlags(int building, int objectflags)	{
-	return SetEntPropEx(building, Prop_Send, "m_fObjectFlags", objectflags);
-}
+stock bool TF2_SetBuildingObjectFlags(int building, int objectflags) { return SetEntPropEx(building, Prop_Send, "m_fObjectFlags", objectflags); }
 
 /**
  *	Returns if the building is a mini building.
@@ -1252,9 +1183,7 @@ stock bool TF2_SetBuildingObjectFlags(int building, int objectflags)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_IsMiniBuilding(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bMiniBuilding");
-}
+stock bool TF2_IsMiniBuilding(int building)	{ return GetEntPropBool(building, Prop_Send, "m_bMiniBuilding"); }
 
 /**
  *	Set the building to be seen as mini variant.
@@ -1264,9 +1193,7 @@ stock bool TF2_IsMiniBuilding(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetMiniBuilding(int building, bool mini)	{
-	return SetEntPropEx(building, Prop_Send, "m_bMiniBuilding", mini);
-}
+stock bool TF2_SetMiniBuilding(int building, bool mini) { return SetEntPropEx(building, Prop_Send, "m_bMiniBuilding", mini); }
 
 /**
  *	Set the building default upgrade value.
@@ -1293,9 +1220,7 @@ stock bool TF2_SetBuildingDefaultUpgrade(int building, int upgrade=1)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_BuildingHasSapper(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bHasSapper");
-}
+stock bool TF2_BuildingHasSapper(int building) { return GetEntPropBool(building, Prop_Send, "m_bHasSapper"); }
 
 /**
  *	Set the building to have a sapper active.
@@ -1305,9 +1230,7 @@ stock bool TF2_BuildingHasSapper(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingSapper(int building, bool sapper)	{
-	return SetEntPropEx(building, Prop_Send, "m_bHasSapper", sapper);
-}
+stock bool TF2_SetBuildingSapper(int building, bool sapper) { return SetEntPropEx(building, Prop_Send, "m_bHasSapper", sapper); }
 
 /**
  *	Set the building object mode.
@@ -1317,9 +1240,7 @@ stock bool TF2_SetBuildingSapper(int building, bool sapper)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetObjectMode(int building, TFObjectMode objectmode)	{
-	return view_as<bool>(SetEntPropEx(building, Prop_Send, "m_iObjectMode", objectmode) && SetEntPropEx(building, Prop_Send, "m_iTeleportType", objectmode));
-}
+stock bool TF2_SetObjectMode(int building, TFObjectMode objectmode) { return view_as<bool>(SetEntPropEx(building, Prop_Send, "m_iObjectMode", objectmode) && SetEntPropEx(building, Prop_Send, "m_iTeleportType", objectmode)); }
 
 /**
  *	Returns the building entity by type.
@@ -1368,9 +1289,7 @@ stock int TF2_CreateBuildingByType(TFBuilding type)	{
  *
  *	@error	If the building entity is invalid, returns false.
  */
-stock bool TF2_IsBuildingDisposable(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bDisposableBuilding");
-}
+stock bool TF2_IsBuildingDisposable(int building) { return GetEntPropBool(building, Prop_Send, "m_bDisposableBuilding"); }
 
 /**
  *	Set the builing to be disposable.
@@ -1380,9 +1299,7 @@ stock bool TF2_IsBuildingDisposable(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingDisposable(int building, bool disposable)	{
-	return SetEntPropEx(building, Prop_Send, "m_bDisposableBuilding", disposable);
-}
+stock bool TF2_SetBuildingDisposable(int building, bool disposable) { return SetEntPropEx(building, Prop_Send, "m_bDisposableBuilding", disposable); }
 
 /**
  *	Returns if the building was map placed.
@@ -1391,9 +1308,7 @@ stock bool TF2_SetBuildingDisposable(int building, bool disposable)	{
  *
  *	@error	If the building entity is invalid, returns false.
  */
-stock bool TF2_IsBuildingMapPlaced(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bWasMapPlaced");
-}
+stock bool TF2_IsBuildingMapPlaced(int building) { return GetEntPropBool(building, Prop_Send, "m_bWasMapPlaced"); }
 
 /**
  *	Set the builing to be seen as map placed.
@@ -1403,9 +1318,7 @@ stock bool TF2_IsBuildingMapPlaced(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingMapPlaced(int building, bool map_placed)	{
-	return SetEntPropEx(building, Prop_Send, "m_bWasMapPlaced", map_placed);
-}
+stock bool TF2_SetBuildingMapPlaced(int building, bool map_placed) { return SetEntPropEx(building, Prop_Send, "m_bWasMapPlaced", map_placed); }
 
 /**
  *	Returns if the building is being placed.
@@ -1414,9 +1327,7 @@ stock bool TF2_SetBuildingMapPlaced(int building, bool map_placed)	{
  *
  *	@error	If the building entity is invalid, returns false.
  */
-stock bool TF2_IsBuildingBeingPlaced(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bPlacing");
-}
+stock bool TF2_IsBuildingBeingPlaced(int building) { return GetEntPropBool(building, Prop_Send, "m_bPlacing"); }
 
 /**
  *	Set the builing to be seen as map placed.
@@ -1426,9 +1337,7 @@ stock bool TF2_IsBuildingBeingPlaced(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingBeingPlaced(int building, bool placing)	{
-	return SetEntPropEx(building, Prop_Send, "m_bPlacing", placing);
-}
+stock bool TF2_SetBuildingBeingPlaced(int building, bool placing) { return SetEntPropEx(building, Prop_Send, "m_bPlacing", placing); }
 
 /**
  *	Returns if the building is being carried.
@@ -1437,9 +1346,7 @@ stock bool TF2_SetBuildingBeingPlaced(int building, bool placing)	{
  *
  *	@error	If the building entity is invalid, returns false.
  */
-stock bool TF2_IsBuildingBeingCarried(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bCarried");
-}
+stock bool TF2_IsBuildingBeingCarried(int building)	{ return GetEntPropBool(building, Prop_Send, "m_bCarried"); }
 
 /**
  *	Set the builing to be seen as being carried.
@@ -1449,9 +1356,7 @@ stock bool TF2_IsBuildingBeingCarried(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingBeingCarried(int building, bool carried)	{
-	return SetEntPropEx(building, Prop_Send, "m_bCarried", carried);
-}
+stock bool TF2_SetBuildingBeingCarried(int building, bool carried) { return SetEntPropEx(building, Prop_Send, "m_bCarried", carried); }
 
 /**
  *	Returns if the building is being carried and deployed.
@@ -1460,9 +1365,7 @@ stock bool TF2_SetBuildingBeingCarried(int building, bool carried)	{
  *
  *	@error	If the building entity is invalid, returns false.
  */
-stock bool TF2_IsBuildingBeingCarriedDeploy(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bCarryDeploy");
-}
+stock bool TF2_IsBuildingBeingCarriedDeploy(int building) { return GetEntPropBool(building, Prop_Send, "m_bCarryDeploy"); }
 
 /**
  *	Set the builing to be seen as being carried and deployed.
@@ -1472,9 +1375,7 @@ stock bool TF2_IsBuildingBeingCarriedDeploy(int building)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_SetBuildingBeingCarriedDeploy(int building, bool deployed)	{
-	return SetEntPropEx(building, Prop_Send, "m_bCarryDeploy", deployed);
-}
+stock bool TF2_SetBuildingBeingCarriedDeploy(int building, bool deployed) { return SetEntPropEx(building, Prop_Send, "m_bCarryDeploy", deployed); }
 
 /**
  *	Returns if the building is active.
@@ -1483,9 +1384,7 @@ stock bool TF2_SetBuildingBeingCarriedDeploy(int building, bool deployed)	{
  *
  *	@error	If the building is invalid, this returns false.
  */
-stock bool TF2_IsBuildingActive(int building)	{
-	return GetEntPropBool(building, Prop_Send, "m_bBuilding");
-}
+stock bool TF2_IsBuildingActive(int building) { return GetEntPropBool(building, Prop_Send, "m_bBuilding"); }
 
 /**
  *	Set the building to be active.
@@ -1495,17 +1394,13 @@ stock bool TF2_IsBuildingActive(int building)	{
  *
  *	@error	If the building is invalid, this reutrns false.
  */
-stock bool TF2_SetBuildingActive(int building, bool active)	{
-	return SetEntPropEx(building, Prop_Send, "m_bBuilding", active);
-}
+stock bool TF2_SetBuildingActive(int building, bool active)	{ return SetEntPropEx(building, Prop_Send, "m_bBuilding", active); }
 
 #if !defined _tklib_no_sdktools
 /**
  *	Returns if MvM (Mann-Vs-Machine) mode is active.
  */
-stock bool TF2_IsMvMGameMode()	{
-	return view_as<bool>(GameRules_GetProp("m_bPlayingMannVsMachine"));
-}
+stock bool TF2_IsMvMGameMode() { return view_as<bool>(GameRules_GetProp("m_bPlayingMannVsMachine")); }
 #endif
 
 /**
@@ -1514,74 +1409,56 @@ stock bool TF2_IsMvMGameMode()	{
  *	@return	Returns a TFTeam team.
  */
 #if !defined _tklib_disable_gameidentifier
-stock TFTeam TF2_GetRandomTeam()	{
-	return view_as<TFTeam>(IsCurrentGame(Game_TF2C) ? GetRandomInt(2, 5) : GetRandomInt(2, 3));
-}
+stock TFTeam TF2_GetRandomTeam() { return view_as<TFTeam>(IsCurrentGame(Game_TF2C) ? GetRandomInt(2, 5) : GetRandomInt(2, 3)); }
 #endif
 
 /**
  *	Returns the gametype of the server.
  */
-stock TFGameType TF2_GetGameType()	{
-	return TFGameType(GameRules_GetProp("m_nGameType"));
-}
+stock TFGameType TF2_GetGameType() { return TFGameType(GameRules_GetProp("m_nGameType")); }
 
 /**
  *	Set the gametype of the server.
  *
  *	@param	gametype	TFGameType gametype to set.
  */
-stock void TF2_SetGameType(TFGameType gametype)	{
-	GameRules_SetProp("m_nGameType", gametype);
-}
+stock void TF2_SetGameType(TFGameType gametype) { GameRules_SetProp("m_nGameType", gametype); }
 
 /**
  *	Returns if Waiting For Players phase is active.
  */
-stock bool TF2_IsWaitingForPlayers()	{
-	return view_as<bool>(GameRules_GetProp("m_bInWaitingForPlayers"));
-}
+stock bool TF2_IsWaitingForPlayers() { return view_as<bool>(GameRules_GetProp("m_bInWaitingForPlayers")); }
 
 /**
  *	Set the Waiting For Players phase.
  *
  *	@param	value	If true, this forces waiting for players phase to be active.
  */
-stock void TF2_SetWarmupForPlayers(bool value)	{
-	GameRules_SetProp("m_bInWaitingForPlayers", value);
-}
+stock void TF2_SetWarmupForPlayers(bool value) { GameRules_SetProp("m_bInWaitingForPlayers", value); }
 
 /**
  *	Returns if Powerup Mode is active.
  */
-stock bool TF2_IsPowerupMode()	{
-	return view_as<bool>(GameRules_GetProp("m_bPowerupMode"));
-}
+stock bool TF2_IsPowerupMode() { return view_as<bool>(GameRules_GetProp("m_bPowerupMode")); }
 
 /**
  *	Set the Powerup Mode.
  *
  *	@param	value	If true, this forces Powerup Mode to be active.
  */
-stock void TF2_SetPowerupMode(bool value)	{
-	GameRules_SetProp("m_bPowerupMode", value);
-}
+stock void TF2_SetPowerupMode(bool value) { GameRules_SetProp("m_bPowerupMode", value); }
 
 /**
  *	Returns if Truce is active.
  */
-stock bool TF2_IsTruceActive()	{
-	return view_as<bool>(GameRules_GetProp("m_bTruceActive"));
-}
+stock bool TF2_IsTruceActive() { return view_as<bool>(GameRules_GetProp("m_bTruceActive")); }
 
 /**
  *	Set the Truce.
  *
  *	@param	value	If true, this forces Truce to be active.
  */
-stock void TF2_SetTruce(bool value)	{
-	GameRules_SetProp("m_bTruceActive", value);
-}
+stock void TF2_SetTruce(bool value)	{ GameRules_SetProp("m_bTruceActive", value); }
 
 /**
  *	Get users airdash count.
@@ -1590,9 +1467,7 @@ stock void TF2_SetTruce(bool value)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int TF2_GetClientAirDash(any client)	{
-	return GetEntPropEx(client, Prop_Send, "m_iAirDash");
-}
+stock int TF2_GetClientAirDash(any client) { return GetEntPropEx(client, Prop_Send, "m_iAirDash"); }
 
 /**
  *	Set users airdash count.
@@ -1602,23 +1477,17 @@ stock int TF2_GetClientAirDash(any client)	{
  *
  *	@error	If the user is invalid or has no m_iAirDash property, this returns false.
  */
-stock bool TF2_SetClientAirDash(int client, int value)	{
-	return SetEntPropEx(client, Prop_Send, "m_iAirDash", value);
-}
+stock bool TF2_SetClientAirDash(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_iAirDash", value); }
 
 /**
  *	Returns if TF2Attributes is available.
  */
-stock bool IsTF2AttributesLoaded()	{
-	return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Attrib_SetByName") == FeatureStatus_Available);
-}
+stock bool IsTF2AttributesLoaded() { return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Attrib_SetByName") == FeatureStatus_Available); }
 
 /**
  *	Returns if TF2Econ is available.
  */
-stock bool IsTF2EconLoaded()	{
-	return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Econ_GetItemName") == FeatureStatus_Available);
-}
+stock bool IsTF2EconLoaded() { return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Econ_GetItemName") == FeatureStatus_Available); }
 
 /**
  *	Returns the Footprint name type.
@@ -1629,8 +1498,8 @@ stock bool IsTF2EconLoaded()	{
  *
  *	@noreturn.
  */
-stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen)	{
-	switch(defindex)	{
+stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen) {
+	switch(defindex) {
 		case 1: strcopy(type, maxlen, "Team Based");
 		case 2: strcopy(type, maxlen, "Purple");
 		case 3: strcopy(type, maxlen, "4 8 15 16 23 42");
@@ -1695,7 +1564,7 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
  *
  *	@return	Returns the weapon entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality, bool dbg=false)	{
+stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality, bool dbg=false) {
 	static int weapon = -1;
 	
 	char classname[128];
@@ -1709,13 +1578,102 @@ stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality,
 		char netclass[64];
 		GetEntityNetClass(weapon, netclass, sizeof(netclass));
 		
-		SetEntityOwner(weapon, client);
-		SetEntitySteamAccountID(weapon, GetSteamAccountID(client));
-		SetEntityDefinitionIndex(weapon, defindex);
-		SetEntityInitialized(weapon, true);
-		TF2_SetEntityLevel(weapon, level);
-		TF2_SetEntityQuality(weapon, quality);
-		TF2_SetValidatedAttachedEntity(weapon, true);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_hOwnerEntity"), client);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iAccountID"), GetSteamAccountID(client));
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_bInitialized"), true);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), true);
+		
+		switch(defindex) {
+			case 735,736,810,831,933,1080,1102: {
+				SetEntProp(weapon, Prop_Send, "m_iObjectType", 3);
+				SetEntProp(weapon, Prop_Data, "m_iSubType", 3);
+				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 0);
+				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 1);
+				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
+				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
+			}
+			case 998: SetEntData(weapon, FindSendPropInfo(netclass, "m_nChargeResistType"), GetRandomInt(0,2));
+			#if defined _tf2attributes_included
+			case 1071: {
+				TF2Attrib_SetByName(weapon, "item style override", 0.0);
+				TF2Attrib_SetByName(weapon, "loot rarity", 1.0);
+				TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
+			}
+			#endif
+		}
+		
+		switch(StrContainsEx(classname, "tf_wearable", false)) {
+			case true: {
+				StartPrepSDKCall(SDKCall_Player);
+				PrepSDKCall_SetVirtual(TF2Offset_EquipWearable);
+				PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
+				Handle EquipWearable = EndPrepSDKCall();
+				
+				if(EquipWearable != null)
+					SDKCall(EquipWearable, client, weapon);
+				
+				delete EquipWearable;
+			}
+			default: {
+				DispatchSpawn(weapon);
+				EquipPlayerWeapon(client, weapon);
+			}
+		}
+		
+		switch(defindex) {
+			case 237, 265: {
+				int ammoType = GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType");				
+				int amount = 0;
+				
+				switch(defindex) {
+					case 237: amount = 60;
+					case 265: amount = 72;
+				}
+				
+				if(ammoType != -1)
+					SetEntProp(client, Prop_Send, "m_iAmmo", amount, 4, ammoType);
+			}
+		}
+	}
+	
+	return weapon;
+}
+
+/**
+ *	Spawns a weapon entity via customized classname.
+ *	The weapons spawned are visible to everyone.
+ *	Requires TF2Econ Data plugin.
+ *	TF2Attributes for golden frying pan to be corrected.
+ *
+ *	@param	client		The users index.
+ *	@param	classname	The weapon classname.
+ *	@param	defindex	The item definition index.
+ *	@param	level		The item level.
+ *	@param	quality		The item quality.
+ *	@param	debug		If true, prints a debug message in server console.
+ *
+ *	@return	Returns the weapon entity index. If invalid user or entity is invalid returns -1.
+ */
+stock int TF2_GiveWeaponEx(int client, const char[] classname, int defindex, int level, TFQuality quality, bool dbg=false)	{
+	static int weapon = -1;
+	
+	if(dbg) PrintToServer("TF2_GiveWeaponEx (client %i, defindex %i, level %i, quality %i, classname '%s')", client, defindex, level, quality, classname);
+	
+	/* Credits to PC Gamer for most of the code. */
+	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true)) {
+		char netclass[64];
+		GetEntityNetClass(weapon, netclass, sizeof(netclass));
+		
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_hOwnerEntity"), client);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iAccountID"), GetSteamAccountID(client));
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_bInitialized"), true);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
+		SetEntData(weapon, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), true);
 		
 		switch(defindex) {
 			case 735,736,810,831,933,1080,1102: {
@@ -1866,11 +1824,10 @@ stock bool TF2_IsValidCosmetic(int cosmetic) {
 	PrepSDKCall_SetVirtual(TF2Offset_IsWearable);
 	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
 	
-	if((IsWearable = EndPrepSDKCall()) != null)
-		return SDKCall(IsWearable, cosmetic);
+	bool valid = ((IsWearable = EndPrepSDKCall()) != null) ? SDKCall(IsWearable, cosmetic) : false 
 	
 	delete IsWearable;
-	return false;
+	return valid;
 }
 
 /**
@@ -1896,28 +1853,26 @@ stock bool TF2_IsValidAustralium(int defindex) {
  *	@noreturn.
  */
 stock void TF2_TurnAustralium(any weapon) {
-	if(!IsValidEntityEx(weapon))
-		return;
-	
-	if(!IsTF2AttributesLoaded())
-		return;
+	if(!IsValidEntityEx(weapon)) return;
+	if(!IsTF2AttributesLoaded()) return;
 	
 	int defindex = GetEntityDefinitionIndex(weapon);
-	
-	if(!TF2_IsValidAustralium(defindex))
-		return;
+	if(!TF2_IsValidAustralium(defindex)) return;
 	
 	/* Force the stock weapons to be 'upgradable' version. */
 	TF2_TurnDefaultDefIndexToUpgraded(weapon);
 	
+	char netclass[64];
+	GetEntityNetClass(weapon, netclass, sizeof(netclass));
+	
 	/* Turn the weapon to strange quality and random level. */
-	TF2_SetEntityQuality(weapon, TFQuality_Strange); /* Strange. */
-	TF2_SetEntityLevel(weapon, GetRandomInt(0, 100)); /* Random level between 0 and 100. */
+	SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), TFQuality_Strange); /* Strange. */
+	SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), GetRandomInt(0, 100)); /* Random level between 0 and 100. */
 	
 	/* Frying Pan. */
 	switch(defindex == 264)	{
 		case true: {
-			SetEntityDefinitionIndex(weapon, 1071); /* Turn to golden frying pan. */
+			SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 1071); /* Turn to golden frying pan. */
 			#if defined _tf2attributes_included
 			TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
 			TF2Attrib_SetByName(weapon, "killstreak tier", 1.0);
@@ -1945,7 +1900,7 @@ stock void TF2_TurnAustralium(any weapon) {
  *	@param	buffer	Buffer to store the killstreaker name.
  *	@param	maxlen	Maximum length of the buffer.
  *
- *	@return	Returns true if the definition index is valie, false otherwise. 
+ *	@return	Returns true if the definition index is valid, false otherwise. 
  */
 stock bool TF2_GetKillstreakerName(int index, char[] buffer, int maxlen) {
 	switch(index) {
@@ -1995,6 +1950,7 @@ stock bool TF2_GetKillstreakerName(int index, char[] buffer, int maxlen) {
 	return false;
 }
 
+#if defined _tf2attributes_included
 /**
  *	Returns an attribute's value of an entity.
  *	Requires TF2Attributes.
@@ -2020,6 +1976,7 @@ stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) {
 	
 	return -1.0;
 }
+#endif
 
 /**
  *	Forces the default weapon definition index
@@ -2029,39 +1986,44 @@ stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) {
  *
  *	@noreturn.
  */
-stock void TF2_TurnDefaultDefIndexToUpgraded(int weapon) {
+stock void TF2_TurnDefaultDefIndexToUpgraded(any weapon) {
 	// Fix the default weapons to be forced as an 'upgraded' variant so they can be festivized variant, be australium, have war paint, etc.
 	if(!IsValidEntityEx(weapon))
 		return;
 	
-	switch(GetEntityDefinitionIndex(weapon)) {
-		case 0: SetEntityDefinitionIndex(weapon, 190);
-		case 1: SetEntityDefinitionIndex(weapon, 191);
-		case 2: SetEntityDefinitionIndex(weapon, 192);
-		case 3: SetEntityDefinitionIndex(weapon, 193);
-		case 4: SetEntityDefinitionIndex(weapon, 194);
-		case 5: SetEntityDefinitionIndex(weapon, 195);
-		case 6: SetEntityDefinitionIndex(weapon, 196);
-		case 7: SetEntityDefinitionIndex(weapon, 197);
-		case 8: SetEntityDefinitionIndex(weapon, 198);
-		case 9: SetEntityDefinitionIndex(weapon, 199);
-		case 10: SetEntityDefinitionIndex(weapon, 199);
-		case 11: SetEntityDefinitionIndex(weapon, 199);
-		case 12: SetEntityDefinitionIndex(weapon, 199);
-		case 13: SetEntityDefinitionIndex(weapon, 200);
-		case 14: SetEntityDefinitionIndex(weapon, 201);
-		case 15: SetEntityDefinitionIndex(weapon, 202);
-		case 16: SetEntityDefinitionIndex(weapon, 203);
-		case 17: SetEntityDefinitionIndex(weapon, 204);
-		case 18: SetEntityDefinitionIndex(weapon, 205);
-		case 19: SetEntityDefinitionIndex(weapon, 206);
-		case 20: SetEntityDefinitionIndex(weapon, 207);
-		case 21: SetEntityDefinitionIndex(weapon, 208);
-		case 22: SetEntityDefinitionIndex(weapon, 209);
-		case 23: SetEntityDefinitionIndex(weapon, 209);
-		case 24: SetEntityDefinitionIndex(weapon, 210);
-		case 25: SetEntityDefinitionIndex(weapon, 737);
-		case 29: SetEntityDefinitionIndex(weapon, 211);
+	char netclass[64];
+	GetEntityNetClass(weapon, netclass, sizeof(netclass));
+	
+	int offset = FindSendPropInfo(netclass, "m_iItemDefinitionIndex");
+	
+	switch(GetEntData(weapon, offset)) {
+		case 0: SetEntData(weapon, offset, 190);
+		case 1: SetEntData(weapon, offset, 191);
+		case 2: SetEntData(weapon, offset, 192);
+		case 3: SetEntData(weapon, offset, 193);
+		case 4: SetEntData(weapon, offset, 194);
+		case 5: SetEntData(weapon, offset, 195);
+		case 6: SetEntData(weapon, offset, 196);
+		case 7: SetEntData(weapon, offset, 197);
+		case 8: SetEntData(weapon, offset, 198);
+		case 9: SetEntData(weapon, offset, 199);
+		case 10: SetEntData(weapon, offset, 199);
+		case 11: SetEntData(weapon, offset, 199);
+		case 12: SetEntData(weapon, offset, 199);
+		case 13: SetEntData(weapon, offset, 200);
+		case 14: SetEntData(weapon, offset, 201);
+		case 15: SetEntData(weapon, offset, 202);
+		case 16: SetEntData(weapon, offset, 203);
+		case 17: SetEntData(weapon, offset, 204);
+		case 18: SetEntData(weapon, offset, 205);
+		case 19: SetEntData(weapon, offset, 206);
+		case 20: SetEntData(weapon, offset, 207);
+		case 21: SetEntData(weapon, offset, 208);
+		case 22: SetEntData(weapon, offset, 209);
+		case 23: SetEntData(weapon, offset, 209);
+		case 24: SetEntData(weapon, offset, 210);
+		case 25: SetEntData(weapon, offset, 737);
+		case 29: SetEntData(weapon, offset, 211);
 	}
 }
 
@@ -2072,14 +2034,7 @@ stock void TF2_TurnDefaultDefIndexToUpgraded(int weapon) {
  *
  *	@return	If the warpaint is valid, this returns true. False otherwise.
  */
-stock bool TF2_IsValidWarPaint(int defindex) {
-	for(int i = MAX_TF2_WARPAINTS; i--;) {
-		if(TF2_Warpaints[i] == defindex)
-			return true;
-	}
-	
-	return false;
-}
+stock bool TF2_IsValidWarPaint(int defindex) { for(int i = MAX_TF2_WARPAINTS; i--;) { if(TF2_Warpaints[i] == defindex) return true; } return false; }
 
 /**
  *	Returns the warpaint name.
@@ -2318,9 +2273,7 @@ stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen) {
  *
  *	@return	Returns the taunt definition index. -1 if invalid user or 0 if no taunt.
  */
-stock int TF2_GetClientActiveTauntDefinitionIndex(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_iTauntItemDefIndex");
-}
+stock int TF2_GetClientActiveTauntDefinitionIndex(int client) { return GetEntPropEx(client, Prop_Send, "m_iTauntItemDefIndex"); }
 
 /**
  *	Returns the paint colour name.
@@ -2474,7 +2427,7 @@ stock bool TF2_IsValidExplosiveWeaponDefindex(int defindex) {
  *	@return	If valid, returns true. Else returns false.
  */
 stock bool TF2_IsValidFlamethrowerDefindex(int defindex) {
-	switch(defindex)	{
+	switch(defindex) {
 		case 21,40,208,215,594,659,741,798,807,887,
 		896,905,914,963,972,11146,1178,15005,15017,
 		15030,15034,15049,15054,15066,15067,15068,
@@ -2617,18 +2570,14 @@ stock bool TF2_SetValidatedAttachedEntity(int entity, bool validated) {
  *
  *	@return	Returns the entity index of the cosmetic entity.
  */
-stock int TF2_CreateCosmetic() {
-	return CreateEntityByName("tf_wearable");
-}
+stock int TF2_CreateCosmetic() { return CreateEntityByName("tf_wearable"); }
 
 /**
  *	Creates a demoshield weapon entity.
  *
  *	@return	Returns the entity index of the cosmetic demoshield entity.
  */
-stock int TF2_CreateCosmeticDemoShield() {
-	return CreateEntityByName("tf_wearable_demoshield");
-}
+stock int TF2_CreateCosmeticDemoShield() { return CreateEntityByName("tf_wearable_demoshield"); }
 
 /**
  *	Creates a razorback weapon entity.
@@ -2636,9 +2585,7 @@ stock int TF2_CreateCosmeticDemoShield() {
  *
  *	@return	Returns the entity index of the cosmetic razorback entity.
  */
-stock int TF2_CreateCosmeticRazorback() {
-	return CreateEntityByName("tf_wearable_razorback");
-}
+stock int TF2_CreateCosmeticRazorback() { return CreateEntityByName("tf_wearable_razorback"); }
 
 /**
  *	Creates a videomaker entity.
@@ -2646,9 +2593,7 @@ stock int TF2_CreateCosmeticRazorback() {
  *
  *	@return	Returns the entity index of the cosmetic videomaker entity.
  */
-stock int TF2_CreateCosmeticVideoMaker() {
-	return CreateEntityByName("tf_wearable_vm");
-}
+stock int TF2_CreateCosmeticVideoMaker() { return CreateEntityByName("tf_wearable_vm"); }
 
 /**
  *	Creates a robot arm viewmodel.
@@ -2656,9 +2601,7 @@ stock int TF2_CreateCosmeticVideoMaker() {
  *
  *	@return	Returns the entity index of the robot arm viewmodel entity.
  */
-stock int TF2_CreateCosmeticRobotArm() {
-	return CreateEntityByName("tf_wearable_robot_arm");
-}
+stock int TF2_CreateCosmeticRobotArm() { return CreateEntityByName("tf_wearable_robot_arm"); }
 
 /**
  *	Creates a levelable cosmetic item.
@@ -2666,18 +2609,14 @@ stock int TF2_CreateCosmeticRobotArm() {
  *
  *	@return	Returns the entity index of the levelable cosmetic entity.
  */
-stock int TF2_CreateCosmeticLevelable() {
-	return CreateEntityByName("tf_wearable_levelable_item");
-}
+stock int TF2_CreateCosmeticLevelable() { return CreateEntityByName("tf_wearable_levelable_item"); }
 
 /**
  *	Creates a cosmetic campaign item.
  *
  *	@return	Returns the entity index of the cosmetic campaign item entity.
  */
-stock int TF2_CreateCosmeticCampaignItem() {
-	return CreateEntityByName("tf_wearable_campaign_item");
-}
+stock int TF2_CreateCosmeticCampaignItem() { return CreateEntityByName("tf_wearable_campaign_item"); }
 
 /**
  *	Creates a viewmodel entity.
@@ -2685,9 +2624,7 @@ stock int TF2_CreateCosmeticCampaignItem() {
  *
  *	@return	Returns the entity index of the cosmetic viewmodel entity.
  */
-stock int TF2_CreateViewmodel() {
-	return CreateEntityByName("tf_viewmodel");
-}
+stock int TF2_CreateViewmodel() { return CreateEntityByName("tf_viewmodel"); }
 
 /**
  *	Returns if the user is in the class.
@@ -2697,9 +2634,7 @@ stock int TF2_CreateViewmodel() {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool TF2_IsClientClass(int client, TFClassType class) {
-	return Tklib_IsValidClient(client, _, true) ? (TF2_GetPlayerClass(client) == class) : false;
-}
+stock bool TF2_IsClientClass(int client, TFClassType class) { return Tklib_IsValidClient(client, _, true) ? (TF2_GetPlayerClass(client) == class) : false; }
 
 /**
  *	Returns the users current desired class.
@@ -2708,10 +2643,7 @@ stock bool TF2_IsClientClass(int client, TFClassType class) {
  *
  *	@error	If the user is invalid, this returns TFClass_Unknown.
  */
-stock TFClassType TF2_GetClientDesiredClass(int client) {
-	int desired;
-	return((desired = GetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass") != -1) ? view_as<TFClassType>(desired) : TFClass_Unknown);
-}
+stock TFClassType TF2_GetClientDesiredClass(int client) { return view_as<TFClassType>(GetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass")); }
 
 /**
  *	Set the users current desired class.
@@ -2720,64 +2652,34 @@ stock TFClassType TF2_GetClientDesiredClass(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool TF2_SetClientDesiredClass(int client, TFClassType class) {
-	return SetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass", class);
-}
+stock bool TF2_SetClientDesiredClass(int client, TFClassType class) { return SetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass", class); }
 
 /**
  *	Returns if the paint kit index is valid.
  *
  *	@param	index	The paint kit index.
  */
-stock bool TF2_IsValidPaintKit(int index) {
-	for(int i = MAX_TF2_PAINTS; i--;) {
-		if(TF2_Paints[i] == index)
-			return true;
-	}
-	
-	return false;
-}
+stock bool TF2_IsValidPaintKit(int index) { for(int i = MAX_TF2_PAINTS; i--;) { if(TF2_Paints[i] == index) return true; } return false; }
 
 /**
  *	Returns if the unusual effect index is valid.
  *
  *	@param	index	The unusual particle index.
  */
-stock bool TF2_IsValidUnusual(int index) {
-	for(int i = MAX_TF2_UNUSUALS; i--;) {
-		if(TF2_UnusualEffects[i] == index)
-			return true;
-	}
-	
-	return false;
-}
+stock bool TF2_IsValidUnusual(int index) { for(int i = MAX_TF2_UNUSUALS; i--;) { if(TF2_UnusualEffects[i] == index) return true; } return false; }
 
 /**
  *	Returns if the definition index is a valid weapon.
  *
  *	@param	defindex	The weapon definition index.
  */
-stock bool TF2_IsValidWeaponDefindex(int defindex) {
-	for(int i = MAX_TF2_WEAPONS; i--;) {
-		if(TF2_Weapons[i] == defindex)
-			return true;
-	}
-	
-	return false;
-}
+stock bool TF2_IsValidWeaponDefindex(int defindex) { for(int i = MAX_TF2_WEAPONS; i--;) { if(TF2_Weapons[i] == defindex) return true; } return false; }
 
 /**
  *	Returns if the definition index is a valid taunt.
  *
  *	@param	defindex	The taunt definition index.
  */
-stock bool TF2_IsValidTaunt(int defindex) {
-	for(int i = MAX_TF2_TAUNTS; i--;) {
-		if(TF2_Taunts[i] == defindex)
-			return true;
-	}
-	
-	return false;
-}
+stock bool TF2_IsValidTaunt(int defindex) { for(int i = MAX_TF2_TAUNTS; i--;) { if(TF2_Taunts[i] == defindex) return true; } return false; }
 
 #endif

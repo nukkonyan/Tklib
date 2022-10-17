@@ -3,7 +3,7 @@
 //==========================================//
 #if !defined _tklib_disable_clients
 
-enum ObserverMode {
+enum ObsMode {
 	ObsMode_Invalid = -1,
 	ObsMode_None = 0,
 	ObsMode_DeathCam = 1,
@@ -39,7 +39,7 @@ enum Team {
 	Team_Yellow = 5
 }
 
-#define TargetLoop(%1) for(int %1 = MaxClients; %1 >= 1; %1--)
+#define TargetLoop(%1) for(int %1 = 1; %1 <= MaxClients; %1++)
 
 //Player permissions
 /**
@@ -47,9 +47,7 @@ enum Team {
  *
  *	@param client	The users index.
  */
-stock bool IsClientConsole(int client) {	
-	return view_as<bool>(client == 0);
-}
+stock bool IsClientConsole(int client) { return view_as<bool>(client == 0); }
 
 /**
  *	Returns if the user is the Owner
@@ -58,9 +56,7 @@ stock bool IsClientConsole(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientOwner(int client) {
-	return CheckCommandAccess(client, "", ADMFLAG_ROOT);
-}
+stock bool IsClientOwner(int client) { return CheckCommandAccess(client, "", ADMFLAG_ROOT); }
 
 /**
  *	Returns if the user is an Admin
@@ -69,9 +65,7 @@ stock bool IsClientOwner(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientAdmin(int client) {
-	return CheckCommandAccess(client, "", ADMFLAG_GENERIC);
-}
+stock bool IsClientAdmin(int client) { return CheckCommandAccess(client, "", ADMFLAG_GENERIC); }
 
 /**
  *	Returns if the user is a Moderator
@@ -80,9 +74,7 @@ stock bool IsClientAdmin(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientModerator(int client) {
-	return CheckCommandAccess(client, "", ADMFLAG_CUSTOM1);
-}
+stock bool IsClientModerator(int client) { return CheckCommandAccess(client, "", ADMFLAG_CUSTOM1); }
 
 /**
  *	Returns if the user is a Vip
@@ -91,9 +83,7 @@ stock bool IsClientModerator(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientVip(int client) {
-	return CheckCommandAccess(client, "", ADMFLAG_RESERVATION);
-}
+stock bool IsClientVip(int client) { return CheckCommandAccess(client, "", ADMFLAG_RESERVATION); }
 
 /**
  *	Returns if the user has the specified flag access.
@@ -104,9 +94,7 @@ stock bool IsClientVip(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientFlag(int client, int adminflags, char[] command="") {
-	return CheckCommandAccess(client, command, adminflags);
-}
+stock bool IsClientFlag(int client, int adminflags, char[] command="") { return CheckCommandAccess(client, command, adminflags); }
 
 /**
  *	Returns if the users is the same player.
@@ -116,9 +104,7 @@ stock bool IsClientFlag(int client, int adminflags, char[] command="") {
  *
  *	@return	Returns true if it's the same player, false otherwise.
  */
-stock bool IsSamePlayers(int client, any target) {
-	return view_as<bool>(client == target);
-}
+stock bool IsSamePlayers(int client, int target) { return view_as<bool>(client == target); }
 
 /**
  *	Returns if the user and target is on the same team.
@@ -128,9 +114,7 @@ stock bool IsSamePlayers(int client, any target) {
  *
  *	@return	Returns true if it's they're on the same team, false otherwise.
  */
-stock bool IsSameTeam(int client, any target) {
-	return view_as<bool>(GetClientTeam(client) == GetClientTeam(target));
-}
+stock bool IsSameTeam(int client, int target) { return view_as<bool>(GetClientTeam(client) == GetClientTeam(target)); }
 
 //General stuff
 
@@ -142,9 +126,7 @@ stock bool IsSameTeam(int client, any target) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientPing(int client, int value)	{
-	return SetEntPropEx(client, Prop_Send, "m_iPing", value);
-}
+stock bool SetClientPing(int client, int value)	{ return SetEntPropEx(client, Prop_Send, "m_iPing", value); }
 
 /**
  *	Returns the users scoreboard ping
@@ -153,9 +135,7 @@ stock bool SetClientPing(int client, int value)	{
  *
  *	@error	If the client is not valid, this returns -1.
  */
-stock int GetClientPing(int client)	{
-	return GetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iPing", _, client);
-}
+stock int GetClientPing(int client)	{ return GetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iPing", _, client); }
 
 /**
  *	Set the users death count
@@ -165,9 +145,7 @@ stock int GetClientPing(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientDeaths(int client, int value) {
-	return SetEntPropEx(client, Prop_Data, "m_iDeaths", value);
-}
+stock bool SetClientDeaths(int client, int value) { return SetEntPropEx(client, Prop_Data, "m_iDeaths", value); }
 
 /**
  *	Set the users frag count
@@ -177,10 +155,7 @@ stock bool SetClientDeaths(int client, int value) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientFrags(int client, int value) {
-	return SetEntPropEx(client, Prop_Data, "m_iFrags", value);
-}
-
+stock bool SetClientFrags(int client, int value) { return SetEntPropEx(client, Prop_Data, "m_iFrags", value); }
 
 /**
  *	Set the users health
@@ -190,9 +165,7 @@ stock bool SetClientFrags(int client, int value) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientHealth(int client, int value) {
-	return SetEntPropEx(client, Prop_Send, "m_iHealth", value);
-}
+stock bool SetClientHealth(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_iHealth", value); }
 
 /**
  *	Set the users max health
@@ -202,9 +175,7 @@ stock bool SetClientHealth(int client, int value) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientMaxHealth(int client, int value) {
-	return SetEntPropEx(client, Prop_Send, "m_iMaxHealth", value);
-}
+stock bool SetClientMaxHealth(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_iMaxHealth", value); }
 
 /**
  *	Returns the users max health
@@ -213,9 +184,7 @@ stock bool SetClientMaxHealth(int client, int value) {
  *
  *	@error	If the client is not valid, this returns -1.
  */
-stock int GetClientMaxHealth(int client) {
-	return GetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", client);
-}
+stock int GetClientMaxHealth(int client) { return GetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", client); }
 
 /**
  *	Sets the users health & maximum health.
@@ -239,26 +208,24 @@ stock bool SetClientHealthEx(int client, int health, int maxhealth)	{
 
 /**
  *	Set the users team index number called from the game's netprop m_iTeamNum.
+ *	Can be paired with game's team enum such as TFTeam_Red or CSTeam_CT.
  *
  *	@param	client	The users index.
  *	@param	value	Team index value.
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientTeamNum(int client, any value) {
-	return SetEntPropEx(client, Prop_Send, "m_iTeamNum", value);
-}
+stock bool SetClientTeamNum(int client, any value) { return SetEntPropEx(client, Prop_Send, "m_iTeamNum", value); }
 
 /**
  *	Returns the users team index number called from the game's netprop m_iTeamNum.
+ *	Can be paired with game's team enum such as TFTeam_Red or CSTeam_CT.
  *
  *	@param	client	The users index.
  *
  *	@error	If the user is not valid or mod not supported, this returns -1.
  */
-stock int GetClientTeamNum(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_iTeamNum");
-}
+stock any GetClientTeamNum(int client) { return GetEntPropEx(client, Prop_Send, "m_iTeamNum"); }
 
 /**
  *	Set the users field-of-view.
@@ -268,9 +235,7 @@ stock int GetClientTeamNum(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientFOV(int client, int value) {
-	return SetEntPropEx(client, Prop_Send, "m_iFOV", value);
-}
+stock bool SetClientFOV(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_iFOV", value); }
 
 /**
  *	Returns the clients field-of-view.
@@ -279,9 +244,7 @@ stock bool SetClientFOV(int client, int value) {
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientFOV(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_iFOV");
-}
+stock int GetClientFOV(int client) { return GetEntPropEx(client, Prop_Send, "m_iFOV"); }
 
 /**
  *	Set the users default field-of-view.
@@ -291,9 +254,7 @@ stock int GetClientFOV(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientDefaultFOV(int client, int value) {
-	return SetEntPropEx(client, Prop_Send, "m_iDefaultFOV", value);
-}
+stock bool SetClientDefaultFOV(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_iDefaultFOV", value); }
 
 /**
  *	Returns the users default fov.
@@ -302,9 +263,7 @@ stock bool SetClientDefaultFOV(int client, int value) {
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientDefaultFOV(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_iDefaultFOV");
-}
+stock int GetClientDefaultFOV(int client) { return GetEntPropEx(client, Prop_Send, "m_iDefaultFOV"); }
 
 /**
  *	Set the users Observer target.
@@ -314,9 +273,7 @@ stock int GetClientDefaultFOV(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientObserverTarget(int client, int target) {
-	return SetEntPropEntEx(client, Prop_Send, "m_iObserverTarget", target);
-}
+stock bool SetClientObserverTarget(int client, int target) { return SetEntPropEntEx(client, Prop_Send, "m_iObserverTarget", target); }
 
 /**
  *	Returns the users Observer target.
@@ -325,9 +282,7 @@ stock bool SetClientObserverTarget(int client, int target) {
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientObserverTarget(int client) {
-	return GetEntPropEntEx(client, Prop_Send, "m_iObserverTarget");
-}
+stock int GetClientObserverTarget(int client) { return GetEntPropEntEx(client, Prop_Send, "m_iObserverTarget"); }
 
 //Credits to SMLib.
 /**
@@ -339,7 +294,7 @@ stock int GetClientObserverTarget(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientObserverMode(int client, ObserverMode mode, bool update=false) {
+stock bool SetClientObserverMode(int client, ObsMode mode, bool update=false) {
 	if(mode < ObsMode_None || mode >= ObsMode_Roaming)
 		return false;
 	
@@ -359,7 +314,7 @@ stock bool SetClientObserverMode(int client, ObserverMode mode, bool update=fals
 		delete mp_forcecamera;
 	}
 	
-	ObserverMode current = GetClientObserverMode(client);
+	ObsMode current = GetClientObserverMode(client);
 	if(current > ObsMode_DeathCam)
 		SetClientLastObserverMode(client, current);
 	
@@ -393,9 +348,7 @@ stock bool SetClientObserverMode(int client, ObserverMode mode, bool update=fals
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock ObserverMode GetClientObserverMode(int client) {
-	return view_as<ObserverMode>(GetEntPropEx(client, Prop_Send, "m_iObserverMode"));
-}
+stock ObsMode GetClientObserverMode(int client) { return view_as<ObsMode>(GetEntPropEx(client, Prop_Send, "m_iObserverMode")); }
 
 /**
  *	Set the users last observer mode.
@@ -405,9 +358,7 @@ stock ObserverMode GetClientObserverMode(int client) {
  *
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
-stock bool SetClientLastObserverMode(int client, ObserverMode mode)	{
-	return SetEntPropEx(client, Prop_Send, "m_iObserverLastMode", mode);
-}
+stock bool SetClientLastObserverMode(int client, ObsMode mode) { return SetEntPropEx(client, Prop_Send, "m_iObserverLastMode", mode); }
 
 /**
  *	Returns the users last observer mode.
@@ -416,9 +367,7 @@ stock bool SetClientLastObserverMode(int client, ObserverMode mode)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock ObserverMode GetClientLastObserverMode(int client) {
-	return view_as<ObserverMode>(GetEntPropEx(client, Prop_Send, "m_iObserverLastMode"));
-}
+stock ObsMode GetClientLastObserverMode(int client) { return view_as<ObsMode>(GetEntPropEx(client, Prop_Send, "m_iObserverLastMode")); }
 
 /**
  *	Set the clients viewmodel to be drawn.
@@ -428,9 +377,7 @@ stock ObserverMode GetClientLastObserverMode(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientDrawViewModel(int client, bool value)	{
-	return SetEntPropEx(client, Prop_Send, "m_bDrawViewmodel", value);
-}
+stock bool SetClientDrawViewModel(int client, bool value) { return SetEntPropEx(client, Prop_Send, "m_bDrawViewmodel", value); }
 
 /**
  *	Returns the clients drawviewmodel value
@@ -439,9 +386,7 @@ stock bool SetClientDrawViewModel(int client, bool value)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientDrawViewModel(int client)	{
-	return GetEntPropBool(client, Prop_Send, "m_bDrawViewmodel");
-}
+stock bool GetClientDrawViewModel(int client) { return GetEntPropBool(client, Prop_Send, "m_bDrawViewmodel"); }
 
 /**
  *	Set the clients godmode
@@ -451,9 +396,7 @@ stock bool GetClientDrawViewModel(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientGodMode(int client, bool godmode)	{
-	return SetEntPropEx(client, Prop_Send, "m_takedamage", godmode ? 0:2, 1);
-}
+stock bool SetClientGodMode(int client, bool godmode) { return SetEntPropEx(client, Prop_Send, "m_takedamage", godmode ? 0:2, 1); }
 
 /**
  *	Returns if client is in godmode
@@ -462,9 +405,7 @@ stock bool SetClientGodMode(int client, bool godmode)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientGodmode(int client)	{
-	return GetEntPropBool(client, Prop_Send, "m_takedamage", 0, 1)
-}
+stock bool GetClientGodmode(int client) { return GetEntPropBool(client, Prop_Send, "m_takedamage", 0, 1); }
 
 /**
  *	Set the user buddha mode
@@ -474,9 +415,7 @@ stock bool GetClientGodmode(int client)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientBuddhaMode(int client, bool buddha)	{
-	return SetEntPropEx(client, Prop_Send, "m_takedamage", buddha ? 1:2, 1);
-}
+stock bool SetClientBuddhaMode(int client, bool buddha)	{ return SetEntPropEx(client, Prop_Send, "m_takedamage", buddha ? 1:2, 1); }
 
 /**
  *	Returns if the user is in buddha mode.
@@ -485,9 +424,7 @@ stock bool SetClientBuddhaMode(int client, bool buddha)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientBuddhaMode(int client)	{
-	return GetEntPropBool(client, Prop_Send, "m_takedamage", 1, 1);
-}
+stock bool GetClientBuddhaMode(int client) { return GetEntPropBool(client, Prop_Send, "m_takedamage", 1, 1); }
 
 /**
  *	Set the users collision
@@ -511,9 +448,7 @@ stock bool SetClientCollision(int client, bool collision)	{
  *	@param	client		The users index.
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientCollision(int client)	{
-	return view_as<bool>(GetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 2) == 4);
-}
+stock bool GetClientCollision(int client) { return view_as<bool>(GetEntData(client, FindSendPropInfo("CBaseEntity", "m_CollisionGroup"), 2) == 4); }
 
 /**
  *	Set the user noclip on/off
@@ -538,39 +473,33 @@ stock bool SetClientNoclip(int client, bool noclip)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientNoclipping(int client)	{
-	return GetEntityMoveType(client) == MOVETYPE_NOCLIP;
-}
- 
+stock bool IsClientNoclipping(int client) { return GetEntityMoveType(client) == MOVETYPE_NOCLIP; }
 
 /**
  *	Set the users max speed
  *
- *	@param	client		The users index.
- *	@param	value		Float amount value.
+ *	@param	client	The users index.
+ *	@param	value	Float amount value.
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientMaxSpeed(int client, float value)	{
-	return SetEntPropFloatEx(client, Prop_Send, "m_flMaxspeed", value);
-}
+stock bool SetClientMaxSpeed(int client, float value) { return SetEntPropFloatEx(client, Prop_Send, "m_flMaxspeed", value); }
 
 /**
  *	Returns the users max speed
  *
- *	@param	client		The users index.
+ *	@param	client	The users index.
  *
- *	@error	If the user is invalid, this returns 0.0.
+ *	@error	If the user is invalid, this returns -1.0.
  */
-stock float GetClientMaxSpeed(int client)	{
-	return GetEntPropFloatEx(client, Prop_Send, "m_flMaxspeed");
-}
+stock float GetClientMaxSpeed(int client) { return GetEntPropFloatEx(client, Prop_Send, "m_flMaxspeed"); }
 
 /**
  *	Returns if the user is muted.
  *	Considered safer over IsClientMuted.
  *
- *	@param 	client		The users index.
+ *	@param 	client	The users index.
+ *
  *	@error	If the user is invalid, this returns false.
  */
 stock bool IsClientMutedEx(int client)	{
@@ -580,8 +509,8 @@ stock bool IsClientMutedEx(int client)	{
 /**
  *	Set if the user should be muted or not.
  *
- *	@param	client		The users index.
- *	@param	mute		If true, it will enable noclip, else disabled.
+ *	@param	client	The users index.
+ *	@param	mute	If true, it will enable noclip, else disabled.
  *
  *	@error	If the user is invalid, this returns false.
  */
@@ -601,7 +530,7 @@ stock bool SetClientMute(int client, bool mute)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SlayClient(int client, bool RandomDeath=false)	{
+stock bool SlayClient(int client, bool RandomDeath=false) {
 	if(!Tklib_IsValidClient(client, _, true))
 		return false;
 		
@@ -616,9 +545,7 @@ stock bool SlayClient(int client, bool RandomDeath=false)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientLifestate(int client)	{
-	return GetEntPropEx(client, Prop_Send, "m_lifeState");
-}
+stock int GetClientLifestate(int client) { return GetEntPropEx(client, Prop_Send, "m_lifeState"); }
 
 /**
  *	Set the users lifestate.
@@ -628,9 +555,7 @@ stock int GetClientLifestate(int client)	{
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock bool SetClientLifestate(int client, int value)	{
-	return SetEntPropEx(client, Prop_Send, "m_lifeState", value);
-}
+stock bool SetClientLifestate(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_lifeState", value); }
 
 /**
  *	Returns the users map navigation location name
@@ -641,9 +566,7 @@ stock bool SetClientLifestate(int client, int value)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientNavLocation(int client, char[] location, int maxlen)	{
-	return GetEntPropStringEx(client, Prop_Send, "m_szLastPlaceName", location, maxlen);
-}
+stock bool GetClientNavLocation(int client, char[] location, int maxlen) { return GetEntPropStringEx(client, Prop_Send, "m_szLastPlaceName", location, maxlen); }
 
 //Respawning
 
@@ -672,10 +595,7 @@ stock bool RespawnTime(int client, float value)	{
 
 #if !defined _tklib_disable_gameidentifier
 //forwards the action to the respawn event
-stock Action SetRespawnTime(Handle timer, int client)	{
-	Respawn(client);
-	return Plugin_Handled;
-}
+stock Action SetRespawnTime(Handle timer, int client) { Respawn(client); }
 #else
 #error SetRespawnTime() requires GameIdentifier Include (for correct respawn actions)
 #endif
@@ -718,9 +638,7 @@ stock bool Respawn(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientAuth(int client, char[] buffer, int maxlen)	{
-	return Tklib_IsValidClient(client, _, _, false) ? GetClientAuthId(client, AuthId_Steam2, buffer, maxlen):false;
-}
+stock bool GetClientAuth(int client, char[] buffer, int maxlen) { return Tklib_IsValidClient(client, _, _, false) ? GetClientAuthId(client, AuthId_Steam2, buffer, maxlen):false; }
 
 /**
  *	Returns the users steam steamid.
@@ -733,9 +651,7 @@ stock bool GetClientAuth(int client, char[] buffer, int maxlen)	{
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientAuth3(int client, char[] buffer, int maxlen) {
-	return Tklib_IsValidClient(client, _, _, false) ? GetClientAuthId(client, AuthId_Steam3, buffer, maxlen):false;
-}
+stock bool GetClientAuth3(int client, char[] buffer, int maxlen) { return Tklib_IsValidClient(client, _, _, false) ? GetClientAuthId(client, AuthId_Steam3, buffer, maxlen):false; }
 
 /**
  *	Returns the user by steam authentication.
@@ -746,7 +662,7 @@ stock bool GetClientAuth3(int client, char[] buffer, int maxlen) {
  *
  *	@error	If the user is invalid, this returns 0.
  */
-stock any GetClientOfAuth(const char[] auth) {
+stock int GetClientOfAuth(const char[] auth) {
 	int user = 0;
 	char tempauth[64];
 	
@@ -757,7 +673,7 @@ stock any GetClientOfAuth(const char[] auth) {
 			user = client;
 	}
 	
-	return	user;
+	return user;
 }
 
 /**
@@ -769,7 +685,7 @@ stock any GetClientOfAuth(const char[] auth) {
  *
  *	@error	If the user is invalid, this returns 0.
  */
-stock any GetClientOfAuth3(const char[] auth) {
+stock int GetClientOfAuth3(const char[] auth) {
 	int user = 0;
 	char tempauth[64];
 	
@@ -792,9 +708,7 @@ stock any GetClientOfAuth3(const char[] auth) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool GetClientNameEx(int client, char[] buffer, int maxlen) {
-	return Tklib_IsValidClient(client, _, _, false) ? GetClientInfo(client, "name", buffer, maxlen):false;
-}
+stock bool GetClientNameEx(int client, char[] buffer, int maxlen) { return Tklib_IsValidClient(client, _, _, false) ? GetClientInfo(client, "name", buffer, maxlen):false; }
 
 /**
  *	Sets the users name properly.
@@ -813,32 +727,10 @@ stock bool SetClientNameEx(int client, const char[] name) {
 }
 
 /**
- *	Returns the users index if found from string.
- *
- *	@param		client			The user performing action.
- *	@param		player_name		The players name to search.
- *	@param		filter_flags	Filter flags.
- *
- *	@error		If the index of the player was not found or is invalid, this returns -1.
- */
-stock int GetClientOfPlayername(int client, const char[] playername, int filter_flags=COMMAND_FILTER_CONNECTED|COMMAND_FILTER_NO_BOTS) {
-	char target_name[64];
-	int target_list[64];
-	bool tn_is_ml;
-	int target = -1;
-	
-	int target_count = ProcessTargetString(playername, client, target_list, MAXPLAYERS, filter_flags, target_name, sizeof(target_name), tn_is_ml);
-	
-	for(int i = 0; i < target_count; i++)
-		target = target_list[i];
-	
-	return target;
-}
-
-/**
  *	Returns user count in the server.
  *
  *	@param	nobots	If true, bots are ignored.
+ *
  *	@return	Returns the user count.
  */
 stock int GetClientCountEx(bool nobots=true) {
@@ -886,38 +778,34 @@ stock bool GetClientViewAngles(int client, float view[3]) {
 	GetClientEyePosition(client, eyes); 
 	GetClientEyeAngles(client, angles);
 	TR_TraceRayFilter(eyes, angles, MASK_SOLID, RayType_Infinite, GetClientViewAngles_TraceEntityFilterPlayer, client);
-	if(TR_DidHit())
-		TR_GetEndPosition(view);
+	if(TR_DidHit()) TR_GetEndPosition(view);
 	
 	return	true;
 }
 
-stock bool GetClientViewAngles_TraceEntityFilterPlayer(int entity, int contentsMask) {
-	return view_as<bool>(entity > MaxClients);
-}
+/**
+ *	Callback for GetClientViewAngles
+ */
+stock bool GetClientViewAngles_TraceEntityFilterPlayer(int entity, int contentsMask) { return view_as<bool>(entity > MaxClients); }
 
 /**
  *	Set the users pending new team.
  *
- *	@param	client		The users index.
- *	@param	team		The new team index.
+ *	@param	client	The users index.
+ *	@param	team	The new team index.
  *
- *	@error	If the user or is not supported in the current mod, this returns false.
+ *	@error	If the user or mod is unsupported, this returns false.
  */
-stock bool SetClientPendingTeam(int client, int team) {
-	return SetEntPropEx(client, Prop_Send, "m_iPendingTeamNum", team);
-}
+stock bool SetClientPendingTeam(int client, int team) { return SetEntPropEx(client, Prop_Send, "m_iPendingTeamNum", team); }
 
 /**
  *	Returns the users pending new team.
  *
- *	@param	client		The users index.
+ *	@param	client	The users index.
  *
- *	@error	If the user or is not supported in the current mod, this returns 0.
+ *	@error	If the user or mod is unsupported, this returns -1.
  */
-stock int GetClientPendingTeam(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_iPendingTeamNum");
-}
+stock int GetClientPendingTeam(int client) { return GetEntPropEx(client, Prop_Send, "m_iPendingTeamNum"); }
 
 /**
  *	Returns if the user is ducking.
@@ -926,9 +814,7 @@ stock int GetClientPendingTeam(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientDucking(int client) {
-	return GetEntPropBool(client, Prop_Data, "m_bDucking");
-}
+stock bool IsClientDucking(int client) { return GetEntPropBool(client, Prop_Data, "m_bDucking"); }
 
 /**
  *	Set users ducking status.
@@ -938,9 +824,7 @@ stock bool IsClientDucking(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientDucking(int client, bool duck) {
-	return SetEntPropEx(client, Prop_Data, "m_bDucking", duck);
-}
+stock bool SetClientDucking(int client, bool duck) { return SetEntPropEx(client, Prop_Data, "m_bDucking", duck); }
 
 /**
  *	Set if the user should be seen as 'connected'.
@@ -950,9 +834,7 @@ stock bool SetClientDucking(int client, bool duck) {
  *
  *	@error	If the user is invalid or has no connection property, this returns false.
  */
-stock bool SetClientConnected(int client, bool connect) {
-	return SetEntPropEx(client, Prop_Send, "m_bConnected", connect);
-}
+stock bool SetClientConnected(int client, bool connect) { return SetEntPropEx(client, Prop_Send, "m_bConnected", connect); }
 
 #if !defined _tklib_disable_gameidentifier
 /**
@@ -1010,9 +892,7 @@ stock void GetClientNameTeamString(int client, char[] buffer, int maxlen) {
  *
  *	@error	If the user is invalid or has no m_fFlags property, this returns -1.
  */
-stock int GetClientFlags(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_fFlags");
-}
+stock int GetClientFlags(int client) { return GetEntPropEx(client, Prop_Send, "m_fFlags"); }
 
 /**
  *	Returns if the user is jumping.
@@ -1021,9 +901,7 @@ stock int GetClientFlags(int client) {
  *
  *	@error	If the user is invalid or has no m_bJumping property, this returns false.
  */
-stock bool IsClientJumping(int client) {
-	return GetEntPropBool(client, Prop_Send, "m_bJumping");
-}
+stock bool IsClientJumping(int client) { return GetEntPropBool(client, Prop_Send, "m_bJumping"); }
 
 /**
  *	Returns if the user is mid-air.
@@ -1046,9 +924,7 @@ stock bool IsClientMidAir(int client) {
  *
  *	@error	If the user is invalid, this returns -1.
  */
-stock int GetClientWaterLevel(int client) {
-	return GetEntPropEx(client, Prop_Send, "m_nWaterLevel");
-}
+stock int GetClientWaterLevel(int client) { return GetEntPropEx(client, Prop_Send, "m_nWaterLevel"); }
 
 /**
  *	Set the users water level
@@ -1058,9 +934,7 @@ stock int GetClientWaterLevel(int client) {
  *
  *	@error	If the user is invalid or procedure failed , this returns false.
  */
-stock int SetClientWaterLevel(int client, int level) {
-	return SetEntPropEx(client, Prop_Send, "m_nWaterLevel", level);
-}
+stock int SetClientWaterLevel(int client, int level) { return SetEntPropEx(client, Prop_Send, "m_nWaterLevel", level); }
 
 /**
  *	Returns the users decal spray cooldown.
@@ -1069,9 +943,7 @@ stock int SetClientWaterLevel(int client, int level) {
  *
  *	@error	If the user is invalid, this returns -1.0.
  */
-stock float GetClientSprayCooldown(int client) {
-	return GetEntPropFloatEx(client, Prop_Send, "m_flNextDecalTime");
-}
+stock float GetClientSprayCooldown(int client) { return GetEntPropFloatEx(client, Prop_Send, "m_flNextDecalTime"); }
 
 /**
  *	Set the users decal spray cooldown.
@@ -1081,9 +953,7 @@ stock float GetClientSprayCooldown(int client) {
  *
  *	@error	If the user is invalid or procedure failed, this returns false.
  */
-stock bool SetClientSprayCooldown(int client, float cooldown) {
-	return SetEntPropFloatEx(client, Prop_Send, "m_flNextDecalTime", cooldown);
-}
+stock bool SetClientSprayCooldown(int client, float cooldown) { return SetEntPropFloatEx(client, Prop_Send, "m_flNextDecalTime", cooldown); }
 
 /**
  *	Returns if the user is actively using a ladder.
@@ -1092,9 +962,7 @@ stock bool SetClientSprayCooldown(int client, float cooldown) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool IsClientUsingLadder(int client) {
-	return Tklib_IsValidClient(client, _, true) ? (GetEntityMoveType(client) == MOVETYPE_LADDER) : false;
-}
+stock bool IsClientUsingLadder(int client) { return Tklib_IsValidClient(client, _, true) ? (GetEntityMoveType(client) == MOVETYPE_LADDER) : false; }
 
 /**
  *	Set the users hud hide-flags.
@@ -1104,9 +972,7 @@ stock bool IsClientUsingLadder(int client) {
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientHideHud(int client, int flags) {
-	return SetEntPropEx(client, Prop_Send, "m_iHideHUD", flags);
-}
+stock bool SetClientHideHud(int client, int flags) { return SetEntPropEx(client, Prop_Send, "m_iHideHUD", flags); }
 
 /**
  *	Returns the targets found matching the playername search criteria in an integer array.
@@ -1156,13 +1022,11 @@ stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, i
 	}
 	
 	TargetLoop(client) {
-		if(!Tklib_IsValidClient(client, _, _, false))
-			continue;
+		if(!Tklib_IsValidClient(client, _, _, false)) continue;
 		
 		if((flags & COMMAND_FILTER_NO_BOTS) && IsFakeClient(client)
 		|| (flags & COMMAND_FILTER_ALIVE) && !IsPlayerAlive(client)
-		|| (flags & COMMAND_FILTER_DEAD) && IsPlayerAlive(client))
-			continue;
+		|| (flags & COMMAND_FILTER_DEAD) && IsPlayerAlive(client)) continue;
 		
 		static char client_name[MAX_TARGET_LENGTH];
 		GetClientInfo(client, "name", client_name, sizeof(client_name));
@@ -1180,12 +1044,11 @@ stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, i
 		|| All) list[found++] = client;
 		else if(StrContainsEx(client_name, target, false)) {
 			list[found++] = client;
-			strcopy(name, maxlen, name);
+			GetClientInfo(client, "name", name, maxlen);
 		}
 		else if(caller != -1 && Tklib_IsValidClient(caller, true)) {
 			if(SameTeam && IsSameTeam(client, caller)
-			|| Aim && GetClientAimTarget(caller, true) == client) //Spaghetti code.
-				list[found++] = client;
+			|| Aim && GetClientAimTarget(caller, true) == client) list[found++] = client; //Spaghetti code.
 		}
 	}
 	
@@ -1257,9 +1120,7 @@ stock bool SetClientSuitSprintPower(int client, float value) {
  *
  *	@error	If the user is invalid, this returns -1.0.
  */
-stock float GetClientSuitSpritPower(int client)	{
-	return GetEntPropFloatEx(client, Prop_Send, "m_flSuitPower");
-}
+stock float GetClientSuitSpritPower(int client)	{ return GetEntPropFloatEx(client, Prop_Send, "m_flSuitPower"); }
 
 /**
  *	Returns the user index by account id.
@@ -1346,9 +1207,7 @@ stock int GetClientWeaponClassname(int client, const char[] weapon) {
  *
  *	@return	If the user or weapon was not foumd, this returns false.
  */
-stock bool ClientHasWeapon(int client, const char[] weapon) {
-	return view_as<bool>(GetClientWeaponClassname(client, weapon) != INVALID_ENT_REFERENCE);
-}
+stock bool ClientHasWeapon(int client, const char[] weapon) { return view_as<bool>(GetClientWeaponClassname(client, weapon) != INVALID_ENT_REFERENCE); }
 
 #endif
 
@@ -1365,7 +1224,7 @@ stock bool ClientHasWeapon(int client, const char[] weapon) {
  *	@param	IgnoreInvalidTeam	If true, the invalid team users are counted as 'invalid'	Defaulted to false.
  */
 stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true, bool IgnoreInvalidTeam=false) {
-	if(client < 1 || client > MaxClients)
+	if(client == 0 || client == -1 || client < 1 || client > MaxClients)
 		return false;
 	if(IgnoreNonConnected) {
 		if(!IsClientConnected(client))

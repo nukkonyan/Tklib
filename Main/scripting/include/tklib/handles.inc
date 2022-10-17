@@ -12,9 +12,7 @@ methodmap MenuEx < Menu {
 	 *	@return	True on success, false on failure.
 	 */
 	public bool Display(int client, int time = MENU_TIME_FOREVER) {
-		if(!Tklib_IsValidClient(client, true))
-			return false;
-		
+		if(!Tklib_IsValidClient(client, true)) return false;
 		return view_as<Menu>(this).Display(client, time);
 	}
 
@@ -28,59 +26,49 @@ methodmap MenuEx < Menu {
 	 *	@return	True on success, false on failure.
 	 */
 	public bool DisplayAt(int client, int first_item, int time = MENU_TIME_FOREVER) {
-		if(!Tklib_IsValidClient(client, true))
-			return false;
-		
+		if(!Tklib_IsValidClient(client, true)) return false;
 		return view_as<Menu>(this).DisplayAt(client, first_item, time);
 	}
 	
 	public void SetTitle(const char[] fmt, any ...) {
-		char format[256];
+		char format[96];
 		VFormat(format, sizeof(format), fmt, 3);
-		
 		view_as<Menu>(this).SetTitle(format);
 	}
 	
-	public void GetTitle(char[] buffer, int maxlen) {
-		view_as<Menu>(this).GetTitle(buffer, maxlen);
-	}
+	public void GetTitle(char[] buffer, int maxlen) { view_as<Menu>(this).GetTitle(buffer, maxlen); }
 	
-	public bool AddItem(const char[] info, const char[] display, int style = ITEMDRAW_DEFAULT) {
-		return view_as<Menu>(this).AddItem(info, display, style);
-	}
+	public bool AddItem(const char[] info, const char[] display, int style = ITEMDRAW_DEFAULT) { return view_as<Menu>(this).AddItem(info, display, style); }
 	
 	public bool AddItemEx(const char[] info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		char format[256];
+		char format[96];
 		VFormat(format, sizeof(format), display, 5);
-		
 		return view_as<Menu>(this).AddItem(info, format, style);
 	}
 	
 	public bool AddItemInt(int info, const char[] display, int style = ITEMDRAW_DEFAULT) {
-		char format[256];
+		char format[96];
 		Format(format, sizeof(format), "%i", info);
 		return view_as<Menu>(this).AddItem(format, display, style);
 	}
 	
 	public bool AddItemIntEx(int info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		char format1[256], format2[256];
+		char format1[96], format2[96];
 		Format(format1, sizeof(format1), "%i", info);
 		VFormat(format2, sizeof(format2), display, 5);
-		
 		return view_as<Menu>(this).AddItem(format1, format2, style);
 	}
 	
 	public bool AddItemAny(any info, const char[] display, int style = ITEMDRAW_DEFAULT) {
-		char format[256];
+		char format[96];
 		Format(format, sizeof(format), "%i", info);
 		return view_as<Menu>(this).AddItem(format, display, style);
 	}
 	
 	public bool AddItemAnyEx(any info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		char format1[256], format2[256];
+		char format1[96], format2[96];
 		Format(format1, sizeof(format1), "%i", info);
 		VFormat(format2, sizeof(format2), display, 5);
-		
 		return view_as<Menu>(this).AddItem(format1, format2, style);
 	}
 	
@@ -91,33 +79,43 @@ methodmap MenuEx < Menu {
 	}
 	
 	public bool AddItemFloatEx(float info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		char format1[256], format2[256];
+		char format1[96], format2[96];
 		Format(format1, sizeof(format1), "%f", info);
 		VFormat(format2, sizeof(format2), display, 5);
-		
 		return view_as<Menu>(this).AddItem(format1, format2, style);
 	}
 	
-	public bool VoteMenuAll(int time, int flags = 0) {
-		return VoteMenuToAll(view_as<Menu>(this), time, flags);
-	}
+	public bool VoteMenuAll(int time, int flags = 0) { return VoteMenuToAll(view_as<Menu>(this), time, flags); }
 	
 	public int GetItemIndex(int position, int &style=0, char[] dispBuf="", int dispBufLen=0) {
-		char buffer[256];
+		char buffer[96];
 		view_as<Menu>(this).GetItem(position, buffer, sizeof(buffer), style, dispBuf, dispBufLen);
 		return StringToInt(buffer);
 	}
 	
 	public float GetItemFloat(int position, int &style=0, char[] dispBuf="", int dispBufLen=0) {
-		char buffer[256];
+		char buffer[96];
 		view_as<Menu>(this).GetItem(position, buffer, sizeof(buffer), style, dispBuf, dispBufLen);
 		return StringToFloat(buffer);
 	}
 	
 	public any GetItemAny(int position, int &style=0, char[] dispBuf="", int dispBufLen=0) {
-		char buffer[256];
+		char buffer[96];
 		view_as<Menu>(this).GetItem(position, buffer, sizeof(buffer), style, dispBuf, dispBufLen);
 		return StringToAny(buffer);
+	}
+	
+	/**
+	 *	Returns if the item position contains string.
+	 *
+	 *	@param	position		The item position.
+	 *	@param	substr			The substring used to check if item contains defined string value.
+	 *	@param	caseSensitive	If true, search is case sensitive.
+	 */
+	public bool ItemStrContains(int position, const char[] substr, bool caseSensitive=false) {
+		char buffer[512];
+		view_as<Menu>(this).GetItem(position, buffer, sizeof(buffer));
+		return (StrContains(buffer, substr, caseSensitive) > 0);
 	}
 }
 
@@ -127,9 +125,7 @@ methodmap PanelEx < Panel {
 	 *
 	 *	@param	hStyle	MenuStyle Handle, or null to use the default style.
 	 */
-	public PanelEx(Handle hStyle=null) {
-		return view_as<PanelEx>(new Panel(hStyle));
-	}
+	public PanelEx(Handle hStyle=null) {return view_as<PanelEx>(new Panel(hStyle));}
 	
 	/*
 	 *	Sets the panel's title.
@@ -208,9 +204,7 @@ methodmap PanelEx < Panel {
 	 *
 	 *	@return		True if item is drawable, false otherwise.
 	 */
-	public bool CanDrawFlags(int style) {
-		return view_as<Panel>(this).CanDrawFlags(style);
-	}
+	public bool CanDrawFlags(int style) {return view_as<Panel>(this).CanDrawFlags(style);}
 	
 	/*
 	 *	Sets the selectable key map of a panel. This is not supported by
@@ -222,9 +216,7 @@ methodmap PanelEx < Panel {
 	 *
 	 *	@return			True if supported, false otherwise.
 	 */
-	public bool SetKeys(int keys) {
-		return view_as<Panel>(this).SetKeys(keys);
-	}
+	public bool SetKeys(int keys) {return view_as<Panel>(this).SetKeys(keys); }
 	
 	/*
 	 *	Sends a panel to a client.	Unlike full menus, the handler
@@ -244,7 +236,7 @@ methodmap PanelEx < Panel {
 	 *
 	 *	@return				True on success, false on failure.
 	 */
-	public void Send(int client, MenuHandler handler, int time)	{
+	public void Send(int client, MenuHandler handler, int time=MENU_TIME_FOREVER)	{
 		view_as<Panel>(this).Send(client, handler, time);
 		delete view_as<Panel>(this);
 	}

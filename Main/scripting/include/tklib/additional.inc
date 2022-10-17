@@ -164,7 +164,7 @@ stock float GetCmdFloat(int argnum) {
  *	@return			Integer result, or 0 on error. 
  */
 stock int FloatToInt(float value) {
-	char buffer[96];
+	char buffer[16];
 	FloatToString(value, buffer, sizeof(buffer));
 	return StringToInt(buffer);
 }
@@ -192,9 +192,7 @@ stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool db
 /**
  *	Returns GetRandomInt(0, 1) in boolean.
  */
-stock bool GetRandomBool() {
-	return view_as<bool>(GetRandomInt(0, 1));
-}
+stock bool GetRandomBool() { return view_as<bool>(GetRandomInt(0, 1)); }
 
 /**
  *	Same as CreateNative but you use 2 natives before forwarding it to a callback.
