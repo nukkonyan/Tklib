@@ -737,8 +737,7 @@ stock int GetClientCountEx(bool nobots=true) {
 	int count = 0;
 	
 	TargetLoop(client) {
-		if(Tklib_IsValidClient(i, nobots, false, false))
-			count++;
+		if(Tklib_IsValidClient(client, nobots, false, false)) count++;
 	}
 	
 	return count;
@@ -755,9 +754,7 @@ stock int GetClientCountEx(bool nobots=true) {
  *	@error	If the user is invalid, this returns false.
  */
 stock bool SetClientModel(int client, const char[] model) {
-	if(!Tklib_IsValidClient(client, _, true))
-		return false;
-	
+	if(!Tklib_IsValidClient(client, _, true)) return false;
 	SetEntityModel(client, model);
 	return true;
 }
