@@ -1068,6 +1068,7 @@ stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, i
 	else if(Bots) strcopy(name, maxlen, "All Bots");
 	else if(SameTeam) strcopy(name, maxlen, "Same Team");
 	
+	if(found == 0) list[0] = -1;
 	return found;
 }
 

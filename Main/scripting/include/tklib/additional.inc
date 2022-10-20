@@ -250,7 +250,7 @@ stock bool AutoSwitch(bool value) {
  *	@param	filename	File path.
  *	@param	...			Additional parameters.
  */
-stock bool AddFileToDownloadsTableEx(const char[] filename, any ...)	{
+stock bool AddFileToDownloadsTableEx(const char[] filename, any ...) {
 	if(IsValidString(filename))	{
 		char download[256];
 		VFormat(download, sizeof(download), filename, 2);
@@ -272,7 +272,7 @@ stock bool AddFileToDownloadsTableEx(const char[] filename, any ...)	{
  *
  *	@error	If the path is invalid or this failed in general, this returns false.
  */
-stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, const char[] type="", const char[] filter="", bool dbg=false)	{
+stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, const char[] type="", const char[] filter="", bool dbg=false) {
 	DirectoryListing DLPath = OpenDirectory(path);
 	bool success = false, invalid_filter = false;
 	
@@ -287,26 +287,18 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
 					if(!invalid_filter)	{
 						AddFileToDownloadsTableEx(FileDL, "%s/%s", path, FileDir);
 						if(precache && IsValidString(type))	{
-							if(StrContains(type, "model", false) > 0)
-								PrecacheModel(FileDL, true);
-							if(StrContains(type, "decal", false) > 0)
-								PrecacheDecal(FileDL, true);
-							if(StrContains(type, "sound", false) > 0)
-								PrecacheSound(FileDL, true);
+							if(StrContains(type, "model", false) > 0) PrecacheModel(FileDL, true);
+							if(StrContains(type, "decal", false) > 0) PrecacheDecal(FileDL, true);
+							if(StrContains(type, "sound", false) > 0) PrecacheSound(FileDL, true);
 						}
-						
-						if(dbg)
-							PrintToServer("[AddFolderToDownloadsTable] : %s/%s", path, FileDir);
+						if(dbg) PrintToServer("[AddFolderToDownloadsTable] : %s/%s", path, FileDir);
 					}
 				}
 			}
 			
 			success = true;
 		}
-		case true:	{
-			if(dbg)
-				PrintToServer("[AddFolderToDownloadsTable] : failed due to invalid path (%s)", path);
-		}
+		case true: if(dbg) PrintToServer("[AddFolderToDownloadsTable] : failed due to invalid path (%s)", path);
 	}
 	
 	delete DLPath;
@@ -323,13 +315,8 @@ stock bool AddFolderToDownloadsTable(const char[] path, bool precache=false, con
  *	@error	If the user is invalid or the procedure failed/not supported for the current gamemod, this returns false.
  */
 stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
-	if(!Tklib_IsValidClient(client))
-		return false;
-	
-	if(index != -1)	{
-		if(!Tklib_IsValidClient(index))
-			return false;
-	}
+	if(!Tklib_IsValidClient(client)) return false;
+	if(index != -1)	if(!Tklib_IsValidClient(index)) return false;
 	
 	if(GetFeatureStatus(FeatureType_Native, "GetUserMessageType") == FeatureStatus_Unavailable
 	|| GetUserMessageId("SayText2") == INVALID_MESSAGE_ID)
@@ -376,14 +363,10 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
  *
  *	@noreturn
  */
-stock void SayText2All(int index=-1, const char[] message, any ...)	{
+stock void SayText2All(int index=-1, const char[] message, any ...) {
 	char format[256];
 	VFormat(format, sizeof(format), message, 2);
-	
-	for(int client = 1; client < MaxClients; client++)	{
-		if(Tklib_IsValidClient(client))
-			SayText2(client, index, format);
-	}
+	for(int client = 1; client < MaxClients; client++) if(Tklib_IsValidClient(client, true)) SayText2(client, index, format);
 }
 
 /**
@@ -395,9 +378,7 @@ stock void SayText2All(int index=-1, const char[] message, any ...)	{
  *
  *	@error			Invalid paramteter number or calling from non-native function.
  */
-stock bool GetNativeBool(int param)	{
-	return view_as<bool>(GetNativeCell(param));
-}
+stock bool GetNativeBool(int param)	{ return view_as<bool>(GetNativeCell(param)); }
 
 /**
  *	Executes a simply query and returns a query Handle for
@@ -411,7 +392,7 @@ stock bool GetNativeBool(int param)	{
  *
  *	@error		If database is invalid, this returns null.
  */
-stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...)	{
+stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...) {
 	if(database != null) {
 		char format[8192];
 		VFormat(format, sizeof(format), query, 3);
@@ -430,9 +411,7 @@ stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...)	{
  *
  *	@error	Invalid paramteter number or calling from non-native function.
  */
-stock Address GetNativeAddress(int param) {
-	return view_as<Address>(GetNativeCell(param));
-}
+stock Address GetNativeAddress(int param) { return view_as<Address>(GetNativeCell(param)); }
 
 /**
  *	Returns if SourceBans is loaded.
@@ -442,28 +421,15 @@ stock Address GetNativeAddress(int param) {
 stock bool IsSourceBansLoaded(bool comms = false) {
 	switch(comms) {
 		case true: {
-			if(GetFeatureStatus(FeatureType_Native, "SourceComms_SetClientMute") == FeatureStatus_Available)
-				return true;
-			
-			if(GetFeatureStatus(FeatureType_Native, "SourceComms_SetClientGag") == FeatureStatus_Available)
-				return true;
-			
-			if(GetFeatureStatus(FeatureType_Native, "SourceComms_GetClientMuteType") == FeatureStatus_Available)
-				return true;
-			
-			if(GetFeatureStatus(FeatureType_Native, "SourceComms_GetClientGagType") == FeatureStatus_Available)
-				return true;
+			if(GetFeatureStatus(FeatureType_Native, "SourceComms_SetClientMute") == FeatureStatus_Available) return true;
+			if(GetFeatureStatus(FeatureType_Native, "SourceComms_SetClientGag") == FeatureStatus_Available) return true;
+			if(GetFeatureStatus(FeatureType_Native, "SourceComms_GetClientMuteType") == FeatureStatus_Available) return true;
+			if(GetFeatureStatus(FeatureType_Native, "SourceComms_GetClientGagType") == FeatureStatus_Available) return true;
 		}
-		
 		case false: {
-			if(GetFeatureStatus(FeatureType_Native, "SBBanPlayer") == FeatureStatus_Available)
-				return true;
-			
-			if(GetFeatureStatus(FeatureType_Native, "SBPP_BanPlayer") == FeatureStatus_Available)
-				return true;
-			
-			if(GetFeatureStatus(FeatureType_Native, "SBPP_ReportPlayer") == FeatureStatus_Available)
-				return true;
+			if(GetFeatureStatus(FeatureType_Native, "SBBanPlayer") == FeatureStatus_Available) return true;
+			if(GetFeatureStatus(FeatureType_Native, "SBPP_BanPlayer") == FeatureStatus_Available) return true;
+			if(GetFeatureStatus(FeatureType_Native, "SBPP_ReportPlayer") == FeatureStatus_Available) return true;
 		}
 	}
 	
@@ -480,62 +446,25 @@ stock bool IsSourceBansLoaded(bool comms = false) {
  *	@noreturn.
  */
 stock void GetNameFromColourTag(const char[] source, char[] colour, int maxlen) {
-	if(StrEqual(source, "{default}", false))
-		strcopy(colour, maxlen, "Default");
-	
-	if(StrEqual(source, "{darkred}", false))
-		strcopy(colour, maxlen, "Dark Red");
-	
-	if(StrEqual(source, "{green}", false))
-		strcopy(colour, maxlen, "Green");
-	
-	if(StrEqual(source, "{lightgreen}", false))
-		strcopy(colour, maxlen, "Light Green");
-	
-	if(StrEqual(source, "{red}", false))
-		strcopy(colour, maxlen, "Red");
-	
-	if(StrEqual(source, "{blue}", false))
-		strcopy(colour, maxlen, "Blue");
-	
-	if(StrEqual(source, "{olive}", false))
-		strcopy(colour, maxlen, "Olive");
-	
-	if(StrEqual(source, "{lime}", false))
-		strcopy(colour, maxlen, "Lime");
-	
-	if(StrEqual(source, "{lightred}", false))
-		strcopy(colour, maxlen, "Light Red");
-	
-	if(StrEqual(source, "{purple}", false))
-		strcopy(colour, maxlen, "Purple");
-	
-	if(StrEqual(source, "{grey}", false))
-		strcopy(colour, maxlen, "Grey");
-	
-	if(StrEqual(source, "{yellow}", false))
-		strcopy(colour, maxlen, "Yellow");
-	
-	if(StrEqual(source, "{orange}", false))
-		strcopy(colour, maxlen, "Orange");
-	
-	if(StrEqual(source, "{bluegrey}", false))
-		strcopy(colour, maxlen, "Blue Grey");
-	
-	if(StrEqual(source, "{lightblue}", false))
-		strcopy(colour, maxlen, "Light Blue");
-	
-	if(StrEqual(source, "{darkblue}", false))
-		strcopy(colour, maxlen, "Dark Blue");
-	
-	if(StrEqual(source, "{grey2}"))
-		strcopy(colour, maxlen, "Grey 2");
-	
-	if(StrEqual(source, "{orchid}", false))
-		strcopy(colour, maxlen, "Orchid");
-	
-	if(StrEqual(source, "{lightred2}", false))
-		strcopy(colour, maxlen, "Light Red 2");
+	if(StrEqual(source, "{default}", false)) strcopy(colour, maxlen, "Default");
+	if(StrEqual(source, "{darkred}", false)) strcopy(colour, maxlen, "Dark Red");
+	if(StrEqual(source, "{green}", false)) strcopy(colour, maxlen, "Green");
+	if(StrEqual(source, "{lightgreen}", false)) strcopy(colour, maxlen, "Light Green");
+	if(StrEqual(source, "{red}", false)) strcopy(colour, maxlen, "Red");
+	if(StrEqual(source, "{blue}", false)) strcopy(colour, maxlen, "Blue");
+	if(StrEqual(source, "{olive}", false)) strcopy(colour, maxlen, "Olive");
+	if(StrEqual(source, "{lime}", false)) strcopy(colour, maxlen, "Lime");
+	if(StrEqual(source, "{lightred}", false)) strcopy(colour, maxlen, "Light Red");
+	if(StrEqual(source, "{purple}", false)) strcopy(colour, maxlen, "Purple");
+	if(StrEqual(source, "{grey}", false)) strcopy(colour, maxlen, "Grey");
+	if(StrEqual(source, "{yellow}", false)) strcopy(colour, maxlen, "Yellow");
+	if(StrEqual(source, "{orange}", false)) strcopy(colour, maxlen, "Orange");
+	if(StrEqual(source, "{bluegrey}", false)) strcopy(colour, maxlen, "Blue Grey");
+	if(StrEqual(source, "{lightblue}", false)) strcopy(colour, maxlen, "Light Blue");
+	if(StrEqual(source, "{darkblue}", false)) strcopy(colour, maxlen, "Dark Blue");
+	if(StrEqual(source, "{grey2}")) strcopy(colour, maxlen, "Grey 2");
+	if(StrEqual(source, "{orchid}", false)) strcopy(colour, maxlen, "Orchid");
+	if(StrEqual(source, "{lightred2}", false)) strcopy(colour, maxlen, "Light Red 2");
 }
 
 /**
@@ -616,9 +545,7 @@ stock bool GetServerHostname(char[] hostname, int maxlen) {
  *
  *	@return	If false, returns ITEMDRAW_DEFAULT. Else if true, returns ITEMDRAW_DISABLED.
  */
-stock int ItemDrawBool(bool value) {
-	return value ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT;
-}
+stock int ItemDrawBool(bool value) { return value ? ITEMDRAW_DISABLED : ITEMDRAW_DEFAULT;}
 
 /**
  *	Returns if the ArrayList handle is empty.
@@ -628,9 +555,7 @@ stock int ItemDrawBool(bool value) {
  *	@error	If the handle is invalid, this returns true.
  */
 stock bool IsArrayEmpty(ArrayList array) {
-	if(array == null)
-		return true;
-	
+	if(array == null) return true;
 	return view_as<bool>(array.Length == 0);
 }
 
@@ -646,9 +571,7 @@ stock bool IsArrayEmpty(ArrayList array) {
  *	@error	If invalid timer handle, returns false.
  */
 stock bool KillTimerEx(Handle timer, bool autoClose=false) {
-	if(!timer)
-		return false;
-	
+	if(!timer) return false;
 	KillTimer(timer, autoClose);
 	return true;
 }
@@ -659,15 +582,9 @@ stock bool KillTimerEx(Handle timer, bool autoClose=false) {
  *	@param	auth	The steam2 authentication id.
  */
 stock bool IsValidSteamID(const char[] auth) {
-	if(StrContainsEx(auth, "STEAM_0:", false))
-		return true;
-	
-	if(auth[0] == '\0')
-		return false;
-	
-	if(!StrEmpty(auth))
-		return false;
-	
+	if(StrContainsEx(auth, "STEAM_0:", false)) return true;
+	if(auth[0] == '\0') return false;
+	if(!StrEmpty(auth)) return false;
 	return true;
 }
 

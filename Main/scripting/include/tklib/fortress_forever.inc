@@ -12,7 +12,7 @@ enum FFTeam	{
 }
 
 enum FFClass {
-	//Will be filled.
+	//Will be filled. (someday, hopefully)
 }
 
 stock char
@@ -52,8 +52,6 @@ stock bool FF_ChangeClientTeam(int client, FFTeam team)	{
  *
  *	@return	Returns a FFTeam team.
  */
-stock FFTeam FF_GetRandomTeam()	{
-	return view_as<FFTeam>(GetRandomInt(2, 3));
-}
+stock FFTeam FF_GetRandomTeam()	{ return view_as<FFTeam>(GetRandomInt(2, 3)); }
 
 #endif

@@ -75,10 +75,7 @@ stock bool FindEntity(const char[] classname) { return FindEntityByClassname(-1,
  */
 stock int CreateEntityByNameEx(const char[] classname, const char[] name="", int ForceEdictIndex=-1) {
 	int entity = CreateEntityByName(classname, ForceEdictIndex);
-	
-	if(!StrEqual(name, NULL_STRING))
-		SetEntityName(entity, name);
-	
+	if(!StrEqual(name, "")) SetEntityName(entity, name);
 	return entity;
 }
 
