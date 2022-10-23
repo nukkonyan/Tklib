@@ -26,9 +26,7 @@ FF_GetTeamStringNameEx[][] = {"{grey}Unassigned{default}","{grey}Spectators{defa
  *
  *	@error	If the user is invalid, this returns FFTeam_Unassigned.
  */
-stock FFTeam FF_GetClientTeam(int client) {
-	return Tklib_IsValidClient(client) ? view_as<FFTeam>(GetClientTeam(client)):FFTeam_Unassigned;
-}
+stock FFTeam FF_GetClientTeam(int client) { return Tklib_IsValidClient(client) ? view_as<FFTeam>(GetClientTeam(client)):FFTeam_Unassigned; }
 
 /**
  *	Changes the users current team.

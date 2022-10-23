@@ -101,7 +101,7 @@ enum Bombsite {
  *
  *	@error	If the client is invalid, this returns CSTeam_Unassigned.
  */
-stock CSTeam CS_GetClientTeam(int client) { return IsClientConnected(client) ? CSTeam(GetClientTeam(client)):CSTeam_Unassigned; }
+stock CSTeam CS_GetClientTeam(int client) { return Tklib_IsValidClient(client) ? CSTeam(GetClientTeam(client)):CSTeam_Unassigned; }
 
 /**
  *	Changes a users current team.
@@ -751,7 +751,7 @@ stock int CS_GetPriceFromWeapon(const char[] weapon) {
 					if(StrEqual(weapon, "weapon_mp7", false)) price = 1500;
 					if(StrEqual(weapon, "weapon_mp9", false)) price = 1250;
 					if(StrEqual(weapon, "weapon_mp5sd", false)) price = 2700;
-					if(StrEqual(weapon, "weapon_bison", false)) price = 1400;
+					if(StrEqual(weapon, "weapon_bizon", false)) price = 1400;
 					if(StrEqual(weapon, "weapon_shield", false)) price = 1100;
 				}
 				/* CS:CO */
@@ -768,6 +768,79 @@ stock int CS_GetPriceFromWeapon(const char[] weapon) {
 	}
 	
 	return price;
+}
+
+/**
+ *	Returns the ammo count of the weapon entity name.
+ *	Price varies from different CS Versions.
+ *	Useful when using CS_OnBuyCommand.
+ *
+ *	@param	weapon	The weapon entity name to read.
+ *
+ *	@return	Returns the price of the specified weapon ("weapon_"-type). 0 if not found.
+ */
+stock int CS_GetAmmoCountFromWeapon(const char[] weapon) {
+	int ammo = 0;
+	
+	/* Incase GameIdentifier wasn't included */
+	char folder[32];
+	GetGameFolderName(folder, sizeof(folder));
+	
+	switch(GetEngineVersion()) {
+		case Engine_CSS: {
+			/* To be added */
+		}
+		case Engine_CSGO: {
+			switch(StrEqual(folder, "csgo")) {
+				/* CS:GO */
+				case true:	{
+					if(StrEqual(weapon, "weapon_ak47", false)) ammo = 30;
+					if(StrEqual(weapon, "weapon_m4a1", false)) ammo = 30;
+					if(StrEqual(weapon, "weapon_m4a1_silencer", false)) ammo = 20;
+					if(StrEqual(weapon, "weapon_galilar", false)) ammo = 35;
+					if(StrEqual(weapon, "weapon_famas", false)) ammo = 25;
+					if(StrEqual(weapon, "weapon_sg556", false)) ammo = 30;
+					if(StrEqual(weapon, "weapon_aug", false)) ammo = 30;
+					if(StrEqual(weapon, "weapon_ssg08", false)) ammo = 10;
+					if(StrEqual(weapon, "weapon_awp", false)) ammo = 10;
+					if(StrEqual(weapon, "weapon_scar20", false)) ammo = 20;
+					if(StrEqual(weapon, "weapon_g3sg1", false)) ammo = 20;
+					if(StrEqual(weapon, "weapon_nova", false)) ammo = 8;
+					if(StrEqual(weapon, "weapon_sawedoff", false)) ammo = 7;
+					if(StrEqual(weapon, "weapon_mag7", false)) ammo = 5;
+					if(StrEqual(weapon, "weapon_xm1014", false)) ammo = 10;
+					if(StrEqual(weapon, "weapon_m249", false)) ammo = 100;
+					if(StrEqual(weapon, "weapon_negev", false)) ammo = 100;
+					if(StrEqual(weapon, "weapon_glock", false)) ammo = 20;
+					if(StrEqual(weapon, "weapon_usp_silencer", false)) ammo = 12;
+					if(StrEqual(weapon, "weapon_hkp2000", false)) ammo = 13;
+					if(StrEqual(weapon, "weapon_p250", false)) ammo = 13;
+					if(StrEqual(weapon, "weapon_deagle", false)) ammo = 7;
+					if(StrEqual(weapon, "weapon_tec9", false)) ammo = 18;
+					if(StrEqual(weapon, "weapon_revolver", false)) ammo = 8;
+					if(StrEqual(weapon, "weapon_fiveseven", false)) ammo = 20;
+					if(StrEqual(weapon, "weapon_elites", false)) ammo = 30;
+					if(StrEqual(weapon, "weapon_p90", false)) ammo = 50;
+					if(StrEqual(weapon, "weapon_ump45", false)) ammo = 25;
+					if(StrEqual(weapon, "weapon_mp7", false)) ammo = 30;
+					if(StrEqual(weapon, "weapon_mp9", false)) ammo = 30;
+					if(StrEqual(weapon, "weapon_mp5sd", false)) ammo = 30;
+					if(StrEqual(weapon, "weapon_bizon", false)) ammo = 64;
+				}
+				/* CS:CO */
+				case false: {
+					/* To be added */
+				}
+			}
+		}
+		case Engine_SourceSDK2007: {
+			if(StrEqual(folder, "cspromod")) {
+				
+			}
+		}
+	}
+	
+	return ammo;
 }
 
 #endif

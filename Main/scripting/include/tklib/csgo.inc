@@ -687,12 +687,12 @@ stock void CSGO_GetGlovesName(int defindex, char[] gloves_name, int maxlen) {
 stock int CSGO_FindWeaponByDefindex(int client, int defindex) {
 	if(!Tklib_IsValidClient(client, _, true)) return -1;
 	
-	int wep = 0;
+	int wep = 0, owner = 0;
 	
 	char clsname[64];
 	CSGO_GetClassnameDefindex(defindex, clsname, sizeof(clsname));
 	
-	while((wep = FindEntityByClassname(wep, clsname)) != -1) if(GetEntityOwner(wep) > 0 && GetEntityOwner(wep) == client) return wep;
+	while((wep = FindEntityByClassname(wep, clsname)) != -1) if((owner = GetEntityOwner(wep)) > 0 && owner == client) return wep;
 	return -1;
 }
 
