@@ -235,8 +235,7 @@ stock bool IsValidWeapon(any weapon)	{
  *	@error	If the user is invalid or weapon is invalid, this returns false.
  */
 stock bool EquipPlayerWeaponEx(int client, any weapon)	{
-	if(!(Tklib_IsValidClient(client, _, true) && IsValidEntityEx(weapon)))
-		return false;
+	if(!(Tklib_IsValidClient(client, _, true) && IsValidEntityEx(weapon))) return false;
 	
 	//Credits to Bacardi for part of the code.
 	

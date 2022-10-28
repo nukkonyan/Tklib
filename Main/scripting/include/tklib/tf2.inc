@@ -543,18 +543,6 @@ TF2_KillstreakerSheen[] = {0,1,2,3,4,5,6,7};
 #define MAX_TF2_KILLSTREAKER_SHEENS sizeof(TF2_KillstreakerEffect)
 #define MAX_TF2_KILLSTREAKER_EFFECTS sizeof(TF2_KillstreakerSheen)
 
-//TF2 Offsets, will be updated as frequently as possible. (Windows [?])
-enum {
-	TF2Offset_IsBaseCombatWeapon = 89,
-	TF2Offset_IsWearable = 90,
-	TF2Offset_GetMaxHealth = 120,
-	TF2Offset_GetMaxClip1 = 321,
-	TF2Offset_GetSlot = 330,
-	TF2Offset_GetWeaponID = 376,
-	TF2Offset_EquipWearable = 434,
-	TF2Offset_RemoveWearable = 435
-}
-
 //TF2 Flag Event
 enum TFFlag {
 	TFFlag_None = 0,
@@ -1576,211 +1564,205 @@ stock int TF2_AttachParticle(any entity, const char[] particle_name, float offse
 
 #if defined __tf_econ_data_included
 /**
- *	Spawns a weapon entity.
- *	The weapons spawned are visible to everyone.
+ *	Spawns an item.
+ *	The item spawned are visible to everyone.
  *	Requires TF2Econ Data plugin.
  *	TF2Attributes for golden frying pan to be corrected.
  *
  *	@param	client		The users index.
  *	@param	defindex	The item definition index.
- *	@param	level		The item level.
  *	@param	quality		The item quality.
+ *	@param	level		The item level. Level -1 results in random level.
+ *	@param	style		The item style index. Example style 0 is "No Glasses".
+ *	@param	effect		The item unusual effect.
+ *	@param	remwep		If true, if valid weapon, weapon equipped in the same slot as the item given is destroyed.
  *	@param	debug		If true, prints a debug message in server console.
  *
- *	@return	Returns the weapon entity index. If invalid user or entity is invalid returns -1.
+ *	@return	Returns the item entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveWeapon(int client, int defindex, int level, TFQuality quality, bool dbg=false) {
-	static int weapon = -1;
-	
+stock int TF2_GiveItem(int client,
+						int defindex,
+						TFQuality quality=TFQuality_Unique,
+						int level=-1,
+						int style=0,
+						int effect=0,
+						bool remwep=true,
+						bool dbg=false) {
 	char classname[128];
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
 	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
+	if(StrEqual(classname, "no_entity")) classname = "tf_wearable_vm";
 	
-	if(dbg) PrintToServer("TF2_GiveWeapon (client %i, defindex %i, level %i, quality %i, classname '%s')", client, defindex, level, quality, classname);
+	if(dbg) PrintToServer("[Tklib:TF2] TF2_GiveItem(client %i, defindex %i, classname '%s', quality %i, level %i, style %i, effect %i, remwep %s)",
+	client, defindex, classname, quality, level, style, effect, OnOff[remwep]);
+	
+	Entity item = new Entity(classname);
+	if(!item.Valid()) return -1;
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true)) {
-		char netclass[64];
-		GetEntityNetClass(weapon, netclass, sizeof(netclass));
-		
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_hOwnerEntity"), client);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iAccountID"), GetSteamAccountID(client));
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_bInitialized"), true);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), true);
+	if(Tklib_IsValidClient(client, _, true)) {
+		item.Owner = client;
+		item.SteamAccountID = GetSteamAccountID(client);
+		item.DefinitionIndex = defindex;
+		item.Initialized = true;
+		item.TF2Level = (level == -1) ? GetRandomInt(0, 100) : level;
+		item.TF2Quality = quality;
+		item.TF2Validated = true;
 		
 		switch(defindex) {
 			case 735,736,810,831,933,1080,1102: {
-				SetEntProp(weapon, Prop_Send, "m_iObjectType", 3);
-				SetEntProp(weapon, Prop_Data, "m_iSubType", 3);
-				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 0);
-				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 1);
-				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
-				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
+				item.SetProp(Prop_Send, "m_iObjectType", 3);
+				item.SetProp(Prop_Data, "m_iSubType", 3);
+				item.SetProp(Prop_Send, "m_aBuildableObjectTypes", 0, _, 0);
+				item.SetProp(Prop_Send, "m_aBuildableObjectTypes", 0, _, 1);
+				item.SetProp(Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
+				item.SetProp(Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
 			}
-			case 998: SetEntData(weapon, FindSendPropInfo(netclass, "m_nChargeResistType"), GetRandomInt(0,2));
+			case 998: item.SetDataOffset("m_nChargeResistType", GetRandomInt(0,2));
 			#if defined _tf2attributes_included
 			case 1071: {
-				TF2Attrib_SetByName(weapon, "item style override", 0.0);
-				TF2Attrib_SetByName(weapon, "loot rarity", 1.0);
-				TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
+				TF2Attrib_SetByName(view_as<int>(item), "item style override", 0.0);
+				TF2Attrib_SetByName(view_as<int>(item), "loot rarity", 1.0);
+				TF2Attrib_SetByName(view_as<int>(item), "turn to gold", 1.0);
 			}
 			#endif
+		}
+		
+		#if defined _tf2attributes_included
+		if(style >= 0) TF2Attrib_SetByName(view_as<int>(item), "item style override", IntToFloat(style));
+		if(effect > 0) TF2Attrib_SetByName(view_as<int>(item), "attach particle effect", IntToFloat(effect));
+		#endif
+		
+		item.Spawn();
+		
+		if(remwep) {
+			TFSlot slot = view_as<TFSlot>(TF2Econ_GetItemDefaultLoadoutSlot(defindex));
+			if(slot >= TFSlot_Primary) TF2_RemovePlayerWeaponSlot(client, slot);
 		}
 		
 		switch(StrContainsEx(classname, "tf_wearable", false)) {
-			case true: {
-				StartPrepSDKCall(SDKCall_Player);
-				PrepSDKCall_SetVirtual(TF2Offset_EquipWearable);
-				PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
-				Handle EquipWearable = EndPrepSDKCall();
-				
-				if(EquipWearable != null)
-					SDKCall(EquipWearable, client, weapon);
-				
-				delete EquipWearable;
-			}
-			default: {
-				DispatchSpawn(weapon);
-				EquipPlayerWeapon(client, weapon);
-			}
+			case true: item.TF2EquipCosmetic(client);
+			default: item.EquipWeapon(client);
 		}
 		
 		switch(defindex) {
 			case 237, 265: {
-				int ammoType = GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType");				
-				int amount = 0;
-				
-				switch(defindex) {
-					case 237: amount = 60;
-					case 265: amount = 72;
+				int ammoType = item.GetProp(Prop_Send, "m_iPrimaryAmmoType");	
+				if(ammoType != -1) {
+					int amount = 0;
+					
+					switch(defindex) {
+						case 237: amount = 60;
+						case 265: amount = 72;
+					}
+					view_as<Entity>(client).SetProp(Prop_Send, "m_iAmmo", amount, 4, ammoType);				
 				}
-				
-				if(ammoType != -1)
-					SetEntProp(client, Prop_Send, "m_iAmmo", amount, 4, ammoType);
 			}
 		}
 	}
 	
-	return weapon;
+	return view_as<int>(item);
 }
 
 /**
- *	Spawns a weapon entity via customized classname.
- *	The weapons spawned are visible to everyone.
+ *	Spawns an item via customized classname.
+ *	The items spawned are visible to everyone.
  *	Requires TF2Econ Data plugin.
- *	TF2Attributes for golden frying pan to be corrected.
+ *	TF2Attributes to set style, effect and for the golden frying pan to be corrected.
  *
  *	@param	client		The users index.
- *	@param	classname	The weapon classname.
+ *	@param	classname	The item classname.
  *	@param	defindex	The item definition index.
- *	@param	level		The item level.
  *	@param	quality		The item quality.
+ *	@param	level		The item level. Level -1 results in random level.
+ *	@param	style		The item style index. Example style 0 is "No Glasses".
+ *	@param	effect		The item unusual effect.
+ *	@param	remwep		If true, if valid weapon, weapon equipped in the same slot as the item given is destroyed.
  *	@param	debug		If true, prints a debug message in server console.
  *
- *	@return	Returns the weapon entity index. If invalid user or entity is invalid returns -1.
+ *	@return	Returns the item entity index. If invalid user or entity is invalid returns -1.
  */
-stock int TF2_GiveWeaponEx(int client, const char[] classname, int defindex, int level, TFQuality quality, bool dbg=false)	{
-	static int weapon = -1;
+stock int TF2_GiveItemEx(int client,
+						const char[] classname,
+						int defindex,
+						TFQuality quality=TFQuality_Unique,
+						int level=-1,
+						int style=0,
+						int effect=0,
+						bool remwep=true,
+						bool dbg=false)	{
+	if(dbg) PrintToServer("[Tklib:TF2] TF2_GiveItemEx(client %i, classname '%s', defindex %i, quality %i, level %i, style %i, effect %i, remwep %s)",
+	client, classname, defindex, quality, level, style, effect, OnOff[remwep]);
 	
-	if(dbg) PrintToServer("TF2_GiveWeaponEx (client %i, defindex %i, level %i, quality %i, classname '%s')", client, defindex, level, quality, classname);
+	Entity item = new Entity(classname);
+	if(!item.Valid()) return -1;
 	
 	/* Credits to PC Gamer for most of the code. */
-	if(IsValidEntityEx((weapon = CreateEntityByName(classname))) && Tklib_IsValidClient(client, _, true)) {
-		char netclass[64];
-		GetEntityNetClass(weapon, netclass, sizeof(netclass));
-		
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_hOwnerEntity"), client);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iAccountID"), GetSteamAccountID(client));
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), defindex);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_bInitialized"), true);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
-		SetEntData(weapon, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), true);
+	if(Tklib_IsValidClient(client, _, true)) {
+		item.Owner = client;
+		item.SteamAccountID = GetSteamAccountID(client);
+		item.DefinitionIndex = defindex);
+		item.Initialized = true;
+		item.TF2Validated = true;
+		item.TF2Level = (level == -1) ? GetRandomInt(0, 100) : 100;
+		item.TF2Quality = quality;
 		
 		switch(defindex) {
 			case 735,736,810,831,933,1080,1102: {
-				SetEntProp(weapon, Prop_Send, "m_iObjectType", 3);
-				SetEntProp(weapon, Prop_Data, "m_iSubType", 3);
-				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 0);
-				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 1);
-				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
-				SetEntProp(weapon, Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
+				item.SetProp(Prop_Send, "m_iObjectType", 3);
+				item.SetProp(Prop_Data, "m_iSubType", 3);
+				item.SetProp(Prop_Send, "m_aBuildableObjectTypes", 0, _, 0);
+				item.SetProp(Prop_Send, "m_aBuildableObjectTypes", 0, _, 1);
+				item.SetProp(Prop_Send, "m_aBuildableObjectTypes", 0, _, 2);
+				item.SetProp(Prop_Send, "m_aBuildableObjectTypes", 1, _, 3);
 			}
-			case 998: SetEntData(weapon, FindSendPropInfo(netclass, "m_nChargeResistType"), GetRandomInt(0,2));
+			case 998: item.SetDataOffset("m_nChargeResistType", GetRandomInt(0,2));
 			#if defined _tf2attributes_included
 			case 1071: {
-				TF2Attrib_SetByName(weapon, "item style override", 0.0);
-				TF2Attrib_SetByName(weapon, "loot rarity", 1.0);
-				TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
+				TF2Attrib_SetByName(view_as<int>(item), "item style override", 0.0);
+				TF2Attrib_SetByName(view_as<int>(item), "loot rarity", 1.0);
+				TF2Attrib_SetByName(view_as<int>(item), "turn to gold", 1.0);
 			}
 			#endif
 		}
 		
-		DispatchSpawn(weapon);
-		EquipPlayerWeapon(client, weapon);
+		#if defined _tf2attributes_included
+		if(style >= 0) TF2Attrib_SetByName(view_as<int>(item), "item style override", IntToFloat(style));
+		if(effect > 0) TF2Attrib_SetByName(view_as<int>(item), "attach particle effect", IntToFloat(effect));
+		#endif
+		
+		item.Spawn();
+		
+		if(remwep) {
+			TFSlot slot = view_as<TFSlot>(TF2Econ_GetItemDefaultLoadoutSlot(defindex));
+			if(slot >= TFSlot_Primary) TF2_RemovePlayerWeaponSlot(client, slot);
+		}
+		
+		switch(StrContainsEx(classname, "tf_wearable", false)) {
+			case true: item.TF2EquipCosmetic(client);
+			default: item.EquipWeapon(client);
+		}
 		
 		switch(defindex) {
 			case 237, 265: {
-				int ammoType = GetEntProp(weapon, Prop_Send, "m_iPrimaryAmmoType");				
-				int amount = 0;
-				
-				switch(defindex) {
-					case 237: amount = 60;
-					case 265: amount = 72;
+				int ammoType = item.GetProp(Prop_Send, "m_iPrimaryAmmoType");
+				if(ammoType != -1) {
+					int amount = 0;
+					
+					switch(defindex) {
+						case 237: amount = 60;
+						case 265: amount = 72;
+					}
+					
+					view_as<Entity>(client).SetProp(Prop_Send, "m_iAmmo", amount, 4, ammoType);
 				}
-				
-				if(ammoType != -1)
-					SetEntProp(client, Prop_Send, "m_iAmmo", amount, 4, ammoType);
 			}
 		}
 	}
 	
-	return weapon;
+	return view_as<int>(item);
 }
 #endif
-
-/**
- *	Give the cosmetic to the client.
- *
- *	@param	client		The users index.
- *	@param	defindex	The cosmetic definition index.
- *	@param	quality		The cosmetic TFQuality index.
- *	@param	level		The cosmetic level.
- *	@param	levelable	The cosmetic is levelable.
- *
- *	@return	Returns the cosmetic entity index. If invalid user or entity is invalid returns -1.
- */
-stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality quality, bool levelable=false) {
-	if(!Tklib_IsValidClient(client, _, true))
-		return -1;
-	
-	int cosmetic = -1;
-	StartPrepSDKCall(SDKCall_Player);
-	PrepSDKCall_SetVirtual(TF2Offset_EquipWearable);
-	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
-	Handle EquipWearable = EndPrepSDKCall();
-	
-	/* Credits to PC Gamer for most of the code. */
-	if(EquipWearable != null && (cosmetic = levelable ? TF2_CreateCosmeticLevelable() : TF2_CreateCosmetic()) != -1) {
-		if(IsValidEntityEx(cosmetic)) {
-			SetEntityDefinitionIndex(cosmetic, defindex);
-			SetEntityInitialized(cosmetic, true);
-			TF2_SetEntityLevel(cosmetic, level);
-			TF2_SetEntityQuality(cosmetic, quality);
-			TF2_SetValidatedAttachedEntity(cosmetic, true);
-			SetEntityOwner(cosmetic, client);
-			SetEntitySteamAccountID(cosmetic, GetSteamAccountID(client));
-			DispatchSpawn(cosmetic);
-			SDKCall(EquipWearable, client, cosmetic);
-		}
-	}
-	
-	delete EquipWearable;
-	return cosmetic;
-}
 
 /**
  *	Strips all cosmetics from the user.
@@ -1792,8 +1774,7 @@ stock int TF2_GiveCosmetic(int client, int defindex, int level, TFQuality qualit
  *	@error	If the user is invalid, this returns false.
  */
 stock bool TF2_StripCosmetics(int client, int defindex=-1)	{
-	if(!Tklib_IsValidClient(client, _, true))
-		return false;
+	if(!Tklib_IsValidClient(client, _, true)) return false;
 	
 	int cosmetic = 0;
 		
@@ -1833,41 +1814,11 @@ stock bool TF2_StripCosmeticsLevelable(int client, int defindex=-1) {
 }
 
 /**
- *	Returns if the cosmetic is valid.
- *
- *	@param	cosmetic	The cosmetic entity index.
- *
- *	@error	If the cosmetic entity is invalid, this returns false.
- */
-stock bool TF2_IsValidCosmetic(int cosmetic) {
-	if(!IsValidEntityEx(cosmetic))
-		return false;
-	
-	static Handle IsWearable;
-	
-	StartPrepSDKCall(SDKCall_Entity);
-	PrepSDKCall_SetVirtual(TF2Offset_IsWearable);
-	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
-	
-	bool valid = ((IsWearable = EndPrepSDKCall()) != null) ? SDKCall(IsWearable, cosmetic) : false 
-	
-	delete IsWearable;
-	return valid;
-}
-
-/**
  *	Returns wheter the definition index has an australium variant available.
  *
  *	@param	defindex	The weapon definition index.
  */
-stock bool TF2_IsValidAustralium(int defindex) {
-	for(int i = 0; i < sizeof(TF2_Australiums); i++) {
-		if(TF2_Australiums[i] == defindex)
-			return true;
-	}
-	
-	return false;
-}
+stock bool TF2_IsValidAustralium(int defindex) { for(int i = 0; i < sizeof(TF2_Australiums); i++) { if(TF2_Australiums[i] == defindex) return true; } return false; }
 
 /**
  *	Turns the weapon into australium variant.
@@ -1887,17 +1838,14 @@ stock void TF2_TurnAustralium(any weapon) {
 	/* Force the stock weapons to be 'upgradable' version. */
 	TF2_TurnDefaultDefIndexToUpgraded(weapon);
 	
-	char netclass[64];
-	GetEntityNetClass(weapon, netclass, sizeof(netclass));
-	
 	/* Turn the weapon to strange quality and random level. */
-	SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityQuality"), TFQuality_Strange); /* Strange. */
-	SetEntData(weapon, FindSendPropInfo(netclass, "m_iEntityLevel"), GetRandomInt(0, 100)); /* Random level between 0 and 100. */
+	SetEntDataOffset(weapon, "m_iEntityQuality", TFQuality_Strange); /* Strange. */
+	SetEntDataOffset(weapon, "m_iEntityLevel", GetRandomInt(0, 100)); /* Random level between 0 and 100. */
 	
 	/* Frying Pan. */
 	switch(defindex == 264)	{
 		case true: {
-			SetEntData(weapon, FindSendPropInfo(netclass, "m_iItemDefinitionIndex"), 1071); /* Turn to golden frying pan. */
+			SetEntDataOffset(weapon, "m_iItemDefinitionIndex", 1071); /* Turn to golden frying pan. */
 			#if defined _tf2attributes_included
 			TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
 			TF2Attrib_SetByName(weapon, "killstreak tier", 1.0);
@@ -1988,15 +1936,13 @@ stock bool TF2_GetKillstreakerName(int index, char[] buffer, int maxlen) {
  *	@error				Invalid entity index or attribute name will return -1.0.
  */
 stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) {
-	if(!IsValidEntityEx(entity))
-		return -1.0;
+	if(!IsValidEntityEx(entity)) return -1.0;
 	
 	int indice[16];
 	float value[16];
 	
 	for(int i = 0; i < TF2Attrib_GetSOCAttribs(entity, indice, value); i++) {
-		if(indice[i] == defindex) 
-			return value[i];
+		if(indice[i] == defindex) return value[i];
 	}
 	
 	return -1.0;
@@ -2009,17 +1955,17 @@ stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) {
  *
  *	@param	weapon	The weapon entity index.
  *
- *	@noreturn.
+ *	@error	If the weapon entity or offset is invalid, this returns false.
  */
-stock void TF2_TurnDefaultDefIndexToUpgraded(any weapon) {
+stock bool TF2_TurnDefaultDefIndexToUpgraded(any weapon) {
 	// Fix the default weapons to be forced as an 'upgraded' variant so they can be festivized variant, be australium, have war paint, etc.
-	if(!IsValidEntityEx(weapon))
-		return;
+	if(!IsValidEntityEx(weapon)) return false;
 	
 	char netclass[64];
 	GetEntityNetClass(weapon, netclass, sizeof(netclass));
 	
 	int offset = FindSendPropInfo(netclass, "m_iItemDefinitionIndex");
+	if(offset < 1) return false;
 	
 	switch(GetEntData(weapon, offset)) {
 		case 0: SetEntData(weapon, offset, 190);
@@ -2050,6 +1996,8 @@ stock void TF2_TurnDefaultDefIndexToUpgraded(any weapon) {
 		case 25: SetEntData(weapon, offset, 737);
 		case 29: SetEntData(weapon, offset, 211);
 	}
+	
+	return true;
 }
 
 /**
@@ -2353,11 +2301,8 @@ stock void TF2_GetPaintName(int defindex, char[] buffer, int maxlen) {
  *	@error	If the user is invalid or has invalid class, this returns false.
  */
 stock bool TF2_ReplaceClientRobotVoicelines(int client, char[] sound, bool giant=false)	{
-	if(!Tklib_IsValidClient(client, _, true))
-		return false;
-	
-	if(TF2_GetPlayerClass(client) < TFClass_Scout)
-		return false;
+	if(!Tklib_IsValidClient(client, _, true)) return false;
+	if(TF2_GetPlayerClass(client) < TFClass_Scout) return false;
 	
 	TFClassType class = TF2_GetPlayerClass(client);
 	
@@ -2391,8 +2336,7 @@ stock bool TF2_ReplaceClientRobotVoicelines(int client, char[] sound, bool giant
 stock int TF2_FindWeaponByDefinitionIndex(int client, int defindex) {
 	for(TFSlot slot = TFSlot_Primary; slot < TFSlot_PDA2; slot++) {
 		int weapon = TF2_GetPlayerWeaponSlot(client, slot);
-		if(IsValidEntityEx(weapon) && GetEntityDefinitionIndex(weapon) == defindex && GetEntityOwner(weapon) == client)
-			return weapon;
+		if(IsValidEntityEx(weapon) && GetEntityDefinitionIndex(weapon) == defindex && GetEntityOwner(weapon) == client) return weapon;
 	}
 	
 	return -1;
@@ -2408,17 +2352,8 @@ stock int TF2_FindWeaponByDefinitionIndex(int client, int defindex) {
  */
 stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex) {
 	int wearable = 0;
-	
-	while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1) {
-		if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client)
-			return wearable;
-	}
-	
-	while((wearable = FindEntityByClassname(wearable, "tf_wearable_levelable_item")) != -1) {
-		if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client)
-			return wearable;
-	}
-	
+	while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1)  if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client) return wearable;
+	while((wearable = FindEntityByClassname(wearable, "tf_wearable_levelable_item")) != -1)  if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client) return wearable;
 	return -1;
 }
 
@@ -2463,27 +2398,31 @@ stock bool TF2_IsValidFlamethrowerDefindex(int defindex) {
 }
 
 /**
- *	Returns if the weapon is valid.
+ *	Returns if the entity is a valid weapon.
  *
- *	@param	weapon	The weapon entity index.
+ *	@param	entity	The entity index.
  *
- *	@error	If the weapon is invalid, this returns false.
+ *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_IsValidWeapon(int weapon) {
-	if(!IsValidEntityEx(weapon))
-		return false;
-	
-	static Handle IsBaseCombatWeapon;
-	
-	StartPrepSDKCall(SDKCall_Entity);
-	PrepSDKCall_SetVirtual(TF2Offset_IsBaseCombatWeapon);
-	PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
-	
-	if((IsBaseCombatWeapon = EndPrepSDKCall()) != null)
-		SDKCall(IsBaseCombatWeapon, weapon);
-	
-	delete IsBaseCombatWeapon;
-	return false;
+stock bool TF2_IsValidWeapon(int entity) {
+	if(!IsValidEntityEx(entity)) return false;
+	char clsname[128];
+	GetEntityClassname(entity, clsname, sizeof(clsname));
+	return StrContainsEx(clsname, "tf_weapon", false);
+}
+
+/**
+ *	Returns if the entity is a valid wearable.
+ *
+ *	@param	entity	The entity index.
+ *
+ *	@error	If the entity is invalid, this returns false.
+ */
+stock bool TF2_IsValidWearable(int entity) {
+	if(!IsValidEntityEx(entity)) return false;
+	char clsname[128];
+	GetEntityClassname(entity, clsname, sizeof(clsname));
+	return StrContainsEx(clsname, "tf_wearable", false);
 }
 
 /**
@@ -2494,15 +2433,7 @@ stock bool TF2_IsValidWeapon(int weapon) {
  *
  *	@error	If the entity is invalid or has no quality property, this returns false.
  */
-stock bool TF2_SetEntityQuality(int entity, TFQuality quality) {
-	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityQuality"))
-		return false;
-	
-	char netclass[64];
-	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	SetEntData(entity, FindSendPropInfo(netclass, "m_iEntityQuality"), quality);
-	return true;
-}
+stock bool TF2_SetEntityQuality(int entity, TFQuality quality) { return SetEntDataOffset(entity, "m_iEntityQuality", quality); }
 
 /**
  *	Returns the entity's quality.
@@ -2511,14 +2442,7 @@ stock bool TF2_SetEntityQuality(int entity, TFQuality quality) {
  *
  *	@error	If the entity is invalid or has no quality property, this returns TFQuality_Invalid.
  */
-stock TFQuality TF2_GetEntityQuality(int entity) {
-	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityQuality"))
-		return TFQuality_Invalid;
-	
-	char netclass[64];
-	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	return view_as<TFQuality>(GetEntData(entity, FindSendPropInfo(netclass, "m_iEntityQuality")));
-}
+stock TFQuality TF2_GetEntityQuality(int entity) { return view_as<TFQuality>(GetEntDataOffset(entity, "m_iEntityQuality")); }
 
 /**
  *	Set the entity's level.
@@ -2527,15 +2451,7 @@ stock TFQuality TF2_GetEntityQuality(int entity) {
  *
  *	@error	If the entity is invalid or has no level property, this returns false.
  */
-stock bool TF2_SetEntityLevel(int entity, int level) {
-	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityLevel"))
-		return false;
-	
-	char netclass[64];
-	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	SetEntData(entity, FindSendPropInfo(netclass, "m_iEntityLevel"), level);
-	return true;
-}
+stock bool TF2_SetEntityLevel(int entity, int level) { return SetEntDataOffset(entity, "m_iEntityLevel", level); }
 
 /**
  *	Returns the entity's level.
@@ -2545,14 +2461,7 @@ stock bool TF2_SetEntityLevel(int entity, int level) {
  *
  *	@error	If the entity is invalid or has no level property, this returns false.
  */
-stock int TF2_GetEntityLevel(int entity) {
-	if(!HasEntPropEx(entity, Prop_Send, "m_iEntityLevel"))
-		return -1;
-	
-	char netclass[64];
-	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	return GetEntData(entity, FindSendPropInfo(netclass, "m_iEntityLevel"));
-}
+stock int TF2_GetEntityLevel(int entity) { return GetEntDataOffset(entity, "m_iEntityLevel"); }
 
 /**
  *	Returns if the entity is a validated attached entity.
@@ -2562,14 +2471,7 @@ stock int TF2_GetEntityLevel(int entity) {
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_IsValidatedAttachedEntity(int entity) {
-	if(!HasEntPropEx(entity, Prop_Send, "m_bValidatedAttachedEntity"))
-		return false;
-	
-	char netclass[64];
-	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	return view_as<bool>(GetEntData(entity, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity")));
-}
+stock bool TF2_IsValidatedAttachedEntity(int entity) { return view_as<bool>(GetEntDataOffset(entity, "m_bValidatedAttachedEntity")); }
 
 /**
  *	Set the entity to be a validated attached entity.
@@ -2580,15 +2482,7 @@ stock bool TF2_IsValidatedAttachedEntity(int entity) {
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool TF2_SetValidatedAttachedEntity(int entity, bool validated) {
-	if(!HasEntPropEx(entity, Prop_Send, "m_bValidatedAttachedEntity"))
-		return false;
-	
-	char netclass[64];
-	GetEntityNetClass(entity, netclass, sizeof(netclass));
-	SetEntData(entity, FindSendPropInfo(netclass, "m_bValidatedAttachedEntity"), validated);
-	return true;
-}
+stock bool TF2_SetValidatedAttachedEntity(int entity, bool validated) { return SetEntDataOffset(entity, "m_bValidatedAttachedEntity", validated); }
 
 /**
  *	Creates a cosmetic entity.
@@ -2706,5 +2600,34 @@ stock bool TF2_IsValidWeaponDefindex(int defindex) { for(int i = MAX_TF2_WEAPONS
  *	@param	defindex	The taunt definition index.
  */
 stock bool TF2_IsValidTaunt(int defindex) { for(int i = MAX_TF2_TAUNTS; i--;) { if(TF2_Taunts[i] == defindex) return true; } return false; }
+
+/**
+ *	Equips the user the cosmetic item.
+ *
+ *	@param	client		The users index.
+ *	@param	cosmetic	The cosmetic entity.
+ *
+ *	@error	If the error or process failed, this returns -1.
+ *
+ *	@return	Returns the offset.
+ */
+stock int TF2_EquipPlayerCosmetic(int client, int cosmetic) {
+	GameData data = new GameData("sm-tf2.games");
+	int offset = data.GetOffset("RemoveWearable")-1;
+	delete data;
+	if(offset < 1) {
+		SetFailState("[Tklib:TF2] TF2_EquipPlayerCosmetic(client %i, cosmetic %i)"
+		... "has entered a fatal error due to invalid offset %i"
+		... "(/gamedata/sm-tf2.games.txt missing or gamedata needs to be updated.)", client, cosmetic, offset);
+		return -1;
+	}
+	StartPrepSDKCall(SDKCall_Player);
+	PrepSDKCall_SetVirtual(offset);
+	PrepSDKCall_AddParameter(SDKType_CBaseEntity, SDKPass_Pointer);
+	Handle EquipWearable = EndPrepSDKCall();
+	if(EquipWearable != null) SDKCall(EquipWearable, client, cosmetic);
+	delete EquipWearable;
+	return offset;
+}
 
 #endif

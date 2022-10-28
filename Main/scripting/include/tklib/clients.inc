@@ -934,7 +934,7 @@ stock bool SetClientHideHud(int client, int flags) { return SetEntPropEx(client,
  *	@param	maxlen		The maximum length of the buffer.
  *	@param	flags		Filter flags.
  *
- *	@error	If no valid users are found, this returns 0.
+ *	@error	If no valid users are found, this returns 0 and array 0 as -1.
  *
  *	@return	Returns the target count.
  */

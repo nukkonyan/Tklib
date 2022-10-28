@@ -50,7 +50,7 @@ stock bool GetEntityName(int entity, char[] buffer, int maxlen)	{ return GetEntP
  *
  *	@error	If entity is invalid, it will returns false.
  */
-stock bool SetEntityName(int entity, const char[] name)	{ return SetEntPropStringEx(entity, Prop_Data, "m_iName", name); }
+stock bool SetEntityName(int entity, const char[] name)	{ return (SetEntPropStringEx(entity, Prop_Data, "m_iName", name) > 0); }
 
 /**
  *	Find entity via classname if it exists.
@@ -106,7 +106,7 @@ stock bool GetEntityDisabled(int entity) { return GetEntPropBool(entity, Prop_Se
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityModelEx(int entity, const char[] model)	{ return SetEntPropStringEx(entity, Prop_Data, "m_ModelName", model); }
+stock bool SetEntityModelEx(int entity, const char[] model)	{ return (SetEntPropStringEx(entity, Prop_Data, "m_ModelName", model) > 0); }
 
 /**
  *	Returns the entity's model name path
@@ -117,7 +117,7 @@ stock bool SetEntityModelEx(int entity, const char[] model)	{ return SetEntPropS
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool GetEntityModel(int entity, char[] buffer, int maxlen) { return GetEntPropStringEx(entity, Prop_Data, "m_ModelName", buffer, maxlen); }
+stock bool GetEntityModel(int entity, char[] buffer, int maxlen) { return (GetEntPropStringEx(entity, Prop_Data, "m_ModelName", buffer, maxlen) > 0); }
 
 /* Finally added to SDKTools - SM 1.12
 **
@@ -192,7 +192,7 @@ stock bool SetEntityClassname(int entity, const char[] clsname)	{ return SetEntP
  *	@param	maxlength	Maximum length of the buffer.
  *	@return				True on success, false if there is no classname set or has no valid classname/invalid entity.
  */
-stock bool GetEntityClassnameEx(int entity, char[] clsname, int maxlength) { return GetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname, maxlength); }
+stock bool GetEntityClassnameEx(int entity, char[] clsname, int maxlength) { return (GetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname, maxlength) > 0); }
 
 /**
  *	Returns the entity's parent attachment.
@@ -259,7 +259,7 @@ stock int GetEntityMoveParent(int entity) { return GetEntPropEntEx(entity, Prop_
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityInitialized(int entity, bool initialized) { return SetEntPropEx(entity, Prop_Send, "m_bInitialized", initialized); }
+stock bool SetEntityInitialized(int entity, bool initialized) { return SetEntDataOffset(entity, "m_bInitialized", initialized); }
 
 /**
  *	Returns if the entity is initialized.
@@ -268,7 +268,7 @@ stock bool SetEntityInitialized(int entity, bool initialized) { return SetEntPro
  *
  *	@error	If the entity is invalid, this will return false.
  */
-stock bool IsEntityInitialized(int entity) { return GetEntPropBool(entity, Prop_Send, "m_bInitialized"); }
+stock bool IsEntityInitialized(int entity) { return GetEntDataOffset(entity, "m_bInitialized"); }
 
 /**
  *	Set the entity's definition index value
@@ -278,7 +278,7 @@ stock bool IsEntityInitialized(int entity) { return GetEntPropBool(entity, Prop_
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityDefinitionIndex(int entity, int defindex) { return SetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex", defindex); }
+stock bool SetEntityDefinitionIndex(int entity, int defindex) { return SetEntDataOffset(entity, "m_iItemDefinitionIndex", defindex); }
 
 /**
  *	Returns the entity's definition index value
@@ -287,7 +287,7 @@ stock bool SetEntityDefinitionIndex(int entity, int defindex) { return SetEntPro
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntityDefinitionIndex(int entity) { return GetEntPropEx(entity, Prop_Send, "m_iItemDefinitionIndex"); }
+stock int GetEntityDefinitionIndex(int entity) { return GetEntDataOffset(entity, "m_iItemDefinitionIndex"); }
 
 /**
  *	Returns if the entity classname is fully or partially matching.
@@ -301,16 +301,15 @@ stock int GetEntityDefinitionIndex(int entity) { return GetEntPropEx(entity, Pro
  *	@error	If the entity is invalid, this returns false.
  */
 stock bool IsEntityClassnameMatching(int entity, const char[] classname, bool partialMatch=false) {
-	if(!IsValidEntityEx(entity))
-		return	false;
+	if(!IsValidEntityEx(entity)) return false;
 	
 	//Credits JonnyBoy0719 - Contagion include.
-	char entity_classname[64];
-	GetEntityClassname(entity, entity_classname, sizeof(entity_classname));
+	char entity_clsname[64];
+	GetEntityClassname(entity, entity_clsname, sizeof(clsname));
 
-	if(partialMatch) return (StrContains(entity_classname, classname) != -1);
+	if(partialMatch) return (StrContains(entity_clsname, classname) != -1);
 	
-	return StrEqual(entity_classname, classname);
+	return StrEqual(entity_clsname, classname);
 }
 
 /**
@@ -323,7 +322,7 @@ stock bool IsEntityClassnameMatching(int entity, const char[] classname, bool pa
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock any GetEntityTeamNum(int entity) { return GetEntPropEx(entity, Prop_Send, "m_iTeamNum"); }
+stock any GetEntityTeamNum(int entity) { return GetEntDataOffset(entity, "m_iTeamNum"); }
 
 /**
  *	Set the entity's team index.
@@ -335,7 +334,7 @@ stock any GetEntityTeamNum(int entity) { return GetEntPropEx(entity, Prop_Send, 
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntityTeamNum(int entity, any team) { return SetEntPropEx(entity, Prop_Send, "m_iTeamNum", team); }
+stock bool SetEntityTeamNum(int entity, any team) { return SetEntDataOffset(entity, "m_iTeamNum", team); }
 
 /**
  *	Set the entity effect.
@@ -461,12 +460,13 @@ stock int GetEntitySpawnFlags(int entity) { return GetEntPropEx(entity, Prop_Sen
 
 /**
  *	Returns the Account ID of the entity index.
+ *	Likely duplicate of GetSteamAccountId().
  *
  *	@param	entity	The entity index.
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntitySteamAccountID(int entity) { return GetEntPropEx(entity, Prop_Send, "m_iAccountID"); }
+stock int GetEntitySteamAccountID(int entity) { return GetEntDataOffset(entity, "m_iAccountID"); }
 
 /**
  *	Set the entity's Steam Account ID.
@@ -476,7 +476,16 @@ stock int GetEntitySteamAccountID(int entity) { return GetEntPropEx(entity, Prop
  *
  *	@error	If the entity is invalid, this returns false.
  */
-stock bool SetEntitySteamAccountID(int entity, int accountid) { return SetEntPropEx(entity, Prop_Send, "m_iAccountID", accountid); }
+stock bool SetEntitySteamAccountID(int entity, int accountid) { return SetEntDataOffset(entity, "m_iAccountID", accountid); }
+
+/**
+ *	Retrieves the entity's health.
+ *
+ *	@param	entity	The entity index.
+ *
+ *	@error	If the entity is invalid, this returns -1.
+ */
+stock int GetEntityHealth(int entity) { return GetEntDataOffset(entity, "m_iHealth"); }
 
 //Methodmap
 methodmap Entity __nullable__ {
@@ -492,10 +501,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	Invalid edict index, or no mod support.
 	 */
-	public Entity(const char[] classname="", const char[] name="", int ForceEdictIndex=-1)
-	{
-		return view_as<Entity>(CreateEntityByNameEx(classname, name, ForceEdictIndex));
-	}
+	public Entity(const char[] classname="", const char[] name="", int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx(classname, name, ForceEdictIndex)); }
 	
 	/**
 	 *	Gives an entity to a player.
@@ -506,10 +512,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error		If invalid client or client not in game, or lack of mod support, this returns Entity_Invalid or Entity_NotSupported.
 	 */
-	public static Entity GiveItem(any client, const char[] classname, int iSubType=0)
-	{
-		return view_as<Entity>(GivePlayerItem(client, classname, iSubType));
-	}
+	public static Entity GiveItem(any client, const char[] classname, int iSubType=0) { return view_as<Entity>(GivePlayerItem(client, classname, iSubType)); }
 	
 	/**
 	 *	Returns the absolute origin of an entity.
@@ -518,10 +521,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	If entity is invalid, this returns false.
 	 */
-	public bool GetAbsOrigin(float vec[3])
-	{
-		return GetEntityAbsOrigin(view_as<int>(this), vec);
-	}
+	public bool GetAbsOrigin(float vec[3]) { return GetEntityAbsOrigin(view_as<int>(this), vec); }
 	
 	/**
 	 *	Returns the entity name
@@ -531,11 +531,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	If the entity is invalid, this returns false.
 	 */
-	public bool GetName(char[] buffer, int maxlen)
-	{
-		return GetEntityName(view_as<int>(this), buffer, maxlen);
-	}
-	
+	public bool GetName(char[] buffer, int maxlen) { return GetEntityName(view_as<int>(this), buffer, maxlen); }
 	
 	/**
 	 *	Set entity name
@@ -544,15 +540,9 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	If entity is invalid, it will returns false.
 	 */
-	public bool SetName(const char[] name)
-	{
-		return SetEntityName(view_as<int>(this), name);
-	}
+	public bool SetName(const char[] name) { return SetEntityName(view_as<int>(this), name); }
 	
-	public static Entity FindByClassname(any startEnt, const char[] classname)
-	{
-		return view_as<Entity>(FindEntityByClassname(startEnt, classname));
-	}
+	public static Entity FindByClassname(any startEnt, const char[] classname) { return view_as<Entity>(FindEntityByClassname(startEnt, classname)); }
 	
 	/**
 	 *	Find entity via classname if it exists.
@@ -561,25 +551,14 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	If the entity is invalid, this will return false.
 	 */
-	public static bool Find(const char[] classname)
-	{
-		return FindEntity(classname);
-	}
-	
+	public static bool Find(const char[] classname) { return FindEntity(classname); }
 	
 	/**
 	 *	Entity's disabled status.
 	 */
-	property bool Disabled
-	{
-		public set(bool value)
-		{
-			SetEntityDisabled(view_as<int>(this), value);
-		}
-		public get()
-		{
-			return GetEntityDisabled(view_as<int>(this));
-		}
+	property bool Disabled {
+		public set(bool value) { SetEntityDisabled(view_as<int>(this), value); }
+		public get() { return GetEntityDisabled(view_as<int>(this)); }
 	}
 	
 	/**
@@ -589,10 +568,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	If the entity is invalid, this returns false.
 	 */
-	public bool SetModel(const char[] model)
-	{
-		return SetEntityModelEx(view_as<int>(this), model);
-	}
+	public bool SetModel(const char[] model) { return SetEntityModelEx(view_as<int>(this), model); }
 	
 	/**
 	 *	Returns the entity's model name path
@@ -602,39 +578,22 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	If the entity is invalid, this returns false.
 	 */
-	public bool GetModel(char[] buffer, int maxlen)
-	{
-		return GetEntityModel(view_as<int>(this), buffer, maxlen);
-	}
+	public bool GetModel(char[] buffer, int maxlen) { return GetEntityModel(view_as<int>(this), buffer, maxlen); }
 	
 	/**
 	 *	The entity's owner entity index.
 	 */
-	property int Owner
-	{
-		public set(int client)
-		{
-			SetEntityOwner(view_as<int>(this), client);
-		}
-		public get()
-		{
-			return GetEntityOwner(view_as<int>(this));
-		}
+	property int Owner {
+		public set(int client) { SetEntityOwner(view_as<int>(this), client); }
+		public get() { return GetEntityOwner(view_as<int>(this)); }
 	}
 	
 	/**
 	 *	The entity health amount
 	 */
-	property int Health
-	{
-		public set(int value)
-		{
-			SetEntPropEx(view_as<int>(this), Prop_Send, "m_iHealth", value);
-		}
-		public get()
-		{
-			return	GetEntPropEx(view_as<int>(this), Prop_Send, "m_iHealth");
-		}
+	property int Health {
+		public set(int value) { SetEntityHealth(view_as<int>(this), value); }
+		public get() { return GetEntityHealth(view_as<int>(this)); }
 	}
 	
 	/**
@@ -643,10 +602,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	If the entity/edict is invalid, this returns false.
 	 */
-	public bool IsValid()
-	{
-		return IsValidEntityEx(view_as<int>(this));
-	}
+	public bool Valid() { return IsValidEntityEx(view_as<int>(this)); }
 	
 	/**
 	 *	Kills the entity.
@@ -655,25 +611,17 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error	If entity is invalid, this returns false.
 	 */
-	public bool Kill(int activator=-1, int caller=-1, int outputid=0)
-	{
-		return KillEntity(view_as<int>(this), activator, caller, outputid);
-	}
+	public bool Kill(int activator=-1, int caller=-1, int outputid=0) { return KillEntity(view_as<int>(this), activator, caller, outputid); }
 	
 	/**
 	 *	Marks an entity for deletion.
 	 *
 	 *	@error		If invalid entity, this returns false.
 	 */
-	public bool Remove()
-	{
-		if(IsValidEntity(view_as<int>(this)))
-		{
-			RemoveEntity(view_as<int>(this));
-			return true;
-		}
-		
-		return	false;
+	public bool Remove() {
+		if(!IsValidEntityEx(view_as<int>(this))) return false;
+		RemoveEntity(view_as<int>(this));
+		return true;
 	}
 	
 	/**
@@ -681,521 +629,507 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@error		If invalid dict, this returns false.
 	 */
-	public bool RemoveEx()
-	{
-		if(IsValidEdict(view_as<int>(this)))
-		{
-			RemoveEdict(view_as<int>(this));
-			return true;
-		}
-			
-		return	false;
+	public bool RemoveEx() {
+		if(!IsValidEdict(view_as<int>(this))) return false;
+		RemoveEdict(view_as<int>(this));
+		return true;
 	}
 	
 	/**
 	 *	The entity's Skin index.
 	 */
-	property int Skin
-	{
-		public set(int skin)
-		{
-			SetEntitySkin(view_as<int>(this), skin);
-		}
-		public get()
-		{
-			return GetEntitySkin(view_as<int>(this));
-		}
+	property int Skin {
+		public set(int skin) { SetEntitySkin(view_as<int>(this), skin); }
+		public get() { return GetEntitySkin(view_as<int>(this)); }
 	}
 	
 	/**
 	 *	The entity's parent entity index.
 	 */
-	property int ParentEntity
-	{
-		public set(int parent)
-		{
-			SetEntityParentEntity(view_as<int>(this), parent);
-		}
-		public get()
-		{
-			return GetEntityParentEntity(view_as<int>(this));
-		}
+	property int ParentEntity {
+		public set(int parent) { SetEntityParentEntity(view_as<int>(this), parent); }
+		public get() { return GetEntityParentEntity(view_as<int>(this)); }
 	}
 	
 	/**
 	 *	The entity's parent entity index.
 	 */
-	property Entity ParentEntityEx
-	{
-		public set(Entity parent)
-		{
-			SetEntityParentEntity(view_as<int>(this), view_as<int>(parent));
-		}
-		public get()
-		{
-			return view_as<Entity>(GetEntityParentEntity(view_as<int>(this)));
-		}
+	property Entity ParentEntityEx {
+		public set(Entity parent) { SetEntityParentEntity(view_as<int>(this), view_as<int>(parent)); }
+		public get() { return view_as<Entity>(GetEntityParentEntity(view_as<int>(this))); }
 	}
 	
 	/**
 	 *	The entity's initialized status.
 	 */
-	property bool Initialized
-	{
-		public set(bool initialized)
-		{
-			SetEntityInitialized(view_as<int>(this), initialized);
-		}
-		public get()
-		{
-			return IsEntityInitialized(view_as<int>(this));
-		}
+	property bool Initialized {
+		public set(bool initialized) { SetEntityInitialized(view_as<int>(this), initialized); }
+		public get() { return IsEntityInitialized(view_as<int>(this)); }
 	}
 	
 	/**
-	 *	The entity's definition index.
+	 *	The entity's item definition index.
 	 */
-	property int DefinitionIndex
-	{
-		public set(int defindex)
-		{
-			SetEntityDefinitionIndex(view_as<int>(this), defindex);
-		}
-		public get()
-		{
-			return GetEntityDefinitionIndex(view_as<int>(this));
-		}
+	property int DefinitionIndex {
+		public set(int defindex) { SetEntityDefinitionIndex(view_as<int>(this), defindex); }
+		public get() { return GetEntityDefinitionIndex(view_as<int>(this)); }
 	}
 	
 	//Netprops
 	
-	public bool HasProp(PropType type, const char[] prop)
-	{
-		return	HasEntProp(view_as<int>(this), type, prop);
-	}
-	public bool HasPropEx(PropType type, const char[] prop)
-	{
-		return	HasEntPropEx(view_as<int>(this), type, prop);
-	}
+	public bool HasProp(PropType type, const char[] prop) { return HasEntPropEx(view_as<int>(this), type, prop); }
 	
-	public void SetProp(PropType type, const char[] prop, any value, int size=4, int element=0)
-	{
-		SetEntProp(view_as<int>(this), type, prop, value, size, element);
-	}
-	public bool SetPropEx(PropType type, const char[] prop, any value, int size=4, int element=0)
-	{
-		return	SetEntPropEx(view_as<int>(this), type, prop, value, size, element);
-	}
-	public void SetPropEnt(PropType type, const char[] prop, any other, int element=0)
-	{
-		SetEntPropEnt(view_as<int>(this), type, prop, other, element);
-	}
-	public bool SetPropEntEx(PropType type, const char[] prop, any other, int element=0)
-	{
-		return	SetEntPropEntEx(view_as<int>(this), type, prop, other, element);
-	}
-	public void SetPropBool(PropType type, const char[] prop, bool value, int size=4, int element)
-	{
-		SetEntProp(view_as<int>(this), type, prop, value, size, element);
-	}
+	public void SetProp(PropType type, const char[] prop, any value, int size=4, int element=0) { SetEntPropEx(view_as<int>(this), type, prop, value, size, element); }
 	
-	public int GetProp(PropType type, const char[] prop, int size=4, int element=0)
-	{
-		return	GetEntProp(view_as<int>(this), type, prop, size, element);
-	}
-	public int GetPropEx(PropType type, const char[] prop, int size=4, int element=0)
-	{
-		return	GetEntPropEx(view_as<int>(this), type, prop, size, element);
-	}
-	public int GetPropEnt(PropType type, const char[] prop, int element=0)
-	{
-		return	GetEntPropEnt(view_as<int>(this), type, prop, element);
-	}
-	public int GetPropEntEx(PropType type, const char[] prop, int element=0)
-	{
-		return	GetEntPropEntEx(view_as<int>(this), type, prop, element);
-	}
-	public int GetPropArraySize(PropType type, const char[] prop)
-	{
-		return	GetEntPropArraySize(view_as<int>(this), type, prop);
-	}
-	public bool GetPropBool(PropType type, const char[] prop, int size=4, int element=0)
-	{
-		return	GetEntPropBool(view_as<int>(this), type, prop, size, element);
-	}
+	public void SetPropEnt(PropType type, const char[] prop, any other, int element=0) { SetEntPropEntEx(view_as<int>(this), type, prop, other, element); }
 	
-	public void SetPropFloat(PropType type, const char[] prop, float value, int element=0)
-	{
-		SetEntPropFloat(view_as<int>(this), type, prop, value, element);
-	}
-	public bool	SetPropFloatEx(PropType type, const char[] prop, float value, int element=0)
-	{
-		return SetEntPropFloatEx(view_as<int>(this), type, prop, value, element);
-	}
-	public float GetPropFloat(PropType type, const char[] prop, int element=0)
-	{
-		return	GetEntPropFloat(view_as<int>(this), type, prop, element);
-	}
+	public void SetPropBool(PropType type, const char[] prop, bool value, int size=4, int element) { SetEntProp(view_as<int>(this), type, prop, value, size, element); }
 	
-	public int SetPropString(PropType type, const char[] prop, const char[] buffer, int element=0)
-	{
-		return	SetEntPropString(view_as<int>(this), type, prop, buffer, element);
-	}
-	public bool SetPropStringEx(PropType type, const char[] prop, const char[] buffer, int element=0)
-	{
-		return	SetEntPropStringEx(view_as<int>(this), type, prop, buffer, element);
-	}
-	public int GetPropString(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
-	{
-		return	GetEntPropString(view_as<int>(this), type, prop, buffer, maxlen, element);
-	}
-	public bool GetPropStringEx(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0)
-	{
-		return	GetEntPropStringEx(view_as<int>(this), type, prop, buffer, maxlen, element);
-	}
+	public int GetProp(PropType type, const char[] prop, int size=4, int element=0) { return GetEntPropEx(view_as<int>(this), type, prop, size, element); }
 	
-	public void SetPropVector(PropType type, const char[] prop, const float vec[3], int element)
-	{
-		SetEntPropVector(view_as<int>(this), type, prop, vec, element);
-	}
-	public void GetPropVector(PropType type, const char[] prop, float vec[3], int element=0)
-	{
-		GetEntPropVector(view_as<int>(this), type, prop, vec, element);
-	}
+	public int GetPropEnt(PropType type, const char[] prop, int element=0) { return GetEntPropEntEx(view_as<int>(this), type, prop, element); }
 	
-	public void SetData(int offset, any value, int size=4, bool changeState=false)
-	{
-		SetEntData(view_as<int>(this), offset, value, size, changeState);
-	}
-	public int GetData(int offset, int size=4)
-	{
-		return	GetEntData(view_as<int>(this), offset, size);
-	}
+	public int GetPropArraySize(PropType type, const char[] prop) { return GetEntPropArraySizeEx(view_as<int>(this), type, prop); }
 	
-	public void SetDataEnt2(int offset, int other, bool changeState=false)
-	{
-		SetEntDataEnt2(view_as<int>(this), offset, other, changeState);
-	}
-	public int GetDataEnt2(int offset)
-	{
-		return	GetEntDataEnt2(view_as<int>(this), offset);
-	}
+	public bool GetPropBool(PropType type, const char[] prop, int size=4, int element=0) { return GetEntPropBool(view_as<int>(this), type, prop, size, element); }
 	
-	public void SetDataFloat(int offset, float value, bool changeState=false)
-	{
-		SetEntDataFloat(view_as<int>(this), offset, value, changeState);
-	}
-	public float GetDataFloat(int offset)
-	{
-		return	GetEntDataFloat(view_as<int>(this), offset);
-	}
+	public void SetPropFloat(PropType type, const char[] prop, float value, int element=0) { SetEntPropFloatEx(view_as<int>(this), type, prop, value, element); }
 	
-	public void SetDataString(int offset, const char[] buffer, int maxlen, bool changeState=false)
-	{
-		SetEntDataString(view_as<int>(this), offset, buffer, maxlen, changeState);
-	}
-	public int GetDataString(int offset, char[] buffer, int maxlen)
-	{
-		return	GetEntDataString(view_as<int>(this), offset, buffer, maxlen);
-	}
+	public float GetPropFloat(PropType type, const char[] prop, int element=0) { return GetEntPropFloatEx(view_as<int>(this), type, prop, element); }
+	
+	public int SetPropString(PropType type, const char[] prop, const char[] buffer, int element=0) { return SetEntPropStringEx(view_as<int>(this), type, prop, buffer, element); }
+	
+	public int GetPropString(PropType type, const char[] prop, char[] buffer, int maxlen, int element=0) { return GetEntPropStringEx(view_as<int>(this), type, prop, buffer, maxlen, element); }
+	
+	public bool SetPropVector(PropType type, const char[] prop, const float vec[3], int element) { return SetEntPropVectorEx(view_as<int>(this), type, prop, vec, element); }
+	
+	public bool GetPropVector(PropType type, const char[] prop, float vec[3], int element=0) { return GetEntPropVectorEx(view_as<int>(this), type, prop, vec, element); }
+	
+	public void SetData(int offset, any value, int size=4, bool changeState=false) { SetEntData(view_as<int>(this), offset, value, size, changeState); }
+	
+	public int GetData(int offset, int size=4) { return GetEntData(view_as<int>(this), offset, size); }
+	
+	/**
+	 *	Peeks into this entity's object data and sets the integer value at
+	 *	the given prop.
+	 *	This is alternative to SetEntData, considered 'safer',
+	 *	gets the offset manually of the prop.
+	 *	
+	 *	@param	prop			Property to get offset out of to use.
+	 *	@param	value			Value to set.
+	 *	@param	size			Number of bytes to write (valid values are 1, 2, or 4).
+	 *	@param	changeState		If true, change will be sent over the network.
+	 *	
+	 *	@error	If invalid entity, offset out of reasonable bounds or invalid, this returns false.
+	 */
+	public bool SetDataOffset(const char[] prop, any value, int size=4, bool changeState=false) { return SetEntDataOffset(view_as<int>(this), prop, value, size, changeState); }
+	
+	/**
+	 *	Peeks into this entity's object data and retrieves the integer value at
+	 *	the given offset.
+	 *	This is alternative to GetEntData, considered 'safer',
+	 *	gets the offset manually of the prop.
+	 *	
+	 *	@param	prop		Property to get offset out of to use.
+	 *	@param	size		Number of bytes to read (valid values are 1, 2, or 4).
+	 *
+	 *	@return	Value at the given memory location.
+	 *
+	 *	@error	If invalid entity, offset out of reasonable bounds or invalid, this returns -1.
+	 */
+	public int GetDataOffset(const char[] prop, int size=4) { return GetEntDataOffset(view_as<int>(this), prop, size); }
+	
+	public void SetDataEnt2(int offset, int other, bool changeState=false) { SetEntDataEnt2(view_as<int>(this), offset, other, changeState); }
+	
+	public int GetDataEnt2(int offset) { return GetEntDataEnt2(view_as<int>(this), offset); }
+	
+	public void SetDataFloat(int offset, float value, bool changeState=false) { SetEntDataFloat(view_as<int>(this), offset, value, changeState); }
+	
+	public float GetDataFloat(int offset) { return GetEntDataFloat(view_as<int>(this), offset); }
+	
+	public void SetDataString(int offset, const char[] buffer, int maxlen, bool changeState=false) { SetEntDataString(view_as<int>(this), offset, buffer, maxlen, changeState); }
+	
+	public int GetDataString(int offset, char[] buffer, int maxlen) { return GetEntDataString(view_as<int>(this), offset, buffer, maxlen); }
 
-	public void SetDataVector(int offset, const float vec[3], bool changeState=false)
-	{
-		SetEntDataVector(view_as<int>(this), offset, vec, changeState);
-	}
-	public void GetDataVector(int offset, float vec[3])
-	{
-		GetEntDataVector(view_as<int>(this), offset, vec);
-	}
+	public void SetDataVector(int offset, const float vec[3], bool changeState=false) { SetEntDataVector(view_as<int>(this), offset, vec, changeState); }
 	
-	public void SetDataArray(int offset, const int[] array, int arraySize, int dataSize=4, bool changeState=false)
-	{
-		SetEntDataArray(view_as<int>(this), offset, array, arraySize, dataSize, changeState);
-	}
-	public void GetDataArray(int offset, int[] array, int arraySize, int dataSize=4)
-	{
-		GetEntDataArray(view_as<int>(this), offset, array, arraySize, dataSize);
-	}
+	public void GetDataVector(int offset, float vec[3]) { GetEntDataVector(view_as<int>(this), offset, vec); }
+	
+	public void SetDataArray(int offset, const int[] array, int arraySize, int dataSize=4, bool changeState=false) { SetEntDataArray(view_as<int>(this), offset, array, arraySize, dataSize, changeState); }
+	
+	public void GetDataArray(int offset, int[] array, int arraySize, int dataSize=4) { GetEntDataArray(view_as<int>(this), offset, array, arraySize, dataSize); }
 	
 	//Other
 	
-	property int Flags
-	{
-		public set(int flags)
-		{
-			SetEntityFlags(view_as<int>(this), flags);
-		}
-		public get()
-		{
-			GetEntityFlags(view_as<int>(this));
-		}
+	/**
+	 *	Entity's flags.
+	 */
+	property int Flags {
+		public set(int flags) { SetEntityFlags(view_as<int>(this), flags); }
+		public get() { return GetEntityFlags(view_as<int>(this)); }
 	}
 	
-	property int FlagsEx
-	{
-		public set(int flags)
-		{
-			SetEdictFlags(view_as<int>(this), flags);
-		}
-		public get()
-		{
-			GetEdictFlags(view_as<int>(this));
-		}
+	/**
+	 *	Entity's edict flags.
+	 *	Set/GetEdictFlags probably same as Set/GetEntityFlags?.
+	 */
+	property int FlagsEdict {
+		public set(int flags) { SetEdictFlags(view_as<int>(this), flags); }
+		public get() { return GetEdictFlags(view_as<int>(this)); }
 	}
 	
-	property float Gravity
-	{
-		public set(float amount)
-		{
-			SetEntityGravity(view_as<int>(this), amount);
-		}
-		public get()
-		{
-			GetEntityFlags(view_as<int>(this));
-		}
+	/*
+	 *	Entity's steam account id.
+	 */
+	property int SteamAccountID {
+		public set(int id) { SetEntitySteamAccountID(view_as<int>(this), id); }
+		public get() { return GetEntitySteamAccountID(view_as<int>(this)); }
 	}
 	
-	property MoveType moveType 
-	{
-		public set(MoveType mt)
-		{
-			SetEntityMoveType(view_as<int>(this), mt);
-		}
-		public get()
-		{
-			GetEntityMoveType(view_as<int>(this));
-		}
+	/**
+	 *	Entity's gravity.
+	 */
+	property float Gravity {
+		public set(float amount) { SetEntityGravity(view_as<int>(this), amount); }
+		public get() { return GetEntityGravity(view_as<int>(this)); }
 	}
 	
-	public void SetRenderColor(int r=255, int g=255, int b=255, int a=255)
-	{
-		SetEntityRenderColor(view_as<int>(this), r, g, b, a);
-	}
-	public void GetRenderColor(int& r, int& g, int& b, int& a)
-	{
-		GetEntityRenderColor(view_as<int>(this), r, g, b, a);
-	}
-	
-	public void SetRenderFx(RenderFx fx)
-	{
-		SetEntityRenderFx(view_as<int>(this), fx);
-	}
-	public RenderFx GetRenderFx()
-	{
-		return GetEntityRenderFx(view_as<int>(this));
+	/**
+	 *	Entity's movetype.
+	 */
+	property MoveType moveType {
+		public set(MoveType mt) { SetEntityMoveType(view_as<int>(this), mt); }
+		public get() { return GetEntityMoveType(view_as<int>(this)); }
 	}
 	
-	public void SetRenderMode(RenderMode mode)
-	{
-		SetEntityRenderMode(view_as<int>(this), mode);
-	}
-	public RenderMode GetRenderMode()
-	{
-		return GetEntityRenderMode(view_as<int>(this));
-	}
+	public void SetRenderColor(int r=255, int g=255, int b=255, int a=255) { SetEntityRenderColor(view_as<int>(this), r, g, b, a); }
+	
+	public void GetRenderColor(int& r, int& g, int& b, int& a) { GetEntityRenderColor(view_as<int>(this), r, g, b, a); }
+	
+	public void SetRenderFx(RenderFx fx) { SetEntityRenderFx(view_as<int>(this), fx); }
+	
+	public RenderFx GetRenderFx() { return GetEntityRenderFx(view_as<int>(this)); }
+	
+	public void SetRenderMode(RenderMode mode) { SetEntityRenderMode(view_as<int>(this), mode); }
+	
+	public RenderMode GetRenderMode() { return GetEntityRenderMode(view_as<int>(this)); }
 	
 	#if !defined _tklib_no_sdktools
-	public bool AcceptInput(const char[] input, any activator=-1, any caller=-1, int outputid=0)
-	{
-		return AcceptEntityInput(view_as<int>(this), input, activator, caller, outputid);
-	}
+	public bool AcceptInput(const char[] input, any activator=-1, any caller=-1, int outputid=0) { return AcceptEntityInput(view_as<int>(this), input, activator, caller, outputid); }
 	
-	public void SetVariant()
-	{
-		SetVariantEntity(view_as<int>(this));
-	}
+	public void SetVariant() { SetVariantEntity(view_as<int>(this)); }
 	
-	public void FireOutput(const char[] output, int activator=-1, float delay=0.0)
-	{
-		FireEntityOutput(view_as<int>(this), output, activator, delay);
-	}
+	public void FireOutput(const char[] output, int activator=-1, float delay=0.0) { FireEntityOutput(view_as<int>(this), output, activator, delay); }
 	
-	public void Activate()
-	{
-		ActivateEntity(view_as<int>(this));
-	}
+	public void Activate() { ActivateEntity(view_as<int>(this)); }
 	
-	public void Extinguish()
-	{
-		ExtinguishEntity(view_as<int>(this));
-	}
+	public void Extinguish() { ExtinguishEntity(view_as<int>(this)); }
 	#endif
 	
 	//Put 'any' to support team enums.
-	property any Team
-	{
-		public set(any value) 
-		{
-			SetEntPropEx(view_as<int>(this), Prop_Send, "m_iTeamNum", value);
-		}
-		public get()
-		{
-			return GetEntPropEx(view_as<int>(this), Prop_Send, "m_iTeamNum");
-		}
+	property any Team {
+		public set(any value) { SetEntityTeamNum(view_as<int>(this), value); }
+		public get() { return GetEntityTeamNum(view_as<int>(this)); }
 	}
 	
-	public bool IsClassnameMatching(const char[] classname, bool partialMatch=false)
-	{
-		return	IsEntityClassnameMatching(view_as<int>(this), classname, partialMatch);
-	}
+	public bool IsClassnameMatching(const char[] classname, bool partialMatch=false) { return IsEntityClassnameMatching(view_as<int>(this), classname, partialMatch); }
 	
 	#if !defined _tklib_no_sdktools
-	public void Ignite(float time, bool npc=false, float size=0.0, bool level=false)
-	{
-		IgniteEntity(view_as<int>(this), time, npc, size, level);
-	}
+	public void Ignite(float time, bool npc=false, float size=0.0, bool level=false) { IgniteEntity(view_as<int>(this), time, npc, size, level); }
+	
+	/**
+	 *	Teleports the entity to a destination.
+	 *
+	 *	@param	origin		The entity origin.
+	 *	@param	angles		The entity angles.
+	 *	@param	velocity	The entity velocity.
+	 */
+	public bool Teleport(const float origin[3]=NULL_VECTOR, const float angles[3]=NULL_VECTOR, const float velocity[3]=NULL_VECTOR) { if(!IsValidEntityEx(view_as<int>(this))) return false; TeleportEntity(view_as<int>(this), origin, angles, velocity); return true; }
 	
 	
-	public void Teleport(const float origin[3]=NULL_VECTOR, const float angles[3]=NULL_VECTOR, const float velocity[3]=NULL_VECTOR)
-	{
-		TeleportEntity(view_as<int>(this), origin, angles, velocity);
-	}
+	/**
+	 *	Dispatches a KeyValue into the entity using string value.
+	 *
+	 *	@param	keyName		The name of the key.
+	 *	@param	value		The string value.
+	 */
+	public void Kv(const char[] keyName, const char[] value) { DispatchKeyValue(view_as<int>(this), keyName, value); }
 	
+	/**
+	 *	Dispatches a KeyValue into the entity using integer value.
+	 *
+	 *	@param	keyName		The name of the key.
+	 *	@param	value		The integer value.
+	 */
+	public void KvNum(const char[] keyName, int value) { char val[8]; IntToString(value, val, sizeof(val)); DispatchKeyValue(view_as<int>(this), keyName, val); }
 	
-	public void Kv(const char[] keyName, const char[] value)
-	{
-		DispatchKeyValue(view_as<int>(this), keyName, value);
-	}
+	/**
+	 *	Dispatches a KeyValue into the entity using boolean value.
+	 *
+	 *	@param	keyName		The name of the key.
+	 *	@param	value		The boolean value.
+	 */
+	public void KvBool(const char[] keyName, bool value) { char val[8]; IntToString(view_as<bool>(value), val, sizeof(val)); DispatchKeyValue(view_as<int>(this), keyName, val); }
 	
-	public void KvFloat(const char[] keyName, float value)
-	{
-		DispatchKeyValueFloat(view_as<int>(this), keyName, value);
-	}
+	/**
+	 *	Dispatches a KeyValue into the entity using a floating point value.
+	 *
+	 *	@param	keyName		The name of the key.
+	 *	@param	value		The float value.
+	 */
+	public void KvFloat(const char[] keyName, float value) { DispatchKeyValueFloat(view_as<int>(this), keyName, value); }
 	
-	public void KvVec(const char[] keyName, const float vec[3])
-	{
-		DispatchKeyValueVector(view_as<int>(this), keyName, vec);
-	}
+	/**
+	 *	Dispatches a KeyValue into the entity using a vector value.
+	 *
+	 *	@param	keyName		The name of the key.
+	 *	@param	value		The vector value.
+	 */
+	public void KvVec(const char[] keyName, const float vec[3]) { DispatchKeyValueVector(view_as<int>(this), keyName, vec); }
 	
-	public bool Spawn()
-	{
-		return DispatchSpawn(view_as<int>(this));
-	}
+	/**
+	 *	Spawns the entity.
+	 *
+	 *	@param	keyName		The name of the key.
+	 *	@param	value		The string value.
+	 */
+	public bool Spawn() { return DispatchSpawn(view_as<int>(this)); }
 	#endif
 	
-	public bool IsNetworkable()
-	{
-		return IsEntNetworkable(view_as<int>(this));
+	/**
+	 *	Returns wheter the entity has any networkable edict.
+	 *
+	 *	@param	keyName		The name of the key.
+	 *	@param	value		The string value.
+	 */
+	public bool IsNetworkable() { return IsEntNetworkable(view_as<int>(this)); }
+	
+	/**
+	 *	Sets the classname of the entity.
+	 *
+	 *	@param	clsname		The classname to set.
+	 */
+	public bool SetClassname(char[] clsname) { return SetEntityClassname(view_as<int>(this), clsname); }
+	
+	/**
+	 *	Returns the classname of the entity.
+	 *
+	 *	@param	clsname		The buffer to store the classname.
+	 *	@param	maxlen		The maximum length of the buffer.
+	 */
+	public bool GetClassname(char[] clsname, int maxlen) { return GetEntityClassnameEx(view_as<int>(this), clsname, maxlen); }
+	
+	/**
+	 *	Retrieves this entity's networkable serverclass name.
+	 *	This is not the same as the classname and is used for networkable state changes.
+	 *
+	 *	@param	clsname		Buffer to store the serverclass name.
+	 *	@param	maxlength	Maximum length of the buffer.
+	 *	
+	 *	@return	True on success, false if the edict is not networkable.
+	 *	
+	 *	@error	Invalid entity.
+	 */
+	public bool GetNetClass(char[] clsname, int maxlen) { return GetEntityNetClass(view_as<int>(this), clsname, maxlen); }
+	
+	/*
+	 *	Returns this entity's memory address.
+	 */
+	public Address GetAddress() { return GetEntityAddress(view_as<int>(this)); }
+	
+	/**
+	 *	Marks this entity as state changed.  This can be useful if you set an offset
+	 *	and wish for it to be immediately changed over the network.  By default this
+	 *	is not done for offset setting functions.
+	 *
+	 *	@param	offset	Offset to mark as changed.  If 0,
+	 *					The entire edict is marked as changed.
+	 *
+	 * @error	Invalid entity or offset out of bounds.
+	 */
+	public void ChangeState(int offset=0) { ChangeEdictState(view_as<int>(this), offset); }
+	
+	/**
+	 *	Entity moving parent entity.
+	 */
+	property int MoveParent {
+		public set(int parent) { SetEntityMoveParent(view_as<int>(this), parent); 	}
+		public get() { return GetEntityMoveParent(view_as<int>(this)); }
 	}
 	
-	public bool SetClassname(char[] clsname)
-	{
-		return SetEntityClassname(view_as<int>(this), clsname);
-	}
-	public bool GetClassname(char[] clsname, int maxlength)
-	{
-		return GetEntityClassnameEx(view_as<int>(this), clsname, maxlength);
-	}
-	public bool GetNetClass(char[] clsname, int maxlength)
-	{
-		return IsValidEntityEx(view_as<int>(this)) ? GetEntityNetClass(view_as<int>(this), clsname, maxlength):false;
-	}
-	public Address GetAddress()
-	{
-		return GetEntityAddress(view_as<int>(this));
-	}
-	
-	public void ChangeState(int offset=0)
-	{
-		ChangeEdictState(view_as<int>(this), offset);
-	}
-	
-	property int MoveParent
-	{
-		public set(int parent)
-		{
-			SetEntityMoveParent(view_as<int>(this), parent);
-		}
-		public get()
-		{
-			return GetEntityMoveParent(view_as<int>(this));
-		}
-	}
-	
-	public int FindMapInfo(const char[] prop, PropFieldType type=view_as<PropFieldType>(0), int num_bits=0, int local_offset=0)
-	{
-		return IsValidEntityEx(view_as<int>(this)) ? FindDataMapInfo(view_as<int>(this), prop, type, num_bits, local_offset):-1;
-	}
-	
-	public static int FindPropInfo(const char[] cls, const char[] prop, PropFieldType type=view_as<PropFieldType>(0), int num_bits=0, int local_offset=0, int array_size=0)
-	{
-		return FindSendPropInfo(cls, prop, type, num_bits, local_offset, array_size);
-	}
-	
-	property int Effect
-	{
-		public set(int value)
-		{
-			SetEntityEffect(view_as<int>(this), value);
-		}
-		public get()
-		{
-			return GetEntityEffect(view_as<int>(this));
-		}
+	/*
+	 *	Entity effect value.
+	 */
+	property int Effect {
+		public set(int value) { SetEntityEffect(view_as<int>(this), value); }
+		public get() { return GetEntityEffect(view_as<int>(this)); }
 	}
 	
 	#if !defined _tklib_no_sdktools
-	public bool EquipWeapon(int client)
-	{
-		if(IsValidEntityEx(view_as<int>(this)))	{
-			EquipPlayerWeapon(client, view_as<int>(this));
-			return true;
-		}
-		
-		return false;
+	/**
+	 *	Equip's the weapon CBaseWeapon entity.
+	 *
+	 *	@param	client	The users index.
+	 *
+	 *	@error	Invalid client or entity, lack of mod support, or client not in game.
+	 */
+	public bool EquipWeapon(int client) {
+		if(!IsValidEntityEx(view_as<int>(this))) return false;
+		EquipPlayerWeapon(client, view_as<int>(this));
+		return true;
 	}
 	#endif
 	
 	#if !defined _tklib_disable_weapons
-	public bool EquipWeaponEx(int client)
-	{
-		return EquipPlayerWeaponEx(client, view_as<int>(this));
-	}
+	/**
+	 *	Equips the weapon entity.
+	 *	This is an alternative to EquipPlayerWeapon (.EquipWeapon), this method fixes 0 clip magazine and glitchy reload animations because
+	 *	it was being spawned onto the user too early when using CreateEntityByName.
+	 *
+	 *	@param	client		The users index.
+	 *
+	 *	@error	If the user is invalid or weapon is invalid, this returns false.
+	 */
+	public bool EquipWeaponEx(int client) { return EquipPlayerWeaponEx(client, view_as<int>(this)); }
 	#else
 	#error Entity.EquipWeapon requires Weapons included to not be disabled ( EquipPlayerWeaponEx() )
 	#endif
 	
-	public float GetDistance(any target)
-	{
-		return GetEntityDistance(view_as<int>(this), target);
-	}
+	/**
+	 *	Returns the entity distance.
+	 *
+	 *	@param	target	The entity target.
+	 *
+	 *	@error	If neither entities are invalid, this returns -1.0.
+	 */
+	public float GetDistance(any target) { return GetEntityDistance(view_as<int>(this), target); }
 	
 	#if defined _tf2_included
 	/**
+	 *	Equips the user the cosmetic entity.
+	 *
+	 *	@param	client	The users index.
+	 *
+	 *	@error	If the user or offset is invalid, this returns -1.
+	 *
+	 *	@return	Returns the offset.
+	 */
+	public int TF2EquipCosmetic(int client) { return TF2_EquipPlayerCosmetic(client, view_as<int>(this)); }
+	
+	/**
 	 *	The entity's quality. [TF2]
 	 *
-	 *	@param	entity	Entity index.
 	 *	@param	quality	The quality.
 	 */
-	property int TF2Quality //Broken, complains must be 'int' when 'TFQuality' actually can be used, pls fix this bug ._.
-	{
-		public set(int quality)
-		{
-			TF2_SetEntityQuality(view_as<int>(this), view_as<TFQuality>(quality));
-		}
-		public get()
-		{
-			return view_as<int>(TF2_GetEntityQuality(view_as<int>(this)));
-		}
+	property any TF2Quality {
+		public set(any quality) { TF2_SetEntityQuality(view_as<int>(this), quality); }
+		public get() { return TF2_GetEntityQuality(view_as<int>(this)); }
 	}
 	
 	/**
 	 *	The entity's level. [TF2]
 	 *
-	 *	@param	entity	Entity index.
 	 *	@param	level	The level.
 	 */
-	property int TF2Level
-	{
-		public set(int level)
-		{
-			TF2_SetEntityLevel(view_as<int>(this), level);
-		}
-		public get()
-		{
-			return TF2_GetEntityLevel(view_as<int>(this));
-		}
+	property int TF2Level {
+		public set(int level) { TF2_SetEntityLevel(view_as<int>(this), level); }
+		public get() { return TF2_GetEntityLevel(view_as<int>(this)); }
 	}
+	
+	/**
+	 *	The entity's validity.
+	 *	
+	 *	@param	valid	If true, this item is visible for everybody.
+	 */
+	 property bool TF2Validated {
+	 	public set(bool valid) { TF2_SetValidatedAttachedEntity(view_as<int>(this), valid); }
+	 	public get() { TF2_IsValidatedAttachedEntity(view_as<int>(this)); }
+	 }
+	
+	/**
+	 *	Creates a cosmetic entity.
+	 *
+	 *	@param	name				The entity name.
+	 *	@param	ForceEdictIndex		Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@return	Returns the entity index of the cosmetic entity.
+	 */
+	public Entity TF2_Cosmetic(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx("tf_wearable", name, ForceEdictIndex)); }
+	
+	/**
+	 *	Creates a demoshield weapon entity.
+	 *
+	 *	@param	name				The entity name.
+	 *	@param	ForceEdictIndex		Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@return	Returns the entity index of the cosmetic demoshield entity.
+	 */
+	public Entity TF2_CosmeticDemoShield(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx("tf_wearable_demoshield", name, ForceEdictIndex)); }
+	
+	/**
+	 *	Creates a razorback weapon entity.
+	 *	Used for the 'Razorback' weapon.
+	 *
+	 *	@param	name				The entity name.
+	 *	@param	ForceEdictIndex		Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@return	Returns the entity index of the cosmetic razorback entity.
+	 */
+	public Entity TF2_CosmeticRazorback(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx("tf_wearable_razorback", name, ForceEdictIndex)); }
+	
+	/**
+	 *	Creates a videomaker entity.
+	 *	Used for taunts.
+	 *
+	 *	@param	name				The entity name.
+	 *	@param	ForceEdictIndex		Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@return	Returns the entity index of the cosmetic videomaker entity.
+	 */
+	public Entity TF2_CosmeticVideoMaker(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx("tf_wearable_vm", name, ForceEdictIndex)); }
+	
+	/**
+	 *	Creates a robot arm viewmodel.
+	 *	Used for the 'Gunslinger' weapon.
+	 *
+	 *	@param	name				The entity name.
+	 *	@param	ForceEdictIndex		Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@return	Returns the entity index of the robot arm viewmodel entity.
+	 */
+	public Entity TF2_CosmeticRobotArm(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx("tf_wearable_robot_arm", name, ForceEdictIndex)); }
+	
+	/**
+	 *	Creates a levelable cosmetic item.
+	 *	Used for cosmetics updating its model based on its owner's current killstreak.
+	 *
+	 *	@param	name				The entity name.
+	 *	@param	ForceEdictIndex		Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@return	Returns the entity index of the levelable cosmetic entity.
+	 */
+	public Entity TF2_CosmeticLevelable(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx("tf_wearable_levelable_item", name, ForceEdictIndex)); }
+	
+	/**
+	 *	Creates a cosmetic campaign item.
+	 *
+	 *	@param	name				The entity name.
+	 *	@param	ForceEdictIndex		Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@return	Returns the entity index of the cosmetic campaign item entity.
+	 */
+	public Entity TF2_CosmeticCampaignItem(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx("tf_wearable_campaign_item", name, ForceEdictIndex)); }
+	
+	/**
+	 *	Creates a viewmodel entity.
+	 *	Used for showing your arms.
+	 *
+	 *	@param	name				The entity name.
+	 *	@param	ForceEdictIndex		Edict index used by the created entity (Ignored on Orangebox and above).
+	 *
+	 *	@return	Returns the entity index of the cosmetic viewmodel entity.
+	 */
+	public Entity TF2_Viewmodel(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(CreateEntityByNameEx("tf_viewmodel", name, ForceEdictIndex)); }
 	#endif
 }
 
@@ -1205,7 +1139,7 @@ methodmap Entity __nullable__ {
 
 /**
  *	Returns if the entity or edict is valid.
- *	Use view_as<int>(this) over IsValidEntity and IsValidEdict as view_as<int>(this) combines them.
+ *	Use this over IsValidEntity and IsValidEdict as this combines them.
  *
  *	@param	entity	Entity index.
  *
@@ -1218,7 +1152,7 @@ stock bool IsValidEntityEx(int entity) { return (IsValidEdict(entity) || IsValid
 /**
  *	Sets an integer value in an entity's property.
  *
- *	view_as<int>(this) function is considered safer and more robust over SetEntData,
+ *	This function is considered safer and more robust over SetEntData,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1226,24 +1160,21 @@ stock bool IsValidEntityEx(int entity) { return (IsValidEdict(entity) || IsValid
  *	@param	prop		Property name.
  *	@param	value		Value to set.
  *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						view_as<int>(this) value is auto-detected, and the size parameter is
+ *						this value is auto-detected, and the size parameter is
  *						only used as a fallback in case detection fails.
  *	@param	element		Element # (starting from 0) if property is an array.
  *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
  */
 stock bool SetEntPropEx(int entity, PropType type, const char[] prop, any value, int size=4, int element=0) {
-	if(HasEntProp(entity, type, prop)) {
-		SetEntProp(entity, type, prop, value, size, element);
-		return true;
-	}
-	
-	return	false;	
+	if(!HasEntProp(entity, type, prop)) return false;
+	SetEntProp(entity, type, prop, value, size, element);
+	return true;	
 }
 
 /**
  *	Sets an entity index in an entity's property.
  *
- *	view_as<int>(this) function is considered safer and more robust over SetEntDataEnt*,
+ *	This function is considered safer and more robust over SetEntDataEnt*,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1255,26 +1186,23 @@ stock bool SetEntPropEx(int entity, PropType type, const char[] prop, any value,
  *	@error				Invalid entity or offset out of reasonable bounds or property not found will return false.
  */
 stock bool SetEntPropEntEx(int entity, PropType type, const char[] prop, int other, int element=0) {
-	if(HasEntProp(entity, type, prop)) {
-		SetEntPropEnt(entity, type, prop, other, element);
-		return true;
-	}
-	
-	return	false;	
+	if(!HasEntProp(entity, type, prop)) return false;
+	SetEntPropEnt(entity, type, prop, other, element);
+	return true;
 }
 
 /**
  *	Retrieves an integer value from an entity's property.
  *	Considered safer over GetEntProp.
  *
- *	view_as<int>(this) function is considered safer and more robust over GetEntData,
+ *	This function is considered safer and more robust over GetEntData,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
  *	@param	type		Property type.
  *	@param	prop		Property name.
  *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						view_as<int>(this) value is auto-detected, and the size parameter is
+ *						this value is auto-detected, and the size parameter is
  *						only used as a fallback in case detection fails.
  *	@param	element		Element # (starting from 0) if property is an array.
  *
@@ -1282,13 +1210,13 @@ stock bool SetEntPropEntEx(int entity, PropType type, const char[] prop, int oth
  *
  *	@error				If entity is invalid or property not found, this returns -1.
  */
-stock int GetEntPropEx(int entity, PropType type, const char[] prop, int size=4, int element=0) { return HasEntPropEx(entity, type, prop) ? GetEntProp(entity, type, prop, size, element):-1; }
+stock int GetEntPropEx(int entity, PropType type, const char[] prop, int size=4, int element=0) { return !HasEntPropEx(entity, type, prop) ? -1 : GetEntProp(entity, type, prop, size, element); }
 
 /**
  *	Retrieves an integer value from an entity's property.
  *	Considered safer over GetEntProp.
  *
- *	view_as<int>(this) function is considered safer and more robust over GetEntDataEnt*,
+ *	This function is considered safer and more robust over GetEntDataEnt*,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1300,20 +1228,20 @@ stock int GetEntPropEx(int entity, PropType type, const char[] prop, int size=4,
  *
  *	@error				If entity is invalid or property not found, this returns -1.
  */
-stock int GetEntPropEntEx(int entity, PropType type, const char[] prop, int element=0) { return HasEntPropEx(entity, type, prop) ? GetEntPropEnt(entity, type, prop, element):-1; }
+stock int GetEntPropEntEx(int entity, PropType type, const char[] prop, int element=0) { return !HasEntPropEx(entity, type, prop) ? -1 : GetEntPropEnt(entity, type, prop, element); }
 
 /**
  *	Retrieves a boolean value from an entity's property.
  *	Considered safer over GetEntProp.
  *
- *	view_as<int>(this) function is considered safer and more robust over GetEntData,
+ *	This function is considered safer and more robust over GetEntData,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
  *	@param	type		Property type.
  *	@param	prop		Property name.
  *	@param	size		Number of bytes to write (valid values are 1, 2, or 4).
- *						view_as<int>(this) value is auto-detected, and the size parameter is
+ *						this value is auto-detected, and the size parameter is
  *						only used as a fallback in case detection fails.
  *	@param	element		Element # (starting from 0) if property is an array.
  *
@@ -1321,7 +1249,7 @@ stock int GetEntPropEntEx(int entity, PropType type, const char[] prop, int elem
  *
  * @error				If entity is invalid or property not found, this returns false.
  */
-stock bool GetEntPropBool(int entity, PropType type, const char[] prop, int size=4, int element=0) { return HasEntPropEx(entity, type, prop) ? view_as<bool>(GetEntProp(entity, type, prop, size, element)):false; }
+stock bool GetEntPropBool(int entity, PropType type, const char[] prop, int size=4, int element=0) { return !HasEntPropEx(entity, type, prop) ? false : view_as<bool>(GetEntProp(entity, type, prop, size, element)); }
 
 /**
  *	Gets a network property as a string.
@@ -1333,11 +1261,11 @@ stock bool GetEntPropBool(int entity, PropType type, const char[] prop, int size
  *	@param	maxlen		Maximum length of output string buffer.
  *	@param	element		Element # (starting from 0) if property is an array.
  *
- *	@return				Returns true/false if the procedure was valid.
+ *	@return	Returns number of non-null bytes written.
  *
- *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
+ *	@error	If entity, offset out of reasonable bounds, or property is not a valid string, this returns 0.
  */
-stock bool GetEntPropStringEx(int entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0) { return HasEntPropEx(entity, type, prop) ? view_as<bool>(GetEntPropString(entity, type, prop, buffer, maxlen, element) != -1):false; }
+stock int GetEntPropStringEx(int entity, PropType type, const char[] prop, char[] buffer, int maxlen, int element=0) { return !HasEntPropEx(entity, type, prop) ? 0 : GetEntPropString(entity, type, prop, buffer, maxlen, element); }
 
 /**
  *	Sets a network property as a string.
@@ -1348,11 +1276,11 @@ stock bool GetEntPropStringEx(int entity, PropType type, const char[] prop, char
  *	@param	buffer		String to set.
  *	@param	element		Element # (starting from 0) if property is an array.
  *
- *	@return				Returns true/false if the procedure was valid.
+ *	@return	Returns number of non-null bytes written.
  *
- *	@error				If entity, offset out of reasonable bounds, or property is not a valid string, this returns false.
+ *	@error	If entity, offset out of reasonable bounds, or property is not a valid string, this returns 0.
  */
-stock bool SetEntPropStringEx(int entity, PropType type, const char[] prop, const char[] buffer, int element=0) { return HasEntPropEx(entity, type, prop) ? view_as<bool>(SetEntPropString(entity, type, prop, buffer, element) != -1):false; }
+stock int SetEntPropStringEx(int entity, PropType type, const char[] prop, const char[] buffer, int element=0) { return !HasEntPropEx(entity, type, prop) ? 0 : SetEntPropString(entity, type, prop, buffer, element); }
 
 /**
  *	Returns if the entity is valid and has the network property.
@@ -1363,11 +1291,11 @@ stock bool SetEntPropStringEx(int entity, PropType type, const char[] prop, cons
  *
  *	@error	If entity or property is invalid/not found, this returns false.
  */
-stock bool HasEntPropEx(int entity, PropType type, const char[] prop) { return view_as<bool>(IsValidEntityEx(entity) && HasEntProp(entity, type, prop)); }
+stock bool HasEntPropEx(int entity, PropType type, const char[] prop) { return !IsValidEntityEx(entity) ? false : HasEntProp(entity, type, prop); }
 
 /**
  *	Sets a float value in an entity's property.
- *	view_as<int>(this) function is considered safer and more robust over SetEntDataFloat,
+ *	This function is considered safer and more robust over SetEntDataFloat,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/Edict index.
@@ -1379,18 +1307,15 @@ stock bool HasEntPropEx(int entity, PropType type, const char[] prop) { return v
  *	@error				If entity, offset or property is not valid, this returns false. (if out of bounds, view_as<int>(this) spits out an error).
  */
 stock bool SetEntPropFloatEx(int entity, PropType type, const char[] prop, float value, int element=0) {
-	if(HasEntPropEx(entity, type, prop))	{
-		SetEntPropFloat(entity, type, prop, value, element);
-		return true;
-	}
-	
-	return false;
+	if(!HasEntPropEx(entity, type, prop)) return false;
+	SetEntPropFloat(entity, type, prop, value, element);
+	return true;
 }
 
 /**
  *	Retrieves a float value from an entity's property.
  *
- *	view_as<int>(this) function is considered safer and more robust over GetEntDataFloat,
+ *	This function is considered safer and more robust over GetEntDataFloat,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1407,7 +1332,7 @@ stock float GetEntPropFloatEx(int entity, PropType type, const char[] prop, int 
 /**
  *	Retrieves a vector of floats from an entity, given a named network property.
  *
- *	view_as<int>(this) function is considered safer and more robust over GetEntDataVector,
+ *	This function is considered safer and more robust over GetEntDataVector,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1419,19 +1344,12 @@ stock float GetEntPropFloatEx(int entity, PropType type, const char[] prop, int 
  *	@error				If entity is invalid, property not found, or property not
  *						actually a vector data type, this returns false.
  */
-stock bool GetEntPropVectorEx(int entity, PropType type, const char[] prop, float vec[3], int element=0) {
-	if(HasEntPropEx(entity, type, prop)) {
-		GetEntPropVector(entity, type, prop, vec, element);
-		return true;
-	}
-	
-	return false;
-}
+stock bool GetEntPropVectorEx(int entity, PropType type, const char[] prop, float vec[3], int element=0) { if(!HasEntPropEx(entity, type, prop)) return false; GetEntPropVector(entity, type, prop, vec, element); return true; }
 
 /**
  *	Sets a vector of floats in an entity, given a named network property.
  *
- *	view_as<int>(this) function is considered safer and more robust over SetEntDataVector,
+ *	This function is considered safer and more robust over SetEntDataVector,
  *	because it performs strict offset checking and typing rules.
  *
  *	@param	entity		Entity/edict index.
@@ -1443,14 +1361,7 @@ stock bool GetEntPropVectorEx(int entity, PropType type, const char[] prop, floa
  *	@error				If entity is invalid, property not found, or property not
  *						actually a vector data type, this returns false.
  */
-stock bool SetEntPropVectorEx(int entity, PropType type, const char[] prop, const float vec[3], int element=0) {
-	if(HasEntPropEx(entity, type, prop)) {
-		SetEntPropVector(entity, type, prop, vec, element);
-		return true;
-	}
-	
-	return false;
-}
+stock bool SetEntPropVectorEx(int entity, PropType type, const char[] prop, const float vec[3], int element=0) { if(!HasEntPropEx(entity, type, prop)) return false; SetEntPropVector(entity, type, prop, vec, element); return true; }
 
 /**
  *	Retrieves the count of values that an entity property's array can store.
@@ -1463,4 +1374,51 @@ stock bool SetEntPropVectorEx(int entity, PropType type, const char[] prop, cons
  *
  *	@error				If invalid entity or property not found, this returns -1.
  */
-stock int GetEntPropArraySizeEx(int entity, PropType type, const char[] prop) { return HasEntPropEx(entity, type, prop) ? GetEntPropArraySize(entity, type, prop):-1; }
+stock int GetEntPropArraySizeEx(int entity, PropType type, const char[] prop) { return !HasEntPropEx(entity, type, prop) ? -1 : GetEntPropArraySize(entity, type, prop); }
+
+/**
+ *	Peeks into an entity's object data and sets the integer value at
+ *	the given prop.
+ *	This is alternative to SetEntData, considered 'safer',
+ *	gets the offset manually of the prop.
+ *	
+ *	@param	entity			Edict index.
+ *	@param	prop			Property to get offset out of to use.
+ *	@param	value			Value to set.
+ *	@param	size			Number of bytes to write (valid values are 1, 2, or 4).
+ *	@param	changeState		If true, change will be sent over the network.
+ *	
+ *	@error	If invalid entity, offset out of reasonable bounds or invalid, this returns false.
+ */
+stock bool SetEntDataOffset(int entity, const char[] prop, any value, int size=4, bool changeState=false) {
+	if(!IsValidEntityEx(entity)) return false;
+	char netclass[96];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	int offset = FindSendPropInfo(netclass, prop);
+	if(offset < 1) return false;
+	SetEntData(entity, offset, value, size, changeState);
+	return true;
+}
+
+/**
+ *	Peeks into an entity's object data and retrieves the integer value at
+ *	the given offset.
+ *	This is alternative to GetEntData, considered 'safer',
+ *	gets the offset manually of the prop.
+ *	
+ *	@param	entity		Edict index.
+ *	@param	prop		Property to get offset out of to use.
+ *	@param	size		Number of bytes to read (valid values are 1, 2, or 4).
+ *
+ *	@return	Value at the given memory location.
+ *
+ *	@error	If invalid entity, offset out of reasonable bounds or invalid, this returns -1.
+ */
+stock any GetEntDataOffset(int entity, const char[] prop, int size=4) {
+	if(!IsValidEntityEx(entity)) return -1;
+	char netclass[96];
+	GetEntityNetClass(entity, netclass, sizeof(netclass));
+	int offset = FindSendPropInfo(netclass, prop);
+	if(offset < 1) return -1;
+	return GetEntData(entity, offset, size);
+}
