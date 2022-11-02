@@ -531,9 +531,9 @@ methodmap Entity __nullable__ {
 	 *	@param	clasname	Item classname (such as weapon_ak47).
 	 *	@param	iSubType	Unknown.
 	 *
-	 *	@error		If invalid client or client not in game, or lack of mod support, this returns Entity_Invalid or Entity_NotSupported.
+	 *	@error	If invalid client or client not in game, or lack of mod support, this returns Entity_Invalid or Entity_NotSupported.
 	 */
-	public static Entity GiveItem(any client, const char[] classname, int iSubType=0) { return view_as<Entity>(GivePlayerItem(client, classname, iSubType)); }
+	public any GiveItem(int client, const char[] classname, int iSubType=0) { return GivePlayerItem(client, classname, iSubType); }
 	
 	/**
 	 *	Returns the absolute origin of an entity.
