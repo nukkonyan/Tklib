@@ -538,7 +538,7 @@ methodmap Entity __nullable__ {
 	/**
 	 *	Returns the absolute origin of an entity.
 	 *
-	 *	@param	vec			3 dimensional vector array.
+	 *	@param	vec		3 dimensional vector array.
 	 *
 	 *	@error	If entity is invalid, this returns false.
 	 */
@@ -547,8 +547,8 @@ methodmap Entity __nullable__ {
 	/**
 	 *	Returns the entity name
 	 *
-	 *	@param buffer		Buffer storage.
-	 *	@param maxlen		Buffer max length.
+	 *	@param buffer	Buffer storage.
+	 *	@param maxlen	Buffer max length.
 	 *
 	 *	@error	If the entity is invalid, this returns false.
 	 */
@@ -557,7 +557,7 @@ methodmap Entity __nullable__ {
 	/**
 	 *	Set entity name
 	 *
-	 *	@param	name		Entity name.
+	 *	@param	name	Entity name.
 	 *
 	 *	@error	If entity is invalid, it will returns false.
 	 */
@@ -585,7 +585,7 @@ methodmap Entity __nullable__ {
 	/**
 	 *	Sets the entity's model name path
 	 *
-	 *	@param	model		Model path.
+	 *	@param	model	Model path.
 	 *
 	 *	@error	If the entity is invalid, this returns false.
 	 */
@@ -594,8 +594,8 @@ methodmap Entity __nullable__ {
 	/**
 	 *	Returns the entity's model name path
 	 *
-	 *	@param	buffer		Buffer storage.
-	 *	@param	maxlen		Length of the buffer.
+	 *	@param	buffer	Buffer storage.
+	 *	@param	maxlen	Length of the buffer.
 	 *
 	 *	@error	If the entity is invalid, this returns false.
 	 */
