@@ -271,6 +271,152 @@ methodmap PanelEx < Panel {
 	}
 }
 
+//Same as DBResultSet, just added DBResultSet.FetchBool value.
+methodmap DBResultSetEx < DBResultSet {
+	// Advances to the next set of results.
+	//
+	// In some SQL implementations, multiple result sets can exist on one query.  
+	// This is possible in MySQL with simple queries when executing a CALL 
+	// query.  If this is the case, all result sets must be processed before
+	// another query is made.
+	//
+	// @return             True if there was another result set, false otherwise.
+	public bool FetchMoreResults() { return view_as<DBResultSet>(this).FetchMoreResults(); }
+
+	// Returns whether or not a result set exists.  This will
+	// return true even if 0 results were returned, but false
+	// on queries like UPDATE, INSERT, or DELETE.
+	property bool HasResults {
+		public get() { return view_as<DBResultSet>(this).HasResults; }
+	}
+
+	// Retrieves the number of rows in the last result set.
+	// 
+	// @param query        A query (or statement) Handle.
+	// @return             Number of rows in the current result set.
+	property int RowCount {
+		public get() { return view_as<DBResultSet>(this).RowCount; }
+	}
+
+	// Retrieves the number of fields in the last result set.
+	property int FieldCount {
+		public get() { return view_as<DBResultSet>(this).FieldCount; }
+	}
+
+	// Returns the number of affected rows from the query that generated this
+	// result set.
+	property int AffectedRows {
+		public get() { return view_as<DBResultSet>(this).AffectedRows; }
+	}
+
+	// Returns the insert id from the query that generated this result set.
+	property int InsertId {
+		public get() { return view_as<DBResultSet>(this).InsertId; }
+	}
+
+	// Retrieves the name of a field by index.
+	// 
+	// @param field        Field number (starting from 0).
+	// @param name         Name buffer.
+	// @param maxlength    Maximum length of the name buffer.
+	// @error              Invalid field index, or no current result set.
+	public void FieldNumToName(int field, char[] name, int maxlength) { view_as<DBResultSet>(this).FieldNumToName(field, name, maxlength); }
+
+	// Retrieves a field index by name.
+	// 
+	// @param name         Name of the field (case sensitive).
+	// @param field        Variable to store field index in.
+	// @return             True if found, false if not found.
+	// @error              No current result set.
+	public bool FieldNameToNum(const char[] name, int &field) { view_as<DBResultSet>(this).FieldNameToNum(name, field); }
+
+	// Fetches a row from the current result set.  This must be 
+	// successfully called before any results are fetched.
+	//
+	// If this function fails, MoreRows can be used to
+	// tell if there was an error or the result set is finished.
+	// 
+	// @return             True if a row was fetched, false otherwise.
+	public bool FetchRow() { return view_as<DBResultSet>(this).FetchRow(); }
+
+	// Returns if there are more rows.
+	// 
+	// @return             True if there are more rows, false otherwise.
+	property bool MoreRows {
+		public get() { return view_as<DBResultSet>(this).MoreRows; }
+	}
+
+	// Rewinds a result set back to the first result.
+	// 
+	// @return             True on success, false otherwise.
+	// @error              No current result set.
+	public bool Rewind() { return view_as<DBResultSet>(this).Rewind(); }
+
+	// Fetches a string from a field in the current row of a result set.  
+	// If the result is NULL, an empty string will be returned.  A NULL 
+	// check can be done with the result parameter, or SQL_IsFieldNull().
+	// 
+	// @param field        The field index (starting from 0).
+	// @param buffer       String buffer.
+	// @param maxlength    Maximum size of the string buffer.
+	// @param result       Optional variable to store the status of the return value.
+	// @return             Number of bytes written.
+	// @error              Invalid field index, invalid type conversion requested
+	//                     from the database, or no current result set.
+	public int FetchString(int field, char[] buffer, int maxlength, DBResult &result=DBVal_Error) { return view_as<DBResultSet>(this).FetchString(field, buffer, maxlength, result); }
+
+	// Fetches a float from a field in the current row of a result set.  
+	// If the result is NULL, a value of 0.0 will be returned.  A NULL 
+	// check can be done with the result parameter, or SQL_IsFieldNull().
+	// 
+	// @param field        The field index (starting from 0).
+	// @param result       Optional variable to store the status of the return value.
+	// @return             A float value.
+	// @error              Invalid field index, invalid type conversion requested
+	//                     from the database, or no current result set.
+	public float FetchFloat(int field, DBResult &result=DBVal_Error) { return view_as<DBResultSet>(this).FetchFloat(field, result); }
+
+	// Fetches an integer from a field in the current row of a result set.  
+	// If the result is NULL, a value of 0 will be returned.  A NULL 
+	// check can be done with the result parameter, or SQL_IsFieldNull().
+	// 
+	// @param field        The field index (starting from 0).
+	// @param result       Optional variable to store the status of the return value.
+	// @return             An integer value.
+	// @error              Invalid field index, invalid type conversion requested
+	//                     from the database, or no current result set.
+	public int FetchInt(int field, DBResult &result=DBVal_Error) { return view_as<DBResultSet>(this).FetchInt(field, result); }
+	
+	// Fetches a boolean from a field in the current row of a result set.  
+	// If the result is NULL, a value of false will be returned.  A NULL 
+	// check can be done with the result parameter, or SQL_IsFieldNull().
+	// 
+	// @param field        The field index (starting from 0).
+	// @param result       Optional variable to store the status of the return value.
+	// @return             A boolean value.
+	// @error              Invalid field index, invalid type conversion requested
+	//                     from the database, or no current result set.
+	public bool FetchBool(int field, DBResult &result=DBVal_Error) { return view_as<bool>(view_as<DBResultSet>(this).FetchInt(field, result)); }
+
+	// Returns whether a field's data in the current row of a result set is 
+	// NULL or not.  NULL is an SQL type which means "no data."
+	// 
+	// @param field        The field index (starting from 0).
+	// @return             True if data is NULL, false otherwise.
+	// @error              Invalid field index, or no current result set.
+	public bool IsFieldNull(int field) { return view_as<DBResultSet>(this).IsFieldNull(field); }
+
+	// Returns the length of a field's data in the current row of a result
+	// set.  This only needs to be called for strings to determine how many
+	// bytes to use.  Note that the return value does not include the null
+	// terminator.
+	// 
+	// @param field        The field index (starting from 0).
+	// @return             Number of bytes for the field's data size.
+	// @error              Invalid field index or no current result set.
+	public int FetchSize(int field) { return view_as<DBResultSet>(this).FetchSize(field); }
+}
+
 /**
  *	Creates a new console boolean variable.
  *
@@ -287,9 +433,7 @@ methodmap PanelEx < Panel {
  *
  *	@error               Convar name is blank or is the same as an existing console command.
  */
-stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[] description, int flags=0) {
-	return CreateConVar(name, defaultValue ? "1":"0", description, flags, true, 0.0, true, 1.0);
-}
+stock ConVar CreateConVarBool(const char[] name, bool defaultValue, const char[] description, int flags=0) { return CreateConVar(name, defaultValue ? "1":"0", description, flags, true, 0.0, true, 1.0); }
 
 /**
  *	Adds ConVar flag(s).
