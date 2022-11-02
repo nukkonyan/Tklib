@@ -271,7 +271,7 @@ methodmap PanelEx < Panel {
 	}
 }
 
-//Same as DBResultSet, just added DBResultSet.FetchBool value.
+//Same as DBResultSet, just added DBResultSet.FetchBool value. Just because.
 methodmap DBResultSetEx < DBResultSet {
 	// Advances to the next set of results.
 	//
@@ -517,3 +517,25 @@ stock bool RemoveConVarFlagsEx(const char[] convar, int flags)	{
  *	@return	If handle is valid, this returns true. Returns false otherwise.
  */
 stock bool IsValidAddress(Address address) { return view_as<bool>(address != Address_Null); }
+
+/**
+ *	Same as SQL_Connect but this is if you just want a temporary connection.
+ *
+ *	@param	confname	The name of the database config connection.
+ *	@param	persistent	If true, it will try to use a previous persistent connection.
+ *	@param	debug		If true, it will show message if the connection returned 'null' (Error) or if it succeeded.
+ *
+ *	@return	Returns the SQL Connection. If invalid, returns null.
+ */
+stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool dbg=false) {
+	char error[256];
+	Database database = SQL_Connect(confname, persistent, error, sizeof(error));
+	if(dbg)	{
+		switch(database == null)	{
+			case true: PrintToServer("[Tklib:SQL_Connect2] : Connection to database \"%s\" had an error (%s)", confname, error);
+			case false: PrintToServer("[Tklib:SQL_Connect2] : Connection to database \"%s\" succeeded!", confname);
+		}
+	}
+	
+	return database;
+}

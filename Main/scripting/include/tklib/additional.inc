@@ -137,7 +137,7 @@ stock int GetCmdInt(int argnum) {
  *	@return	Integer of the returned argument.
  */
 stock bool GetCmdBool(int argnum) {
-	char buffer[256];
+	char buffer[2];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
 	return view_as<bool>(StringToInt(buffer));
 }
@@ -152,7 +152,7 @@ stock bool GetCmdBool(int argnum) {
  *	@return	Integer of the returned argument.
  */
 stock float GetCmdFloat(int argnum) {
-	char buffer[256];
+	char buffer[16];
 	GetCmdArg(argnum, buffer, sizeof(buffer));
 	return StringToFloat(buffer);
 }
@@ -167,26 +167,6 @@ stock int FloatToInt(float value) {
 	char buffer[16];
 	FloatToString(value, buffer, sizeof(buffer));
 	return StringToInt(buffer);
-}
-
-/**
- *	Same as SQL_Connect but this is if you just want a temporary connection.
- *
- *	@param		confname		The name of the database config connection.
- *	@param		persistent		If true, it will try to use a previous persistent connection.
- *	@param		debug			If true, it will show message if the connection returned 'null' (Error) or if it succeeded.
- */
-stock Database SQL_Connect2(const char[] confname, bool persistent=true, bool dbg=false) {
-	char error[256];
-	Database database = SQL_Connect(confname, persistent, error, sizeof(error));
-	if(dbg)	{
-		switch(database == null)	{
-			case true: PrintToServer("[SQL_Connect2] : Connection to database \"%s\" had an error (%s)", confname, error);
-			case false: PrintToServer("[SQL_Connect2] : Connection to database \"%s\" succeeded!", confname);
-		}
-	}
-	
-	return database;
 }
 
 /**
