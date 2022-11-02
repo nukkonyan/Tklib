@@ -417,7 +417,7 @@ stock int CSGO_GetWeaponDefindex(const char[] weapon) {
 }
 
 /**
- *	Returns the weapon name by its entity name.
+ *	Returns the item name by its entity name.
  *
  *	@param	classname	The weapon entity classname.
  *	@param	name		The weapon's name.
@@ -425,7 +425,7 @@ stock int CSGO_GetWeaponDefindex(const char[] weapon) {
  *
  *	@noreturn
  */
-stock void CSGO_GetWeaponName(const char[] classname, char[] name, int maxlen) {
+stock void CSGO_GetItemName(const char[] classname, char[] name, int maxlen) {
 	if(StrEqual(classname, "weapon_ak47", false)) strcopy(name, maxlen, "Ak-47");
 	if(StrEqual(classname, "weapon_m4a1", false)) strcopy(name, maxlen, "M4A4");
 	if(StrEqual(classname, "weapon_m4a1_silencer", false)) strcopy(name, maxlen, "M4A1-S");
@@ -493,7 +493,7 @@ stock void CSGO_GetWeaponName(const char[] classname, char[] name, int maxlen) {
 }
 
 /**
- *	Returns the weapon name by its definition index.
+ *	Returns the item name by its definition index.
  *
  *	@param	defindex	The weapon definition index.
  *	@param	name		The weapon's name.
@@ -501,7 +501,7 @@ stock void CSGO_GetWeaponName(const char[] classname, char[] name, int maxlen) {
  *
  *	@noreturn
  */
-stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen) {
+stock void CSGO_GetItemNameDefindex(int defindex, char[] name, int maxlen) {
 	switch(defindex) {
 		case CSGO_Weapon_Ak47: strcopy(name, maxlen, "Ak-47");
 		case CSGO_Weapon_M4A4: strcopy(name, maxlen, "M4A4");
@@ -582,7 +582,7 @@ stock void CSGO_GetWeaponNameDefindex(int defindex, char[] name, int maxlen) {
  *
  *	@noreturn
  */
-stock void CSGO_GetClassnameDefindex(int defindex, char[] name, int maxlen) {
+stock void CSGO_GetItemClassnameDefindex(int defindex, char[] name, int maxlen) {
 	switch(defindex) {
 		case CSGO_Weapon_Ak47: strcopy(name, maxlen, "weapon_ak47");
 		case CSGO_Weapon_M4A4: strcopy(name, maxlen, "weapon_m4a1");

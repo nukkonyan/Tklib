@@ -13,6 +13,7 @@ CS_GetWeaponTypeName[][] = {"Knife","Pistol","SMG","Rifle","Shotgun","Sniper","M
 
 //CS Slots
 enum CSSlot {
+	CSSlot_Invalid = -1,
 	CSSlot_Primary = 0,
 	CSSlot_Secondary = 1,
 	CSSlot_Knife = 2,
@@ -40,34 +41,36 @@ enum CSWeaponType {
 enum {
 	CSS_Weapon_Deagle =	1,
 	CSS_Weapon_Glock = 2,
-	CSS_Weapon_Ak47 = 3,
-	CSS_Weapon_Aug = 4,
-	CSS_Weapon_AWP = 5,
-	CSS_Weapon_Famas = 6,
-	CSS_Weapon_G3SG1 = 7,
-	CSS_Weapon_Galil = 8,
-	CSS_Weapon_M249 = 9,
-	CSS_Weapon_M4A1 = 10,
-	CSS_Weapon_Mac10 = 11,
-	CSS_Weapon_P90 = 12,
-	CSS_Weapon_MP5 = 13,
-	CSS_Weapon_MP5Navy = 13,
-	CSS_Weapon_UMP45 =	14,
-	CSS_Weapon_XM1014 =	15,
-	CSS_Weapon_M3 =	16,
-	CSS_Weapon_USP = 17,
-	CSS_Weapon_P228 = 18,
-	CSS_Weapon_SG550 = 19,
-	CSS_Weapon_Scar20 = 19,
-	CSS_Weapon_SG552 = 20,
-	CSS_Weapon_Krieg = 20,
-	CSS_Weapon_SSG08 = 21,
-	CSS_Weapon_Scout = 21,
-	CSS_Weapon_Knife = 22,
-	CSS_Grenade_Flashbang = 23,
-	CSS_Grenade_HEGrenade = 24,
-	CSS_Grenade_SmokeGrenade = 25,
-	CSS_Weapon_C4 =	26
+	CSS_Weapon_FiveSeven = 3,
+	CSS_Weapon_Ak47 = 4,
+	CSS_Weapon_Aug = 5,
+	CSS_Weapon_AWP = 6,
+	CSS_Weapon_Famas = 7,
+	CSS_Weapon_G3SG1 = 8,
+	CSS_Weapon_Galil = 9,
+	CSS_Weapon_M249 = 10,
+	CSS_Weapon_M4A1 = 11,
+	CSS_Weapon_Mac10 = 12,
+	CSS_Weapon_P90 = 13,
+	CSS_Weapon_MP5 = 14,
+	CSS_Weapon_MP5Navy = 15,
+	CSS_Weapon_UMP45 =	16,
+	CSS_Weapon_XM1014 =	17,
+	CSS_Weapon_M3 =	18,
+	CSS_Weapon_USP = 19,
+	CSS_Weapon_P228 = 20,
+	CSS_Weapon_SG550 = 21,
+	CSS_Weapon_Scar20 = 22,
+	CSS_Weapon_SG552 = 23,
+	CSS_Weapon_Krieg = 24,
+	CSS_Weapon_SSG08 = 25,
+	CSS_Weapon_Scout = 26,
+	CSS_Weapon_Knife = 27,
+	CSS_Grenade_Flashbang = 28,
+	CSS_Grenade_HEGrenade = 29,
+	CSS_Grenade_SmokeGrenade = 30,
+	CSS_Weapon_C4 =	31,
+	CSS_Item_Defuser = 32
 }
 
 //I made this because TFTeam enum exists and cs doesn't have it :)
@@ -652,6 +655,48 @@ stock CSTeam CS_GetRandomTeam() { return view_as<CSTeam>(GetRandomInt(2, 3)); }
  *	@param	weapon	The weapon entity.
  */
 stock bool CS_IsWeaponZoomedIn(any weapon) { return GetEntPropBool(weapon, Prop_Send, "m_weaponMode"); }
+
+/**
+ *	Returns the classname by its definition index.
+ *
+ *	@param	defindex	The weapon definition index.
+ *	@param	name		The weapon's name.
+ *	@param	maxlen		The maximum length of the name.
+ *
+ *	@noreturn
+ */
+stock void CSS_GetItemClassnameDefindex(int defindex, char[] name, int maxlen) {
+	switch(defindex) {
+		case CSS_Weapon_Ak47: strcopy(name, maxlen, "weapon_ak47");
+		case CSS_Weapon_M4A1: strcopy(name, maxlen, "weapon_m4a1");
+		case CSS_Weapon_Galil: strcopy(name, maxlen, "weapon_galilar");
+		case CSS_Weapon_Famas: strcopy(name, maxlen, "weapon_famas");
+		case CSS_Weapon_SG552: strcopy(name, maxlen, "weapon_sg552");
+		case CSS_Weapon_Aug: strcopy(name, maxlen, "weapon_aug");
+		case CSS_Weapon_Scout: strcopy(name, maxlen, "weapon_ssg08");
+		case CSS_Weapon_AWP: strcopy(name, maxlen, "weapon_awp");
+		case CSS_Weapon_SG550: strcopy(name, maxlen, "weapon_scar20");
+		case CSS_Weapon_G3SG1: strcopy(name, maxlen, "weapon_g3sg1");
+		case CSS_Weapon_M3: strcopy(name, maxlen, "weapon_m3");
+		case CSS_Weapon_XM1014: strcopy(name, maxlen, "weapon_xm1014");
+		case CSS_Weapon_M249: strcopy(name, maxlen, "weapon_m249");
+		case CSS_Weapon_C4: strcopy(name, maxlen, "weapon_c4");
+		case CSS_Item_DefuserKit: strcopy(name, maxlen, "item_defuser");
+		case CSS_Grenade_HEGrenade: strcopy(name, maxlen, "weapon_hegrenade");
+		case CSS_Grenade_Flashbang: strcopy(name, maxlen, "weapon_flashbang");
+		case CSS_Grenade_SmokeGrenade: strcopy(name, maxlen, "weapon_smokegrenade");
+		case CSS_Weapon_Glock: strcopy(name, maxlen, "weapon_glock");
+		case CSS_Weapon_USP: strcopy(name, maxlen, "weapon_usp_silencer");
+		case CSS_Weapon_P228: strcopy(name, maxlen, "weapon_p228");
+		case CSS_Weapon_Deagle: strcopy(name, maxlen, "weapon_deagle");
+		case CSS_Weapon_FiveSeven: strcopy(name, maxlen, "weapon_fiveseven");
+		case CSS_Weapon_P90: strcopy(name, maxlen, "weapon_p90");
+		case CSS_Weapon_UMP45: strcopy(name, maxlen, "weapon_ump45");
+		case CSS_Weapon_MP5: strcopy(name, maxlen, "weapon_mp5navy");
+		case CSS_Weapon_Mac10: strcopy(name, maxlen, "weapon_mac10");
+		case CSGO_Knife: strcopy(name, maxlen, "weapon_knife");
+	}
+}
 
 /**
  *	Returns the weapon definition index by its entity name.

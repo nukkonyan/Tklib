@@ -1935,7 +1935,7 @@ stock bool TF2_GetKillstreakerName(int index, char[] buffer, int maxlen) {
  *
  *	@error				Invalid entity index or attribute name will return -1.0.
  */
-stock float TF2Attrib_GetByDefIndexEx(int entity, int defindex) {
+stock float TF2Attrib_GetByDefIndexEx(any entity, int defindex) {
 	if(!IsValidEntityEx(entity)) return -1.0;
 	
 	int indice[16];
@@ -2487,63 +2487,98 @@ stock bool TF2_SetValidatedAttachedEntity(int entity, bool validated) { return S
 /**
  *	Creates a cosmetic entity.
  *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
  *	@return	Returns the entity index of the cosmetic entity.
  */
-stock int TF2_CreateCosmetic() { return CreateEntityByName("tf_wearable"); }
+stock int TF2_CreateCosmetic(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_wearable", name, ForceEdictIndex); }
 
 /**
  *	Creates a demoshield weapon entity.
  *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
  *	@return	Returns the entity index of the cosmetic demoshield entity.
  */
-stock int TF2_CreateCosmeticDemoShield() { return CreateEntityByName("tf_wearable_demoshield"); }
+stock int TF2_CreateCosmeticDemoShield(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_wearable_demoshield", name, ForceEdictIndex); }
 
 /**
  *	Creates a razorback weapon entity.
  *	Used for the 'Razorback' weapon.
  *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
  *	@return	Returns the entity index of the cosmetic razorback entity.
  */
-stock int TF2_CreateCosmeticRazorback() { return CreateEntityByName("tf_wearable_razorback"); }
+stock int TF2_CreateCosmeticRazorback(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_wearable_razorback", name, ForceEdictIndex); }
 
 /**
  *	Creates a videomaker entity.
  *	Used for taunts.
  *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
  *	@return	Returns the entity index of the cosmetic videomaker entity.
  */
-stock int TF2_CreateCosmeticVideoMaker() { return CreateEntityByName("tf_wearable_vm"); }
+stock int TF2_CreateCosmeticVideoMaker(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_wearable_vm", name, ForceEdictIndex); }
 
 /**
  *	Creates a robot arm viewmodel.
  *	Used for the 'Gunslinger' weapon.
  *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
  *	@return	Returns the entity index of the robot arm viewmodel entity.
  */
-stock int TF2_CreateCosmeticRobotArm() { return CreateEntityByName("tf_wearable_robot_arm"); }
+stock int TF2_CreateCosmeticRobotArm(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_wearable_robot_arm", name, ForceEdictIndex); }
 
 /**
  *	Creates a levelable cosmetic item.
  *	Used for cosmetics updating its model based on its owner's current killstreak.
  *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
  *	@return	Returns the entity index of the levelable cosmetic entity.
  */
-stock int TF2_CreateCosmeticLevelable() { return CreateEntityByName("tf_wearable_levelable_item"); }
+stock int TF2_CreateCosmeticLevelable(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_wearable_levelable_item", name, ForceEdictIndex); }
 
 /**
  *	Creates a cosmetic campaign item.
  *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
  *	@return	Returns the entity index of the cosmetic campaign item entity.
  */
-stock int TF2_CreateCosmeticCampaignItem() { return CreateEntityByName("tf_wearable_campaign_item"); }
+stock int TF2_CreateCosmeticCampaignItem(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_wearable_campaign_item", name, ForceEdictIndex); }
 
 /**
  *	Creates a viewmodel entity.
  *	Used for showing your arms.
  *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
  *	@return	Returns the entity index of the cosmetic viewmodel entity.
  */
-stock int TF2_CreateViewmodel() { return CreateEntityByName("tf_viewmodel"); }
+stock int TF2_CreateViewmodel(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_viewmodel", name, ForceEdictIndex); }
+
+/**
+ *	Created a 'dropped' weapon entity.
+ *	Spawned into the world when the opponent dies, replica of the weapon wielded.
+ *
+ *	@param	name				If non-null, applies the entity name.
+ *	@param	ForceEdictIndex		If non-null, applies forced entity index when created.
+ *
+ *	@return	Returns the weapon entity.
+ */
+stock int TF2_CreateDroppedWeapon(const char[] name="", int ForceEdictIndex=-1) { return CreateEntityByNameEx("tf_dropped_weapon", name, ForceEdictIndex); }
 
 /**
  *	Returns if the user is in the class.
