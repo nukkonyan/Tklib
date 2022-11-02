@@ -269,8 +269,7 @@ stock Handle StartMessageOne(const char[] msgname, int client, int flags=0)
 	return StartMessage(msgname, players, 1, flags);
 }
 
-methodmap Message < Handle
-{
+methodmap Message < Handle {
 	// Starts a usermessage (network message).
 	//
 	// @note Only one message can be active at a time.
@@ -299,18 +298,10 @@ methodmap Message < Handle
  *
  *	@return	Returns null if invalid handle, otherwise viewed as ProtoBuf or BfRead handle.
  */
-stock any GetUserMsgType(Handle msg)
-{
-	switch(GetUserMessageType())
-	{
-		case	UM_Protobuf:
-		{
-			return view_as<Protobuf>(msg);
-		}
-		case	UM_BitBuf:
-		{
-			return view_as<BfRead>(msg);
-		}
+stock any GetUserMsgType(Handle msg) {
+	switch(GetUserMessageType()) {
+		case UM_Protobuf: return view_as<Protobuf>(msg);
+		case UM_BitBuf: return view_as<BfRead>(msg);
 	}
 	
 	//If the handle is invalid for some reason.
