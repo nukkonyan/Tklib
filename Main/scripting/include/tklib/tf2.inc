@@ -811,7 +811,7 @@ enum {
 	TF2Attr_MaxAmmoSecWearerIncrease = 78,
 	TF2Attr_MaxAmmoSecWearerDecrease = 79,
 	TF2Attr_MaxMetalWearerIncrease = 80,
-	TF2Attr_MaxMetalWearerIncrease = 81,
+	TF2Attr_MaxMetalWearerDecrease = 81,
 	TF2Attr_CloakDurationIncrease = 82,
 	TF2Attr_CloakDurationDecrease = 83,
 	TF2Attr_CloakRegenRateIncrease = 84,
@@ -857,6 +857,7 @@ enum {
 	TF2Attr_Killstreaks = 2025,
 	TF2Attr_Australium = 2027,
 	TF2Attr_Marketable = 2028,
+	TF2Attr_OnTauntUnusualEffect = 2041,
 	TF2Attr_Festivized = 2053,
 	TF2Attr_ItemDropWave = 3018,
 }
