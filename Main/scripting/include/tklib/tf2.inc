@@ -1847,23 +1847,23 @@ stock void TF2_TurnAustralium(any weapon) {
 		case true: {
 			SetEntDataOffset(weapon, "m_iItemDefinitionIndex", 1071); /* Turn to golden frying pan. */
 			#if defined _tf2attributes_included
-			TF2Attrib_SetByName(weapon, "turn to gold", 1.0);
-			TF2Attrib_SetByName(weapon, "killstreak tier", 1.0);
-			TF2Attrib_SetByName(weapon, "killstreak effect", view_as<float>(GetRandomInt(2002, 2008)));
-			TF2Attrib_SetByName(weapon, "killstreak idleeffect", view_as<float>(GetRandomInt(1, 7)));
-			TF2Attrib_SetByName(weapon, "item style override", 0.0);
+			TF2Attrib_SetByDefIndex(weapon, 150, 1.0);
+			TF2Attrib_SetByDefIndex(weapon, 2025, 1.0);
+			TF2Attrib_SetByDefIndex(weapon, 2013, view_as<float>(GetRandomInt(2002, 2008)));
+			TF2Attrib_SetByDefIndex(weapon, 2014, view_as<float>(GetRandomInt(1, 7)));
+			TF2Attrib_SetByDefIndex(weapon, 542, 0.0);
 			#endif
 		}
 		/* Turn the weapon to australium. */
 		case false: {
 			#if defined _tf2attributes_included
-			TF2Attrib_SetByName(weapon, "is australium item", 1.0);
-			TF2Attrib_SetByName(weapon, "item style override", 1.0);
+			TF2Attrib_SetByDefIndex(weapon, 542, 1.0);
 			#endif
 		}
 	}
 	
-	TF2Attrib_SetByName(weapon, "loot rarity", 1.0);
+	TF2Attrib_SetByDefIndex(weapon, 2027, 1.0);
+	TF2Attrib_SetByDefIndex(weapon, 3018, 1.0);
 }
 
 /**
@@ -1873,54 +1873,19 @@ stock void TF2_TurnAustralium(any weapon) {
  *	@param	buffer	Buffer to store the killstreaker name.
  *	@param	maxlen	Maximum length of the buffer.
  *
- *	@return	Returns true if the definition index is valid, false otherwise. 
+ *	@noreturn. 
  */
-stock bool TF2_GetKillstreakerName(int index, char[] buffer, int maxlen) {
+stock void TF2_GetKillstreakerName(int index, char[] buffer, int maxlen) {
 	switch(index) {
-		/* Fire Horns. */
-		case 2002: {
-			strcopy(buffer, maxlen, "Fire Horns");
-			return true;
-		}
-		
-		/* Cerebral Discharge. */
-		case 2003: {
-			strcopy(buffer, maxlen, "Cerebral Discharge");
-			return true;
-		}
-		
-		/* Tornado. */
-		case 2004: {
-			strcopy(buffer, maxlen, "Tornado");
-			return true;
-		}
-		
-		/* Flames. */
-		case 2005: {
-			strcopy(buffer, maxlen, "Flames");
-			return true;
-		}
-		
-		/* Singularity. */
-		case 2006: {
-			strcopy(buffer, maxlen, "Singularity");
-			return true;
-		}
-		
-		/* Incinerator. */
-		case 2007: {
-			strcopy(buffer, maxlen, "Incinerator");
-			return true;
-		}
-		
-		/* Hypno-Beam. */
-		case 2008: {
-			strcopy(buffer, maxlen, "Hypno-Beam");
-			return true;
-		}
+		case 2002: strcopy(buffer, maxlen, "Fire Horns");
+		case 2003: strcopy(buffer, maxlen, "Cerebral Discharge");
+		case 2004: strcopy(buffer, maxlen, "Tornado");
+		case 2005: strcopy(buffer, maxlen, "Flames");
+		case 2006: strcopy(buffer, maxlen, "Singularity");
+		case 2007: strcopy(buffer, maxlen, "Incinerator");
+		case 2008: strcopy(buffer, maxlen, "Hypno-Beam");
+		default: strcopy(buffer, maxlen, "None"); /* Invalid. */
 	}
-	
-	return false;
 }
 
 #if defined _tf2attributes_included
@@ -2664,5 +2629,35 @@ stock int TF2_EquipPlayerCosmetic(int client, int cosmetic) {
 	delete EquipWearable;
 	return offset;
 }
+
+/**
+ *	Returns if the class is valid.
+ *
+ *	@param	class	The TFClassType class type.
+ */
+stock bool TF2_IsValidClass(TFClassType class) { return (class >= TFClass_Scout && class <= TFClass_Civilian); }
+
+/**
+ *	Retrieves the users active class.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If user is invalid, this returns TFClass_Invalid.
+ */
+stock TFClassType TF2_GetPlayerActiveClass(int client) {
+	TFClassType class = view_as<TFClassType>(GetEntPropEx(client, Prop_Send, "m_iClass"))
+	, desired = view_as<TFClassType>(GetEntPropEx(client, Prop_Send, "m_iDesiredPlayerClass"));
+	
+	return TF2_IsValidClass(class) ? class : TF2_IsValidClass(desired) ? desired : TFClass_Invalid;
+}
+
+/**
+ *	Returns if the user has valid class.
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool TF2_PlayerHasValidClass(int client) { return TF2_IsValidClass(TF2_GetPlayerActiveClass(client)); }
 
 #endif

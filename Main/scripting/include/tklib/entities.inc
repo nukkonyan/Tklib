@@ -3,7 +3,7 @@
 //==========================================//
 #if !defined _tklib_disable_entities
 
-enum Entity	{
+enum Entity {
 	Entity_Unsupported = -2,
 	Entity_Invalid = -1,
 	Entity_Empty = 0
@@ -1831,3 +1831,5 @@ stock any GetEntDataOffset(int entity, const char[] prop, int size=4) {
 	if(offset < 1) return -1;
 	return GetEntData(entity, offset, size);
 }
+
+#define EntityWhileLoop(%1,%2) while((%1 = Entity.FindByClassname(%1, %2)).Valid())
