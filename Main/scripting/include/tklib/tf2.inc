@@ -1636,9 +1636,9 @@ stock bool IsTF2EconLoaded() { return view_as<bool>(GetFeatureStatus(FeatureType
 /**
  *	Returns the Footprint name type.
  *
- *	@param	defindex	The definition index of the footprint.
- *	@param	type		The buffer to store the name.
- *	@param	maxlen		The maximum length of the buffer.
+ *	@param	index	The footprint index.
+ *	@param	type	The buffer to store the name.
+ *	@param	maxlen	The maximum length of the buffer.
  *
  *	@noreturn.
  */
@@ -1660,7 +1660,6 @@ stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen) {
 		case 13595446: strcopy(type, maxlen, "Flames");
 		case 41234123: strcopy(type, maxlen, "Pink");
 		case 51234123: strcopy(type, maxlen, "Lime");
-		default: strcopy(type, maxlen, "Unknown");
 	}
 }
 
