@@ -842,6 +842,7 @@ enum {
 	TF2Attr_Purchased = 172,
 	TF2Attr_PaintRGB2 = 261,
 	TF2Attr_TwoWayTeleporter = 276,
+	TF2Attr_PDAPipBoyInterface = 295,
 	TF2Attr_DispenserRadiusIncreased = 345,
 	TF2Attr_HeadScale = 444,
 	TF2Attr_UnusualEffectVerticalOffset = 519,
