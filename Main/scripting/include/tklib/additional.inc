@@ -497,6 +497,12 @@ stock bool KillTimerEx(Handle timer, bool autoClose=false) { if(!timer) return f
  *
  *	@param	auth	The steam2 authentication id.
  */
-stock bool IsValidSteamID(const char[] auth) { if(StrContainsEx(auth, "STEAM_0:", false)) return true; if(auth[0] == '\0') return false; if(!StrEmpty(auth)) return false; return true; }
+stock bool IsValidSteamID(const char[] auth) {
+	if(StrContainsEx(auth, "STEAM_0:", false)) return true;
+	if(StrContainsEx(auth, "STEAM_1:", false)) return true;
+	if(auth[0] == '\0') return false;
+	if(!IsValidString(auth)) return false;
+	return true;
+}
 
 #endif

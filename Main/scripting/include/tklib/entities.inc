@@ -1164,6 +1164,60 @@ methodmap Entity __nullable__ {
 	//Other
 	
 	/**
+	 *	Returns the entity's absolute velocity.
+	 *
+	 *	@param	velocity	The velocity.
+	 *
+	 *	@error	If the entity is invalid or has no absolute velocity, this returns -1.0.
+	 */
+	public bool GetAbsVelocity(float velocity[3]) { return GetEntityVelocity(view_as<int>(this), velocity); }
+	
+	/**
+	 *	Set the entity's absolute velocity.
+	 *
+	 *	@param	velocity	The velocity.
+	 *
+	 *	@error	If the entity is invalid or has no absolute velocity, this returns -1.0.
+	 */
+	public bool SetAbsVelocity(const float velocity[3]) { return SetEntityAbsVelocity(view_as<int>(this), velocity); }
+	
+	/**
+	 *	Returns the entity's base velocity.
+	 *
+	 *	@param	velocity	The velocity.
+	 *
+	 *	@error	If the entity is invalid or has no base velocity, this returns -1.0.
+	 */
+	public bool GetBaseVelocity(float velocity[3]) { return GetEntityBaseVelocity(view_as<int>(this), velocity); }
+	
+	/**
+	 *	Set the entity's base velocity.
+	 *
+	*	@param	velocity	The velocity.
+	 *
+	 *	@error	If the entity is invalid or has no base velocity, this returns -1.0.
+	 */
+	public bool SetBaseOrigin(const float velocity[3]) { return SetEntityBaseOrigin(view_as<int>(this), velocity); }
+	
+	/**
+	 *	Returns the entity's velocity.
+	 *
+	 *	@param	velocity	The velocity.
+	 *
+	 *	@error	If the entity is invalid or has no velocity, this returns -1.0.
+	 */
+	public bool GetVelocity(float velocity[3]) { return GetEntityVelocity(view_as<int>(this), velocity); }
+	
+	/**
+	 *	Set the entity's velocity.
+	 *
+	 *	@param	velocity	The velocity.
+	 *
+	 *	@error	If the entity is invalid or has no velocity, this returns -1.0.
+	 */
+	public bool SetVelocity(const float velocity[3]) { return SetEntityVelocity(view_as<int>(this), velocity); }
+	
+	/**
 	 *	Entity's flags.
 	 */
 	property int Flags {

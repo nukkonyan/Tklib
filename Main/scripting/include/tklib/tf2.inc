@@ -28,6 +28,10 @@ const TFTeam TFTeam_Red = view_as<TFTeam>(2);
 const TFTeam TFTeam_Blue = view_as<TFTeam>3);
 #endif
 
+const int MAX_TF2_CLASSES = 10;
+const int MAX_TF2C_CLASSES = 11;
+const int MAX_TF2_PLAYERS = 34; // TF2 Clients will never reach above index 33, maximum players available is only to 32 or 33, each counting as entity index 1 to 32/33. Excluding zombie gamemode?
+
 const TFClassType TFClass_All = TFClass_Scout|TFClass_Soldier|TFClass_Pyro|TFClass_DemoMan|TFClass_Heavy|TFClass_Engineer|TFClass_Medic|TFClass_Sniper|TFClass_Spy|TFClass_Civilian;
 
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringNameEx[GetClientTeam(client)] will return the correct team name)
@@ -534,14 +538,14 @@ TF2_Weapons[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,2
 TF2_KillstreakerEffect[] = {2002,2003,2004,2005,2006,2007,2008},
 TF2_KillstreakerSheen[] = {0,1,2,3,4,5,6,7};
 
-#define MAX_TF2_TAUNTS sizeof(TF2_Taunts)
-#define MAX_TF2_CONDITIONS sizeof(TF2_Conditions)
-#define MAX_TF2_WARPAINTS sizeof(TF2_Warpaints)
-#define MAX_TF2_PAINTS sizeof(TF2_Paints)
-#define MAX_TF2_UNUSUALS sizeof(TF2_UnusualEffects)
-#define MAX_TF2_WEAPONS sizeof(TF2_Weapons)
-#define MAX_TF2_KILLSTREAKER_SHEENS sizeof(TF2_KillstreakerEffect)
-#define MAX_TF2_KILLSTREAKER_EFFECTS sizeof(TF2_KillstreakerSheen)
+const int MAX_TF2_TAUNTS = sizeof(TF2_Taunts);
+const int MAX_TF2_CONDITIONS = sizeof(TF2_Conditions);
+const int MAX_TF2_WARPAINTS = sizeof(TF2_Warpaints);
+const int MAX_TF2_PAINTS = sizeof(TF2_Paints);
+const int MAX_TF2_UNUSUALS = sizeof(TF2_UnusualEffects);
+const int MAX_TF2_WEAPONS = sizeof(TF2_Weapons);
+const int MAX_TF2_KILLSTREAKER_SHEENS = sizeof(TF2_KillstreakerEffect);
+const int MAX_TF2_KILLSTREAKER_EFFECTS = sizeof(TF2_KillstreakerSheen);
 
 //TF2 Flag Event
 enum TFFlag {
@@ -839,10 +843,13 @@ enum {
 	TF2Attr_PaintRGB2 = 261,
 	TF2Attr_TwoWayTeleporter = 276,
 	TF2Attr_DispenserRadiusIncreased = 345,
+	TF2Attr_HeadScale = 444,
 	TF2Attr_UnusualEffectVerticalOffset = 519,
 	TF2Attr_UnusualEffectUseHeadOrigin = 520,
 	TF2Attr_ItemStyleOverride = 542,
+	TF2Attr_TorsoScale = 620,
 	TF2Attr_LimitedQuantityItem = 692,
+	TF2Attr_HandScale = 699,
 	TF2Attr_WarpaintWear = 725,
 	TF2Attr_Warpaint = 834,
 	TF2Attr_SpellPaint = 1004,
@@ -1626,12 +1633,12 @@ stock bool TF2_SetClientAirDash(int client, int value) { return SetEntPropEx(cli
 /**
  *	Returns if TF2Attributes is available.
  */
-stock bool IsTF2AttributesLoaded() { return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Attrib_SetByName") == FeatureStatus_Available); }
+stock bool IsTF2AttributesLoaded() { return LibraryExists("tf2attributes"); }
 
 /**
- *	Returns if TF2Econ is available.
+ *	Returns if TF2Econ Data is available.
  */
-stock bool IsTF2EconLoaded() { return view_as<bool>(GetFeatureStatus(FeatureType_Native, "TF2Econ_GetItemName") == FeatureStatus_Available); }
+stock bool IsTF2EconDataLoaded() { return LibraryExists("tf_econ_data"); }
 
 /**
  *	Returns the Footprint name type.
@@ -1992,8 +1999,10 @@ stock void TF2_TurnAustralium(any weapon) {
 		}
 	}
 	
+	#if defined _tf2attributes_included
 	TF2Attrib_SetByDefIndex(weapon, 2027, 1.0);
 	TF2Attrib_SetByDefIndex(weapon, 3018, 1.0);
+	#endif
 }
 
 /**
@@ -2090,6 +2099,8 @@ stock bool TF2_TurnDefaultDefIndexToUpgraded(any weapon) {
 		case 24: SetEntData(weapon, offset, 210);
 		case 25: SetEntData(weapon, offset, 737);
 		case 29: SetEntData(weapon, offset, 211);
+		case 30: SetEntData(weapon, offset, 212);
+		case 735: SetEntData(weapon, offset, 736);
 	}
 	
 	return true;
@@ -2428,7 +2439,7 @@ stock bool TF2_ReplaceClientRobotVoicelines(int client, char[] sound, bool giant
  *
  *	@return	Returns the entity's owner.
  */
-stock int TF2_FindWeaponByDefinitionIndex(int client, int defindex) {
+stock any TF2_FindWeaponByDefinitionIndex(int client, int defindex) {
 	for(TFSlot slot = TFSlot_Primary; slot < TFSlot_PDA2; slot++) {
 		int weapon = TF2_GetPlayerWeaponSlot(client, slot);
 		if(IsValidEntityEx(weapon) && GetEntityDefinitionIndex(weapon) == defindex && GetEntityOwner(weapon) == client) return weapon;
@@ -2445,10 +2456,10 @@ stock int TF2_FindWeaponByDefinitionIndex(int client, int defindex) {
  *
  *	@return	Returns the entity's owner.
  */
-stock int TF2_FindCosmeticByDefinitionIndex(int client, int defindex) {
+stock any TF2_FindCosmeticByDefinitionIndex(int client, int defindex) {
 	int wearable = 0;
-	while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1)  if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client) return wearable;
-	while((wearable = FindEntityByClassname(wearable, "tf_wearable_levelable_item")) != -1)  if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client) return wearable;
+	while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1) if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client) return wearable;
+	while((wearable = FindEntityByClassname(wearable, "tf_wearable_levelable_item")) != -1) if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client) return wearable;
 	return -1;
 }
 
