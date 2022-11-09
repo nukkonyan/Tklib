@@ -36,25 +36,25 @@ const TFClassType TFClass_All = TFClass_Scout|TFClass_Soldier|TFClass_Pyro|TFCla
 
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringNameEx[GetClientTeam(client)] will return the correct team name)
 stock char
-TF2_GetTeamStringName[][] = {"Unassigned","Spectators","RED","BLU","GRN","YLW"},
-TF2_GetTeamStringNameEx[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{red}RED{default}","{blue}BLU{default}","{lightgreen}GRN{default}","{orange}YLW{default}"},
-TF2_GetTeamColour[][] = {"{grey}","{grey}","{red}","{blue}","{lightgreen}","{orange}"},
-TF2_GetFlagTypeName[][] = {"None","Picked up","Captured","Defended","Dropped","Carrier"},
-TF2_GetGameTypeName[][] = {"Unknown","Capture-The-Flag","Capture Points","Payload / Payload Race","Arena","Unknown","Unknown","Passball"},
-TF2_GetCritTypeName[][] = {"None","Mini-Crit","Crit"},
-TF2_GetClassTypeName[][] = {"Unknown","Scout","Sniper","Soldier","Demoman","Medic","Heavy","Pyro","Spy","Engineer","Civilian"},
-TF2_GetClassTypeNameLC[][] = {"unknown","scout","sniper","soldier","demoman","medic","heavy","pyro","spy","engineer","civilian"},
-TF2_GetBuildingTypeName[][] = {"Sentrygun","Dispenser","Teleporter Entrance","Teleporter Exit","Mini-Sentry","Sapper"},
-TF2_GetRobotPlayerModel[][] = {"","models/bots/scout/bot_scout.mdl","models/bots/sniper/bot_sniper.mdl","models/bots/soldier/bot_soldier.mdl","models/bots/demoman/bot_demoman.mdl","models/bots/medic/bot_medic.mdl","models/bots/heavy/bot_heavy.mdl","models/bots/pyro/bot_pyro.mdl","models/bots/spy/bot_spy.mdl","models/bots/engineer/bot_engineer.mdl"},
-TF2_GetPlayerZombieModel[][] = {"","models/player/items/scout/scout_zombie.mdl","models/player/items/sniper/sniper_zombie.mdl","models/player/items/soldier/soldier_zombie.mdl","models/player/items/demo/demo_zombie.mdl","models/player/items/medic/medic_zombie.mdl","models/player/items/heavy/heavy_zombie.mdl","models/player/items/pyro/pyro_zombie.mdl","models/player/items/spy/spy_zombie.mdl","models/player/items/engineer/engineer_zombie.mdl"},
-TF2_GetDefaultPlayerModel[][] = {"","models/player/scout.mdl","models/player/sniper.mdl","models/player/soldier.mdl","models/player/demoman.mdl","models/player/medic.mdl","models/player/heavy.mdl","models/player/pyro.mdl","models/player/spy.mdl","models/player/engineer.mdl"},
-TF2_GetStockWeaponTypeClassnamePrimary[][] = {"","tf_weapon_scattergun","tf_weapon_sniperrifle","tf_weapon_rocketlauncher","tf_weapon_grenadelauncher","tf_weapon_syringegun_medic","tf_weapon_minigun","tf_weapon_flamethrower","tf_weapon_revolver","tf_weapon_shotgun_primary"},
-TF2_GetStockWeaponTypeClassnameSecondary[][] = {"","tf_weapon_pistol_scout","tf_weapon_smg","tf_weapon_shotgun_soldier","tf_weapon_pipebomblauncher","tf_weapon_medigun","tf_weapon_shotgun_hwg","tf_weapon_shotgun_pyro","tf_weapon_sapper","tf_weapon_pistol"},
-TF2_GetStockWeaponTypeClassnameMelee[][] = {"","tf_weapon_bat","tf_weapon_club","tf_weapon_shovel","tf_weapon_bottle","tf_weapon_bonesaw","tf_weapon_fists","tf_weapon_fireaxe","tf_weapon_knife","tf_weapon_wrench"},
-TF2_GetPDATypeClassname[][] = {"","","","","","","","","tf_weapon_pda_spy","tf_weapon_pda_engineer_build"},
-TF2_GetPDA2TypeClassname[][] = {"","","","","","","","","tf_weapon_invis","tf_weapon_pda_engineer_destroy"},
-TF2_GetPDA3TypeClassname[][] = {"","","","","","","","","","tf_weapon_builder"},
-TF2_GetSlotName[][] = {"Primary","Secondary","Melee","Construction PDA / Disguise Kit","Demolition PDA / Invis Watch","Slot5","Slot6","Slot7","Slot8","Slot9","Slot10"},
+TF2_TeamName[][] = {"Unassigned","Spectators","RED","BLU","GRN","YLW"},
+TF2_TeamNameEx[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{red}RED{default}","{blue}BLU{default}","{lightgreen}GRN{default}","{orange}YLW{default}"},
+TF2_TeamColour[][] = {"{grey}","{grey}","{red}","{blue}","{lightgreen}","{orange}"},
+TF2_FlagTypeName[][] = {"None","Picked up","Captured","Defended","Dropped","Carrier"},
+TF2_GameTypeName[][] = {"Unknown","Capture-The-Flag","Capture Points","Payload / Payload Race","Arena","Unknown","Unknown","Passball"},
+TF2_CritTypeName[][] = {"None","Mini-Crit","Crit"},
+TF2_ClassTypeName[][] = {"Unknown","Scout","Sniper","Soldier","Demoman","Medic","Heavy","Pyro","Spy","Engineer","Civilian"},
+TF2_ClassTypeNameLC[][] = {"unknown","scout","sniper","soldier","demoman","medic","heavy","pyro","spy","engineer","civilian"},
+TF2_BuildingTypeName[][] = {"Sentrygun","Dispenser","Teleporter Entrance","Teleporter Exit","Mini-Sentry","Sapper"},
+TF2_RobotPlayerModel[][] = {"","models/bots/scout/bot_scout.mdl","models/bots/sniper/bot_sniper.mdl","models/bots/soldier/bot_soldier.mdl","models/bots/demoman/bot_demoman.mdl","models/bots/medic/bot_medic.mdl","models/bots/heavy/bot_heavy.mdl","models/bots/pyro/bot_pyro.mdl","models/bots/spy/bot_spy.mdl","models/bots/engineer/bot_engineer.mdl"},
+TF2_PlayerZombieModel[][] = {"","models/player/items/scout/scout_zombie.mdl","models/player/items/sniper/sniper_zombie.mdl","models/player/items/soldier/soldier_zombie.mdl","models/player/items/demo/demo_zombie.mdl","models/player/items/medic/medic_zombie.mdl","models/player/items/heavy/heavy_zombie.mdl","models/player/items/pyro/pyro_zombie.mdl","models/player/items/spy/spy_zombie.mdl","models/player/items/engineer/engineer_zombie.mdl"},
+TF2_DefaultPlayerModel[][] = {"","models/player/scout.mdl","models/player/sniper.mdl","models/player/soldier.mdl","models/player/demoman.mdl","models/player/medic.mdl","models/player/heavy.mdl","models/player/pyro.mdl","models/player/spy.mdl","models/player/engineer.mdl"},
+TF2_StockWeaponTypeClassnamePrimary[][] = {"","tf_weapon_scattergun","tf_weapon_sniperrifle","tf_weapon_rocketlauncher","tf_weapon_grenadelauncher","tf_weapon_syringegun_medic","tf_weapon_minigun","tf_weapon_flamethrower","tf_weapon_revolver","tf_weapon_shotgun_primary"},
+TF2_StockWeaponTypeClassnameSecondary[][] = {"","tf_weapon_pistol_scout","tf_weapon_smg","tf_weapon_shotgun_soldier","tf_weapon_pipebomblauncher","tf_weapon_medigun","tf_weapon_shotgun_hwg","tf_weapon_shotgun_pyro","tf_weapon_sapper","tf_weapon_pistol"},
+TF2_StockWeaponTypeClassnameMelee[][] = {"","tf_weapon_bat","tf_weapon_club","tf_weapon_shovel","tf_weapon_bottle","tf_weapon_bonesaw","tf_weapon_fists","tf_weapon_fireaxe","tf_weapon_knife","tf_weapon_wrench"},
+TF2_PDATypeClassname[][] = {"","","","","","","","","tf_weapon_pda_spy","tf_weapon_pda_engineer_build"},
+TF2_PDA2TypeClassname[][] = {"","","","","","","","","tf_weapon_invis","tf_weapon_pda_engineer_destroy"},
+TF2_PDA3TypeClassname[][] = {"","","","","","","","","","tf_weapon_builder"},
+TF2_SlotName[][] = {"Primary","Secondary","Melee","Construction PDA / Disguise Kit","Demolition PDA / Invis Watch","Slot5","Slot6","Slot7","Slot8","Slot9","Slot10"},
 TF2_ConditionName[][] = {"Revving Minigun, Sniper Rifle. Gives zoomed/revved pose"
 ,"Sniper Rifle zooming"
 ,"Disguise smoke"
@@ -192,7 +192,7 @@ TF2_KillstreakerEffectName[][] = {"Fire Horns","Cerebral Discharge","Tornado","F
 stock TFClassType TF2_TauntsClassType[] = {TFClass_All,TFClass_All,TFClass_All,TFClass_Medic,TFClass_All,TFClass_All,TFClass_All,TFClass_Spy,TFClass_Medic,TFClass_All,TFClass_All,TFClass_Pyro,TFClass_Soldier,TFClass_Demoman,TFClass_Engineer,TFClass_Sniper,TFClass_Scout,TFClass_All,TFClass_Scout,TFClass_Demoman,TFClass_All,TFClass_All,TFClass_All,TFClass_Heavy,TFClass_All,TFClass_All,TFClass_Soldier,TFClass_Scout,TFClass_Pyro,TFClass_Scout,TFClass_Sniper,TFClass_Sniper,TFClass_Spy,TFClass_Heavy,TFClass_Engineer,TFClass_All,TFClass_Demoman,TFClass_All,TFClass_Soldier,TFClass_Soldier,TFClass_Spy,TFClass_Pyro,TFClass_All,TFClass_Sniper,TFClass_Demoman,TFClass_Engineer,TFClass_Heavy,TFClass_Heavy,TFClass_Engineer,TFClass_Pyro,TFClass_Scout,TFClass_Medic,TFClass_Pyro,TFClass_Scout,TFClass_Scout,TFClass_Spy,TFClass_Demoman,TFClass_Medic,TFClass_Soldier,TFClass_Scout,TFClass_Pyro,TFClass_Engineer,TFClass_Scout,TFClass_All,TFClass_Demoman,TFClass_Soldier,TFClass_Medic,TFClass_Heavy,TFClass_Scout,TFClass_Medic,TFClass_Sniper,TFClass_Pyro};
 
 stock int
-TF2_GetClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175},
+TF2_ClassDefaultHealth[] = {125,200,175,175,300,125,150,125,125,175},
 TF2_Taunts[] = {167,438,463,477,1015,1106,1107,1108,1109,1110,1111,1112,1113,1114,1115,1116,1117,1118,1119,1120,1157,1162,1172,1174,1182,1183,1196,1197,30570,30572,30609,30614,30615,30616,30618,30621,30671,30672,30673,30761,30762,30763,30816,30839,30840,30842,30843,30844,30845,30876,30917,30918,30919,30920,30921,30922,31153,31154,31155,31156,31157,31160,31161,31162,31201,31202,31203,31207,31233,31236,31237,31239},
 TF2_Australiums[] = {4,7,13,14,15,16,18,19,20,21,29,36,38,45,61,132,141,194,197,200,201,202,203,205,206,207,208,211,228,264,424},
 TF2_Conditions[] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129},
@@ -2413,20 +2413,20 @@ stock bool TF2_ReplaceClientRobotVoicelines(int client, char[] sound, bool giant
 	TFClassType class = TF2_GetPlayerClass(client);
 	
 	char vc[3][64];
-	Format(vc[0], sizeof(vc[]), "vo/%s_", TF2_GetClassTypeNameLC[class]);
+	Format(vc[0], sizeof(vc[]), "vo/%s_", TF2_ClassTypeNameLC[class]);
 	switch(giant) {
 		case true: {
-			Format(vc[1], sizeof(vc[]), "vo/mvm/mght/%s_", TF2_GetClassTypeNameLC[class]);
-			Format(vc[2], sizeof(vc[]), "%s_mvm_m", TF2_GetClassTypeNameLC[class]);
+			Format(vc[1], sizeof(vc[]), "vo/mvm/mght/%s_", TF2_ClassTypeNameLC[class]);
+			Format(vc[2], sizeof(vc[]), "%s_mvm_m", TF2_ClassTypeNameLC[class]);
 		}
 		case false: {
-			Format(vc[1], sizeof(vc[]), "vo/mvm/norm/%s_", TF2_GetClassTypeNameLC[class]);
-			Format(vc[2], sizeof(vc[]), "%s_mvm", TF2_GetClassTypeNameLC[class]);
+			Format(vc[1], sizeof(vc[]), "vo/mvm/norm/%s_", TF2_ClassTypeNameLC[class]);
+			Format(vc[2], sizeof(vc[]), "%s_mvm", TF2_ClassTypeNameLC[class]);
 		}
 	}
 	
 	ReplaceString(sound, 128, vc[0], vc[1], false);
-	ReplaceString(sound, 128, TF2_GetClassTypeName[class], vc[2], false);
+	ReplaceString(sound, 128, TF2_ClassTypeName[class], vc[2], false);
 	PrecacheSound(sound);
 	return true;
 }

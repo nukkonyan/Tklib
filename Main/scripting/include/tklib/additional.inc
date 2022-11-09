@@ -505,4 +505,17 @@ stock bool IsValidSteamID(const char[] auth) {
 	return true;
 }
 
+/**
+ *	Returns a random value between value 1 'any1' and value 2 'any2'
+ *
+ *	@param	any1	First value, the minimum value.
+ *	@param	any2	Second value, the maximum value.
+ */
+stock any GetRandomAny(any any1, any any2) { return GetRandomInt(any1, any2); }
+
+/**
+ *	Returns if the updater is loaded.
+ */
+stock bool IsUpdaterAvailable()	{ return view_as<bool>(GetFeatureStatus(FeatureType_Native, "Updater_AddPlugin") == FeatureStatus_Available); }
+
 #endif

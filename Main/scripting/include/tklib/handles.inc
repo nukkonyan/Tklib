@@ -311,33 +311,53 @@ methodmap StringMapEx < StringMap {
 	public bool SetValue(const char[] key, any value, bool replace=true) { return view_as<StringMap>(this).SetValue(key, value, replace); }
 	
 	/*
-	 *	Sets an array value in a Map, either inserting a new entry or replacing an old one.
+	 *	Retrieves a value in a Map.
 	 *
-	 *	@param	key			Key string.
-	 *	@param	array		Array to store.
-	 *	@param	num_items	Number of items in the array.
-	 *	@param	replace		If false, operation will fail if the key is already set.
+	 *	@param	key		Key string.
+	 *	@param	size	Optional parameter to store the number of elements written to the buffer.
+	 *	@param	...		Additional key parameters.
 	 *
-	 *	@return	True on success, false on failure.
+	 *	@return	True on success. False if the key is not set, or the key is set as an array or string (not a value).
 	 */
-	public bool SetArray(const char[] key, const any[] array, int num_items, bool replace=true) { return view_as<StringMap>(this).SetArray(key, array, num_items, replace); }
+	public bool GetValue(const char[] key, int &size=0, any ...) {
+		char dummy[256];
+		VFormat(dummy, sizeof(dummy), key, 3);
+		return view_as<StringMap>(this).GetValue(dummy, size);
+	}
 	
 	/*
 	 *	Sets an array value in a Map, either inserting a new entry or replacing an old one.
 	 *
-	 *	@param	index		Key index.
+	 *	@param	key			Key string.
 	 *	@param	array		Array to store.
-	 *	@param	num_items	Number of items in the array.
+	 *	@param	array_size	Number of items in the array. (Array size)
 	 *	@param	replace		If false, operation will fail if the key is already set.
 	 *
 	 *	@return	True on success, false on failure.
 	 */
-	public bool SetArrayIndex(int index, const any[] array, int num_items, bool replace=true) {
-		char key[16];
-		IntToString(index, key, sizeof(key));
-		return view_as<StringMap>(this).SetArray(key, array, num_items, replace);
+	public bool SetArray(const char[] key, const any[] array, int array_size, bool replace=true, any ...) {
+		char dummy[256];
+		VFormat(dummy, sizeof(dummy), key, 5);
+		return view_as<StringMap>(this).SetArray(dummy, array, array_size, replace);
 	}
-
+	
+	/*
+	 *	Retrieves an array in a Map.
+	 *	
+	 *	@param	key			Key string.
+	 *	@param	array		Buffer to store array.
+	 *	@param	array_size	Maximum size of array buffer. (Array size)
+	 *	@param	size		Optional parameter to store the number of elements written to the buffer.
+	 *	@param	...			Additional key parameters.
+	 *
+	 *	@return	True on success.  False if the key is not set, or the key is set as a value or string (not an array).
+	 */
+	public bool GetArray(const char[] key, any[] array, int array_size, int &size=0, any ...) {
+		char dummy[256];
+		VFormat(dummy, sizeof(dummy), key, 5);
+		return view_as<StringMap>(this).GetArray(dummy, array, array_size, size);
+	}
+	
 	/*
 	 *	Sets a string value in a Map, either inserting a new entry or replacing an old one.
 	 *
@@ -350,18 +370,70 @@ methodmap StringMapEx < StringMap {
 	public bool SetString(const char[] key, const char[] value, bool replace=true) { return view_as<StringMap>(this).SetString(key, value, replace); }
 	
 	/*
+	 *	Sets an index in a Map.
+	 *
+	 *	@param	key		Key string.
+	 *	@param	value	Index to store.
+	 *	@param	replace	If false, operation will fail if the key is already set.
+	 *	@param	...		Additional key parameters.
+	 *
+	 *	@return	True on success, false on failure.
+	 */
+	public bool SetStringIndex(const char[] key, int index, bool replace=true, any ...) {
+		char value[16], dummy[256];
+		IntToString(index, value, sizeof(value));
+		VFormat(dummy, sizeof(dummy), key, 4);
+		return view_as<StringMap>(this).SetString(dummy, value, replace);
+	}
+	
+	/*
+	 *	Sets a value in a Map.
+	 *
+	 *	@param	key		Key string.
+	 *	@param	value	Value to store.
+	 *	@param	replace	If false, operation will fail if the key is already set.
+	 *	@param	...		Additional key parameters.
+	 *
+	 *	@return	True on success, false on failure.
+	 */
+	public bool SetStringValue(const char[] key, any value, bool replace=true, any ...) {
+		char val[16], dummy[256];
+		IntToString(value, val, sizeof(val));
+		VFormat(dummy, sizeof(dummy), key, 4);
+		return view_as<StringMap>(this).SetString(dummy, val, replace);
+	}
+	
+	/*
+	 *	Sets a boolean value in a Map.
+	 *
+	 *	@param	key		Key string.
+	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
+	 *	@param	...		Additional key parameters.
+	 *
+	 *	@return	True on success, false on failure.
+	 */
+	public bool SetStringBool(const char[] key, bool value, bool replace=true, any ...) {
+		char val[16], dummy[256];
+		IntToString(view_as<int>(value), val, sizeof(val));
+		VFormat(dummy, sizeof(dummy), key, 4);
+		return view_as<StringMap>(this).SetString(dummy, val, replace);
+	}
+	
+	/*
 	 *	Sets a string value in a Map, either inserting a new entry or replacing an old one.
 	 *
 	 *	@param	index	Key index.
 	 *	@param	value	String to store.
 	 *	@param	replace	If false, operation will fail if the key is already set.
+	 *	@param	...		Additional value parameters.
 	 *
 	 *	@return	True on success, false on failure.
 	 */
-	public bool SetStringIndex(int index, const char[] value, bool replace=true) {
-		char key[16];
+	public bool SetIndexString(int index, const char[] value, bool replace=true, any ...) {
+		char key[16], dummy[256];
 		IntToString(index, key, sizeof(key));
-		return view_as<StringMap>(this).SetString(key, value, replace);
+		VFormat(dummy, sizeof(dummy), value, 4);
+		return view_as<StringMap>(this).SetString(key, dummy, replace);
 	}
 	
 	/*
@@ -379,71 +451,81 @@ methodmap StringMapEx < StringMap {
 		IntToString(value, val, sizeof(val));
 		return view_as<StringMap>(this).SetString(key, val, replace);
 	}
-
-	/*
-	 *	Retrieves a value in a Map.
-	 *
-	 *	@param	key		Key string.
-	 *	@param	value	Variable to store value.
-	 *
-	 *	@return	True on success. False if the key is not set, or the key is set as an array or string (not a value).
-	 */
-	public bool GetValue(const char[] key, any &value) { return view_as<StringMap>(this).GetValue(key, value); }
-
-	/*
-	 *	Retrieves an array in a Map.
-	 *	
-	 *	@param	key			Key string.
-	 *	@param	array		Buffer to store array.
-	 *	@param	max_size	Maximum size of array buffer.
-	 *	@param	size		Optional parameter to store the number of elements written to the buffer.
-	 *
-	 *	@return	True on success.  False if the key is not set, or the key is set as a value or string (not an array).
-	 */
-	public bool GetArray(const char[] key, any[] array, int max_size, int &size=0) { return view_as<StringMap>(this).GetArray(key, array, max_size, size); }
 	
 	/*
-	 *	Retrieves an array in a Map.
-	 *	
-	 *	@param	index		Key index.
-	 *	@param	array		Buffer to store array.
-	 *	@param	max_size	Maximum size of array buffer.
-	 *	@param	size		Optional parameter to store the number of elements written to the buffer.
+	 *	Sets an array value in a Map, either inserting a new entry or replacing an old one.
 	 *
-	 *	@return	True on success.  False if the key is not set, or the key is set as a value or string (not an array).
+	 *	@param	index		Key index.
+	 *	@param	array		Array to store.
+	 *	@param	array_size	Number of items in the array.
+	 *	@param	replace		If false, operation will fail if the key is already set.
+	 *
+	 *	@return	True on success, false on failure.
 	 */
-	public bool GetArrayIndex(int index, any[] array, int max_size, int &size=0) {
+	public bool SetIndexArray(int index, const any[] array, int array_size, bool replace=true) {
 		char key[16];
 		IntToString(index, key, sizeof(key));
-		return view_as<StringMap>(this).GetArray(key, array, max_size, size);
+		return view_as<StringMap>(this).SetArray(key, array, array_size, replace);
 	}
 	
 	/*
 	 *	Retrieves a string in a Map.
 	 *
-	 *	@param	key			Key string.
-	 *	@param	value		Buffer to store value.
-	 *	@param	max_size	Maximum size of string buffer.
-	 *	@param	size		Optional parameter to store the number of bytes written to the buffer.
+	 *	@param	key		Key string.
+	 *	@param	value	Buffer to store value.
+	 *	@param	maxlen	Maximum size of string buffer.
+	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
 	 *
 	 *	@return	True on success.  False if the key is not set, or the key is set as a value or array (not a string).
 	 */
-	public bool GetString(const char[] key, char[] value, int max_size, int &size=0) { return view_as<StringMap>(this).GetString(key, value, max_size, size); }
+	public bool GetString(const char[] key, char[] value, int maxlen, int &size=0) { return view_as<StringMap>(this).GetString(key, value, maxlen, size); }
 	
 	/*
-	 *	Retrieves a string in a Map.
+	 *	Retrieves an index in a Map.
 	 *
-	 *	@param	index		Key index.
-	 *	@param	value		Buffer to store value.
-	 *	@param	max_size	Maximum size of string buffer.
-	 *	@param	size		Optional parameter to store the number of bytes written to the buffer.
+	 *	@param	key		Key string.
+	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
+	 *	@param	...		Additional key parameters.
 	 *
-	 *	@return	True on success.  False if the key is not set, or the key is set as a value or array (not a string).
+	 *	@return	Value on success. 0 if the key is not set, or the key is set as a value or array (not a string).
 	 */
-	public bool GetStringIndex(int index, char[] value, int max_size, int &size=0) {
-		char key[16];
-		IntToString(index, key, sizeof(key));
-		return view_as<StringMap>(this).GetString(key, value, max_size, size);
+	public int GetStringIndex(const char[] key, int &size=0, any ...) {
+		char value[16], dummy[256];
+		VFormat(dummy, sizeof(dummy), key, 3);
+		view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size);
+		return StringToInt(value);
+	}
+	
+	/*
+	 *	Retrieves a value in a Map.
+	 *
+	 *	@param	key		Key string.
+	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
+	 *	@param	...		Additional key parameters.
+	 *
+	 *	@return	Value on success. 0 if the key is not set, or the key is set as a value or array (not a string).
+	 */
+	public any GetStringValue(const char[] key, int &size=0, any ...) {
+		char value[16], dummy[256];
+		VFormat(dummy, sizeof(dummy), key, 3);
+		view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size);
+		return StringToInt(value);
+	}
+	
+	/*
+	 *	Retrieves a value in a Map.
+	 *
+	 *	@param	key		Key string.
+	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
+	 *	@param	...		Additional key parameters.
+	 *
+	 *	@return	Value on success. 0 if the key is not set, or the key is set as a value or array (not a string).
+	 */
+	public bool GetStringBool(const char[] key, int &size=0, any ...) {
+		char value[16], dummy[256];
+		VFormat(dummy, sizeof(dummy), key, 3);
+		view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size);
+		return view_as<bool>(StringToInt(value));
 	}
 	
 	/*
@@ -455,10 +537,44 @@ methodmap StringMapEx < StringMap {
 	 *	@return	value on success. 0 if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public int GetIndex(int index, any &size=0) {
-		char key[16], val[16];
+		char key[16], value[16];
 		IntToString(index, key, sizeof(key));
-		view_as<StringMap>(this).GetString(key, val, sizeof(val), size);
-		return StringToInt(val);
+		view_as<StringMap>(this).GetString(key, value, sizeof(value), size);
+		return StringToInt(value);
+	}
+	
+	/*
+	 *	Retrieves a string in a Map.
+	 *
+	 *	@param	index	Key index.
+	 *	@param	value	Buffer to store value.
+	 *	@param	maxlen	Maximum size of string buffer.
+	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
+	 *	@param	...		Additional value parameters
+	 *
+	 *	@return	True on success.  False if the key is not set, or the key is set as a value or array (not a string).
+	 */
+	public bool GetIndexString(int index, char[] value, int maxlen, int &size=0, any ...) {
+		char key[16], dummy[256];
+		IntToString(index, key, sizeof(key));
+		VFormat(dummy, sizeof(dummy), value, 5);
+		return view_as<StringMap>(this).GetString(key, dummy, maxlen, size);
+	}
+	
+	/*
+	 *	Retrieves an array in a Map.
+	 *	
+	 *	@param	index		Key index.
+	 *	@param	array		Buffer to store array.
+	 *	@param	array_size	Maximum size of array buffer.
+	 *	@param	size		Optional parameter to store the number of elements written to the buffer.
+	 *
+	 *	@return	True on success.  False if the key is not set, or the key is set as a value or string (not an array).
+	 */
+	public bool GetIndexArray(int index, any[] array, int array_size, int &size=0) {
+		char key[16];
+		IntToString(index, key, sizeof(key));
+		return view_as<StringMap>(this).GetArray(key, array, array_size, size);
 	}
 	
 	/*
