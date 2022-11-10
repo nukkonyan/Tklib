@@ -615,10 +615,16 @@ methodmap StringMapEx < StringMap {
 	 *	Removes a key entry from a Map.
 	 *
 	 *	@param	key	Key string.
+	 *	@param	...	Additional key parameters.
 	 *
 	 *	@return	True on success, false if the value was never set.
 	 */
-	public bool Remove(const char[] key) { return view_as<StringMap>(this).Remove(key); }
+	public bool Remove(const char[] key, any ...) {
+		int maxlen = (strlen(key)+1)*3;
+		char[] dummy = new char[maxlen];
+		VFormat(dummy, maxlen, key, 2);
+		return view_as<StringMap>(this).Remove(dummy);
+	}
 	
 	/*
 	 *	Removes a key entry from a Map.
