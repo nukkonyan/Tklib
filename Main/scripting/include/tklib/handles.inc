@@ -505,7 +505,7 @@ methodmap StringMapEx < StringMap {
 		char value[16], dummy[256];
 		VFormat(dummy, sizeof(dummy), key, 3);
 		if(!view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size)) return -1;
-		StringToInt(value);
+		return StringToInt(value);
 	}
 	
 	/*
