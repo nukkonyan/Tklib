@@ -215,4 +215,24 @@ stock void StrToLower(const char[] str, char[] subStr, int len) {
 	subStr[i] = '\0';
 }
 
+/**
+ *	Formats a string according to the SourceMod format rules (see documentation).
+ *	@note This is the same as Format(), except it grabs parameters from a 
+ *		parent parameter stack, rather than a local.  This is useful for 
+ *		implementing your own variable argument functions.
+ *
+ *	Alternative to FormatNativeString(), considered way easier based on VFormat().
+ *
+ *	@param	param		The parameter of the string.
+ *	@param	buffer		Output string buffer.
+ *	@param	maxlength	Maximum length of output string buffer.
+ *	@param	varpos		Argument number which contains the '...' symbol.
+ *						Note: Arguments start at 1.
+ *
+ *	@return				Number of bytes written.
+ *
+ *	@error				Invalid argument index.
+ */
+stock int VFormatNative(int param, char[] buffer, int maxlen, int varpos) { return FormatNativeString(0, param, varpos, maxlen, _, buffer); }
+
 #endif

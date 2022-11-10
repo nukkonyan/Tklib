@@ -41,6 +41,10 @@ enum Team {
 
 #define TargetLoop(%1) for(int %1 = 1; %1 <= MaxClients; %1++)
 
+#if defined _tklib_definitions
+#define TargetLoopEx(%1) for(int %1 = 1; %1 <= MaxPlayers; %1++)
+#endif
+
 //Player permissions
 /**
  *	Returns if the user is a Console
