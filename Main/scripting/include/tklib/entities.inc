@@ -34,23 +34,56 @@ stock bool SetEntityAbsOrigin(int entity, const float vec[3]) { return SetEntPro
 /**
  *	Returns the entity name
  *
- *	@param entity		Entity index.
- *	@param buffer		Buffer storage.
- *	@param maxlen		Buffer max length.
+ *	@param	entity	Entity index.
+ *	@param	buffer	Buffer storage.
+ *	@param	maxlen	Buffer max length.
  *
- *	@error	If the entity is invalid, this returns false.
+ *	@return	Number of non-null bytes written.
  */
-stock bool GetEntityName(int entity, char[] buffer, int maxlen)	{ return (GetEntPropStringEx(entity, Prop_Data, "m_iName", buffer, maxlen) > 0); }
+stock int GetEntityName(int entity, char[] buffer, int maxlen) { return GetEntPropStringEx(entity, Prop_Data, "m_iName", buffer, maxlen); }
 
 /**
- *	Set entity name
+ *	Sets the entity's name.
  *
- *	@param	entity		Entity index.
- *	@param	name		Entity name.
+ *	@param	entity	Entity index.
+ *	@param	name	Entity name.
+ *	@param	...		Additional name parameters.
  *
- *	@error	If entity is invalid, it will returns false.
+ *	@return	Number of non-null bytes written.
  */
-stock bool SetEntityName(int entity, const char[] name)	{ return (SetEntPropStringEx(entity, Prop_Data, "m_iName", name) > 0); }
+stock int SetEntityName(int entity, const char[] name, any ...) {
+	int maxlen = (strlen(name)+1)*3;
+	char[] dummy = new char[maxlen];
+	VFormat(dummy, maxlen, name, 3);
+	return SetEntPropStringEx(entity, Prop_Data, "m_iName", dummy);
+}
+
+/**
+ *	Retrieves the entity's global name.
+ *
+ *	@param	entity	The entity index.
+ *	@param	name	The name to store.
+ *	@param	maxlen	Maximum length of the name.
+ *
+ *	@return	Number of non-null bytes written.
+ */
+stock int GetEntityGlobalName(int entity, char[] name, int maxlen) { return GetEntPropStringEx(entity, Prop_Data, "m_iGlobalname", name, maxlen); }
+
+/**
+ *	Sets the entity's global name.
+ *
+ *	@param	entity	The entity index.
+ *	@param	name	The name to set.
+ *	@param	...		Additional name parameters.
+ *
+ *	@return	Number of non-null bytes written.
+ */
+stock int SetEntityGlobalName(int entity, const char[] name, any ...) {
+	int maxlen = (strlen(name)+1)*3;
+	char[] dummy = new char[maxlen];
+	VFormat(dummy, maxlen, name, 3);
+	return SetEntPropStringEx(entity, Prop_Data, "m_iGlobalname", dummy);
+}
 
 /**
  *	Find entity via classname if it exists.
@@ -545,23 +578,54 @@ methodmap Entity __nullable__ {
 	public bool GetAbsOrigin(float vec[3]) { return GetEntityAbsOrigin(view_as<int>(this), vec); }
 	
 	/**
-	 *	Returns the entity name
+	 *	Retrieves the entity's name.
 	 *
 	 *	@param buffer	Buffer storage.
 	 *	@param maxlen	Buffer max length.
 	 *
-	 *	@error	If the entity is invalid, this returns false.
+	 *	@return	Number of non-null bytes written.
 	 */
-	public bool GetName(char[] buffer, int maxlen) { return GetEntityName(view_as<int>(this), buffer, maxlen); }
+	public int GetName(char[] name, int maxlen) { return GetEntityName(view_as<int>(this), name, maxlen); }
 	
 	/**
-	 *	Set entity name
+	 *	Sets the entity's name
 	 *
 	 *	@param	name	Entity name.
+	 *	@param	...		Additional name parameters.
 	 *
-	 *	@error	If entity is invalid, it will returns false.
+	 *	@return	Number of non-null bytes written.
 	 */
-	public bool SetName(const char[] name) { return SetEntityName(view_as<int>(this), name); }
+	public int SetName(const char[] name, any ...) {
+		int maxlen = (strlen(name)+1)*3;
+		char[] dummy = new char[maxlen];
+		VFormat(dummy, maxlen, name, 2);
+		return SetEntityName(view_as<int>(this), dummy);
+	}
+	
+	/**
+	 *	Retrieves the entity's global name.
+	 *
+	 *	@param	name	The name to store.
+	 *	@param	maxlen	Maximum length of the name.
+	 *
+	 *	@return	Number of non-null bytes written.
+	 */
+	public int GetGlobalName(char[] name, int maxlen) { return GetEntityGlobalName(view_as<int>(this), name, maxlen); }
+	
+	/**
+	 *	Sets the entity's global name.
+	 *
+	 *	@param	name	The name to set.
+	 *	@param	...		Additional name parameters.
+	 *
+	 *	@return	Number of non-null bytes written.
+	 */
+	public int SetGlobalName(const char[] name, any ...) {
+		int maxlen = (strlen(name)+1)*3;
+		char[] dummy = new char[maxlen];
+		VFormat(dummy, maxlen, name, 2);
+		return SetEntityGlobalName(view_as<int>(this), dummy);
+	}
 	
 	public static Entity FindByClassname(any startEnt, const char[] classname) { return view_as<Entity>(FindEntityByClassname(startEnt, classname)); }
 	
@@ -1498,7 +1562,7 @@ methodmap Entity __nullable__ {
 	}
 	#endif
 	
-	#if !defined _tklib_disable_weapons
+	#if defined _tklib_disable_weapons
 	/**
 	 *	Equips the weapon entity.
 	 *	This is an alternative to EquipPlayerWeapon (.EquipWeapon), this method fixes 0 clip magazine and glitchy reload animations because
@@ -1510,8 +1574,6 @@ methodmap Entity __nullable__ {
 	 */
 	public bool EquipWeaponEx(int client) { return EquipPlayerWeaponEx(client, view_as<int>(this)); }
 	#else
-	#error Entity.EquipWeapon requires Weapons included to not be disabled ( EquipPlayerWeaponEx() )
-	#endif
 	
 	/**
 	 *	Returns the entity distance.

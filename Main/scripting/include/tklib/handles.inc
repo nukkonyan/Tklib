@@ -305,10 +305,16 @@ methodmap StringMapEx < StringMap {
 	 *	@param	key			Key string.
 	 *	@param	value		Value to store at this key.
 	 *	@param	replace		If false, operation will fail if the key is already set.
+	 *	@param	...			Additional key parameters.
 	 *
 	 *	@return	True on success, false on failure.
 	 */
-	public bool SetValue(const char[] key, any value, bool replace=true) { return view_as<StringMap>(this).SetValue(key, value, replace); }
+	public bool SetValue(const char[] key, any value, bool replace=true, any ...) {
+		int maxlen = (strlen(key)+1)*3;
+		char[] dummy = new char[maxlen];
+		VFormat(dummy, maxlen, key, 4);
+		return view_as<StringMap>(this).SetValue(dummy, value, replace);
+	}
 	
 	/*
 	 *	Retrieves a value in a Map.
@@ -475,10 +481,16 @@ methodmap StringMapEx < StringMap {
 	 *	@param	value	Buffer to store value.
 	 *	@param	maxlen	Maximum size of string buffer.
 	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
+	 *	@param	...		Additional key parameters.
 	 *
 	 *	@return	True on success.  False if the key is not set, or the key is set as a value or array (not a string).
 	 */
-	public bool GetString(const char[] key, char[] value, int maxlen, int &size=0) { return view_as<StringMap>(this).GetString(key, value, maxlen, size); }
+	public bool GetString(const char[] key, char[] value, int maxlen, int &size=0, any ...) {
+		int len = (strlen(key)+1)*3;
+		char[] dummy = new char[len];
+		VFormat(dummy, len, key, 5);
+		return view_as<StringMap>(this).GetString(dummy, value, maxlen, size);
+	}
 	
 	/*
 	 *	Retrieves an index in a Map.
@@ -487,13 +499,13 @@ methodmap StringMapEx < StringMap {
 	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
 	 *	@param	...		Additional key parameters.
 	 *
-	 *	@return	Value on success. 0 if the key is not set, or the key is set as a value or array (not a string).
+	 *	@return	Value on success. -1 if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public int GetStringIndex(const char[] key, int &size=0, any ...) {
 		char value[16], dummy[256];
 		VFormat(dummy, sizeof(dummy), key, 3);
-		view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size);
-		return StringToInt(value);
+		if(!view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size)) return -1;
+		StringToInt(value);
 	}
 	
 	/*
@@ -503,12 +515,12 @@ methodmap StringMapEx < StringMap {
 	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
 	 *	@param	...		Additional key parameters.
 	 *
-	 *	@return	Value on success. 0 if the key is not set, or the key is set as a value or array (not a string).
+	 *	@return	Value on success. -1 if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public any GetStringValue(const char[] key, int &size=0, any ...) {
 		char value[16], dummy[256];
 		VFormat(dummy, sizeof(dummy), key, 3);
-		view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size);
+		if(!view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size)) return -1;
 		return StringToInt(value);
 	}
 	
@@ -519,12 +531,12 @@ methodmap StringMapEx < StringMap {
 	 *	@param	size	Optional parameter to store the number of bytes written to the buffer.
 	 *	@param	...		Additional key parameters.
 	 *
-	 *	@return	Value on success. 0 if the key is not set, or the key is set as a value or array (not a string).
+	 *	@return	Value on success. false if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public bool GetStringBool(const char[] key, int &size=0, any ...) {
 		char value[16], dummy[256];
 		VFormat(dummy, sizeof(dummy), key, 3);
-		view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size);
+		if(!view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size)) return false;
 		return view_as<bool>(StringToInt(value));
 	}
 	

@@ -327,19 +327,20 @@ stock void CSGO_SetMatchmakingRank(int player_ent, int client, CSGORank rank, CS
  *	@param	client	The users index.
  *	@param	arms	The Arm model path.
  *
- *	@return	Returns false on failure, true otherwise.
+ *	@return	Returns number of non-null bytes written.
  */
-stock bool CSGO_SetClientArmModel(int client, const char[] arms) { return SetEntPropStringEx(client, Prop_Send, "m_szArmsModel", arms); }
+stock int CSGO_SetClientArmModel(int client, const char[] arms) { return SetEntPropStringEx(client, Prop_Send, "m_szArmsModel", arms); }
 
 /**
  *	Return the users arms model.
  *
- *	@param client		The users index.
- *	@param name			The Arm model path.
+ *	@param	client	The users index.
+ *	@param	model	The Arm model path.
+ *	@param	maxlen	The maximum length of the arm model.
  *
- *	@return				Returns false on failure, true otherwise.
+ *	@return	Returns number of non-null bytes written.
  */
-stock bool CSGO_GetClientArmModel(int client, char[] buffer, int maxlen) { return GetEntPropStringEx(client, Prop_Send, "m_szArmsModel", buffer, maxlen); }
+stock int CSGO_GetClientArmModel(int client, char[] buffer, int maxlen) { return GetEntPropStringEx(client, Prop_Send, "m_szArmsModel", buffer, maxlen); }
 
 /**
  *	Returns the weapon definition index by its entity name.
