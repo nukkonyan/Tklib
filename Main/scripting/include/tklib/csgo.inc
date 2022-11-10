@@ -221,7 +221,7 @@ stock bool CSGO_SetStatTrak(any entity, int value=-1) { return SetEntPropEx(enti
  *
  *	@error	If entity or stattrak module is invalid, it will return -1.
  */
-stock int CSGO_GetWeaponStatTrak(any entity) { return GetEntPropEx(entity, Prop_Send, "m_nFallbackStatTrak"); }
+stock int CSGO_GetStatTrak(any entity) { return GetEntPropEx(entity, Prop_Send, "m_nFallbackStatTrak"); }
 
 /**
  *	Set the weapon owner.
@@ -247,6 +247,15 @@ stock bool CSGO_SetOwner(any entity, int client) {
  *	@error	If the entity is invalid or procedure failed, this returns false.
  */
 stock bool CSGO_SetQuality(any entity, int index=3) { return SetEntPropEx(entity, Prop_Send, "m_iEntityQuality", index); }
+
+/**
+ *	Retrieves the weapon quality.
+ *
+ *	@param	entity	Entity index.
+ *
+ *	@error	If the entity is invalid or procedure failed, this returns -1.
+ */
+stock int CSGO_GetQuality(any entity) { return SetEntPropEx(entity, Prop_Send, "m_iEntityQuality", index); }
 
 /**
  *	Set the name tag

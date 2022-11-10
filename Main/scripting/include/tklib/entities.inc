@@ -256,7 +256,7 @@ stock bool GetEntityClassnameEx(int entity, char[] clsname, int maxlength) { ret
  *
  *	@error	If the entities is invalid, this returns false.
  */
-stock bool SetEntityParentAttachment(int entity, int parent) { return SetEntPropEx(entity, Prop_Send, "m_iParentAttachment", parent); }
+stock bool SetEntityParentAttachment(int entity, any parent) { return SetEntPropEx(entity, Prop_Send, "m_iParentAttachment", parent); }
 
 /**
  *	Returns the entity's parent attachment.
@@ -265,7 +265,7 @@ stock bool SetEntityParentAttachment(int entity, int parent) { return SetEntProp
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntityParentAttachment(int entity)	{ return GetEntPropEx(entity, Prop_Send, "m_iParentAttachment"); }
+stock any GetEntityParentAttachment(any entity)	{ return GetEntPropEx(entity, Prop_Send, "m_iParentAttachment"); }
 
 /**
  *	Returns the entity's parent entity.
@@ -275,7 +275,7 @@ stock int GetEntityParentAttachment(int entity)	{ return GetEntPropEx(entity, Pr
  *
  *	@error	If the entities is invalid, this returns false.
  */
-stock bool SetEntityParentEntity(int entity, int parent) { return SetEntPropEntEx(entity, Prop_Data, "m_hParent", parent); }
+stock bool SetEntityParentEntity(int entity, any parent) { return SetEntPropEntEx(entity, Prop_Data, "m_hParent", parent); }
 
 /**
  *	Returns the entity's parent entity.
@@ -284,7 +284,7 @@ stock bool SetEntityParentEntity(int entity, int parent) { return SetEntPropEntE
  *
  *	@error	If the entity is invalid, this returns -1.
  */
-stock int GetEntityParentEntity(int entity)	{ return GetEntPropEntEx(entity, Prop_Data, "m_hParent"); }
+stock any GetEntityParentEntity(int entity)	{ return GetEntPropEntEx(entity, Prop_Data, "m_hParent"); }
 
 /**
  *	Set the entity moving parent entity.
@@ -690,8 +690,8 @@ methodmap Entity __nullable__ {
 	public bool Valid() { return IsValidEntityEx(view_as<int>(this)); }
 	
 	/**
-	 *	Kills the entity.
-	 *	Same as AcceptEntityInput with "Kill".
+	 *	Kills the entity and its "children".
+	 *	Same as AcceptEntityInput with "KillHierarchy".
 	 *	this one makes sure if the entity is valid or not.
 	 *
 	 *	@error	If entity is invalid, this returns false.
@@ -739,17 +739,9 @@ methodmap Entity __nullable__ {
 	/**
 	 *	The entity's parent entity index.
 	 */
-	property int ParentEntity {
-		public set(int parent) { SetEntityParentEntity(view_as<int>(this), parent); }
+	property any Parent {
+		public set(any parent) { SetEntityParentEntity(view_as<int>(this), parent); }
 		public get() { return GetEntityParentEntity(view_as<int>(this)); }
-	}
-	
-	/**
-	 *	The entity's parent entity index.
-	 */
-	property Entity ParentEntityEx {
-		public set(Entity parent) { SetEntityParentEntity(view_as<int>(this), view_as<int>(parent)); }
-		public get() { return view_as<Entity>(GetEntityParentEntity(view_as<int>(this))); }
 	}
 	
 	/**
@@ -1711,6 +1703,111 @@ methodmap Entity __nullable__ {
 	 */
 	public Entity TF2_Viewmodel(const char[] name, int ForceEdictIndex=-1) { return view_as<Entity>(TF2_CreateViewmodel(name, ForceEdictIndex)); }
 	#endif
+	
+	#if !defined _tklib_no_csgo
+	/**
+	 *	Fixes the StatTrak and Skins function not working.
+	 *
+	 *	@return	Returns false on failure, true otherwise.
+	 */
+	public bool CSGOFixId() { return CSGO_FixId(view_as<int>(this)); }
+	
+	/**
+	 *	Sets or retrieves the skin.
+	 *
+	 *	@param	index	The skin index.
+	 *
+	 *	@return	If the entity is invalid, nothing will happen.
+	 */
+	property int CSGOSkin {
+		public set(int index) { CSGO_SetSkin(view_as<int>(this), index); }
+		public get() { return CSGO_GetSkin(view_as<int>(this)); }
+	}
+	
+	/**
+	 *	Sets or retrieves the pattern/seed.
+	 *
+	 *	@param	pattern	The pattern to set.
+	 *
+	 *	@error	If the entity is invalid or procedure failed, this returns -1.
+	 */
+	property int CSGOPattern {
+		public set(int pattern) { CSGO_SetPattern(view_as<int>(this), pattern); }
+		public get() { return CSGO_GetPattern(view_as<int>(this)); }
+	}
+	
+	/**
+	 *	Set the StatTrak.
+	 *
+	 *	@param	value	The 'kill' track amount. If -1, stattrak will be disabled.
+	 *
+	 *	@return	Returns false on failure, true otherwise.
+	 *
+	 *	@error	If the entity is invalid or procedure failed, returns -1.
+	 */
+	property int CSGOStatTrak {
+		public set(int value) { CSGO_SetStatTrak(view_as<int>(this), value); }
+		public get() { return CSGO_GetStatTrak(view_as<int>(this)); }
+	}
+	
+	/**
+	 *	Set the weapon quality.
+	 *
+	 *	@param	entity	Entity index.
+	 *	@param	index	Quality index value. By default set to 3, adding a star to the weapon name.
+	 *
+	 *	@error	If the entity is invalid or procedure failed, this returns -1.
+	 */
+	property int CSGOQuality {
+		public set(int quality) { CSGO_SetQuality(view_as<int>(this), quality); }
+		public get() { return CSGO_GetQuality(view_as<int>(this)); }
+	}
+	
+	/**
+	 *	Sets or retrieves the wear.
+	 *
+	 *	@param	wear	The wear float value.
+	 *
+	 *	@error	If the entity is invalid or procedure failed, this returns -1.0.
+	 */
+	property float CSGOWear {
+		public set(float wear) { CSGO_SetWear(view_as<int>(this), wear); }
+		public get() { return CSGO_GetWear(view_as<int>(this)); }
+	}
+	
+	/**
+	 *	Set the weapon owner.
+	 *
+	 *	@param	client	Users index.
+	 *
+	 *	@noreturn.
+	 */
+	public void CSGOSetOwner(int client) {
+		this.SetProp(Prop_Send, "m_iAccountID", GetSteamAccountID(client));
+		this.SetPropEnt(Prop_Send, "m_hOwnerEntity", client);
+		this.SetPropEnt(Prop_Send, "m_hPrevOwner", -1);
+	}
+	
+	/**
+	 *	Set the name tag
+	 *
+	 *	@param	nametag	A name tag or string of characters you specify.
+	 *	@param	maxlen	Max character length for the string buffer.
+	 *
+	 *	@return	Returns false on failure, true otherwise.
+	 */
+	public bool CSGOSetNameTag(any entity, const char[] nametag) { return CSGO_SetNameTag(view_as<int>(this), nametag); }
+	
+	/**
+	 *	Retrieves the nametag
+	 *
+	 *	@param	name	The source to store at.
+	 *	@param	maxlen	Length of the buffer.
+	 *
+	 *	@return	Returns false on failure, true otherwise.
+	 */
+	public bool CSGOGetNameTag(any entity, char[] name, int maxlen) { return CSGO_GetNameTag(view_as<int>(this), name, maxlen); }
+	#endif
 }
 
 #endif
@@ -1763,7 +1860,7 @@ stock bool SetEntPropEx(int entity, PropType type, const char[] prop, any value,
  *
  *	@error	Invalid entity or offset out of reasonable bounds or property not found will return false.
  */
-stock bool SetEntPropEntEx(int entity, PropType type, const char[] prop, int other, int element=0) { if(!HasEntProp(entity, type, prop)) return false; SetEntPropEnt(entity, type, prop, other, element); return true; }
+stock bool SetEntPropEntEx(int entity, PropType type, const char[] prop, any other, int element=0) { if(!HasEntProp(entity, type, prop)) return false; SetEntPropEnt(entity, type, prop, other, element); return true; }
 
 /**
  *	Retrieves an integer value from an entity's property.
