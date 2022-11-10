@@ -3,8 +3,8 @@
 //==========================================//
 #if !defined _tklib_no_csgo
 
-#define MAX_CSGO_WEP_LENGTH 16
-#define MAX_CSGO_ITEM_DEFINITION 526
+const int MaxCSGOWepLength = 16;
+const int MaxCSGOItemDefinition = 526;
 
 stock char
 CSGO_TeamNameEx[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{yellow}Terrorists{default}","{bluegrey}Counter-Terrorists{default}"},

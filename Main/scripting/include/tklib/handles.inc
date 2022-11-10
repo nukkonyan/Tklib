@@ -49,7 +49,7 @@ methodmap MenuEx < Menu {
 	public bool AddItemIntEx(int info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
 		char dummy[16];
 		IntToString(info, dummy, sizeof(dummy));
-		int maxlen = strlen(display)+128;
+		int maxlen = strlen(display)*3;
 		char[] format = new char[maxlen++];
 		VFormat(format, maxlen, display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
@@ -64,7 +64,7 @@ methodmap MenuEx < Menu {
 	public bool AddItemAnyEx(any info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
 		char dummy[16];
 		IntToString(info, dummy, sizeof(dummy));
-		int maxlen = strlen(display)+128;
+		int maxlen = strlen(display)*3;
 		char[] format = new char[maxlen++];
 		VFormat(dummy, maxlen, display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
@@ -79,7 +79,7 @@ methodmap MenuEx < Menu {
 	public bool AddItemFloatEx(float info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
 		char dummy[16];
 		FloatToString(info, dummy, sizeof(dummy));
-		int maxlen = strlen(display)+128;
+		int maxlen = strlen(display)*3;
 		char[] format = new char[maxlen++];
 		VFormat(format, maxlen, display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
@@ -134,8 +134,8 @@ methodmap PanelEx < Panel {
 	 *	@param	...		Additional parameters.
 	 */
 	public bool SetTitle(const char[] text, any ...) {
-		int maxlen = strlen(text)+65;
-		char[] dummy = new char[maxlen];
+		int maxlen = strlen(text)*3;
+		char[] dummy = new char[maxlen++];
 		VFormat(dummy, maxlen, text, 3); /* 1 is the panel, 2 is the input, 3 is the parameters */
 		view_as<Panel>(this).SetTitle(dummy);
 	}
@@ -152,8 +152,8 @@ methodmap PanelEx < Panel {
 	 *	@return			A slot position, or 0 if item was a rawline or could not be drawn.
 	 */
 	public int DrawItem(const char[] text, any ...) {
-		int maxlen = strlen(text)+65;
-		char[] dummy = new char[maxlen];
+		int maxlen = strlen(text)*3;
+		char[] dummy = new char[maxlen++];
 		VFormat(dummy, maxlen, text, 3);
 		return view_as<Panel>(this).DrawItem(dummy);
 	}
@@ -171,8 +171,8 @@ methodmap PanelEx < Panel {
 	 *	@return			A slot position, or 0 if item was a rawline or could not be drawn.
 	 */
 	public int DrawItemEx(const char[] text, int style=ITEMDRAW_DEFAULT, any ...) {
-		int maxlen = strlen(text)+65;
-		char[] dummy = new char[maxlen];
+		int maxlen = strlen(text)*3;
+		char[] dummy = new char[maxlen++];
 		VFormat(dummy, maxlen, text, 4);
 		return view_as<Panel>(this).DrawItem(dummy, style);
 	}
@@ -186,8 +186,8 @@ methodmap PanelEx < Panel {
 	 *	@return			True on success, false if raw lines are not supported.
 	 */
 	public bool DrawText(const char[] text, any ...) {
-		int maxlen = strlen(text)+65;
-		char[] dummy = new char[maxlen];
+		int maxlen = strlen(text)*3;
+		char[] dummy = new char[maxlen++];
 		VFormat(dummy, maxlen, text, 3);
 		return view_as<Panel>(this).DrawText(dummy);
 	}
@@ -310,8 +310,8 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success, false on failure.
 	 */
 	public bool SetValue(const char[] key, any value, bool replace=true, any ...) {
-		int maxlen = (strlen(key)+1)*3;
-		char[] dummy = new char[maxlen];
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
 		VFormat(dummy, maxlen, key, 4);
 		return view_as<StringMap>(this).SetValue(dummy, value, replace);
 	}
@@ -326,8 +326,9 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success. False if the key is not set, or the key is set as an array or string (not a value).
 	 */
 	public bool GetValue(const char[] key, int &size=0, any ...) {
-		char dummy[256];
-		VFormat(dummy, sizeof(dummy), key, 3);
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 3);
 		return view_as<StringMap>(this).GetValue(dummy, size);
 	}
 	
@@ -342,8 +343,9 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success, false on failure.
 	 */
 	public bool SetArray(const char[] key, const any[] array, int array_size, bool replace=true, any ...) {
-		char dummy[256];
-		VFormat(dummy, sizeof(dummy), key, 5);
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 5);
 		return view_as<StringMap>(this).SetArray(dummy, array, array_size, replace);
 	}
 	
@@ -359,8 +361,9 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success.  False if the key is not set, or the key is set as a value or string (not an array).
 	 */
 	public bool GetArray(const char[] key, any[] array, int array_size, int &size=0, any ...) {
-		char dummy[256];
-		VFormat(dummy, sizeof(dummy), key, 5);
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 5);
 		return view_as<StringMap>(this).GetArray(dummy, array, array_size, size);
 	}
 	
@@ -386,9 +389,11 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success, false on failure.
 	 */
 	public bool SetStringIndex(const char[] key, int index, bool replace=true, any ...) {
-		char value[16], dummy[256];
+		char value[16];
 		IntToString(index, value, sizeof(value));
-		VFormat(dummy, sizeof(dummy), key, 4);
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 4);
 		return view_as<StringMap>(this).SetString(dummy, value, replace);
 	}
 	
@@ -403,9 +408,11 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success, false on failure.
 	 */
 	public bool SetStringValue(const char[] key, any value, bool replace=true, any ...) {
-		char val[16], dummy[256];
+		char val[16];
 		IntToString(value, val, sizeof(val));
-		VFormat(dummy, sizeof(dummy), key, 4);
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 4);
 		return view_as<StringMap>(this).SetString(dummy, val, replace);
 	}
 	
@@ -419,9 +426,11 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success, false on failure.
 	 */
 	public bool SetStringBool(const char[] key, bool value, bool replace=true, any ...) {
-		char val[16], dummy[256];
+		char val[16];
 		IntToString(view_as<int>(value), val, sizeof(val));
-		VFormat(dummy, sizeof(dummy), key, 4);
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 4);
 		return view_as<StringMap>(this).SetString(dummy, val, replace);
 	}
 	
@@ -436,9 +445,11 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success, false on failure.
 	 */
 	public bool SetIndexString(int index, const char[] value, bool replace=true, any ...) {
-		char key[16], dummy[256];
+		char key[16];
 		IntToString(index, key, sizeof(key));
-		VFormat(dummy, sizeof(dummy), value, 4);
+		int maxlen = strlen(value)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, value, 4);
 		return view_as<StringMap>(this).SetString(key, dummy, replace);
 	}
 	
@@ -486,8 +497,8 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success.  False if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public bool GetString(const char[] key, char[] value, int maxlen, int &size=0, any ...) {
-		int len = (strlen(key)+1)*3;
-		char[] dummy = new char[len];
+		int len = strlen(key)*3;
+		char[] dummy = new char[len++];
 		VFormat(dummy, len, key, 5);
 		return view_as<StringMap>(this).GetString(dummy, value, maxlen, size);
 	}
@@ -502,8 +513,10 @@ methodmap StringMapEx < StringMap {
 	 *	@return	Value on success. -1 if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public int GetStringIndex(const char[] key, int &size=0, any ...) {
-		char value[16], dummy[256];
-		VFormat(dummy, sizeof(dummy), key, 3);
+		char value[16];
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 3);
 		if(!view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size)) return -1;
 		return StringToInt(value);
 	}
@@ -518,8 +531,10 @@ methodmap StringMapEx < StringMap {
 	 *	@return	Value on success. -1 if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public any GetStringValue(const char[] key, int &size=0, any ...) {
-		char value[16], dummy[256];
-		VFormat(dummy, sizeof(dummy), key, 3);
+		char value[16];
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 3);
 		if(!view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size)) return -1;
 		return StringToInt(value);
 	}
@@ -534,8 +549,10 @@ methodmap StringMapEx < StringMap {
 	 *	@return	Value on success. false if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public bool GetStringBool(const char[] key, int &size=0, any ...) {
-		char value[16], dummy[256];
-		VFormat(dummy, sizeof(dummy), key, 3);
+		char value[16];
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
+		VFormat(dummy, maxlen, key, 3);
 		if(!view_as<StringMap>(this).GetString(dummy, value, sizeof(value), size)) return false;
 		return view_as<bool>(StringToInt(value));
 	}
@@ -567,9 +584,11 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success.  False if the key is not set, or the key is set as a value or array (not a string).
 	 */
 	public bool GetIndexString(int index, char[] value, int maxlen, int &size=0, any ...) {
-		char key[16], dummy[256];
+		char key[16];
 		IntToString(index, key, sizeof(key));
-		VFormat(dummy, sizeof(dummy), value, 5);
+		int len = strlen(value)*3;
+		char[] dummy = new char[len++];
+		VFormat(dummy, len, value, 5);
 		return view_as<StringMap>(this).GetString(key, dummy, maxlen, size);
 	}
 	
@@ -620,8 +639,8 @@ methodmap StringMapEx < StringMap {
 	 *	@return	True on success, false if the value was never set.
 	 */
 	public bool Remove(const char[] key, any ...) {
-		int maxlen = (strlen(key)+1)*3;
-		char[] dummy = new char[maxlen];
+		int maxlen = strlen(key)*3;
+		char[] dummy = new char[maxlen++];
 		VFormat(dummy, maxlen, key, 2);
 		return view_as<StringMap>(this).Remove(dummy);
 	}
