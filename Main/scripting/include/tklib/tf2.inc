@@ -30,7 +30,6 @@ const TFTeam TFTeam_Blue = view_as<TFTeam>3);
 
 const int MAX_TF2_CLASSES = 9;
 const int MAX_TF2C_CLASSES = 10;
-const int MAX_TF2_PLAYERS = 34; // TF2 Clients will never reach above index 33, maximum players available is only to 32 or 33, each counting as entity index 1 to 32/33. Excluding zombie gamemode?
 
 const TFClassType TFClass_All = TFClass_Scout|TFClass_Soldier|TFClass_Pyro|TFClass_DemoMan|TFClass_Heavy|TFClass_Engineer|TFClass_Medic|TFClass_Sniper|TFClass_Spy|TFClass_Civilian;
 

@@ -10,6 +10,7 @@ enum Entity {
 }
 
 #define Ent(%1) view_as<Entity>(%1)
+#define EntityWhileLoop(%1,%2) while((%1 = Entity.FindByClassname(%1, %2)).Valid())
 
 /**
  *	Returns the absolute origin of an entity.
@@ -2133,5 +2134,3 @@ stock any GetEntDataNetClass(int entity, const char[] netclass, const char[] pro
 	if(offset < 1) return -1;
 	return GetEntData(entity, offset, size);
 }
-
-#define EntityWhileLoop(%1,%2) while((%1 = Entity.FindByClassname(%1, %2)).Valid())
