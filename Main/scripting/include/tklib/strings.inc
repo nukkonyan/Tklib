@@ -236,7 +236,7 @@ stock void StrToLower(const char[] str, char[] subStr, int len) {
 stock int VFormatNative(int param, char[] buffer, int maxlen, int varpos) { return FormatNativeString(0, param, varpos, maxlen, _, buffer); }
 
 /**
- * Retrieves the actual string length from a native parameter string.
+ *	Retrieves the actual string length from a native parameter string.
  *	This is useful for fetching the entire string using dynamic arrays.
  *
  *	@note	If this function succeeds, Get/SetNativeString will also succeed.

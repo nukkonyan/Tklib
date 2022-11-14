@@ -1137,6 +1137,27 @@ stock int GetClientWeaponClassname(int client, const char[] weapon) {
  */
 stock bool ClientHasWeapon(int client, const char[] weapon) { return view_as<bool>(GetClientWeaponClassname(client, weapon) != INVALID_ENT_REFERENCE); }
 
+/**
+ *	Set the users team.
+ *	Paired with GetClientTeamEx().
+ *
+ *	@param	client	The users index.
+ *	@param	team	The team to set.
+ *
+ *	@error	If the user is invalid, this returns false.
+ */
+stock bool SetClientTeam(int client, Team team) { if(!Tklib_IsValidClient(client)) return false; ChangeClientTeam(client, view_as<Team>(team)); }
+
+/**
+ *	Retrieves the users team.
+ *	Paired with SetClientTeamEx()
+ *
+ *	@param	client	The users index.
+ *
+ *	@error	If the user is invalid, this returns Team_Invalid.
+ */
+stock Team GetClientTeamEx(int client) { return !Tklib_IsValidClient(client, _, true) ? Team_Invalid : view_as<Team>(GetClientTeam(client)); }
+
 #endif
 
 //Important

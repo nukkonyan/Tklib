@@ -1797,7 +1797,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@return	Returns false on failure, true otherwise.
 	 */
-	public bool CSGOSetNameTag(any entity, const char[] nametag) { return CSGO_SetNameTag(view_as<int>(this), nametag); }
+	public bool CSGOSetNameTag(const char[] nametag) { return CSGO_SetNameTag(view_as<int>(this), nametag); }
 	
 	/**
 	 *	Retrieves the nametag
@@ -1807,7 +1807,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@return	Returns false on failure, true otherwise.
 	 */
-	public bool CSGOGetNameTag(any entity, char[] name, int maxlen) { return CSGO_GetNameTag(view_as<int>(this), name, maxlen); }
+	public bool CSGOGetNameTag(char[] name, int maxlen) { return CSGO_GetNameTag(view_as<int>(this), name, maxlen); }
 	#endif
 }
 
