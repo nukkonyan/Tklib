@@ -296,29 +296,6 @@ stock void SayText2All(int index=-1, const char[] message, any ...) {
 }
 
 /**
- *	Executes a simply query and returns a query Handle for
- *	recieving the results.
- *	This one is allows for additional parameters, making Format not required.
- *
- *	@param	database	The database handle.
- *	@param	query		The query string.
- *
- *	@return	A new Query Handle on success, else nulll.
- *
- *	@error	If database is invalid, this returns null.
- */
-stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...) {
-	if(database != null) {
-		int maxlen = strlen(query)+97;
-		char[] format = new char[maxlen];
-		VFormat(format, maxlen, query, 3);
-		return SQL_Query(database, format, -1);
-	}
-	
-	return null;
-}
-
-/**
  *	Returns if SourceBans is loaded.
  *
  *	@param	comms	If true, this checks if SourceComms of SourceBans is loaded instead.
