@@ -633,45 +633,65 @@ stock bool GetClientAuth(int client, char[] buffer, int maxlen) { return Tklib_I
 stock bool GetClientAuth3(int client, char[] buffer, int maxlen) { return Tklib_IsValidClient(client, _, _, false) ? GetClientAuthId(client, AuthId_Steam3, buffer, maxlen):false; }
 
 /**
- *	Returns the user by steam authentication.
+ *	Returns the users index by steam authentication.
  *
- *	@param auth.		Steam Auth.
+ *	@param	auth		Steam2 authentication id string.
+ *	@param	altsearch	Searches through MaxPlayers over MaxClients.
  *
- *	@return				The users index.
+ *	@return	The users index.
  *
- *	@error	If the user is invalid, this returns 0.
+ *	@error	If the user isn't found, this returns -1.
  */
-stock int GetClientOfAuth(const char[] auth) {
-	int user = 0;
+stock int GetClientOfAuth(const char[] auth, bool altsearch=true) {
 	char tempauth[64];
+	int x = altsearch ? MaxPlayers : MaxClients;
 	
-	TargetLoop(client) {
+	for(int client = 1; client <= x; client++) {
+		if(!Tklib_IsValidClient(client, _, false)) continue;
 		GetClientAuth(client, tempauth, sizeof(tempauth));
 		if(StrEqual(tempauth, auth, false)) user = client;
 	}
 	
-	return user;
+	return -1;
 }
 
 /**
- *	Returns the user by steam authentication.
+ *	Retrieves the users index by steam authentication.
  *
- *	@param auth.		Steam3 Auth.
+ *	@param	auth		Steam3 authentication id string.
+ *	@param	altsearch	Searches through MaxPlayers over MaxClients.
  *
- *	@return				The users index.
+ *	@return	The users index.
  *
- *	@error	If the user is invalid, this returns 0.
+ *	@error	If the user isn't found, this returns -1.
  */
-stock int GetClientOfAuth3(const char[] auth) {
-	int user = 0;
+stock int GetClientOfAuth3(const char[] auth, bool altsearch=true) {
 	char tempauth[64];
+	int x = altsearch ? MaxPlayers : MaxClients;
 	
-	TargetLoop(client) {
+	for(int client = 1; client <= x; client++) {
+		if(!Tklib_IsValidClient(client, _, false)) continue;
 		GetClientAuth3(client, tempauth, sizeof(tempauth));
 		if(StrEqual(tempauth, auth, false)) user = client;
 	}
 	
-	return user;
+	return -1;
+}
+
+/**
+ *	Retrieves the steam profile id.
+ *	Turning profile id to integer only returns -1 always, has to be done this way.
+ *	All due to id being 64-bit (more than 10 digits) and isn't supported on 32-bit integer.
+ *	Using float is a sneaky loophole, using '%.f' for a solid 'integer'(ish)
+ *
+ *	@param	client	The users index.
+ *
+ *	@noreturn
+ */
+stock void GetSteamProfileID(int client, char[] profileid, int maxlen) {
+	if(Tklib_IsValidClient(client, true, _, false)) {
+		GetClientAuthId(client, AuthId_SteamID64, profileid, maxlen);
+	}
 }
 
 /**
@@ -932,12 +952,13 @@ stock bool SetClientHideHud(int client, int flags) { return SetEntPropEx(client,
  *	@param	name		The string buffer to store the target name.
  *	@param	maxlen		The maximum length of the buffer.
  *	@param	flags		Filter flags.
+ *	@param	altsearch	If true, uses MaxPlayers over MaxClients.
  *
  *	@error	If no valid users are found, this returns 0 and array 0 as -1.
  *
  *	@return	Returns the target count.
  */
-stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, int maxlen, int[] list, int flags=0) {
+stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, int maxlen, int[] list, int flags=0, bool altsearch=false) {
 	int found = 0;
 	
 	bool All = (StrEqual(target, "@all", false)
@@ -971,7 +992,9 @@ stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, i
 		return found;
 	}
 	
-	TargetLoop(client) {
+	int x = altsearch ? MaxPlayers : MaxClients;
+	
+	for(int client = 1; client <= x; client++) {
 		if(!Tklib_IsValidClient(client, _, _, false)) continue;
 		
 		if((flags & COMMAND_FILTER_NO_BOTS) && IsFakeClient(client)

@@ -4,34 +4,34 @@
 #if !defined _tklib_no_tf2
 
 //May seem useless, but for just incase.
-const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
-const TFTeam TFTeam_Green = view_as<TFTeam>(4);
-const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
-const TFClassType TFClass_Invalid = view_as<TFClassType>(-1);
-const TFClassType TFClass_Demoman = view_as<TFClassType>(4);
-const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
+#define TFTeam_Invalid view_as<TFTeam>(-1)
+#define TFTeam_Green view_as<TFTeam>(4)
+#define TFTeam_Yellow view_as<TFTeam>(5)
+#define TFClass_Invalid view_as<TFClassType>(-1)
+#define TFClass_Demoman view_as<TFClassType>(4)
+#define TFClass_Civilian view_as<TFClassType>(10)
 
 #if !defined _tf2_included && defined _tklib_only_tf2
-const TFClassType TFClass_Unknown = view_as<TFClassType>(0);
-const TFClassType TFClass_Scout = view_as<TFClassType>(1);
-const TFClassType TFClass_Sniper = view_as<TFClassType>(2);
-const TFClassType TFClass_Soldier = view_as<TFClassType>(3);
-const TFClassType TFClass_DemoMan = view_as<TFClassType>(4);
-const TFClassType TFClass_Medic = view_as<TFClassType>(5);
-const TFClassType TFClass_Heavy = view_as<TFClassType>(6);
-const TFClassType TFClass_Pyro = view_as<TFClassType>(7);
-const TFClassType TFClass_Spy = view_as<TFClassType>(8);
-const TFClassType TFClass_Engineer = view_as<TFClassType>(9);
-const TFTeam TFTeam_Unassigned = view_as<TFTeam>(0);
-const TFTeam TFTeam_Spectator = view_as<TFTeam>(1);
-const TFTeam TFTeam_Red = view_as<TFTeam>(2);
-const TFTeam TFTeam_Blue = view_as<TFTeam>3);
+#define TFClass_Unknown view_as<TFClassType>(0)
+#define TFClass_Scout view_as<TFClassType>(1)
+#define TFClass_Sniper view_as<TFClassType>(2)
+#define TFClass_Soldier view_as<TFClassType>(3)
+#define TFClass_DemoMan view_as<TFClassType>(4)
+#define TFClass_Medic view_as<TFClassType>(5)
+#define TFClass_Heavy view_as<TFClassType>(6)
+#define TFClass_Pyro view_as<TFClassType>(7)
+#define TFClass_Spy view_as<TFClassType>(8)
+#define TFClass_Engineer view_as<TFClassType>(9)
+#define TFTeam_Unassigned view_as<TFTeam>(0)
+#define TFTeam_Spectator view_as<TFTeam>(1)
+#define TFTeam_Red view_as<TFTeam>(2)
+#define TFTeam_Blue view_as<TFTeam>3)
 #endif
 
-const int MaxTF2Classes = 9;
-const int MaxTF2CClasses = 10;
+#define MaxTF2Classes 9
+#define MaxTF2CClasses 10
 
-const TFClassType TFClass_All = TFClass_Scout|TFClass_Soldier|TFClass_Pyro|TFClass_DemoMan|TFClass_Heavy|TFClass_Engineer|TFClass_Medic|TFClass_Sniper|TFClass_Spy|TFClass_Civilian;
+#define TFClass_All TFClass_Scout|TFClass_Soldier|TFClass_Pyro|TFClass_DemoMan|TFClass_Heavy|TFClass_Engineer|TFClass_Medic|TFClass_Sniper|TFClass_Spy|TFClass_Civilian
 
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringNameEx[GetClientTeam(client)] will return the correct team name)
 stock char

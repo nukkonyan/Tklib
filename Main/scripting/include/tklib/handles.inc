@@ -6,10 +6,8 @@
  *	@param	param1	First action parameter (usually the client).
  *	@param	param2	Second action parameter (usually the item).
  */
-typeset MenuHandlerEx {
-	function void (Menu menu, MenuAction action, int param1, int param2);
-	function void (MenuEx menu, MenuAction action, int param1, int param2);
-}
+typedef MenuHandlerEx = function void (MenuEx menu, MenuAction action, int param1, int param2);
+//int function is useless and serves no purpose than to be annoying >:(
 
 methodmap MenuEx < Menu {
 	public MenuEx(MenuHandlerEx handler) { return view_as<MenuEx>(new Menu(view_as<MenuHandler>(handler))); }
@@ -47,8 +45,8 @@ methodmap MenuEx < Menu {
 	public bool AddItem(const char[] info, const char[] display, int style = ITEMDRAW_DEFAULT) { return view_as<Menu>(this).AddItem(info, display, style); }
 	
 	public bool AddItemEx(const char[] info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		int maxlen = strlen(display)+128;
-		char[] format = new char[maxlen++];
+		int maxlen = (strlen(display)+1)*6;
+		char[] format = new char[maxlen];
 		VFormat(format, maxlen, display, 5);
 		return view_as<Menu>(this).AddItem(info, format, style);
 	}
@@ -62,8 +60,8 @@ methodmap MenuEx < Menu {
 	public bool AddItemIntEx(int info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
 		char dummy[16];
 		IntToString(info, dummy, sizeof(dummy));
-		int maxlen = strlen(display)*3;
-		char[] format = new char[maxlen++];
+		int maxlen = (strlen(display)+1)*6;
+		char[] format = new char[maxlen];
 		VFormat(format, maxlen, display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
 	}
@@ -77,8 +75,8 @@ methodmap MenuEx < Menu {
 	public bool AddItemAnyEx(any info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
 		char dummy[16];
 		IntToString(info, dummy, sizeof(dummy));
-		int maxlen = strlen(display)*3;
-		char[] format = new char[maxlen++];
+		int maxlen = (strlen(display)+1)*6;
+		char[] format = new char[maxlen];
 		VFormat(dummy, maxlen, display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
 	}
@@ -92,8 +90,8 @@ methodmap MenuEx < Menu {
 	public bool AddItemFloatEx(float info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
 		char dummy[16];
 		FloatToString(info, dummy, sizeof(dummy));
-		int maxlen = strlen(display)*3;
-		char[] format = new char[maxlen++];
+		int maxlen = (strlen(display)+1)*6;
+		char[] format = new char[maxlen];
 		VFormat(format, maxlen, display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
 	}
@@ -813,7 +811,7 @@ typeset SQLQueryCallbackEx {
 	function void (Database db, DBResultSet results, const char[] error, any data);
 }
 
-methodmap DatabaseEx < Handle {
+methodmap DatabaseEx < Database {
 	/*
 	 *	Connects to a database asynchronously, so the game thread is not blocked.
 	 *
@@ -1006,6 +1004,199 @@ methodmap DatabaseEx < Handle {
 	}
 }
 
+#if defined _tklib_cookies
+methodmap CookieEx < Cookie {
+	// Creates a new Client preference cookie.
+	//
+	// Handles returned can be closed via CloseHandle() when
+	// no longer needed.
+	//
+	// @param name          Name of the new preference cookie.
+	// @param description   Optional description of the preference cookie.
+	// @param access        What CookieAccess level to assign to this cookie.
+	// @return              A handle to the newly created cookie. If the cookie already
+	//                      exists, a handle to it will still be returned.
+	// @error               Cookie name is blank.
+	public CookieEx(const char[] name, const char[] description, CookieAccess access)
+	{
+		return view_as<CookieEx>(new Cookie(name, description, access));
+	}
+
+	// Searches for a Client preference cookie.
+	//
+	// Handles returned by Cookie.Find can be closed via CloseHandle() when
+	// no longer needed.
+	//
+	// @param name          Name of cookie to find.
+	// @return              A handle to the cookie if it is found, null otherwise.
+
+	public static Cookie Find(const char[] name)
+	{
+		return view_as<CookieEx>(view_as<Cookie>(this).Find(name));
+	}
+
+	// Set the value of a Client preference cookie.
+	//
+	// @param client        Client index.
+	// @param value         String value to set.
+	// @error               Invalid cookie handle or invalid client index.
+	public void Set(int client, const char[] value)
+	{
+		view_as<Cookie>(this).Set(client, value);
+	}
+	
+	// Set the integer value of a Client preference cookie.
+	//
+	// @param client        Client index.
+	// @param value         Integer value to set.
+	// @error               Invalid cookie handle or invalid client index.
+	public void SetInt(int client, int value)
+	{
+		char val[32];
+		IntToString(value, val, sizeof(val));
+		
+		view_as<Cookie>(this).Set(client, val);
+	}
+	
+	// Set the value of a Client preference cookie.
+	//
+	// @param client        Client index.
+	// @param value         Value to set.
+	// @error               Invalid cookie handle or invalid client index.
+	public void SetValue(int client, any value)
+	{
+		char val[32];
+		IntToString(value, val, sizeof(val));
+		
+		view_as<Cookie>(this).Set(client, val);
+	}
+	
+	// Set the float value of a Client preference cookie.
+	//
+	// @param client        Client index.
+	// @param value         Float value to set.
+	// @error               Invalid cookie handle or invalid client index.
+	public void SetFloat(int client, float value)
+	{
+		char val[32];
+		FloatToString(value, val, sizeof(val));
+		
+		view_as<Cookie>(this).Set(client, val);
+	}
+
+
+	// Retrieve the value of a Client preference cookie.
+	//
+	// @param client        Client index.
+	// @param buffer        Copyback buffer for value.
+	// @param maxlen        Maximum length of the buffer.
+	// @error               Invalid cookie handle or invalid client index.
+	public void Get(int client, char[] buffer, int maxlen)
+	{
+		view_as<Cookie>(this).Get(client, buffer, maxlen);
+	}
+
+	// Retrieve the integer value of a Client preference cookie.
+	//
+	// @param client        Client index.
+	// @return              Integer value of cookie
+	// @error               Invalid cookie handle or invalid client index.
+	public int GetInt(int client, int defaultValue = 0)
+	{
+		char buffer[32];
+		view_as<Cookie>(this).Get(client, buffer, sizeof(buffer));
+
+		int value;
+		if (!StringToIntEx(buffer, value))
+		{
+			value = defaultValue;
+		}
+		return value;
+	}
+	
+	// Retrieve the integer value of a Client preference cookie.
+	//
+	// @param client        Client index.
+	// @return              Integer value of cookie
+	// @error               Invalid cookie handle or invalid client index.
+	public any GetValue(int client, any defaultValue = 0)
+	{
+		char buffer[32];
+		view_as<Cookie>(this).Get(client, buffer, sizeof(buffer));
+
+		any value;
+		if (!StringToIntEx(buffer, value))
+		{
+			value = defaultValue;
+		}
+		return value;
+	}
+	
+	// Retrieve the float value of a Client preference cookie.
+	//
+	// @param client        Client index.
+	// @return              Float value of cookie
+	// @error               Invalid cookie handle or invalid client index.
+	public float GetFloat(int client, float defaultValue = 0.0)
+	{
+		char buffer[32];
+		view_as<Cookie>(this).Get(client, buffer, sizeof(buffer));
+
+		float value;
+		if (!StringToFloatEx(buffer, value))
+		{
+			value = defaultValue;
+		}
+		return value;
+	}
+	
+	// Set the value of a Client preference cookie based on an authID string.
+	//
+	// @param auth        String Auth/STEAM ID of player to set.
+	// @param value         String value to set.
+	// @error               Invalid cookie handle.
+	public void SetByAuthId(const char[] auth, const char[] value)
+	{
+		view_as<Cookie>(this).SetByAuthId(auth, value);
+	}
+
+	// Add a new prefab item to the client cookie settings menu.
+	//
+	// Note: This handles everything automatically and does not require a callback
+	//
+	// @param type          A CookieMenu prefab menu type.
+	// @param display       Text to show on the menu.
+	// @param handler       Optional handler callback for translations and output on selection
+	// @param info          Info data to pass to the callback.
+	// @error               Invalid cookie handle.
+	public void SetPrefabMenu(CookieMenu type, const char[] display, CookieMenuHandler handler=INVALID_FUNCTION, any info=0)
+	{
+		view_as<Cookie>(this).SetPrefabMenu(type, display, handler, info);
+	}
+
+	// Returns the last updated timestamp for a client cookie
+	//
+	// @param client        Client index.
+	// @return              Last updated timestamp.
+	public int GetClientTime(int client)
+	{
+		return view_as<Cookie>(this).GetClientTime(client);
+	}
+
+	// Returns the access level of a cookie
+	//
+	// @return              CookieAccess access level.
+	// @error               Invalid cookie handle.
+	property CookieAccess AccessLevel
+	{
+		public get()
+		{
+			return view_as<Cookie>(this).AccessLevel;
+		}
+	}
+}
+#endif
+
 /**
  *	Creates a new console boolean variable.
  *
@@ -1169,3 +1360,39 @@ stock DBResultSet SQL_QueryEx(Handle database, const char[] query, any ...) {
 	
 	return null;
 }
+
+#if defined _tklib_cookies
+/**
+ *	Sets the cookie value.
+ *
+ *	@param	client	The users index.
+ *	@param	cookie	The cookie handle.
+ *	@param	value	The value to set.
+ *
+ *	@noreturn.
+ */
+stock void SetCookieValue(int client, Handle cookie, any value) {
+	char dummy[32];
+	IntToString(value, dummy, sizeof(dummy));
+	
+	SetClientCookie(client, cookie, dummy);
+}
+
+/**
+ *	Retrieves the cookie value.
+ *
+ *	@param	client	The users index.
+ *	@param	cookie	The cookie handle.
+ *
+ *	@return	Returns the value.
+ */
+stock any GetCookieValue(Handle cookie, int client) {
+	char dummy[32];
+	IntToString(value, dummy, sizeof(dummy));
+	
+	GetClientCookie(client, cookie, dummy, sizeof(dummy));
+	
+	return StringToInt(dummy);
+}
+
+#endif

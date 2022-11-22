@@ -242,6 +242,10 @@
 	#include <sdkhooks>
 #endif
 
+#if defined _tklib_cookies
+	#include <clientprefs>
+#endif
+
 #if !defined _tklib_no_cstrike
 	#undef REQUIRE_EXTENSIONS
 	#undef REQUIRE_PLUGIN

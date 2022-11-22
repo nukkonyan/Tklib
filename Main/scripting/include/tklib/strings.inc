@@ -5,15 +5,13 @@
 
 /**
  *	Tests whether a string is found in another string.
- *	This is same as StrContains but no need to use the -1 at the end, now just returns true or false.
+ *	This is same as StrContains but no need to use the -1 at the end, now just returns true or false, ignoring case sensitivity.
  *
  *	@param	str				String to search in.
  *	@param	substr			Substring to find inside the original string.
- *	@param	caseSensitive	if true (by default), search is case sensitive. If false, search is case insensitive.
  */
-stock bool StrContainsEx(const char[] str, const char[] substr, bool caseSensitive=true) {
-	if(StrContains(str, substr, caseSensitive) > -1)
-		return true;
+stock bool StrContainsEx(const char[] str, const char[] substr) {
+	if(StrContains(str, substr, false) > -1) return true;
 	return false;
 }
 
@@ -203,17 +201,10 @@ stock int BoolToString(bool num, char[] str, int maxlength) { return IntToString
  *	as SourceMod will be confused about em'.
  *
  *	@param	str		The string to convert.
- *	@param	subStr	The string to store.
- *	@param	len		The length of the string.
  *
  *	@return void
  */
-stock void StrToLower(const char[] str, char[] subStr, int len) {
-	len--;
-	int i = 0;
-	while(str[i] != '\0' && i < len) { subStr[i] = CharToLower(str[i++]); }
-	subStr[i] = '\0';
-}
+stock void StrToLower(char[] str) { for(int i = 0; i < strlen(str); i++) str[i] = CharToLower(str[i]); }
 
 /**
  *	Formats a string according to the SourceMod format rules (see documentation).

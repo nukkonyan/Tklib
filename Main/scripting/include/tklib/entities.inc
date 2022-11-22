@@ -6,11 +6,11 @@
 enum Entity {
 	Entity_Unsupported = -2,
 	Entity_Invalid = -1,
-	Entity_Empty = 0
+	Entity_NULL = 0
 }
 
 #define Ent(%1) view_as<Entity>(%1)
-#define EntityWhileLoop(%1,%2) while((%1 = Entity.FindByClassname(%1, %2)).Valid())
+#define EntityWhileLoop(%1,%2) while((%1 = Entity.FindByClassname(%1,%2)).Valid())
 
 /**
  *	Returns the absolute origin of an entity.
@@ -628,7 +628,7 @@ methodmap Entity __nullable__ {
 		return SetEntityGlobalName(view_as<int>(this), dummy);
 	}
 	
-	public static any FindByClassname(const char[] classname) { return FindEntityByClassname(0, classname); }
+	public static any FindByClassname(any startEnt, const char[] classname) { return FindEntityByClassname(startEnt, classname); }
 	
 	/**
 	 *	Find entity via classname if it exists.

@@ -16,7 +16,7 @@ OnOffEx[][] = {"{red}Off{default}","{green}On{default}"},
 //Property name
 PropTypeName[][] = {"","Prop_Send","Prop_Data"};
 
-enum boolEx { False = 0, True = 1, Maybe = 2 } //useful?
+#define MaxIntegerDigits 10
 
 /**
  *	Returns the AdminFlag from the ADMFLAG you specify.
@@ -446,8 +446,8 @@ stock bool KillTimerEx(Handle timer, bool autoClose=false) { if(!timer) return f
  *	@param	auth	The steam2 authentication id.
  */
 stock bool IsValidSteamID(const char[] auth) {
-	if(StrContainsEx(auth, "STEAM_0:", false)) return true;
-	if(StrContainsEx(auth, "STEAM_1:", false)) return true;
+	if(StrContainsEx(auth, "STEAM_0:")) return true;
+	if(StrContainsEx(auth, "STEAM_1:")) return true;
 	if(auth[0] == '\0') return false;
 	if(!IsValidString(auth)) return false;
 	return true;
@@ -474,3 +474,19 @@ stock bool IsUpdaterAvailable()	{ return LibraryExists("updater"); }
  *	@param	value	The integer to convert.
  */
 stock float IntToFloat(int value) { char str[16]; IntToString(value, str, sizeof(str)); return StringToFloat(str); }
+
+/**
+ *	Returns the digits-length of the integer.
+ *
+ *	@param	value	The value to retrieve digit count.
+ */
+stock int GetIntLen(int value) {
+	int count = 0;
+	
+	while(value != 0) {
+		value /= MaxIntegerDigits;
+		count++;
+	}
+	
+	return count;
+}
