@@ -114,25 +114,6 @@ stock bool SetClientHandScale(int client, float scale) { return SetEntPropFloatE
 stock float GetClientHandScale(int client) { return GetEntPropFloatEx(client, Prop_Send, "m_flHandScale"); }
 
 /**
- *	Set the entitys model scale/size.
- *
- *	@param	entity	Entity index.
- *	@param	scale	The model scale.
- *
- *	@error	If the entity or user is invalid, this returns false.
- */
-stock bool SetEntityModelScale(int entity, float scale)	{ return SetEntPropFloatEx(entity, Prop_Send, "m_flModelScale", scale); }
-
-/**
- *	Returns the entitys model scale/size.
- *
- *	@param	entity	Entity index.
- *
- *	@error	If the entity or user is invalid, this returns -1.0.
- */
-stock float GetEntityModelScale(int entity)	{ return GetEntPropFloatEx(entity, Prop_Send, "m_flModelScale"); }
-
-/**
  *	Set the users step scale/size.
  *
  *	@param	client	The users index.

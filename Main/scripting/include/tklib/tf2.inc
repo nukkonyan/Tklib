@@ -28,10 +28,10 @@
 #define TFTeam_Blue view_as<TFTeam>3)
 #endif
 
-#define MaxTF2Classes 9
-#define MaxTF2CClasses 10
+const int MaxTF2Classes = 9;
+const int MaxTF2CClasses = 10;
 
-#define TFClass_All TFClass_Scout|TFClass_Soldier|TFClass_Pyro|TFClass_DemoMan|TFClass_Heavy|TFClass_Engineer|TFClass_Medic|TFClass_Sniper|TFClass_Spy|TFClass_Civilian
+const TFClassType TFClass_All = (TFClass_Scout|TFClass_Soldier|TFClass_Pyro|TFClass_DemoMan|TFClass_Heavy|TFClass_Engineer|TFClass_Medic|TFClass_Sniper|TFClass_Spy|TFClass_Civilian);
 
 //Get the team name via strings for colored chat purpose (Usage example: TF2_GetTeamStringNameEx[GetClientTeam(client)] will return the correct team name)
 stock char
@@ -46,7 +46,7 @@ TF2_ClassTypeNameLC[][] = {"unknown","scout","sniper","soldier","demoman","medic
 TF2_BuildingTypeName[][] = {"Sentrygun","Dispenser","Teleporter Entrance","Teleporter Exit","Mini-Sentry","Sapper"},
 TF2_RobotPlayerModel[][] = {"","models/bots/scout/bot_scout.mdl","models/bots/sniper/bot_sniper.mdl","models/bots/soldier/bot_soldier.mdl","models/bots/demoman/bot_demoman.mdl","models/bots/medic/bot_medic.mdl","models/bots/heavy/bot_heavy.mdl","models/bots/pyro/bot_pyro.mdl","models/bots/spy/bot_spy.mdl","models/bots/engineer/bot_engineer.mdl"},
 TF2_PlayerZombieModel[][] = {"","models/player/items/scout/scout_zombie.mdl","models/player/items/sniper/sniper_zombie.mdl","models/player/items/soldier/soldier_zombie.mdl","models/player/items/demo/demo_zombie.mdl","models/player/items/medic/medic_zombie.mdl","models/player/items/heavy/heavy_zombie.mdl","models/player/items/pyro/pyro_zombie.mdl","models/player/items/spy/spy_zombie.mdl","models/player/items/engineer/engineer_zombie.mdl"},
-TF2_DefaultPlayerModel[][] = {"","models/player/scout.mdl","models/player/sniper.mdl","models/player/soldier.mdl","models/player/demoman.mdl","models/player/medic.mdl","models/player/heavy.mdl","models/player/pyro.mdl","models/player/spy.mdl","models/player/engineer.mdl"},
+TF2_DefaultPlayerModel[][] = {"","models/player/scout.mdl","models/player/sniper.mdl","models/player/soldier.mdl","models/player/demo.mdl","models/player/medic.mdl","models/player/heavy.mdl","models/player/pyro.mdl","models/player/spy.mdl","models/player/engineer.mdl"},
 TF2_StockWeaponTypeClassnamePrimary[][] = {"","tf_weapon_scattergun","tf_weapon_sniperrifle","tf_weapon_rocketlauncher","tf_weapon_grenadelauncher","tf_weapon_syringegun_medic","tf_weapon_minigun","tf_weapon_flamethrower","tf_weapon_revolver","tf_weapon_shotgun_primary"},
 TF2_StockWeaponTypeClassnameSecondary[][] = {"","tf_weapon_pistol_scout","tf_weapon_smg","tf_weapon_shotgun_soldier","tf_weapon_pipebomblauncher","tf_weapon_medigun","tf_weapon_shotgun_hwg","tf_weapon_shotgun_pyro","tf_weapon_sapper","tf_weapon_pistol"},
 TF2_StockWeaponTypeClassnameMelee[][] = {"","tf_weapon_bat","tf_weapon_club","tf_weapon_shovel","tf_weapon_bottle","tf_weapon_bonesaw","tf_weapon_fists","tf_weapon_fireaxe","tf_weapon_knife","tf_weapon_wrench"},
@@ -869,6 +869,7 @@ enum {
 	TF2Attr_LimitedQuantityItem = 692,
 	TF2Attr_HandScale = 699,
 	TF2Attr_WarpaintWear = 725,
+	TF2Attr_HideStrangePrefix = 753,
 	TF2Attr_Warpaint = 834,
 	TF2Attr_SpellPaint = 1004,
 	TF2Attr_SpellFootprints = 1005,
@@ -1119,7 +1120,7 @@ stock TFBuilding TF2_GetBuildingType(any entity) {
 		}
 	}
 	if(StrEqual(classname, "obj_minisentry")) return TFBuilding_MiniSentry;
-	if(StrContainsEx(classname, "sapper", false)) return TFBuilding_Sapper;
+	if(StrContainsEx(classname, "sapper")) return TFBuilding_Sapper;
 	
 	return TFBuilding_Invalid;
 }
@@ -1412,6 +1413,7 @@ stock bool TF2_SetBuildingSapper(int building, bool sapper) { return SetEntPropE
  */
 stock bool TF2_SetObjectMode(int building, TFObjectMode objectmode) { return view_as<bool>(SetEntPropEx(building, Prop_Send, "m_iObjectMode", objectmode) && SetEntPropEx(building, Prop_Send, "m_iTeleportType", objectmode)); }
 
+#if !defined _tklib_disable_entities
 /**
  *	Returns the building entity by type.
  *	Creates a building entity by type.
@@ -1451,6 +1453,7 @@ stock int TF2_CreateBuildingByType(TFBuilding type)	{
 	TF2_SetBuildingActive(building, true);
 	return building;
 }
+#endif
 
 /**
  *	Returns if the building is disposable.
@@ -1579,7 +1582,7 @@ stock bool TF2_IsMvMGameMode() { return view_as<bool>(GameRules_GetProp("m_bPlay
  *	@return	Returns a TFTeam team.
  */
 #if !defined _tklib_disable_gameidentifier
-stock TFTeam TF2_GetRandomTeam() { return view_as<TFTeam>(IsCurrentGame(Game_TF2C) ? GetRandomInt(2, 5) : GetRandomInt(2, 3)); }
+stock TFTeam TF2_GetRandomTeam() { return view_as<TFTeam>(IsCurrentGame(Game_TF2C) ? GetRandomAny(TFTeam_Red, TFTeam_Yellow) : GetRandomAny(TFTeam_Red, TFTeam_Blue)); }
 #endif
 
 /**
@@ -1670,22 +1673,22 @@ stock bool IsTF2EconDataLoaded() { return LibraryExists("tf_econ_data"); }
  */
 stock void TF2_GetFootprintName(int defindex, char[] type, int maxlen) {
 	switch(defindex) {
-		case 1: strcopy(type, maxlen, "Team Based");
-		case 2: strcopy(type, maxlen, "Purple");
-		case 3: strcopy(type, maxlen, "4 8 15 16 23 42");
-		case 7777: strcopy(type, maxlen, "Blue");
-		case 83552: strcopy(type, maxlen, "Ghost in the Machine");
-		case 300000: strcopy(type, maxlen, "Satan's Blue");
-		case 933333: strcopy(type, maxlen, "Light Blue");
-		case 3100495: strcopy(type, maxlen, "Dark Green");
-		case 4552221: strcopy(type, maxlen, "Corrupted Green");
-		case 5322826: strcopy(type, maxlen, "Brown");
-		case 8208497: strcopy(type, maxlen, "Cream");
-		case 8355220: strcopy(type, maxlen, "Oak Tree Brown");
-		case 8421376: strcopy(type, maxlen, "Yellow");
-		case 13595446: strcopy(type, maxlen, "Flames");
-		case 41234123: strcopy(type, maxlen, "Pink");
-		case 51234123: strcopy(type, maxlen, "Lime");
+		case 1: strcopy(type, maxlen, "Halloween Spell: Team Spirit Footprints");
+		case 2: strcopy(type, maxlen, "Halloween Spell: Headless Horseshoes");
+		case 3: strcopy(type, maxlen, "Halloween Spell: 4 8 15 16 23 42 Footprints");
+		case 7777: strcopy(type, maxlen, "Halloween Spell: Blue Footprints");
+		case 83552: strcopy(type, maxlen, "Halloween Spell: Ghost in the Machine Footprints");
+		case 300000: strcopy(type, maxlen, "Halloween Spell: Satan's Blue Footprints");
+		case 933333: strcopy(type, maxlen, "Halloween Spell: Light Blue Footprints");
+		case 3100495: strcopy(type, maxlen, "Halloween Spell: Corpse Gray Footprints");
+		case 4552221: strcopy(type, maxlen, "Halloween Spell: Corrupted Green Footprints");
+		case 5322826: strcopy(type, maxlen, "Halloween Spell: Violent Violet Footprints");
+		case 8208497: strcopy(type, maxlen, "Halloween Spell: Cream Footprints");
+		case 8355220: strcopy(type, maxlen, "Halloween Spell: Oak Tree Brown Footprints");
+		case 8421376: strcopy(type, maxlen, "Halloween Spell: Gangreen Footprints");
+		case 13595446: strcopy(type, maxlen, "Halloween Spell: Rotten Orange Footprints");
+		case 41234123: strcopy(type, maxlen, "Halloween Spell: Pink Footprints");
+		case 51234123: strcopy(type, maxlen, "Halloween Spell: Lime Footprints");
 	}
 }
 
@@ -1750,7 +1753,7 @@ stock int TF2_GiveItem(int client,
 	if(StrEqual(classname, "no_entity")) classname = "tf_wearable_vm";
 	
 	if(dbg) PrintToServer("[Tklib:TF2] TF2_GiveItem(client %i, defindex %i, classname '%s', quality %i, level %i, style %i, effect %i, remwep %s)",
-	client, defindex, classname, quality, level, style, effect, OnOff[remwep]);
+	client, defindex, classname, quality, level, style, effect, OnOff[int(remwep)]);
 	
 	Entity item = new Entity(classname);
 	if(!item.Valid()) return -1;
@@ -1796,7 +1799,7 @@ stock int TF2_GiveItem(int client,
 			if(slot >= TFSlot_Primary) TF2_RemovePlayerWeaponSlot(client, slot);
 		}
 		
-		switch(StrContainsEx(classname, "tf_wearable", false)) {
+		switch(StrContainsEx(classname, "tf_wearable")) {
 			case true: item.TF2EquipCosmetic(client);
 			default: item.EquipWeapon(client);
 		}
@@ -1857,7 +1860,7 @@ stock int TF2_GiveItemEx(int client,
 	if(Tklib_IsValidClient(client, _, true)) {
 		item.Owner = client;
 		item.SteamAccountID = GetSteamAccountID(client);
-		item.DefinitionIndex = defindex);
+		item.DefinitionIndex = defindex;
 		item.Initialized = true;
 		item.TF2Validated = true;
 		item.TF2Level = (level == -1) ? GetRandomInt(0, 100) : 100;
@@ -1894,7 +1897,7 @@ stock int TF2_GiveItemEx(int client,
 			if(slot >= TFSlot_Primary) TF2_RemovePlayerWeaponSlot(client, slot);
 		}
 		
-		switch(StrContainsEx(classname, "tf_wearable", false)) {
+		switch(StrContainsEx(classname, "tf_wearable")) {
 			case true: item.TF2EquipCosmetic(client);
 			default: item.EquipWeapon(client);
 		}
@@ -2132,7 +2135,7 @@ stock bool TF2_TurnDefaultDefIndexToUpgraded(any weapon) {
  *
  *	@return	If the warpaint is valid, this returns true. False otherwise.
  */
-stock bool TF2_IsValidWarPaint(int defindex) { for(int i = MAX_TF2_WARPAINTS; i--;) { if(TF2_Warpaints[i] == defindex) return true; } return false; }
+stock bool TF2_IsValidWarPaint(int defindex) { for(int i = MaxTF2Warpaints; i--;) { if(TF2_Warpaints[i] == defindex) return true; } return false; }
 
 /**
  *	Returns the warpaint name.
@@ -2141,9 +2144,9 @@ stock bool TF2_IsValidWarPaint(int defindex) { for(int i = MAX_TF2_WARPAINTS; i-
  *	@param	buffer		The warpaint name.
  *	@param	maxlen		The warpaint name maximum length.
  *
- *	@noreturn.
+ *	@return	If warpaint name was not found, this returns false.
  */
-stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen) {
+stock bool TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen) {
 	switch(defindex) {
 		//First wave of warpaints, by default weapon-locked.
 		//================================================//
@@ -2360,8 +2363,10 @@ stock void TF2_GetWarPaintName(int defindex, char[] buffer, int maxlen) {
 		case 310: strcopy(buffer, maxlen, "Leopard Printed");
 		case 390: strcopy(buffer, maxlen, "Dragon Slayer");
 		case 391: strcopy(buffer, maxlen, "Smissmass Sweater");
-		default: Format(buffer, maxlen, "Unknown warpaint (%i)", defindex);
+		default: return false;
 	}
+	
+	return true;
 }
 
 /**
@@ -2533,7 +2538,7 @@ stock bool TF2_IsValidWeapon(int entity) {
 	if(!IsValidEntityEx(entity)) return false;
 	char clsname[128];
 	GetEntityClassname(entity, clsname, sizeof(clsname));
-	return StrContainsEx(clsname, "tf_weapon", false);
+	return StrContainsEx(clsname, "tf_weapon");
 }
 
 /**
@@ -2547,7 +2552,7 @@ stock bool TF2_IsValidWearable(int entity) {
 	if(!IsValidEntityEx(entity)) return false;
 	char clsname[128];
 	GetEntityClassname(entity, clsname, sizeof(clsname));
-	return StrContainsEx(clsname, "tf_wearable", false);
+	return StrContainsEx(clsname, "tf_wearable");
 }
 
 /**
@@ -2819,5 +2824,38 @@ stock TFClassType TF2_GetPlayerActiveClass(int client) {
  *	@error	If the user is invalid, this returns false.
  */
 stock bool TF2_PlayerHasValidClass(int client) { return TF2_IsValidClass(TF2_GetPlayerActiveClass(client)); }
+
+/**
+ *	Returns the condition name by the float.
+ *
+ *	@param	wear	The wear float.
+ *	@param	str		String buffer to store the condition name.
+ *	@param	maxlen	The maximum length of the string buffer.
+ *
+ *	@noreturn
+ */
+stock void TF2_GetWarpaintCondition(float wear, char[] str, int maxlen) {
+	if(wear < 0.4) strcopy(str, maxlen, "Factory New");
+	else if(wear >= 0.4 && wear < 0.6) strcopy(str, maxlen, "Minimal Wear");
+	else if(wear >= 0.6 && wear < 0.8) strcopy(str, maxlen, "Field Tested");
+	else if(wear >= 0.8 && wear < 0.9) strcopy(str, maxlen, "Well Worn");
+	else if(wear >= 0.9 && wear < 1.0) strcopy(str, maxlen, "Battle Scarred");
+	else if(wear >= 1.0) strcopy(str, maxlen, "Worst Battle Scarred");
+}
+
+/**
+ *	Adds warpaint conditions onto menu, such as Factory New, Field-Tested, etc.
+ *
+ *	@param	menu	The menu handle.
+ *	@param	check	If not -1.0, if the condition wear matches the check, this option becomes disabled.
+ */
+stock void TF2_AddMenuConditions(Handle menu, float check=-1.0) {
+	view_as<Menu>(menu).AddItem("0.0", "Factory New", ItemDrawBool((check == -1) ? false : (check == 0.0) ? true : false));
+	view_as<Menu>(menu).AddItem("0.4", "Minimal wear", ItemDrawBool((check == -1) ? false : (check == 0.4) ? true : false));
+	view_as<Menu>(menu).AddItem("0.6", "Field Tested", ItemDrawBool((check == -1) ? false : (check == 0.6) ? true : false));
+	view_as<Menu>(menu).AddItem("0.8", "Well Worn", ItemDrawBool((check == -1) ? false: (check == 0.8) ? true : false));
+	view_as<Menu>(menu).AddItem("0.9", "Battle Scarred", ItemDrawBool((check == -1) ? false: (check == 0.9) ? true : false));
+	view_as<Menu>(menu).AddItem("1.0", "Worst Battle Scarred", ItemDrawBool((check == -1) ? false: (check == 1.0) ? true : false));
+}
 
 #endif

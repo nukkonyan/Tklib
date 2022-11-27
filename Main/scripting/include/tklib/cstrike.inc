@@ -533,33 +533,24 @@ stock void CS_GetWeaponName(const char[] weapon, char[] output, int maxlen)	{
  *	@param	buffer	String to store in.
  *	@param	maxlen	Maximum length of the string.
  *
- *	@error	If the procedure failed, this returns false.
+ *	@return	Returns non-null bytes written.
+ *
+ *	@error	If the procedure failed, this returns 0.
  */
-stock bool CS_GetTeamName(CSTeam team, char[] buffer, int maxlen) {
+stock int CS_GetTeamName(CSTeam team, char[] buffer, int maxlen) {
 	int index = -1;
 	while((index = FindEntityByClassname(index, "cs_team_manager")) != -1) {
 		if(view_as<CSTeam>(GetEntPropEx(index, Prop_Send, "m_iTeamNum")) == team) {
 			char checkname[96];
-			bool success = GetEntPropStringEx(index, Prop_Send, "m_szClanTeamname", buffer, maxlen);
+			int len = GetEntPropStringEx(index, Prop_Send, "m_szClanTeamname", buffer, maxlen);
 			
-			if(StrEqual(checkname, "")) {
-				switch(team) {
-					case CSTeam_T:	{
-						strcopy(buffer, maxlen, "Terrorists");
-						success = true;
-					}
-					case CSTeam_CT:	{
-						strcopy(buffer, maxlen, "Counter-Terrorists");
-						success = true;
-					}
-				}
-			}
+			if(StrEqual(checkname, "")) len = strcopy(buffer, maxlen, CS_TeamName[team])
 			
-			return success;
+			return len;
 		}
 	}
 	
-	return false;
+	return 0;
 }
 
 /**
@@ -681,7 +672,7 @@ stock void CSS_GetItemClassnameDefindex(int defindex, char[] name, int maxlen) {
 		case CSS_Weapon_XM1014: strcopy(name, maxlen, "weapon_xm1014");
 		case CSS_Weapon_M249: strcopy(name, maxlen, "weapon_m249");
 		case CSS_Weapon_C4: strcopy(name, maxlen, "weapon_c4");
-		case CSS_Item_DefuserKit: strcopy(name, maxlen, "item_defuser");
+		case CSS_Item_Defuser: strcopy(name, maxlen, "item_defuser");
 		case CSS_Grenade_HEGrenade: strcopy(name, maxlen, "weapon_hegrenade");
 		case CSS_Grenade_Flashbang: strcopy(name, maxlen, "weapon_flashbang");
 		case CSS_Grenade_SmokeGrenade: strcopy(name, maxlen, "weapon_smokegrenade");
@@ -694,7 +685,7 @@ stock void CSS_GetItemClassnameDefindex(int defindex, char[] name, int maxlen) {
 		case CSS_Weapon_UMP45: strcopy(name, maxlen, "weapon_ump45");
 		case CSS_Weapon_MP5: strcopy(name, maxlen, "weapon_mp5navy");
 		case CSS_Weapon_Mac10: strcopy(name, maxlen, "weapon_mac10");
-		case CSGO_Knife: strcopy(name, maxlen, "weapon_knife");
+		case CSS_Weapon_Knife: strcopy(name, maxlen, "weapon_knife");
 	}
 }
 

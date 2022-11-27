@@ -40,10 +40,7 @@ enum Team {
 }
 
 #define TargetLoop(%1) for(int %1 = 1; %1 <= MaxClients; %1++)
-
-#if defined _tklib_definitions
 #define TargetLoopEx(%1) for(int %1 = 1; %1 <= MaxPlayers; %1++)
-#endif
 
 //Player permissions
 /**
@@ -545,7 +542,7 @@ stock bool SetClientLifestate(int client, int value) { return SetEntPropEx(clien
  *
  *	@error	If the user is invalid or game mod not supported, this returns false.
  */
-stock bool GetClientNavLocation(int client, char[] location, int maxlen) { return GetEntPropStringEx(client, Prop_Send, "m_szLastPlaceName", location, maxlen); }
+stock int GetClientNavLocation(int client, char[] location, int maxlen) { return GetEntPropStringEx(client, Prop_Send, "m_szLastPlaceName", location, maxlen); }
 
 //Respawning
 
@@ -649,7 +646,7 @@ stock int GetClientOfAuth(const char[] auth, bool altsearch=true) {
 	for(int client = 1; client <= x; client++) {
 		if(!Tklib_IsValidClient(client, _, false)) continue;
 		GetClientAuth(client, tempauth, sizeof(tempauth));
-		if(StrEqual(tempauth, auth, false)) user = client;
+		if(StrEqual(tempauth, auth, false)) return client;
 	}
 	
 	return -1;
@@ -672,7 +669,7 @@ stock int GetClientOfAuth3(const char[] auth, bool altsearch=true) {
 	for(int client = 1; client <= x; client++) {
 		if(!Tklib_IsValidClient(client, _, false)) continue;
 		GetClientAuth3(client, tempauth, sizeof(tempauth));
-		if(StrEqual(tempauth, auth, false)) user = client;
+		if(StrEqual(tempauth, auth, false)) return client;
 	}
 	
 	return -1;
@@ -951,6 +948,7 @@ stock bool SetClientHideHud(int client, int flags) { return SetEntPropEx(client,
  *	@param	caller		The calling user index, for '@me' or '@sameteam' targeting.
  *	@param	name		The string buffer to store the target name.
  *	@param	maxlen		The maximum length of the buffer.
+ *	@param	list		The integer array constructor containing the user indexes.
  *	@param	flags		Filter flags.
  *	@param	altsearch	If true, uses MaxPlayers over MaxClients.
  *
@@ -958,7 +956,14 @@ stock bool SetClientHideHud(int client, int flags) { return SetEntPropEx(client,
  *
  *	@return	Returns the target count.
  */
-stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, int maxlen, int[] list, int flags=0, bool altsearch=false) {
+stock int FindClientsByTarget(const char[] target
+							, int caller=-1
+							, char[] name
+							, int maxlen
+							, int[] list
+							, int flags=0
+							, bool altsearch=false
+							, char[] list_name="") {
 	int found = 0;
 	
 	bool All = (StrEqual(target, "@all", false)
@@ -1015,9 +1020,10 @@ stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, i
 		|| (Team5 && GetClientTeam(client) == 5)
 		|| Bots && IsFakeClient(client)
 		|| All) list[found++] = client;
-		else if(StrContainsEx(client_name, target, false)) {
+		else if(StrContainsEx(client_name, target)) {
 			list[found++] = client;
 			GetClientInfo(client, "name", name, maxlen);
+			GetClientInfo(client, "name", list_name[found], maxlen);
 		}
 		else if(caller != -1 && Tklib_IsValidClient(caller, true)) {
 			if(SameTeam && IsSameTeam(client, caller)
@@ -1059,9 +1065,10 @@ stock int FindClientsByTarget(const char[] target, int caller=-1, char[] name, i
  *
  *	@return	Returns the target count.
  */
-stock int FindClientsByTeam(any team, bool nobots=false, int[] list) {
+stock int FindClientsByTeam(any team, bool nobots=false, int[] list, bool altsearch=false) {
 	int found = 0;
-	TargetLoop(client) if(Tklib_IsValidClient(client, nobots, false, false)) if(GetClientTeam(client) == team) clients[found++] = client;
+	int x = altsearch ? MaxPlayers : MaxClients;
+	for(int client = 1; client <= x; client++) if(Tklib_IsValidClient(client, nobots, false, false)) if(GetClientTeam(client) == team) list[found++] = client;
 	return found;
 }
 
@@ -1169,7 +1176,7 @@ stock bool ClientHasWeapon(int client, const char[] weapon) { return view_as<boo
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientTeam(int client, Team team) { if(!Tklib_IsValidClient(client)) return false; ChangeClientTeam(client, view_as<Team>(team)); }
+stock bool SetClientTeam(int client, Team team) { if(!Tklib_IsValidClient(client)) return false; ChangeClientTeam(client, view_as<int>(team)); }
 
 /**
  *	Retrieves the users team.

@@ -167,11 +167,11 @@ stock any StringToAny(const char[] str, int nBase=10) { return view_as<any>(Stri
  *	@param	str	The string to check.
  */
 stock bool StrHasNumbers(const char[] str) {
-	return (StrContainsEx(str, "1", false) || StrContainsEx(str, "2", false)
-	|| StrContainsEx(str, "3", false) || StrContainsEx(str, "4", false)
-	|| StrContainsEx(str, "5", false) || StrContainsEx(str, "6", false)
-	|| StrContainsEx(str, "7", false) || StrContainsEx(str, "8", false)
-	|| StrContainsEx(str, "9", false) || StrContainsEx(str, "0", false));
+	return (StrContainsEx(str, "1") || StrContainsEx(str, "2")
+	|| StrContainsEx(str, "3") || StrContainsEx(str, "4")
+	|| StrContainsEx(str, "5") || StrContainsEx(str, "6")
+	|| StrContainsEx(str, "7") || StrContainsEx(str, "8")
+	|| StrContainsEx(str, "9") || StrContainsEx(str, "0"));
 }
 
 /**

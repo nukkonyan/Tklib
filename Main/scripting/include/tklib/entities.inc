@@ -138,9 +138,9 @@ stock bool GetEntityDisabled(int entity) { return GetEntPropBool(entity, Prop_Se
  *	@param	entity		Entity index.
  *	@param	model		Model path.
  *
- *	@error	If the entity is invalid, this returns false.
+ *	@return	Non-null bytes written.
  */
-stock bool SetEntityModelEx(int entity, const char[] model)	{ return (SetEntPropStringEx(entity, Prop_Data, "m_ModelName", model) > 0); }
+stock int SetEntityModelEx(int entity, const char[] model) { return SetEntPropStringEx(entity, Prop_Data, "m_ModelName", model); }
 
 /**
  *	Returns the entity's model name path
@@ -234,7 +234,7 @@ stock int GetEntityBody(int entity) { return GetEntPropEx(entity, Prop_Send, "m_
  *
  *	@error	If the entity has no valid classname, this returns false.
  */
-stock bool SetEntityClassname(int entity, const char[] clsname)	{ return SetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname); }
+stock int SetEntityClassname(int entity, const char[] clsname) { return SetEntPropStringEx(entity, Prop_Data, "m_iClassname", clsname); }
 
 /**
  *	Retrieves the classname of an entity.
@@ -360,7 +360,7 @@ stock bool IsEntityClassnameMatching(int entity, const char[] classname, bool pa
 	
 	//Credits JonnyBoy0719 - Contagion include.
 	char entity_clsname[64];
-	GetEntityClassname(entity, entity_clsname, sizeof(clsname));
+	GetEntityClassname(entity, entity_clsname, sizeof(entity_clsname));
 
 	if(partialMatch) return (StrContains(entity_clsname, classname) != -1);
 	
@@ -542,6 +542,25 @@ stock bool SetEntitySteamAccountID(int entity, int accountid) { return SetEntDat
  */
 stock int GetEntityHealth(int entity) { return GetEntDataOffset(entity, "m_iHealth"); }
 
+/**
+ *	Sets the entity's model scale/size.
+ *
+ *	@param	entity	Entity index.
+ *	@param	scale	The model scale.
+ *
+ *	@error	If the entity or user is invalid, this returns false.
+ */
+stock bool SetEntityModelScale(int entity, float scale)	{ return SetEntPropFloatEx(entity, Prop_Send, "m_flModelScale", scale); }
+
+/**
+ *	Retrieves the entitys model scale/size.
+ *
+ *	@param	entity	Entity index.
+ *
+ *	@error	If the entity or user is invalid, this returns -1.0.
+ */
+stock float GetEntityModelScale(int entity)	{ return GetEntPropFloatEx(entity, Prop_Send, "m_flModelScale"); }
+
 //Methodmap
 methodmap Entity __nullable__ {
 	/**
@@ -652,9 +671,9 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@param	model	Model path.
 	 *
-	 *	@error	If the entity is invalid, this returns false.
+	 *	@return	Non-null bytes written.
 	 */
-	public bool SetModel(const char[] model) { return SetEntityModelEx(view_as<int>(this), model); }
+	public int SetModel(const char[] model) { return SetEntityModelEx(view_as<int>(this), model); }
 	
 	/**
 	 *	Returns the entity's model name path
@@ -1484,7 +1503,7 @@ methodmap Entity __nullable__ {
 	 *
 	 *	@param	clsname		The classname to set.
 	 */
-	public bool SetClassname(char[] clsname) { return SetEntityClassname(view_as<int>(this), clsname); }
+	public int SetClassname(char[] clsname) { return SetEntityClassname(view_as<int>(this), clsname); }
 	
 	/**
 	 *	Returns the classname of the entity.
@@ -1492,7 +1511,7 @@ methodmap Entity __nullable__ {
 	 *	@param	clsname		The buffer to store the classname.
 	 *	@param	maxlen		The maximum length of the buffer.
 	 */
-	public bool GetClassname(char[] clsname, int maxlen) { return GetEntityClassnameEx(view_as<int>(this), clsname, maxlen); }
+	public int GetClassname(char[] clsname, int maxlen) { return GetEntityClassnameEx(view_as<int>(this), clsname, maxlen); }
 	
 	/**
 	 *	Retrieves this entity's networkable serverclass name.

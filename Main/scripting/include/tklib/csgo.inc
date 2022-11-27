@@ -487,7 +487,7 @@ stock bool CSGO_SetQuality(any entity, int index=3) { return SetEntPropEx(entity
  *
  *	@error	If the entity is invalid or procedure failed, this returns -1.
  */
-stock int CSGO_GetQuality(any entity) { return SetEntPropEx(entity, Prop_Send, "m_iEntityQuality", index); }
+stock int CSGO_GetQuality(any entity) { return GetEntPropEx(entity, Prop_Send, "m_iEntityQuality"); }
 
 /**
  *	Set the name tag
@@ -601,7 +601,7 @@ stock int CSGO_GetItemDefindex(const char[] clsname) { for(int i = 0; i < MaxCSG
  *
  *	@return	Number of non-null bytes written.
  */
-stock int CSGO_GetItemName(const char[] clsname, char[] name, int maxlen) { for(int i = 0; i < MaxCSGOItemDefinition; i++) if(StrEqual(clsname, CSGO_ItemClassname[i], false)) return strcopy(name, maxlen, CSGO_ItemsName[i]); return 0; }
+stock int CSGO_GetItemName(const char[] clsname, char[] name, int maxlen) { for(int i = 0; i < MaxCSGOItemDefinition; i++) if(StrEqual(clsname, CSGO_ItemClassname[i], false)) return strcopy(name, maxlen, CSGO_ItemName[i]); return 0; }
 
 /**
  *	Returns the item name by its definition index.
@@ -639,7 +639,7 @@ stock int CSGO_FindWeaponByDefindex(int client, int defindex) {
 	int wep = 0, owner = 0;
 	
 	char clsname[64];
-	CSGO_GetClassnameDefindex(defindex, clsname, sizeof(clsname));
+	CSGO_GetItemClassnameDefindex(defindex, clsname, sizeof(clsname));
 	
 	while((wep = FindEntityByClassname(wep, clsname)) != -1) if((owner = GetEntityOwner(wep)) > 0 && owner == client) return wep;
 	return -1;
@@ -659,7 +659,7 @@ stock bool CSGO_WinPanelText(int client, const char[] str="") {
 	if(!Tklib_IsValidClient(client, true)) return false;
 	
 	Event event = null;
-	if((event = new Event("cs_win_panel_round")) != null) {
+	if((event = CreateEvent("cs_win_panel_round")) != null) {
 		event.SetString("funfact_token", str);
 		event.FireToClient(client);
 		event.Cancel();
@@ -667,6 +667,39 @@ stock bool CSGO_WinPanelText(int client, const char[] str="") {
 	}
 	
 	return false;
+}
+
+/**
+ *	Returns the condition name by the float.
+ *
+ *	@param	wear	The wear float.
+ *	@param	str		String buffer to store the condition name.
+ *	@param	maxlen	The maximum length of the string buffer.
+ *
+ *	@noreturn
+ */
+stock void CSGo_GetSkinCondition(float wear, char[] str, int maxlen) {
+	if(wear < 0.07) strcopy(str, maxlen, "Factory New");
+	else if(wear >= 0.07 && wear < 0.15) strcopy(str, maxlen, "Minimal Wear");
+	else if(wear >= 0.15 && wear < 0.38) strcopy(str, maxlen, "Field Tested");
+	else if(wear >= 0.38 && wear < 0.45) strcopy(str, maxlen, "Well Worn");
+	else if(wear >= 0.45 && wear < 1.00) strcopy(str, maxlen, "Battle Scarred");
+	else if(wear >= 0.99) strcopy(str, maxlen, "Worst Battle Scarred");
+}
+
+/**
+ *	Adds conditions onto menu, such as Factory New, Field-Tested, etc.
+ *
+ *	@param	menu	The menu handle.
+ *	@param	check	If not -1.0, if the condition wear matches the check, this option becomes disabled.
+ */
+stock void CSGO_AddMenuConditions(Handle menu, float check=-1.0) {
+	view_as<Menu>(menu).AddItem("0.00", "Factory New", ItemDrawBool((check == -1) ? false : (check == 0.00) ? true : false));
+	view_as<Menu>(menu).AddItem("0.07", "Minimal wear", ItemDrawBool((check == -1) ? false : (check == 0.07) ? true : false));
+	view_as<Menu>(menu).AddItem("0.15", "Field Tested", ItemDrawBool((check == -1) ? false : (check == 0.15) ? true : false));
+	view_as<Menu>(menu).AddItem("0.38", "Well Worn", ItemDrawBool((check == -1) ? false: (check == 0.38) ? true : false));
+	view_as<Menu>(menu).AddItem("0.45", "Battle Scarred", ItemDrawBool((check == -1) ? false: (check == 0.45) ? true : false));
+	view_as<Menu>(menu).AddItem("1.00", "Worst Battle Scarred", ItemDrawBool((check == -1) ? false: (check == 1.00) ? true : false));
 }
 
 /**
@@ -681,23 +714,5 @@ stock bool CSGO_IsValidItemDefinitionIndex(int defindex) { for(int i = 0; i < Ma
  *
  *	@param	defindex	The item definition index.
  */
-stock bool CSGO_IsItemIndexKnife(int defindex) { for(int i = 0; i < MaxCSGOItems; i++) if(StrEqual(CSGO_ItemClassname[i], "weapon_bayonet", false) || StrContainsEx(CSGO_ItemClassname[i], "weapon_knife", false)) return true; return false; }
-
-/**
- *	Returns the condition name by the float.
- *
- *	@param	wear	The wear float.
- *	@param	str		String buffer to store the condition name.
- *	@param	maxlen	The maximum length of the string buffer.
- *
- *	@noreturn
- */
-stock void CSGO_GetSkinCondition(float wear, char[] str, int maxlen) {
-	if(wear < 0.07) strcopy(str, maxlen, "Factory New");
-	else if(wear >= 0.07 && wear < 0.15) strcopy(str, maxlen, "Minimal Wear");
-	else if(wear >= 0.15 && wear < 0.38) strcopy(str, maxlen, "Field Tested");
-	else if(wear >= 0.38 && wear < 0.45) strcopy(str, maxlen, "Well Worn");
-	else if(wear >= 0.45 && wear < 1.00) strcopy(str, maxlen, "Battle Scarred");
-	else if(wear >= 0.99) strcopy(str, maxlen, "Worst Battle Scarred");
-}
+stock bool CSGO_IsItemIndexKnife(int defindex) { for(int i = 0; i < MaxCSGOItems; i++) if(StrEqual(CSGO_ItemClassname[i], "weapon_bayonet") || StrContainsEx(CSGO_ItemClassname[i], "weapon_knife")) return true; return false; }
 #endif
