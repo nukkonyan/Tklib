@@ -1204,6 +1204,7 @@ stock Team GetClientTeamEx(int client) { return !Tklib_IsValidClient(client, _, 
  */
 stock bool Tklib_IsValidClient(int client, bool IgnoreBot=false, bool IgnoreDead=false, bool IgnoreNonInGame=true, bool IgnoreNonConnected=true, bool IgnoreInvalidTeam=false) {
 	if(client == 0 || client == -1 || client < 1 || client > MaxClients) return false;
+	if(!IsValidEntity(client)) return false;
 	if(IgnoreNonConnected) if(!IsClientConnected(client)) return false;
 	if(IgnoreNonInGame) if(!IsClientInGame(client)) return false;
 	if(IsClientSourceTV(client)) return false;
