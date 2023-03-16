@@ -179,7 +179,6 @@
 #endif
 
 #if defined _tklib_only_csgo
-	#define _tklib_no_cstrike
 	#define _tklib_no_tf2
 	#define _tklib_disable_tf2
 	#define _tklib_disable_l4d
@@ -274,6 +273,7 @@
 #define	PropFieldType(%1) view_as<PropFieldType>(%1)
 #define	PropType(%1) view_as<PropType>(%1)
 #define	Address(%1) view_as<Address>(%1)
+#define	EventHook(%1) view_as<EventHook>(%1)
 
 #define This view_as<any>(this)
 #define Bot(%1) IsFakeClient(%1)

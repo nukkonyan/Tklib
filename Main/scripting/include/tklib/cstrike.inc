@@ -5,6 +5,7 @@
 
 stock char
 CSS_TeamNameEx[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{red}Terrorists{default}","{blue}Counter-Terrorists{default}"},
+CSS_TeamNameExShort[][] = {"{grey}Unassigned{default}","{grey}Spec{default}","{red}T{default}","{blue}CT{default}"},
 CSS_TeamColour[][] = {"{grey}","{grey}","{red}","{blue}"},
 CS_TeamName[][] = {"Unassigned","Spectators","Terrorists","Counter-Terrorists"},
 CS_TeamNameShort[][] = {"Unassigned","Spec","T","CT"},
@@ -87,9 +88,9 @@ enum CSTeam {
 //Bombsites
 enum Bombsite {
 	Bombsite_Invalid = -1,
-	BombsiteA = 1,
-	BombsiteB = 2,
-	BombsiteC = 3
+	BombsiteA = 0,
+	BombsiteB = 1,
+	BombsiteC = 2
 }
 
 #define	CSSlot(%1) view_as<CSSlot>(%1)
@@ -241,7 +242,7 @@ stock float CS_GetClientFlashDuration(int client) { return GetEntPropFloatEx(cli
  *
  *	@error	If the user is invalid, returns false.
  */
-stock bool CS_SetClientArmor(int client, int value)	{ return SetEntPropEx(client, Prop_Send, "m_ArmorValue", value); }
+stock bool CS_SetClientArmor(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_ArmorValue", value); }
 
 /**
  *	Returns the users armor value.
@@ -280,7 +281,7 @@ stock bool CS_ClientHasHelmet(int client) { return GetEntPropBool(client, Prop_S
  *
  *	@error	If the user is invalid, returns false.
  */
-stock bool CS_SetClientHeavyArmor(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_bHasHeavyArmor", value); }
+stock bool CS_SetClientHeavyArmor(int client, bool value) { return SetEntPropEx(client, Prop_Send, "m_bHasHeavyArmor", value); }
 
 /**
  *	Returns if the user has heavy armor.

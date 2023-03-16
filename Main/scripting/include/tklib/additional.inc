@@ -13,6 +13,10 @@ DoorSwitch[][] = {"close","open"},
 OnOff[][] = {"Off","On"},
 //On - Off switch coloured.
 OnOffEx[][] = {"{red}Off{default}","{green}On{default}"},
+//Yes - No switch.
+YesNo[][] = {"No","Yes"},
+//Yes - No switch coloured.
+YesNoEx[][] = {"{red}No","{green}Yes"},
 //Property name
 PropTypeName[][] = {"","Prop_Send","Prop_Data"};
 
@@ -489,4 +493,26 @@ stock int GetIntLen(int value) {
 	}
 	
 	return count;
+}
+
+/**
+ *	Formats an RGB (Red-Green-Blue) coloured output.
+ *	Some games may not support this and instead possibly print garbage. (?)
+ *	Combining rgb colours in additional parameters from within the same string causes them to be removed due to garabage print (?).
+ *
+ *	@param	output	The output string.
+ *	@param	maxlen	The output maximum string length.
+ *	@param	format	The Format to transform.
+ *	@param	r		Red colour 0-255.
+ *	@param	g		Green colour 0-255.
+ *	@param	b		Blue colour 0-255.
+ *	@param	...		Additional parameters.
+ */
+stock void FormatRGB(char[] output, int maxlen, const char[] format, int r, int g, int b, any ...) {
+	int colour = (r << 16) | (g << 8) | (b << 0);
+	
+	char fallback[1024];
+	VFormat(fallback, sizeof(fallback), format, 7);
+	
+	Format(output, maxlen, "\x07%06X%s", colour, fallback);
 }

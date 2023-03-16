@@ -10,7 +10,7 @@ typedef MenuHandlerEx = function void (MenuEx menu, MenuAction action, int param
 //int function is useless and serves no purpose than to be annoying >:(
 
 methodmap MenuEx < Menu {
-	public MenuEx(MenuHandlerEx handler) { return view_as<MenuEx>(new Menu(view_as<MenuHandler>(handler))); }
+	public MenuEx(MenuHandlerEx handler, MenuAction actions=MENU_ACTIONS_DEFAULT) { return view_as<MenuEx>(new Menu(view_as<MenuHandler>(handler), actions)); }
 	
 	/*
 	 *	Displays a menu to a user.
@@ -34,9 +34,8 @@ methodmap MenuEx < Menu {
 	public bool DisplayAt(int client, int first_item, int time = MENU_TIME_FOREVER) { return view_as<Menu>(this).DisplayAt(client, first_item, time); }
 	
 	public void SetTitle(const char[] fmt, any ...) {
-		int maxlen = strlen(fmt)+65;
-		char[] format = new char[maxlen];
-		VFormat(format, maxlen, fmt, 3);
+		char format[512];
+		VFormat(format, sizeof(format), fmt, 3);
 		view_as<Menu>(this).SetTitle(format);
 	}
 	
@@ -45,9 +44,8 @@ methodmap MenuEx < Menu {
 	public bool AddItem(const char[] info, const char[] display, int style = ITEMDRAW_DEFAULT) { return view_as<Menu>(this).AddItem(info, display, style); }
 	
 	public bool AddItemEx(const char[] info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		int maxlen = (strlen(display)+1)*6;
-		char[] format = new char[maxlen];
-		VFormat(format, maxlen, display, 5);
+		char format[512];
+		VFormat(format, sizeof(format), display, 5);
 		return view_as<Menu>(this).AddItem(info, format, style);
 	}
 	
@@ -58,11 +56,9 @@ methodmap MenuEx < Menu {
 	}
 	
 	public bool AddItemIntEx(int info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		char dummy[16];
+		char dummy[16], format[512];
 		IntToString(info, dummy, sizeof(dummy));
-		int maxlen = (strlen(display)+1)*6;
-		char[] format = new char[maxlen];
-		VFormat(format, maxlen, display, 5);
+		VFormat(format, sizeof(format), display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
 	}
 	
@@ -73,11 +69,9 @@ methodmap MenuEx < Menu {
 	}
 	
 	public bool AddItemAnyEx(any info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		char dummy[16];
+		char dummy[16], format[512];
 		IntToString(info, dummy, sizeof(dummy));
-		int maxlen = (strlen(display)+1)*6;
-		char[] format = new char[maxlen];
-		VFormat(dummy, maxlen, display, 5);
+		VFormat(dummy, sizeof(format), display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
 	}
 	
@@ -88,11 +82,9 @@ methodmap MenuEx < Menu {
 	}
 	
 	public bool AddItemFloatEx(float info, const char[] display, int style = ITEMDRAW_DEFAULT, any ...) {
-		char dummy[16];
+		char dummy[16], format[512];
 		FloatToString(info, dummy, sizeof(dummy));
-		int maxlen = (strlen(display)+1)*6;
-		char[] format = new char[maxlen];
-		VFormat(format, maxlen, display, 5);
+		VFormat(format, sizeof(format), display, 5);
 		return view_as<Menu>(this).AddItem(dummy, format, style);
 	}
 	
@@ -126,7 +118,7 @@ methodmap MenuEx < Menu {
 	public bool ItemStrContains(int position, const char[] substr, bool caseSensitive=false) {
 		char dummy[128];
 		view_as<Menu>(this).GetItem(position, dummy, sizeof(dummy));
-		return (StrContains(dummy, substr, caseSensitive) > 0);
+		return StrContains(dummy, substr, caseSensitive) > -1;
 	}
 }
 
@@ -1396,3 +1388,34 @@ stock any GetCookieValue(Handle cookie, int client) {
 }
 
 #endif
+
+// -- Events
+
+typeset EventHookDefine
+{
+	function void (Event event);
+	function void (Event event, const char[] event_name);
+	function void (Event event, const char[] event_name, bool dontBroadcast);
+	
+	function Action (Event event);
+	function Action (Event event, const char[] event_name);
+	function Action (Event event, const char[] event_name, bool dontBroadcast);
+}
+
+/**
+ *	Creates a hook for when a game event is fired.
+ *	Functionally the same as HookEventEx,
+ *	but callback is now customizable to be as (Event event) rather than (Event event, const char[] name, bool dontBroadcast).
+ *
+ *	@param name          Name of event.
+ *	@param callback      An EventHook function pointer.
+ *	@param mode          Optional EventHookMode determining the type of hook.
+ *
+ *	@return              True if event exists and was hooked successfully, false otherwise.
+ *
+ *	@error               Invalid callback function.
+ */
+stock bool DefineEvent(const char[] event_name, EventHookDefine callback, EventHookMode mode=EventHookMode_Post)
+{
+	return HookEventEx(event_name, view_as<EventHook>(callback), mode);
+}

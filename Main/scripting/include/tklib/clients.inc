@@ -176,7 +176,7 @@ stock bool SetClientHealth(int client, int value) { return SetEntPropEx(client, 
  *
  *	@error	If the user is invalid or game mod not supported, this returns false.
  */
-stock bool SetClientMaxHealth(int client, int value) { return SetEntPropEx(client, Prop_Send, "m_iMaxHealth", value); }
+stock bool SetClientMaxHealth(int client, int value) { return SetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", value, _, client); }
 
 /**
  *	Returns the users max health
@@ -185,7 +185,7 @@ stock bool SetClientMaxHealth(int client, int value) { return SetEntPropEx(clien
  *
  *	@error	If the client is not valid, this returns -1.
  */
-stock int GetClientMaxHealth(int client) { return GetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", client); }
+stock int GetClientMaxHealth(int client) { return GetEntPropEx(GetPlayerResourceEntity(), Prop_Send, "m_iMaxHealth", _, client); }
 
 /**
  *	Sets the users health & maximum health.
@@ -571,7 +571,7 @@ stock bool RespawnTime(int client, float value)	{
 
 #if !defined _tklib_disable_gameidentifier
 //forwards the action to the respawn event
-stock Action SetRespawnTime(Handle timer, int client) { Respawn(client); }
+stock Action SetRespawnTime(Handle timer, int client) { Respawn(client); return Plugin_Handled; }
 #else
 #error SetRespawnTime() requires GameIdentifier Include (for correct respawn actions)
 #endif
@@ -950,7 +950,6 @@ stock bool SetClientHideHud(int client, int flags) { return SetEntPropEx(client,
  *	@param	maxlen		The maximum length of the buffer.
  *	@param	list		The integer array constructor containing the user indexes.
  *	@param	flags		Filter flags.
- *	@param	altsearch	If true, uses MaxPlayers over MaxClients.
  *
  *	@error	If no valid users are found, this returns 0 and array 0 as -1.
  *
@@ -961,9 +960,7 @@ stock int FindClientsByTarget(const char[] target
 							, char[] name
 							, int maxlen
 							, int[] list
-							, int flags=0
-							, bool altsearch=false
-							, char[] list_name="") {
+							, int flags=0) {
 	int found = 0;
 	
 	bool All = (StrEqual(target, "@all", false)
@@ -991,66 +988,109 @@ stock int FindClientsByTarget(const char[] target
 	bool Bots = (StrEqual(target, "@bots", false)
 	|| StrEqual(target, "@bot"));
 	
-	if(caller != -1 && Self && Tklib_IsValidClient(caller, true)) {
+	if(caller != -1 && Self && Tklib_IsValidClient(caller, true))
+	{
 		list[found++] = caller;
 		GetClientInfo(caller, "name", name, maxlen);
 		return found;
 	}
 	
-	int x = altsearch ? MaxPlayers : MaxClients;
-	
-	for(int client = 1; client <= x; client++) {
-		if(!Tklib_IsValidClient(client, _, _, false)) continue;
-		
-		if((flags & COMMAND_FILTER_NO_BOTS) && IsFakeClient(client)
-		|| (flags & COMMAND_FILTER_ALIVE) && !IsPlayerAlive(client)
-		|| (flags & COMMAND_FILTER_DEAD) && IsPlayerAlive(client)) continue;
-		
-		static char client_name[MAX_TARGET_LENGTH];
-		GetClientInfo(client, "name", client_name, sizeof(client_name));
-		//Format(client_name, sizeof(client_name), "%N", client);
-		
-		//PrintToServer("Found target '%i' ['%s'] ['%s']", client, client_name, target);
-		
-		if((Team0 && GetClientTeam(client) == 0)
-		|| (Team1 && GetClientTeam(client) == 1)
-		|| (Team2 && GetClientTeam(client) == 2)
-		|| (Team3 && GetClientTeam(client) == 3)
-		|| (Team4 && GetClientTeam(client) == 4)
-		|| (Team5 && GetClientTeam(client) == 5)
-		|| Bots && IsFakeClient(client)
-		|| All) list[found++] = client;
-		else if(StrContainsEx(client_name, target)) {
-			list[found++] = client;
-			GetClientInfo(client, "name", name, maxlen);
-			GetClientInfo(client, "name", list_name[found], maxlen);
+	int player = 0;
+	while((player = FindEntityByClassname(player, "player")) != -1)
+	{
+		/*
+		if(!Tklib_IsValidClient(player, _, _, false))
+		{
+			continue;
 		}
-		else if(caller != -1 && Tklib_IsValidClient(caller, true)) {
-			if(SameTeam && IsSameTeam(client, caller)
-			|| Aim && GetClientAimTarget(caller, true) == client) list[found++] = client; //Spaghetti code.
+		*/
+		
+		int m_iTeamNum = GetEntProp(player, Prop_Send, "m_iTeamNum");
+		int m_iAccountID = GetEntProp(player, Prop_Send, "m_iAccountID");
+		
+		if((flags & COMMAND_FILTER_NO_BOTS) && IsFakeClient(player)
+		|| (flags & COMMAND_FILTER_ALIVE) && !IsPlayerAlive(player)
+		|| (flags & COMMAND_FILTER_DEAD) && IsPlayerAlive(player)) continue;
+		
+		char client_name[MAX_TARGET_LENGTH];
+		GetClientName(player, client_name, sizeof(client_name));
+		
+		//PrintToServer("Found target '%i' ['%s'] ['%s']", player, client_name, target);
+		
+		if((Team0 && m_iTeamNum == 0)
+		|| (Team1 && m_iTeamNum == 1)
+		|| (Team2 && m_iTeamNum == 2)
+		|| (Team3 && m_iTeamNum == 3)
+		|| (Team4 && m_iTeamNum == 4)
+		|| (Team5 && m_iTeamNum == 5)
+		|| Bots && IsFakeClient(player)
+		|| All
+		|| StringToInt(target) == m_iAccountID
+		|| (StrContains(target, "#") != -1) && StringToInt(target[1]) == m_iAccountID) //if printed #<userid> like #2
+		{
+			list[found++] = player;
+		}
+		else if(StrContainsEx(client_name, target))
+		{
+			list[found++] = player;
+			GetClientName(player, name, maxlen);
+		}
+		else if(caller != -1 && Tklib_IsValidClient(caller, true))
+		{
+			if(SameTeam && IsSameTeam(player, caller)
+			|| Aim && GetClientAimTarget(caller, true) == player)
+			{
+				list[found++] = player; //Spaghetti code.
+			}
 		}
 	}
 	
-	if(All) strcopy(name, maxlen, "Everyone");
-	else if(Team1) strcopy(name, maxlen, "Spectators");
-	else if(Team2) {
-		switch(IdentifyGame()) {
+	if(All)
+	{
+		strcopy(name, maxlen, "Everyone");
+	}
+	else if(Team1)
+	{
+		strcopy(name, maxlen, "Spectators");
+	}
+	else if(Team2)
+	{
+		switch(IdentifyGame())
+		{
 			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(name, maxlen, "Red Team");
 			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(name, maxlen, "T");
 		}
 	}
-	else if(Team3) {
-		switch(IdentifyGame()) {
+	else if(Team3)
+	{
+		switch(IdentifyGame())
+		{
 			case Game_TF2, Game_TF2C, Game_TF2Beta, Game_TF2OP, Game_TF2V: strcopy(name, maxlen, "Blue Team");
 			case Game_CSS, Game_CSPromod, Game_CSGO: strcopy(name, maxlen, "CT");
 		}
 	}
-	else if(Team4) strcopy(name, maxlen, "Green Team");
-	else if(Team5) strcopy(name, maxlen, "Yellow Team");
-	else if(Bots) strcopy(name, maxlen, "All Bots");
-	else if(SameTeam) strcopy(name, maxlen, "Same Team");
+	else if(Team4)
+	{
+		strcopy(name, maxlen, "Green Team");
+	}
+	else if(Team5)
+	{
+		strcopy(name, maxlen, "Yellow Team");
+	}
+	else if(Bots)
+	{
+		strcopy(name, maxlen, "All Bots");
+	}
+	else if(SameTeam)
+	{
+		strcopy(name, maxlen, "Same Team");
+	}
 	
-	if(found == 0) list[0] = -1;
+	if(found == 0)
+	{
+		list[0] = -1;
+	}
+	
 	return found;
 }
 
@@ -1176,7 +1216,7 @@ stock bool ClientHasWeapon(int client, const char[] weapon) { return view_as<boo
  *
  *	@error	If the user is invalid, this returns false.
  */
-stock bool SetClientTeam(int client, Team team) { if(!Tklib_IsValidClient(client)) return false; ChangeClientTeam(client, view_as<int>(team)); }
+stock bool SetClientTeam(int client, Team team) { if(!Tklib_IsValidClient(client)) return false; ChangeClientTeam(client, view_as<int>(team)); return true; }
 
 /**
  *	Retrieves the users team.
@@ -1187,6 +1227,25 @@ stock bool SetClientTeam(int client, Team team) { if(!Tklib_IsValidClient(client
  *	@error	If the user is invalid, this returns Team_Invalid.
  */
 stock Team GetClientTeamEx(int client) { return !Tklib_IsValidClient(client, _, true) ? Team_Invalid : view_as<Team>(GetClientTeam(client)); }
+
+/**
+ *	Strips the users wielding weapons/items via player slots.
+ *
+ *	@param	client	The users index.
+ *
+ *	@noreturn
+ */
+stock void StripClientWeapons(int client) {
+	if(!Tklib_IsValidClient(client)) return;
+	
+	for(int i = 0; i <= 6; i++) {
+		int weapon = GetPlayerWeaponSlot(client, i);
+		if(IsValidEntity(weapon)) {
+			RemovePlayerItem(client, weapon);
+			RemoveEdict(weapon);
+		}
+	}
+}
 
 #endif
 

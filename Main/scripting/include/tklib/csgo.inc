@@ -7,8 +7,9 @@ const int MaxCSGOWepLength = 16;
 const int MaxCSGOItemDefinition = 526;
 
 stock char
-CSGO_TeamNameEx[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{yellow}Terrorists{default}","{bluegrey}Counter-Terrorists{default}"},
-CSGO_TeamColour[][] = {"{grey}","{grey}","{yellow}","{bluegrey}"},
+CSGO_TeamNameEx[][] = {"{grey}Unassigned{default}","{grey}Spectators{default}","{teamcolor}Terrorists{default}","{teamcolor}Counter-Terrorists{default}"},
+CSGO_TeamNameExShort[][] = {"{grey}Unassigned{default}","{grey}Spec{default}","{teamcolor}T{default}","{teamcolor}CT{default}"},
+CSGO_TeamColour[][] = {"{grey}","{grey}","{teamcolor}","{teamcolor}"},
 CSGO_RankName[][] = {"Unranked","Silver I","Silver II","Silver III","Silver IV","Silver Elite","Silver Elite Master","Gold Nova I","Gold Nova II","Gold Nova III","Gold Nova Master","Master Guardian I","Master Guardian II","Master Guardian Elite","Distinguished Master Guardian","Legendary Eagle","Legendary Eagle Master","Supreme Master First Class","The Global Elite"};
 
 enum CSGORank {
@@ -623,7 +624,7 @@ stock int CSGO_GetItemNameDefindex(int defindex, char[] name, int maxlen) { for(
  *
  *	@noreturn
  */
-stock int CSGO_GetItemClassnameDefindex(int defindex, char[] name, int maxlen) { for(int i = 0; i < MaxCSGOItems; i++) if(CSGO_Item[i] == defindex) return strcopy(name, maxlen, CSGO_ItemName[i]); return 0; }
+stock int CSGO_GetItemClassnameDefindex(int defindex, char[] name, int maxlen) { for(int i = 0; i < MaxCSGOItems; i++) if(CSGO_Item[i] == defindex) return strcopy(name, maxlen, CSGO_ItemClassname[i]); return 0; }
 
 /**
  *	Returns the weapon by its definition index.
@@ -678,7 +679,7 @@ stock bool CSGO_WinPanelText(int client, const char[] str="") {
  *
  *	@noreturn
  */
-stock void CSGo_GetSkinCondition(float wear, char[] str, int maxlen) {
+stock void CSGO_GetSkinCondition(float wear, char[] str, int maxlen) {
 	if(wear < 0.07) strcopy(str, maxlen, "Factory New");
 	else if(wear >= 0.07 && wear < 0.15) strcopy(str, maxlen, "Minimal Wear");
 	else if(wear >= 0.15 && wear < 0.38) strcopy(str, maxlen, "Field Tested");
@@ -714,5 +715,5 @@ stock bool CSGO_IsValidItemDefinitionIndex(int defindex) { for(int i = 0; i < Ma
  *
  *	@param	defindex	The item definition index.
  */
-stock bool CSGO_IsItemIndexKnife(int defindex) { for(int i = 0; i < MaxCSGOItems; i++) if(StrEqual(CSGO_ItemClassname[i], "weapon_bayonet") || StrContainsEx(CSGO_ItemClassname[i], "weapon_knife")) return true; return false; }
+stock bool CSGO_IsItemIndexKnife(int defindex) { for(int i = 0; i < MaxCSGOItems; i++) if(CSGO_Item[i] == defindex && (StrEqual(CSGO_ItemClassname[i], "weapon_bayonet") || StrContainsEx(CSGO_ItemClassname[i], "weapon_knife"))) return true; return false; }
 #endif

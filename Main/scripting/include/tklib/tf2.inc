@@ -4,28 +4,28 @@
 #if !defined _tklib_no_tf2
 
 //May seem useless, but for just incase.
-#define TFTeam_Invalid view_as<TFTeam>(-1)
-#define TFTeam_Green view_as<TFTeam>(4)
-#define TFTeam_Yellow view_as<TFTeam>(5)
-#define TFClass_Invalid view_as<TFClassType>(-1)
-#define TFClass_Demoman view_as<TFClassType>(4)
-#define TFClass_Civilian view_as<TFClassType>(10)
+const TFTeam TFTeam_Invalid = view_as<TFTeam>(-1);
+const TFTeam TFTeam_Green = view_as<TFTeam>(4);
+const TFTeam TFTeam_Yellow = view_as<TFTeam>(5);
+const TFClassType TFClass_Invalid = view_as<TFClassType>(-1);
+const TFClassType TFClass_Demoman = view_as<TFClassType>(4);
+const TFClassType TFClass_Civilian = view_as<TFClassType>(10);
 
 #if !defined _tf2_included && defined _tklib_only_tf2
-#define TFClass_Unknown view_as<TFClassType>(0)
-#define TFClass_Scout view_as<TFClassType>(1)
-#define TFClass_Sniper view_as<TFClassType>(2)
-#define TFClass_Soldier view_as<TFClassType>(3)
-#define TFClass_DemoMan view_as<TFClassType>(4)
-#define TFClass_Medic view_as<TFClassType>(5)
-#define TFClass_Heavy view_as<TFClassType>(6)
-#define TFClass_Pyro view_as<TFClassType>(7)
-#define TFClass_Spy view_as<TFClassType>(8)
-#define TFClass_Engineer view_as<TFClassType>(9)
-#define TFTeam_Unassigned view_as<TFTeam>(0)
-#define TFTeam_Spectator view_as<TFTeam>(1)
-#define TFTeam_Red view_as<TFTeam>(2)
-#define TFTeam_Blue view_as<TFTeam>3)
+const TFClassType TFClass_Unknown = view_as<TFClassType>(0);
+const TFClassType TFClass_Scout = view_as<TFClassType>(1);
+const TFClassType TFClass_Sniper = view_as<TFClassType>(2);
+const TFClassType TFClass_Soldier = view_as<TFClassType>(3);
+const TFClassType TFClass_DemoMan = view_as<TFClassType>(4);
+const TFClassType TFClass_Medic = view_as<TFClassType>(5);
+const TFClassType TFClass_Heavy = view_as<TFClassType>(6);
+const TFClassType TFClass_Pyro = view_as<TFClassType>(7);
+const TFClassType TFClass_Spy = view_as<TFClassType>(8);
+const TFClassType TFClass_Engineer = view_as<TFClassType>(9);
+const TFTeam TFTeam_Unassigned = view_as<TFTeam>(0);
+const TFTeam TFTeam_Spectator = view_as<TFTeam>(1);
+const TFTeam TFTeam_Red = view_as<TFTeam>(2);
+const TFTeam TFTeam_Blue = view_as<TFTeam>3);
 #endif
 
 const int MaxTF2Classes = 9;
@@ -567,7 +567,7 @@ enum TFSlot {
 	TFSlot_Melee = 2,
 	TFSlot_PDA = 3,
 	TFSlot_PDA2 = 4,
-	TFSlot_Slot6 = 5,
+	TFSlot_Building = 5,
 	TFSlot_Slot7 = 6,
 	TFSlot_Slot8 = 7,
 	TFSlot_Slot9 = 8,
@@ -857,11 +857,38 @@ enum {
 	TF2Attr_PaintRGB1 = 142,
 	TF2Attr_TurnToGold = 150,
 	TF2Attr_Purchased = 172,
+	TF2Attr_KillEater = 214,
 	TF2Attr_PaintRGB2 = 261,
 	TF2Attr_TwoWayTeleporter = 276,
+	TF2Attr_KillEaterScoreType = 292,
+	TF2Attr_KillEaterScoreType2 = 293,
+	TF2Attr_KillEater2 = 294,
 	TF2Attr_PDAPipBoyInterface = 295,
 	TF2Attr_DispenserRadiusIncreased = 345,
+	TF2Attr_KillEaterUser1 = 379,
+	TF2Attr_KillEaterUserScoreType1 = 380,
+	TF2Attr_KillEaterUser2 = 381,
+	TF2Attr_KillEaterUserScoreType2 = 382,
+	TF2Attr_KillEaterUser3 = 383,
+	TF2Attr_KillEaterUserScoreType3 = 384,
+	TF2Attr_StrangePartNewCounterID = 385,
+	TF2Attr_KillEaterType = 388,
 	TF2Attr_HeadScale = 444,
+	TF2Attr_StrangeRestrictionType1 = 454,
+	TF2Attr_StrangeRestrictionValue1 = 455,
+	TF2Attr_StrangeRestrictionType2 = 456,
+	TF2Attr_StrangeRestrictionValue2 = 457,
+	TF2Attr_StrangeRestrictionUserType1 = 458,
+	TF2Attr_StrangeRestrictionUserValue1 = 459,
+	TF2Attr_StrangeRestrictionUserType2 = 460,
+	TF2Attr_StrangeRestrictionUserValue2 = 461,
+	TF2Attr_StrangeRestrictionUserType3 = 462,
+	TF2Attr_StrangeRestrictionUserValue3 = 463,
+	TF2Attr_StrangeScoreSelector = 468,
+	TF2Attr_KillEater3 = 494,
+	TF2Attr_KillEaterScoreType3 = 495,
+	TF2Attr_StrangeRestrictionScoreType3 = 496,
+	TF2Attr_StrangeRestrictionValue3 = 497,
 	TF2Attr_UnusualEffectVerticalOffset = 519,
 	TF2Attr_UnusualEffectUseHeadOrigin = 520,
 	TF2Attr_ItemStyleOverride = 542,
@@ -1751,6 +1778,7 @@ stock int TF2_GiveItem(int client,
 	TF2Econ_GetItemClassName(defindex, classname, sizeof(classname));
 	TF2Econ_TranslateWeaponEntForClass(classname, sizeof(classname), TF2_GetPlayerClass(client));
 	if(StrEqual(classname, "no_entity")) classname = "tf_wearable_vm";
+	if(StrEqual(classname, "")) classname = "tf_wearable";
 	
 	if(dbg) PrintToServer("[Tklib:TF2] TF2_GiveItem(client %i, defindex %i, classname '%s', quality %i, level %i, style %i, effect %i, remwep %s)",
 	client, defindex, classname, quality, level, style, effect, OnOff[int(remwep)]);
@@ -1851,7 +1879,7 @@ stock int TF2_GiveItemEx(int client,
 						bool remwep=true,
 						bool dbg=false)	{
 	if(dbg) PrintToServer("[Tklib:TF2] TF2_GiveItemEx(client %i, classname '%s', defindex %i, quality %i, level %i, style %i, effect %i, remwep %s)",
-	client, classname, defindex, quality, level, style, effect, OnOff[remwep]);
+	client, classname, defindex, quality, level, style, effect, OnOff[view_as<int>(remwep)]);
 	
 	Entity item = new Entity(classname);
 	if(!item.Valid()) return -1;
@@ -2458,33 +2486,94 @@ stock bool TF2_ReplaceClientRobotVoicelines(int client, char[] sound, bool giant
 /**
  *	Find weapon by definition index and its owner.
  *
- *	@param	defindex	The item definition index.
- *	@param	client		The item owner user index.
+ *	@param	client		The users index.
+ *	@param	defindex	The weapon definition index.
  *
- *	@return	Returns the entity's owner.
+ *	@return	Returns the weapon entity index.
  */
 stock any TF2_FindWeaponByDefinitionIndex(int client, int defindex) {
-	for(TFSlot slot = TFSlot_Primary; slot < TFSlot_PDA2; slot++) {
+	for(TFSlot slot = TFSlot_Primary; slot <= TFSlot_Building; slot++) {
 		int weapon = TF2_GetPlayerWeaponSlot(client, slot);
-		if(IsValidEntityEx(weapon) && GetEntityDefinitionIndex(weapon) == defindex && GetEntityOwner(weapon) == client) return weapon;
+		if(IsValidEntity(weapon)) if(GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex") == defindex) return weapon;
 	}
 	
 	return -1;
 }
 
 /**
- *	Find wearable by definition index and its owner.
+ *	Retrieves the user's cosmetic by definition index.
  *
+ *	@param	client		The users index.
  *	@param	defindex	The item definition index.
- *	@param	client		The item owner user index.
  *
- *	@return	Returns the entity's owner.
+ *	@return	Returns the cosmetic entity index.
  */
 stock any TF2_FindCosmeticByDefinitionIndex(int client, int defindex) {
 	int wearable = 0;
-	while((wearable = FindEntityByClassname(wearable, "tf_wearable")) != -1) if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client) return wearable;
-	while((wearable = FindEntityByClassname(wearable, "tf_wearable_levelable_item")) != -1) if(IsValidEntityEx(wearable) && GetEntityDefinitionIndex(wearable) == defindex && GetEntityOwner(wearable) == client) return wearable;
+	while((wearable = FindEntityByClassname(wearable, "tf_wear*")) != -1) { // * is a wildcard, so it searches for any entity that matches tf_wear like tf_wearable_demoshield or tf_wearable_levelable_item
+		if(GetEntProp(wearable, Prop_Send, "m_iItemDefinitionIndex") == defindex
+		&& GetEntPropEnt(wearable, Prop_Data, "m_hOwnerEntity") == client) return wearable; // Using Prop_Send over Prop_Data causes the item owner to not be correctly red.
+	}
+	
 	return -1;
+}
+
+/**
+ *	Retrieves an array of cosmetics currently worn by the user.
+ *
+ *	@param	client		The users index.
+ *	@param	list		The item definition index.
+ *
+ *	@return	Returns the entity's owner.
+ */
+stock int TF2_GetCosmeticsList(int client, int[] list) {
+	int wearable = 0, found = 0;
+	while((wearable = FindEntityByClassname(wearable, "tf_wear*")) != -1) {
+		if(GetEntPropEnt(wearable, Prop_Data, "m_hOwnerEntity") != client) continue;
+		list[found++] = GetEntProp(wearable, Prop_Send, "m_iItemDefinitionIndex");
+	}
+	
+	return found;
+}
+
+/**
+ *	Kills all wearables the user is wearing.
+ *
+ *	@param	client		The users index.
+ *	@param	blacklist	a string containing definition indexes to ignore.
+ */
+stock void TF2_KillCosmetics(int client, const char[] blacklist="") {
+	int wearable = 0;
+	
+	while((wearable = FindEntityByClassname(wearable, "tf_wear*")) != -1) {
+		if(GetEntPropEnt(wearable, Prop_Data, "m_hOwnerEntity") != client) continue;
+		int defindex = GetEntProp(wearable, Prop_Send, "m_iItemDefinitionIndex");
+		
+		char str_defindex[24];
+		IntToString(defindex, str_defindex, sizeof(str_defindex));
+		
+		if(StrContains(str_defindex, blacklist, false) > -1) continue;
+		
+		AcceptEntityInput(wearable, "KillHierarchy");
+	}
+}
+
+/**
+ *	Kills the cosmetic the user is wearing.
+ *
+ *	@param	client		The users index.
+ *	@param	defindex	The cosmetic definition index.
+ */
+stock void TF2_KillCosmeticByDefinitionIndex(int client, int defindex) {
+	int wearable = 0;
+	
+	while((wearable = FindEntityByClassname(wearable, "tf_wear*")) != -1) {
+		if(!IsValidEntity(wearable)) continue;
+		if(GetEntPropEnt(wearable, Prop_Data, "m_hOwnerEntity") != client) continue;
+		if(GetEntProp(wearable, Prop_Send, "m_iItemDefinitionIndex") != defindex) continue;
+		
+		AcceptEntityInput(wearable, "KillHierarchy");
+	}
 }
 
 /**
