@@ -127,7 +127,7 @@ methodmap ConVar < Handle
 		public native get();
 	}
 	
-	//Creates a new console variable.
+	// Creates a new console variable.
 	//
 	// @param name          Name of new convar.
 	// @param defaultValue  String containing the default value of new convar.
@@ -205,6 +205,61 @@ methodmap ConVar < Handle
 	// @param notify     If set to true, clients will be notified that the convar has changed.
 	//                   This will only work if the convar has the FCVAR_NOTIFY flag.
 	public native void SetString(const char[] value, bool replicate=false, bool notify=false);
+	
+	// Gets the float vector of the convar variable.
+	//
+	// @param vec        buffer to store the value of the vecto convar.
+	public void GetVector(float[] vec)
+	{
+		char value[96], split[3][32];
+		view_as<ConVar>(this).GetString(value, sizeof(value));
+		ExplodeString(value, " ", split, sizeof(split), sizeof(value));
+		
+		for(int i = 0; i < sizeof(split); i++)
+		{
+			vec[0] = StringToFloat(split[i]);
+		}
+	}
+	
+	// Sets the float vector of the convar variable.
+	//
+	// @param vec        New float value.
+	public void SetVector(const float[] vec)
+	{
+		char vec_value[3][32], value[96];
+		FloatToString(vec[0], vec_value[0], 32);
+		FloatToString(vec[1], vec_value[1], 32);
+		FloatToString(vec[2], vec_value[2], 32);
+		Format(value, sizeof(value), "%s %s %s", vec_value[0], vec_value[1], vec_value[2]);
+		
+		view_as<ConVar>(this).SetString(value);
+	}
+	
+	// Gets the float vector of the convar variable.
+	//
+	// @param vec        buffer to store the value of the vecto convar.
+	public void GetVectorInt(int[] vec)
+	{
+		char value[96], split[3][32];
+		view_as<ConVar>(this).GetString(value, sizeof(value));
+		ExplodeString(value, " ", split, sizeof(split), sizeof(value));
+		
+		for(int i = 0; i < sizeof(split); i++)
+		{
+			vec[0] = StringToInt(split[i]);
+		}
+	}
+	
+	// Sets the integer vector of the convar variable.
+	//
+	// @param vec        New float value.
+	public void SetVectorInt(const int[] vec)
+	{
+		char value[96];
+		Format(value, sizeof(value), "%i %i %i", value[0], value[1], value[2]);
+		
+		view_as<ConVar>(this).SetString(value);
+	}
 
 	// Resets the console variable to its default value.
 	//

@@ -6,8 +6,11 @@
  *	@param	param1	First action parameter (usually the client).
  *	@param	param2	Second action parameter (usually the item).
  */
-typedef MenuHandlerEx = function void (MenuEx menu, MenuAction action, int param1, int param2);
-//int function is useless and serves no purpose than to be annoying >:(
+typeset MenuHandlerEx
+{
+	function void (MenuEx menu, MenuAction action, int param1, int param2);
+	function int (MenuEx menu, MenuAction action, int param1, int param2);
+}
 
 methodmap MenuEx < Menu {
 	public MenuEx(MenuHandlerEx handler, MenuAction actions=MENU_ACTIONS_DEFAULT) { return view_as<MenuEx>(new Menu(view_as<MenuHandler>(handler), actions)); }
@@ -116,9 +119,22 @@ methodmap MenuEx < Menu {
 	 *	@param	caseSensitive	If true, search is case sensitive.
 	 */
 	public bool ItemStrContains(int position, const char[] substr, bool caseSensitive=false) {
-		char dummy[128];
+		char dummy[1024];
 		view_as<Menu>(this).GetItem(position, dummy, sizeof(dummy));
 		return StrContains(dummy, substr, caseSensitive) > -1;
+	}
+	
+	/**
+	 * Returns if the item position is equal to a string.
+	 *
+	 * @param	position		The item position
+	 * @param	substr			The substring used to check if the item contains the defined string value.
+	 * @param	caseSensitive	If true, the search is case sensitive.
+	 */
+	public bool ItemStrEqual(int position, const char[] substr, bool caseSensitive=false) {
+		char dummy[1024];
+		view_as<Menu>(this).GetItem(position, dummy, sizeof(dummy));
+		return StrEqual(dummy, substr, caseSensitive);
 	}
 }
 

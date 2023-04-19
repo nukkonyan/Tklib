@@ -39,8 +39,13 @@ enum Team {
 	Team_Yellow = 5
 }
 
+#pragma deprecated Use PlayerLoop() instead, be sure to define an integer with atleast 0 to accompany.
 #define TargetLoop(%1) for(int %1 = 1; %1 <= MaxClients; %1++)
+
+#pragma deprecated Use PlayerLoop() instead, be sure to define an integer with atleast 0 to accompany.
 #define TargetLoopEx(%1) for(int %1 = 1; %1 <= MaxPlayers; %1++)
+
+#define PlayerLoop(%1) while((%1 = FindEntityByClassname(%1, "player")) != -1)
 
 //Player permissions
 /**
@@ -720,8 +725,8 @@ stock bool SetClientNameEx(int client, const char[] name) { if(!Tklib_IsValidCli
  *	@return	Returns the user count.
  */
 stock int GetClientCountEx(bool nobots=true) {
-	int count = 0;
-	TargetLoop(client) if(Tklib_IsValidClient(client, nobots, false, false)) count++;
+	int count = 0, client = 0;
+	PlayerLoop(client) if(Tklib_IsValidClient(client, nobots, false, false)) count++;
 	return count;
 }
 
@@ -996,7 +1001,7 @@ stock int FindClientsByTarget(const char[] target
 	}
 	
 	int player = 0;
-	while((player = FindEntityByClassname(player, "player")) != -1)
+	PlayerLoop(player)
 	{
 		/*
 		if(!Tklib_IsValidClient(player, _, _, false))
@@ -1006,7 +1011,8 @@ stock int FindClientsByTarget(const char[] target
 		*/
 		
 		int m_iTeamNum = GetEntProp(player, Prop_Send, "m_iTeamNum");
-		int m_iAccountID = GetEntProp(player, Prop_Send, "m_iAccountID");
+		//int m_iAccountID = GetEntProp(player, Prop_Send, "m_iAccountID");
+		int m_iAccountID = GetSteamAccountID(player);
 		
 		if((flags & COMMAND_FILTER_NO_BOTS) && IsFakeClient(player)
 		|| (flags & COMMAND_FILTER_ALIVE) && !IsPlayerAlive(player)
@@ -1024,16 +1030,18 @@ stock int FindClientsByTarget(const char[] target
 		|| (Team4 && m_iTeamNum == 4)
 		|| (Team5 && m_iTeamNum == 5)
 		|| Bots && IsFakeClient(player)
-		|| All
-		|| StringToInt(target) == m_iAccountID
-		|| (StrContains(target, "#") != -1) && StringToInt(target[1]) == m_iAccountID) //if printed #<userid> like #2
+		|| All)
 		{
 			list[found++] = player;
 		}
-		else if(StrContainsEx(client_name, target))
+		else if(StrContains(client_name, target, false) >= 0)
 		{
 			list[found++] = player;
 			GetClientName(player, name, maxlen);
+		}
+		else if(StrContains(target, "#", false) >= 0 && StringToInt(target[1]) == m_iAccountID) //if printed #<userid> like #2))
+		{
+			list[found++] = player;
 		}
 		else if(caller != -1 && Tklib_IsValidClient(caller, true))
 		{
@@ -1141,7 +1149,8 @@ stock float GetClientSuitSpritPower(int client)	{ return GetEntPropFloatEx(clien
 stock int GetClientOfAccountID(int accountid) {
 	if(accountid < 1) return -1;
 	
-	TargetLoop(client) {
+	int client = 0;
+	PlayerLoop(client) {
 		if(!Tklib_IsValidClient(client, _, _, false)) continue;
 		if(GetSteamAccountID(client) == accountid) return client;
 	}
@@ -1165,7 +1174,8 @@ stock int GetClientIPClones(int client, int[] list) {
 	
 	GetClientIP(client, ip[0], sizeof(ip[]));
 	
-	TargetLoop(target) {
+	int target = 0;
+	PlayerLoop(target) {
 		if(!Tklib_IsValidClient(target)) continue;
 		GetClientIP(target, ip[1], sizeof(ip[]));
 		if(StrEqual(ip[0], ip[1])) list[i++] = target;
@@ -1245,6 +1255,27 @@ stock void StripClientWeapons(int client) {
 			RemoveEdict(weapon);
 		}
 	}
+}
+
+/**
+ * Returns the active player count.
+ *
+ * @param bBot If false, bots will be excluded.
+ * @param m_iTeamNum if 0 or above, only players with that team index will be counted. (If m_iTeamNum on player entity is not supported, this will throw an error.)
+ *
+ * @return Returns the player count.
+ */
+stock int GetActivePlayerCount2(bool bBot=true, any m_iTeamNum = -1) {
+	int player = 0;
+	int count = 0;
+	
+	PlayerLoop(player) {
+		if(m_iTeamNum >= 0) if(GetEntProp(player, Prop_Send, "m_iTeamNum") != m_iTeamNum) continue;
+		if(!bBot) if(IsFakeClient(player)) continue;
+		count++;
+	}
+	
+	return count;
 }
 
 #endif

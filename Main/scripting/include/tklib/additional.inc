@@ -293,10 +293,10 @@ stock bool SayText2(int client, int index=-1, const char[] message, any ...) {
  *	@noreturn
  */
 stock void SayText2All(int index=-1, const char[] message, any ...) {
-	int maxlen = strlen(message)*3;
-	char[] format = new char[maxlen];
-	VFormat(format, maxlen, message, 2);
-	TargetLoop(client) if(Tklib_IsValidClient(client, true)) SayText2(client, index, format);
+	char format[1024];
+	VFormat(format, sizeof(format), message, 2);
+	int client = 0;
+	PlayerLoop(client) if(Tklib_IsValidClient(client, true)) SayText2(client, index, format);
 }
 
 /**
