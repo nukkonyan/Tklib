@@ -14,6 +14,7 @@
 #endif
 
 #define _tklib_included
+#define _tklib_author_name "幸運心" // 'lucky heart'
 #define _tklib_author "Tk /id/Teamkiller324"
 #define _tklib_author_url "https://steamcommunity.com/id/Teamkiller324"
 #define SetPluginInfo(%1,%2,%3,%4,%5) public Plugin myinfo = {name = %1, author = %2, description = %3, version = %4, url = %5}
@@ -35,6 +36,7 @@
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_gameidentifier
@@ -46,6 +48,7 @@
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_resize
@@ -57,6 +60,7 @@
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_weapons
@@ -68,6 +72,7 @@
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_clients
@@ -79,6 +84,7 @@
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_entities
@@ -90,6 +96,7 @@
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_additional
@@ -101,6 +108,7 @@
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_events
@@ -112,6 +120,7 @@
 	#define _tklib_disable_additional
 	#define _tklib_disable_usermessages
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_usermessages
@@ -123,6 +132,7 @@
 	#define _tklib_disable_additional
 	#define _tklib_disable_events
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_usermessages
@@ -134,6 +144,7 @@
 	#define _tklib_disable_additional
 	#define _tklib_disable_events
 	#define _tklib_disable_strings
+	#define _tklib_disable_other
 #endif
 
 #if defined _tklib_only_strings
@@ -145,6 +156,18 @@
 	#define _tklib_disable_additional
 	#define _tklib_disable_events
 	#define _tklib_disable_usermessages
+#endif
+
+#if defined _tklib_only_other
+	#define _tklib_disable_gameidentifier
+	#define _tklib_disable_resize
+	#define _tklib_disable_weapons
+	#define _tklib_disable_clients
+	#define _tklib_disable_entities
+	#define _tklib_disable_additional
+	#define _tklib_disable_events
+	#define _tklib_disable_usermessages
+	#define _tklib_disable_strings
 #endif
 
 #if defined _tklib_no_game_includes
@@ -264,8 +287,8 @@
 #define	float(%1) view_as<float>(%1) // doesn't break float(int value) function.
 #define	bool(%1) view_as<bool>(%1) // %1 means it is the first parameter,
 #define	char(%1) view_as<char>(%1) // %2 would be second, and so on (you get it).
-#define	Handle(%1) view_as<Handle>(%1)
-#define	Database(%1) view_as<Database>(%1)
+#define Handle(%1) view_as<Handle>(%1)
+#define Database(%1) view_as<Database>(%1)
 #define	DBResult(%1) view_as<DBResult>(%1)
 #define	DBResultSet(%1) view_as<DBResultSet(%1)
 #define	APLRes(%1) view_as<APLRes>(%1)
@@ -275,10 +298,14 @@
 #define	Address(%1) view_as<Address>(%1)
 #define	EventHook(%1) view_as<EventHook>(%1)
 
+#define IntFloat(%1) %1 + 0.0
+#define FloatInt(%1) view_as<int>(%1)
+
 #define This view_as<any>(this)
 #define Bot(%1) IsFakeClient(%1)
 #define boolean bool
 #define integer int
+#define and &&
 #endif
 
 const int Console = 0;
@@ -303,3 +330,21 @@ const int MaxPlayers = 33; // Clients will never reach above index 33, maximum p
 #include <tklib/strings>
 #include <tklib/weapons>
 #include <tklib/handles>
+#include <tklib/other>
+
+// SourceMod Color Table
+//	\x01 - Default/White
+//	\x02 - Darkred
+//	\x03 - Purple
+//	\x04 - Green
+// 	\x05 - Lightgreen
+//	\x06 - Lime
+//	\x07 - Lightred/unknown (CSGO/L4D2) (?)
+//	\x08 - Gray
+//	\x10 - Gold
+//	\x0A - Bluegray
+//	\x0B - Blue
+//	\x0C - Darkblue
+//	\x0D - Gray 2
+//	\x0E - Orchid (Pink)
+//	\x0F - Lightred
